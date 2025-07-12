@@ -52,3 +52,16 @@
 <li class=" nav-item"><a href="{{ route('divisions.index') }}"><i class="icon-list"></i><span data-i18n="nav.divisions.main" class="menu-title">{{__('dashboard.division.title_plural')}}</span></a>
 </li>
 @endcan
+
+@can('view_student')
+<li class=" nav-item"><a href="{{ route('students.index') }}"><i class="icon-list"></i><span data-i18n="nav.students.main" class="menu-title">{{__('dashboard.student.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_student')
+<li class=" nav-item"><a href="{{ route('students.index') }}"><i class="icon-list"></i><span data-i18n="nav.students.main" class="menu-title">{{__('dashboard.student.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_guardian')
+<li class=" nav-item"><a href="{{ route('guardians.index') }}"><i class="icon-list"></i><span data-i18n="nav.guardians.main" class="menu-title">{{__('dashboard.guardian.title_plural')}}</span></a>
+</li>
+@endcan

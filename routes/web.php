@@ -15,6 +15,8 @@ use App\Http\Controllers\Dashboard\CenterController;
 use App\Http\Controllers\Dashboard\StageController;
 use App\Http\Controllers\Dashboard\GradeController;
 use App\Http\Controllers\Dashboard\DivisionController;
+use App\Http\Controllers\Dashboard\StudentController;
+use App\Http\Controllers\Dashboard\GuardianController;
 
 
 Route::get('/dashboard2', function () {
@@ -568,4 +570,99 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('divisions/{division}', [DivisionController::class, 'destroy'])
         ->name('divisions.destroy')
         ->middleware('can:delete_division');
+});
+
+
+
+// Routes for Student
+Route::middleware(['auth'])->group(function() {
+    Route::get('students', [StudentController::class, 'index'])
+        ->name('students.index')
+        ->middleware('can:view_student');
+
+    Route::get('students/create', [StudentController::class, 'create'])
+        ->name('students.create')
+        ->middleware('can:create_student');
+
+    Route::post('students', [StudentController::class, 'store'])
+        ->name('students.store')
+        ->middleware('can:create_student');
+
+    Route::get('students/{student}', [StudentController::class, 'show'])
+        ->name('students.show')
+        ->middleware('can:view_student');
+
+    Route::get('students/{student}/edit', [StudentController::class, 'edit'])
+        ->name('students.edit')
+        ->middleware('can:edit_student');
+
+    Route::put('students/{student}', [StudentController::class, 'update'])
+        ->name('students.update')
+        ->middleware('can:edit_student');
+
+    Route::delete('students/{student}', [StudentController::class, 'destroy'])
+        ->name('students.destroy')
+        ->middleware('can:delete_student');
+});
+
+// Routes for Student
+Route::middleware(['auth'])->group(function() {
+    Route::get('students', [StudentController::class, 'index'])
+        ->name('students.index')
+        ->middleware('can:view_student');
+
+    Route::get('students/create', [StudentController::class, 'create'])
+        ->name('students.create')
+        ->middleware('can:create_student');
+
+    Route::post('students', [StudentController::class, 'store'])
+        ->name('students.store')
+        ->middleware('can:create_student');
+
+    Route::get('students/{student}', [StudentController::class, 'show'])
+        ->name('students.show')
+        ->middleware('can:view_student');
+
+    Route::get('students/{student}/edit', [StudentController::class, 'edit'])
+        ->name('students.edit')
+        ->middleware('can:edit_student');
+
+    Route::put('students/{student}', [StudentController::class, 'update'])
+        ->name('students.update')
+        ->middleware('can:edit_student');
+
+    Route::delete('students/{student}', [StudentController::class, 'destroy'])
+        ->name('students.destroy')
+        ->middleware('can:delete_student');
+});
+
+// Routes for Guardian
+Route::middleware(['auth'])->group(function() {
+    Route::get('guardians', [GuardianController::class, 'index'])
+        ->name('guardians.index')
+        ->middleware('can:view_guardian');
+
+    Route::get('guardians/create', [GuardianController::class, 'create'])
+        ->name('guardians.create')
+        ->middleware('can:create_guardian');
+
+    Route::post('guardians', [GuardianController::class, 'store'])
+        ->name('guardians.store')
+        ->middleware('can:create_guardian');
+
+    Route::get('guardians/{guardian}', [GuardianController::class, 'show'])
+        ->name('guardians.show')
+        ->middleware('can:view_guardian');
+
+    Route::get('guardians/{guardian}/edit', [GuardianController::class, 'edit'])
+        ->name('guardians.edit')
+        ->middleware('can:edit_guardian');
+
+    Route::put('guardians/{guardian}', [GuardianController::class, 'update'])
+        ->name('guardians.update')
+        ->middleware('can:edit_guardian');
+
+    Route::delete('guardians/{guardian}', [GuardianController::class, 'destroy'])
+        ->name('guardians.destroy')
+        ->middleware('can:delete_guardian');
 });
