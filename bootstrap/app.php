@@ -13,8 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            Route::prefix('api/students')
+            Route::prefix('api/mobile/student')
                 ->group(base_path('routes/students.php'));
+            Route::prefix('api/mobile/guardian')
+                ->group(base_path('routes/guardians.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
