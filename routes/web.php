@@ -17,6 +17,8 @@ use App\Http\Controllers\Dashboard\GradeController;
 use App\Http\Controllers\Dashboard\DivisionController;
 use App\Http\Controllers\Dashboard\StudentController;
 use App\Http\Controllers\Dashboard\GuardianController;
+use App\Http\Controllers\Dashboard\SubjectController;
+use App\Http\Controllers\Dashboard\TeacherController;
 
 
 Route::get('/dashboard2', function () {
@@ -665,4 +667,66 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('guardians/{guardian}', [GuardianController::class, 'destroy'])
         ->name('guardians.destroy')
         ->middleware('can:delete_guardian');
+});
+
+// Routes for Subject
+Route::middleware(['auth'])->group(function() {
+    Route::get('subjects', [SubjectController::class, 'index'])
+        ->name('subjects.index')
+        ->middleware('can:view_subject');
+
+    Route::get('subjects/create', [SubjectController::class, 'create'])
+        ->name('subjects.create')
+        ->middleware('can:create_subject');
+
+    Route::post('subjects', [SubjectController::class, 'store'])
+        ->name('subjects.store')
+        ->middleware('can:create_subject');
+
+    Route::get('subjects/{subject}', [SubjectController::class, 'show'])
+        ->name('subjects.show')
+        ->middleware('can:view_subject');
+
+    Route::get('subjects/{subject}/edit', [SubjectController::class, 'edit'])
+        ->name('subjects.edit')
+        ->middleware('can:edit_subject');
+
+    Route::put('subjects/{subject}', [SubjectController::class, 'update'])
+        ->name('subjects.update')
+        ->middleware('can:edit_subject');
+
+    Route::delete('subjects/{subject}', [SubjectController::class, 'destroy'])
+        ->name('subjects.destroy')
+        ->middleware('can:delete_subject');
+});
+
+// Routes for Teacher
+Route::middleware(['auth'])->group(function() {
+    Route::get('teachers', [TeacherController::class, 'index'])
+        ->name('teachers.index')
+        ->middleware('can:view_teacher');
+
+    Route::get('teachers/create', [TeacherController::class, 'create'])
+        ->name('teachers.create')
+        ->middleware('can:create_teacher');
+
+    Route::post('teachers', [TeacherController::class, 'store'])
+        ->name('teachers.store')
+        ->middleware('can:create_teacher');
+
+    Route::get('teachers/{teacher}', [TeacherController::class, 'show'])
+        ->name('teachers.show')
+        ->middleware('can:view_teacher');
+
+    Route::get('teachers/{teacher}/edit', [TeacherController::class, 'edit'])
+        ->name('teachers.edit')
+        ->middleware('can:edit_teacher');
+
+    Route::put('teachers/{teacher}', [TeacherController::class, 'update'])
+        ->name('teachers.update')
+        ->middleware('can:edit_teacher');
+
+    Route::delete('teachers/{teacher}', [TeacherController::class, 'destroy'])
+        ->name('teachers.destroy')
+        ->middleware('can:delete_teacher');
 });

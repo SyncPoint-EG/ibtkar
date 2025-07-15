@@ -65,3 +65,11 @@
 <li class=" nav-item"><a href="{{ route('guardians.index') }}"><i class="icon-list"></i><span data-i18n="nav.guardians.main" class="menu-title">{{__('dashboard.guardian.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_subject')
+<li class=" nav-item"><a href="{{ route('subjects.index') }}"><i class="icon-list"></i><span data-i18n="nav.subjects.main" class="menu-title">{{__('dashboard.subject.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_teacher')
+<li class=" nav-item"><a href="{{ route('teachers.index') }}"><i class="icon-list"></i><span data-i18n="nav.teachers.main" class="menu-title">{{__('dashboard.teacher.title_plural')}}</span></a>
+</li>
+@endcan
