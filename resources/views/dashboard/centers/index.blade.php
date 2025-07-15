@@ -59,14 +59,14 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $center->name }}</td>
-                                                <td>{{ $center->image }}</td>
+                                                <td><img src="{{ $center->image }}" width="100px"></td>
                                                 <td>
-{{--                                                    @can('view_center')--}}
-{{--                                                        <a href="{{ route('centers.show', $center->id) }}"--}}
-{{--                                                           class="btn btn-info btn-sm">--}}
-{{--                                                            <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}--}}
-{{--                                                        </a>--}}
-{{--                                                    @endcan--}}
+                                                    {{--                                                    @can('view_center')--}}
+                                                    {{--                                                        <a href="{{ route('centers.show', $center->id) }}"--}}
+                                                    {{--                                                           class="btn btn-info btn-sm">--}}
+                                                    {{--                                                            <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}--}}
+                                                    {{--                                                        </a>--}}
+                                                    {{--                                                    @endcan--}}
 
                                                     @can('edit_center')
                                                         <a href="{{ route('centers.edit', $center->id) }}"

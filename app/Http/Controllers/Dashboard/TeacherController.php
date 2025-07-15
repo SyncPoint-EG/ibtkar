@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
+use App\Models\Division;
+use App\Models\Grade;
+use App\Models\Stage;
+use App\Models\Subject;
 use App\Services\TeacherService;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -36,9 +40,14 @@ class TeacherController extends Controller
      *
      * @return View
      */
-    public function create(): View
+    public function create()
     {
-        return view('dashboard.teachers.create');
+        $subjects = Subject::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+
+        return view('dashboard.teachers.create', compact('subjects', 'stages', 'grades', 'divisions'));
     }
 
     /**
@@ -50,7 +59,23 @@ class TeacherController extends Controller
     public function store(TeacherRequest $request): RedirectResponse
     {
         try {
-            $this->teacherService->create($request->validated());
+            $teacher  = $this->teacherService->create($request->validated());
+// Sync many-to-many relationships
+            if ($request->has('subjects')) {
+                $teacher->subjects()->sync($request->subjects);
+            }
+
+            if ($request->has('stages')) {
+                $teacher->stages()->sync($request->stages);
+            }
+
+            if ($request->has('grades')) {
+                $teacher->grades()->sync($request->grades);
+            }
+
+            if ($request->has('divisions')) {
+                $teacher->divisions()->sync($request->divisions);
+            }
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher created successfully.');
@@ -80,7 +105,12 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher): View
     {
-        return view('dashboard.teachers.edit', compact('teacher'));
+        $subjects = Subject::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+
+        return view('dashboard.teachers.edit', compact('teacher','subjects', 'stages', 'grades', 'divisions'));
     }
 
     /**
@@ -94,7 +124,11 @@ class TeacherController extends Controller
     {
         try {
             $this->teacherService->update($teacher, $request->validated());
-
+            // Sync many-to-many relationships
+            $teacher->subjects()->sync($request->subjects ?? []);
+            $teacher->stages()->sync($request->stages ?? []);
+            $teacher->grades()->sync($request->grades ?? []);
+            $teacher->divisions()->sync($request->divisions ?? []);
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher updated successfully.');
         } catch (\Exception $e) {

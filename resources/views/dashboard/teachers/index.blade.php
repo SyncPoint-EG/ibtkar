@@ -10,7 +10,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.teacher.title') }}
                             </li>
@@ -48,12 +49,12 @@
                                         <thead class="thead-inverse">
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.image") }}</th>
                                             <th>{{ __("dashboard.teacher.fields.name") }}</th>
-                <th>{{ __("dashboard.teacher.fields.phone") }}</th>
-                <th>{{ __("dashboard.teacher.fields.other_phone") }}</th>
-                <th>{{ __("dashboard.teacher.fields.bio") }}</th>
-                <th>{{ __("dashboard.teacher.fields.image") }}</th>
-                <th>{{ __("dashboard.teacher.fields.rate") }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.phone") }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.other_phone") }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.bio") }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.rate") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -61,30 +62,34 @@
                                         @forelse($teachers as $teacher)
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
+                                                <td><img src="{{ $teacher->image }}" width="100px"></td>
                                                 <td>{{ $teacher->name }}</td>
-                <td>{{ $teacher->phone }}</td>
-                <td>{{ $teacher->other_phone }}</td>
-                <td>{{ $teacher->bio }}</td>
-                <td>{{ $teacher->image }}</td>
-                <td>{{ $teacher->rate }}</td>
+                                                <td>{{ $teacher->phone }}</td>
+                                                <td>{{ $teacher->other_phone }}</td>
+                                                <td>{{ $teacher->bio }}</td>
+                                                <td>{{ $teacher->rate }}</td>
                                                 <td>
                                                     @can('view_teacher')
-                                                        <a href="{{ route('teachers.show', $teacher->id) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ route('teachers.show', $teacher->id) }}"
+                                                           class="btn btn-info btn-sm">
                                                             <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('edit_teacher')
-                                                        <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('teachers.edit', $teacher->id) }}"
+                                                           class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('delete_teacher')
-                                                        <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" style="display: inline-block;">
+                                                        <form action="{{ route('teachers.destroy', $teacher->id) }}"
+                                                              method="POST" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('dashboard.teacher.delete_confirm') }}');">
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('{{ __('dashboard.teacher.delete_confirm') }}');">
                                                                 <i class="icon-trash4"></i> {{ __('dashboard.common.delete') }}
                                                             </button>
                                                         </form>
@@ -93,7 +98,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('teachers')) }}" class="text-center">{{ __('dashboard.teacher.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('teachers')) }}"
+                                                    class="text-center">{{ __('dashboard.teacher.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

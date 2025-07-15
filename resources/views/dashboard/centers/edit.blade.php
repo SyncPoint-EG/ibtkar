@@ -10,9 +10,11 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item"><a href="{{ route('centers.index') }}">{{ __('dashboard.center.management') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('centers.index') }}">{{ __('dashboard.center.management') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.center.edit') }}
                             </li>
@@ -26,7 +28,9 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title" id="basic-layout-tooltip">{{ __('dashboard.center.edit') }} {{ __('dashboard.center.title') }} #{{ $center->id }}</h4>
+                                    <h4 class="card-title"
+                                        id="basic-layout-tooltip">{{ __('dashboard.center.edit') }} {{ __('dashboard.center.title') }}
+                                        #{{ $center->id }}</h4>
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
@@ -43,28 +47,40 @@
                                             <p>{{ __('dashboard.center.update_info') }}</p>
                                         </div>
 
-                                        <form class="form" method="POST" action="{{ route('centers.update', $center->id) }}" enctype="multipart/form-data">
+                                        <form class="form" method="POST"
+                                              action="{{ route('centers.update', $center->id) }}"
+                                              enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             <div class="form-body">
                                                 <div class="form-group">
-            <label for="name">{{ __("dashboard.center.fields.name") }}</label>
-            <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
-                   name="name" value="{{ isset($center) ? $center->name : old('name') }}"
-                   placeholder="{{ __("dashboard.center.fields.name") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.center.fields.name") }}">
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-                <div class="form-group">
-            <label for="image">{{ __("dashboard.center.fields.image") }}</label>
-            <input type="text" id="image" class="form-control @error('image') is-invalid @enderror"
-                   name="image" value="{{ isset($center) ? $center->image : old('image') }}"
-                   placeholder="{{ __("dashboard.center.fields.image") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.center.fields.image") }}">
-            @error('image')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                                                    <label for="name">{{ __("dashboard.center.fields.name") }}</label>
+                                                    <input type="text" id="name"
+                                                           class="form-control @error('name') is-invalid @enderror"
+                                                           name="name"
+                                                           value="{{ isset($center) ? $center->name : old('name') }}"
+                                                           placeholder="{{ __("dashboard.center.fields.name") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.center.fields.name") }}">
+                                                    @error('name')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="image">{{ __("dashboard.center.fields.image") }}</label>
+                                                    <input type="file" id="image"
+                                                           class="form-control @error('image') is-invalid @enderror"
+                                                           name="image"
+                                                           value="{{ isset($center) ? $center->image : old('image') }}"
+                                                           placeholder="{{ __("dashboard.center.fields.image") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.center.fields.image") }}">
+                                                    @error('image')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                             </div>
 
                                             <div class="form-actions">

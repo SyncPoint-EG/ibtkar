@@ -10,9 +10,11 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item"><a href="{{ route('subjects.index') }}">{{ __('dashboard.subject.management') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('subjects.index') }}">{{ __('dashboard.subject.management') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.subject.create') }}
                             </li>
@@ -26,7 +28,8 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title" id="basic-layout-tooltip">{{ __('dashboard.subject.create_new') }}</h4>
+                                    <h4 class="card-title"
+                                        id="basic-layout-tooltip">{{ __('dashboard.subject.create_new') }}</h4>
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
@@ -43,36 +46,53 @@
                                             <p>{{ __('dashboard.subject.fill_required') }}</p>
                                         </div>
 
-                                        <form class="form" method="POST" action="{{ route('subjects.store') }}" enctype="multipart/form-data">
+                                        <form class="form" method="POST" action="{{ route('subjects.store') }}"
+                                              enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-body">
                                                 <div class="form-group">
-            <label for="name">{{ __("dashboard.subject.fields.name") }}</label>
-            <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
-                   name="name" value="{{ isset($subject) ? $subject->name : old('name') }}"
-                   placeholder="{{ __("dashboard.subject.fields.name") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.subject.fields.name") }}">
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-                <div class="form-group">
-            <label for="logo">{{ __("dashboard.subject.fields.logo") }}</label>
-            <input type="text" id="logo" class="form-control @error('logo') is-invalid @enderror"
-                   name="logo" value="{{ isset($subject) ? $subject->logo : old('logo') }}"
-                   placeholder="{{ __("dashboard.subject.fields.logo") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.subject.fields.logo") }}">
-            @error('logo')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-                <div class="form-group">
-            <label for="second_logo">{{ __("dashboard.subject.fields.second_logo") }}</label>
-            <input type="text" id="second_logo" class="form-control @error('second_logo') is-invalid @enderror"
-                   name="second_logo" value="{{ isset($subject) ? $subject->second_logo : old('second_logo') }}"
-                   placeholder="{{ __("dashboard.subject.fields.second_logo") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.subject.fields.second_logo") }}">
-            @error('second_logo')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                                                    <label for="name">{{ __("dashboard.subject.fields.name") }}</label>
+                                                    <input type="text" id="name"
+                                                           class="form-control @error('name') is-invalid @enderror"
+                                                           name="name"
+                                                           value="{{ isset($subject) ? $subject->name : old('name') }}"
+                                                           placeholder="{{ __("dashboard.subject.fields.name") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.subject.fields.name") }}">
+                                                    @error('name')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="logo">{{ __("dashboard.subject.fields.logo") }}</label>
+                                                    <input type="file" id="logo"
+                                                           class="form-control @error('logo') is-invalid @enderror"
+                                                           name="logo"
+                                                           value="{{ isset($subject) ? $subject->logo : old('logo') }}"
+                                                           placeholder="{{ __("dashboard.subject.fields.logo") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.subject.fields.logo") }}">
+                                                    @error('logo')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        for="second_logo">{{ __("dashboard.subject.fields.second_logo") }}</label>
+                                                    <input type="file" id="second_logo"
+                                                           class="form-control @error('second_logo') is-invalid @enderror"
+                                                           name="second_logo"
+                                                           value="{{ isset($subject) ? $subject->second_logo : old('second_logo') }}"
+                                                           placeholder="{{ __("dashboard.subject.fields.second_logo") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.subject.fields.second_logo") }}">
+                                                    @error('second_logo')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                             </div>
 
                                             <div class="form-actions">

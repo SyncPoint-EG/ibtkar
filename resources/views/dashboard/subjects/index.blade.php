@@ -10,7 +10,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.subject.title') }}
                             </li>
@@ -49,8 +50,8 @@
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.subject.fields.name") }}</th>
-                <th>{{ __("dashboard.subject.fields.logo") }}</th>
-                <th>{{ __("dashboard.subject.fields.second_logo") }}</th>
+                                            <th>{{ __("dashboard.subject.fields.logo") }}</th>
+                                            <th>{{ __("dashboard.subject.fields.second_logo") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -59,26 +60,30 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $subject->name }}</td>
-                <td>{{ $subject->logo }}</td>
-                <td>{{ $subject->second_logo }}</td>
+                                                <td><img width="100px" src="{{ $subject->logo }}"></td>
+                                                <td><img width="100px" src="{{ $subject->second_logo }}"></td>
                                                 <td>
                                                     @can('view_subject')
-                                                        <a href="{{ route('subjects.show', $subject->id) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ route('subjects.show', $subject->id) }}"
+                                                           class="btn btn-info btn-sm">
                                                             <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('edit_subject')
-                                                        <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('subjects.edit', $subject->id) }}"
+                                                           class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('delete_subject')
-                                                        <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST" style="display: inline-block;">
+                                                        <form action="{{ route('subjects.destroy', $subject->id) }}"
+                                                              method="POST" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('dashboard.subject.delete_confirm') }}');">
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('{{ __('dashboard.subject.delete_confirm') }}');">
                                                                 <i class="icon-trash4"></i> {{ __('dashboard.common.delete') }}
                                                             </button>
                                                         </form>
@@ -87,7 +92,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('subjects')) }}" class="text-center">{{ __('dashboard.subject.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('subjects')) }}"
+                                                    class="text-center">{{ __('dashboard.subject.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>
