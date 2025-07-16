@@ -19,6 +19,9 @@ use App\Http\Controllers\Dashboard\StudentController;
 use App\Http\Controllers\Dashboard\GuardianController;
 use App\Http\Controllers\Dashboard\SubjectController;
 use App\Http\Controllers\Dashboard\TeacherController;
+use App\Http\Controllers\Dashboard\EducationTypeController;
+use App\Http\Controllers\Dashboard\SemisterController;
+use App\Http\Controllers\Dashboard\CourseController;
 
 
 Route::get('/dashboard2', function () {
@@ -730,3 +733,99 @@ Route::middleware(['auth'])->group(function() {
         ->name('teachers.destroy')
         ->middleware('can:delete_teacher');
 });
+
+// Routes for EducationType
+Route::middleware(['auth'])->group(function() {
+    Route::get('education-types', [EducationTypeController::class, 'index'])
+        ->name('education-types.index')
+        ->middleware('can:view_educationtype');
+
+    Route::get('education-types/create', [EducationTypeController::class, 'create'])
+        ->name('education-types.create')
+        ->middleware('can:create_educationtype');
+
+    Route::post('education-types', [EducationTypeController::class, 'store'])
+        ->name('education-types.store')
+        ->middleware('can:create_educationtype');
+
+    Route::get('education-types/{educationType}', [EducationTypeController::class, 'show'])
+        ->name('education-types.show')
+        ->middleware('can:view_educationtype');
+
+    Route::get('education-types/{educationType}/edit', [EducationTypeController::class, 'edit'])
+        ->name('education-types.edit')
+        ->middleware('can:edit_educationtype');
+
+    Route::put('education-types/{educationType}', [EducationTypeController::class, 'update'])
+        ->name('education-types.update')
+        ->middleware('can:edit_educationtype');
+
+    Route::delete('education-types/{educationType}', [EducationTypeController::class, 'destroy'])
+        ->name('education-types.destroy')
+        ->middleware('can:delete_educationtype');
+});
+
+// Routes for Semister
+Route::middleware(['auth'])->group(function() {
+    Route::get('semisters', [SemisterController::class, 'index'])
+        ->name('semisters.index')
+        ->middleware('can:view_semister');
+
+    Route::get('semisters/create', [SemisterController::class, 'create'])
+        ->name('semisters.create')
+        ->middleware('can:create_semister');
+
+    Route::post('semisters', [SemisterController::class, 'store'])
+        ->name('semisters.store')
+        ->middleware('can:create_semister');
+
+    Route::get('semisters/{semister}', [SemisterController::class, 'show'])
+        ->name('semisters.show')
+        ->middleware('can:view_semister');
+
+    Route::get('semisters/{semister}/edit', [SemisterController::class, 'edit'])
+        ->name('semisters.edit')
+        ->middleware('can:edit_semister');
+
+    Route::put('semisters/{semister}', [SemisterController::class, 'update'])
+        ->name('semisters.update')
+        ->middleware('can:edit_semister');
+
+    Route::delete('semisters/{semister}', [SemisterController::class, 'destroy'])
+        ->name('semisters.destroy')
+        ->middleware('can:delete_semister');
+});
+
+
+
+// Routes for Course
+Route::middleware(['auth'])->group(function() {
+    Route::get('courses', [CourseController::class, 'index'])
+        ->name('courses.index')
+        ->middleware('can:view_course');
+
+    Route::get('courses/create', [CourseController::class, 'create'])
+        ->name('courses.create')
+        ->middleware('can:create_course');
+
+    Route::post('courses', [CourseController::class, 'store'])
+        ->name('courses.store')
+        ->middleware('can:create_course');
+
+    Route::get('courses/{course}', [CourseController::class, 'show'])
+        ->name('courses.show')
+        ->middleware('can:view_course');
+
+    Route::get('courses/{course}/edit', [CourseController::class, 'edit'])
+        ->name('courses.edit')
+        ->middleware('can:edit_course');
+
+    Route::put('courses/{course}', [CourseController::class, 'update'])
+        ->name('courses.update')
+        ->middleware('can:edit_course');
+
+    Route::delete('courses/{course}', [CourseController::class, 'destroy'])
+        ->name('courses.destroy')
+        ->middleware('can:delete_course');
+});
+

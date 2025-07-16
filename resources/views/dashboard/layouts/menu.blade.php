@@ -73,3 +73,15 @@
 <li class=" nav-item"><a href="{{ route('teachers.index') }}"><i class="icon-list"></i><span data-i18n="nav.teachers.main" class="menu-title">{{__('dashboard.teacher.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_educationtype')
+<li class=" nav-item"><a href="{{ route('education-types.index') }}"><i class="icon-list"></i><span data-i18n="nav.education-types.main" class="menu-title">{{__('dashboard.educationtype.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_semister')
+<li class=" nav-item"><a href="{{ route('semisters.index') }}"><i class="icon-list"></i><span data-i18n="nav.semisters.main" class="menu-title">{{__('dashboard.semister.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_course')
+<li class=" nav-item"><a href="{{ route('courses.index') }}"><i class="icon-list"></i><span data-i18n="nav.courses.main" class="menu-title">{{__('dashboard.course.title_plural')}}</span></a>
+</li>
+@endcan
