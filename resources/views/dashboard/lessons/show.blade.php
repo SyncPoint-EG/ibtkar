@@ -11,8 +11,10 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('lessons.index') }}">{{ __('dashboard.lesson.list') }}</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('lessons.index') }}">{{ __('dashboard.lesson.list') }}</a></li>
                             <li class="breadcrumb-item active">{{ __('dashboard.lesson.view') }}</li>
                         </ol>
                     </div>
@@ -29,8 +31,13 @@
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-sm btn-primary"><i class="icon-pencil"></i> {{ __('dashboard.common.edit') }}</a></li>
-                                            <li><a href="{{ route('lessons.index') }}" class="btn btn-sm btn-secondary"><i class="icon-arrow-left4"></i> {{ __('dashboard.common.back') }}</a></li>
+                                            <li><a href="{{ route('lessons.edit', $lesson->id) }}"
+                                                   class="btn btn-sm btn-primary"><i
+                                                        class="icon-pencil"></i> {{ __('dashboard.common.edit') }}</a>
+                                            </li>
+                                            <li><a href="{{ route('lessons.index') }}" class="btn btn-sm btn-secondary"><i
+                                                        class="icon-arrow-left4"></i> {{ __('dashboard.common.back') }}
+                                                </a></li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
                                         </ul>
@@ -49,20 +56,25 @@
                                                         </tr>
 
                                                         <div class="mb-3">
-        <strong>{{ __("dashboard.lesson.fields.name") }}:</strong> {{ $lesson->name }}
-    </div>
-                <div class="mb-3">
-        <strong>{{ __("dashboard.lesson.fields.desc") }}:</strong> {{ $lesson->desc }}
-    </div>
-                <div class="mb-3">
-        <strong>{{ __("dashboard.lesson.fields.video_link") }}:</strong> {{ $lesson->video_link }}
-    </div>
-                <div class="mb-3">
-        <strong>{{ __("dashboard.lesson.fields.video_image") }}:</strong> {{ $lesson->video_image }}
-    </div>
-                <div class="mb-3">
-        <strong>{{ __("dashboard.lesson.fields.chapter_id") }}:</strong> {{ $lesson->chapter_id }}
-    </div>
+                                                            <strong>{{ __("dashboard.lesson.fields.name") }}
+                                                                :</strong> {{ $lesson->name }}
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.lesson.fields.desc") }}
+                                                                :</strong> {{ $lesson->desc }}
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.lesson.fields.video_link") }}
+                                                                :</strong><a href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.lesson.fields.video_image") }}
+                                                                :</strong> <img src="{{ $lesson->video_image }}" width="100px">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.lesson.fields.chapter_id") }}
+                                                                :</strong> {{ $lesson->chapter_id }}
+                                                        </div>
 
                                                         <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
@@ -82,7 +94,8 @@
                                 <div class="card-footer">
                                     <div class="row">
                                         <div class="col-md-12 text-right">
-                                            <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST" class="delete-form d-inline-block">
+                                            <form action="{{ route('lessons.destroy', $lesson->id) }}" method="POST"
+                                                  class="delete-form d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button" class="btn btn-danger btn-md delete-btn">
@@ -104,8 +117,8 @@
 
 @section('page_scripts')
     <script>
-        $(document).ready(function() {
-            $('.delete-btn').on('click', function(e) {
+        $(document).ready(function () {
+            $('.delete-btn').on('click', function (e) {
                 e.preventDefault();
 
                 // SweetAlert or custom confirmation

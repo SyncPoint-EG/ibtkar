@@ -128,7 +128,7 @@
                                         <ul class="list-inline mb-0">
                                             <li><a href="{{ route('courses.create', $teacher->id) }}"
                                                    class="btn btn-sm btn-success"><i
-                                                        class="icon-plus"></i> {{ __('dashboard.course.add') }}</a>
+                                                        class="icon-plus"></i> {{ __('dashboard.course.add_new') }}</a>
                                             </li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>

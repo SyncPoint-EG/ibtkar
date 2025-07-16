@@ -139,7 +139,7 @@
                                         <ul class="list-inline mb-0">
                                             <li><a href="{{ route('chapters.create', $course->id) }}"
                                                    class="btn btn-sm btn-success"><i
-                                                        class="icon-plus"></i> {{ __('dashboard.chapter.add') }}</a>
+                                                        class="icon-plus"></i> {{ __('dashboard.chapter.add_new') }}</a>
                                             </li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
