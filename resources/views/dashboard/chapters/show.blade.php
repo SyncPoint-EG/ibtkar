@@ -6,7 +6,7 @@
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-xs-12 mb-1">
-                    <h2 class="content-header-title">{{ __('dashboard.teacher.view') }}</h2>
+                    <h2 class="content-header-title">{{ __('dashboard.chapter.view') }}</h2>
                 </div>
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
@@ -14,8 +14,8 @@
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a></li>
                             <li class="breadcrumb-item"><a
-                                    href="{{ route('teachers.index') }}">{{ __('dashboard.teacher.list') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('dashboard.teacher.view') }}</li>
+                                    href="{{ route('chapters.index') }}">{{ __('dashboard.chapter.list') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('dashboard.chapter.view') }}</li>
                         </ol>
                     </div>
                 </div>
@@ -27,15 +27,15 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">{{ __('dashboard.teacher.title') }} {{ __('dashboard.common.information') }}</h4>
+                                    <h4 class="card-title">{{ __('dashboard.chapter.title') }} {{ __('dashboard.common.information') }}</h4>
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route('teachers.edit', $teacher->id) }}"
+                                            <li><a href="{{ route('chapters.edit', $chapter->id) }}"
                                                    class="btn btn-sm btn-primary"><i
                                                         class="icon-pencil"></i> {{ __('dashboard.common.edit') }}</a>
                                             </li>
-                                            <li><a href="{{ route('teachers.index') }}"
+                                            <li><a href="{{ route('chapters.index') }}"
                                                    class="btn btn-sm btn-secondary"><i
                                                         class="icon-arrow-left4"></i> {{ __('dashboard.common.back') }}
                                                 </a></li>
@@ -53,41 +53,25 @@
                                                         <tbody>
                                                         <tr>
                                                             <th width="200">{{ __('dashboard.common.id') }}</th>
-                                                            <td>{{ $teacher->id }}</td>
+                                                            <td>{{ $chapter->id }}</td>
                                                         </tr>
 
                                                         <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.name") }}
-                                                                :</strong> {{ $teacher->name }}
+                                                            <strong>{{ __("dashboard.chapter.fields.name") }}
+                                                                :</strong> {{ $chapter->name }}
                                                         </div>
                                                         <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.phone") }}
-                                                                :</strong> {{ $teacher->phone }}
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.other_phone") }}
-                                                                :</strong> {{ $teacher->other_phone }}
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.bio") }}
-                                                                :</strong> {{ $teacher->bio }}
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.image") }}
-                                                                :</strong> <img src="{{ $teacher->image }}" width="100px">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.teacher.fields.rate") }}
-                                                                :</strong> {{ $teacher->rate }}
+                                                            <strong>{{ __("dashboard.course.title") }}
+                                                                :</strong> {{ $chapter->course->name }}
                                                         </div>
 
                                                         <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
-                                                            <td>{{ $teacher->created_at->format('Y-m-d H:i:s') }}</td>
+                                                            <td>{{ $chapter->created_at->format('Y-m-d H:i:s') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>{{ __('dashboard.common.updated_at') }}</th>
-                                                            <td>{{ $teacher->updated_at->format('Y-m-d H:i:s') }}</td>
+                                                            <td>{{ $chapter->updated_at->format('Y-m-d H:i:s') }}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -99,7 +83,7 @@
                                 <div class="card-footer">
                                     <div class="row">
                                         <div class="col-md-12 text-right">
-                                            <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST"
+                                            <form action="{{ route('chapters.destroy', $chapter->id) }}" method="POST"
                                                   class="delete-form d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
@@ -116,19 +100,19 @@
                 </section>
                 <!-- Basic example section end -->
 
-                <!-- Courses section start -->
-                <section id="courses-section">
+                <!-- Lessons section start -->
+                <section id="lessons-section">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">{{ __('dashboard.course.list') }}</h4>
+                                    <h4 class="card-title">{{ __('dashboard.lesson.list') }}</h4>
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route('courses.create', $teacher->id) }}"
+                                            <li><a href="{{ route('lessons.create', ['chapter_id' => $chapter->id]) }}"
                                                    class="btn btn-sm btn-success"><i
-                                                        class="icon-plus"></i> {{ __('dashboard.course.add') }}</a>
+                                                        class="icon-plus"></i> {{ __('dashboard.lesson.add') }}</a>
                                             </li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
@@ -139,51 +123,51 @@
                                     <div class="card-block">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                @if($teacher->courses && $teacher->courses->count() > 0)
+                                                @if($chapter->lessons && $chapter->lessons->count() > 0)
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
                                                             <tr>
                                                                 <th>{{ __('dashboard.common.id') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.name') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.year') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.education_type') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.stage') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.grade') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.division') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.semister') }}</th>
-                                                                <th>{{ __('dashboard.course.fields.subject') }}</th>
+                                                                <th>{{ __('dashboard.lesson.fields.name') }}</th>
+                                                                <th>{{ __('dashboard.lesson.fields.description') }}</th>
+                                                                <th>{{ __('dashboard.lesson.fields.video_image') }}</th>
                                                                 <th>{{ __('dashboard.common.created_at') }}</th>
                                                                 <th>{{ __('dashboard.common.actions') }}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            @foreach($teacher->courses as $course)
+                                                            @foreach($chapter->lessons as $lesson)
                                                                 <tr>
-                                                                    <td>{{ $course->id }}</td>
-                                                                    <td>{{ $course->name }}</td>
-                                                                    <td>{{ $course->year }}</td>
-                                                                    <td>{{ $course->educationType->name ?? '-' }}</td>
-                                                                    <td>{{ $course->stage->name ?? '-' }}</td>
-                                                                    <td>{{ $course->grade->name ?? '-' }}</td>
-                                                                    <td>{{ $course->division->name ?? '-' }}</td>
-                                                                    <td>{{ $course->semister->name ?? '-' }}</td>
-                                                                    <td>{{ $course->subject->name ?? '-' }}</td>
-                                                                    <td>{{ $course->created_at->format('Y-m-d H:i:s') }}</td>
+                                                                    <td>{{ $lesson->id }}</td>
+                                                                    <td>{{ $lesson->name }}</td>
+                                                                    <td>{{ Str::limit($lesson->desc, 50) }}</td>
                                                                     <td>
-                                                                        <a href="{{ route('courses.show', $course->id) }}"
+                                                                        @if($lesson->video_image)
+                                                                            <img src="{{ asset($lesson->video_image) }}"
+                                                                                 alt="{{ $lesson->name }}"
+                                                                                 class="img-thumbnail"
+                                                                                 style="width: 60px; height: 40px; object-fit: cover;">
+                                                                        @else
+                                                                            <span class="text-muted">{{ __('dashboard.common.no_image') }}</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>{{ $lesson->created_at->format('Y-m-d H:i:s') }}</td>
+                                                                    <td>
+                                                                        <a href="{{ route('lessons.show', $lesson->id) }}"
                                                                            class="btn btn-sm btn-primary">
                                                                             <i class="icon-eye"></i> {{ __('dashboard.common.view') }}
                                                                         </a>
-                                                                        <a href="{{ route('courses.edit', $course->id) }}"
+                                                                        <a href="{{ route('lessons.edit', $lesson->id) }}"
                                                                            class="btn btn-sm btn-warning">
                                                                             <i class="icon-pencil"></i> {{ __('dashboard.common.edit') }}
                                                                         </a>
-                                                                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
+                                                                        <form action="{{ route('lessons.destroy', $lesson->id) }}"
+                                                                              method="POST"
                                                                               class="delete-form d-inline-block">
                                                                             @csrf
                                                                             @method('DELETE')
-                                                                            <button type="button" class="btn btn-sm btn-danger delete-course-btn">
+                                                                            <button type="button" class="btn btn-sm btn-danger delete-lesson-btn">
                                                                                 <i class="icon-trash"></i> {{ __('dashboard.common.delete') }}
                                                                             </button>
                                                                         </form>
@@ -194,8 +178,14 @@
                                                         </table>
                                                     </div>
                                                 @else
-                                                    <div class="alert alert-info">
-                                                        <i class="icon-info"></i> {{ __('dashboard.course.no_courses') }}
+                                                    <div class="alert alert-info text-center">
+                                                        <i class="icon-info"></i>
+                                                        <strong>{{ __('dashboard.lesson.no_lessons') }}</strong>
+                                                        <br>
+                                                        <a href="{{ route('lessons.create', ['chapter_id' => $chapter->id]) }}"
+                                                           class="btn btn-sm btn-success mt-2">
+                                                            <i class="icon-plus"></i> {{ __('dashboard.lesson.add_first') }}
+                                                        </a>
                                                     </div>
                                                 @endif
                                             </div>
@@ -206,7 +196,7 @@
                         </div>
                     </div>
                 </section>
-                <!-- Courses section end -->
+                <!-- Lessons section end -->
             </div>
         </div>
     </div>
@@ -215,20 +205,22 @@
 @section('page_scripts')
     <script>
         $(document).ready(function () {
+            // Delete chapter confirmation
             $('.delete-btn').on('click', function (e) {
                 e.preventDefault();
 
                 // SweetAlert or custom confirmation
-                if (confirm('{{ __("dashboard.teacher.delete_confirm") }}')) {
+                if (confirm('{{ __("dashboard.chapter.delete_confirm") }}')) {
                     $(this).closest('form').submit();
                 }
             });
 
-            $('.delete-course-btn').on('click', function (e) {
+            // Delete lesson confirmation
+            $('.delete-lesson-btn').on('click', function (e) {
                 e.preventDefault();
 
                 // SweetAlert or custom confirmation
-                if (confirm('{{ __("dashboard.course.delete_confirm") }}')) {
+                if (confirm('{{ __("dashboard.lesson.delete_confirm") }}')) {
                     $(this).closest('form').submit();
                 }
             });

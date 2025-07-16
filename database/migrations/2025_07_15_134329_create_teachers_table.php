@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('password')->nullable();
-            $table->string('other_phone');
-            $table->text('bio');
-            $table->string('image');
-            $table->float('rate');
+            $table->string('other_phone')->nullable();
+            $table->text('bio')->nullable();
+            $table->string('image')->nullable();
+            $table->float('rate')->nullable();
             $table->timestamps();
         });
     }

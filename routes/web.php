@@ -22,6 +22,8 @@ use App\Http\Controllers\Dashboard\TeacherController;
 use App\Http\Controllers\Dashboard\EducationTypeController;
 use App\Http\Controllers\Dashboard\SemisterController;
 use App\Http\Controllers\Dashboard\CourseController;
+use App\Http\Controllers\Dashboard\ChapterController;
+use App\Http\Controllers\Dashboard\LessonController;
 
 
 Route::get('/dashboard2', function () {
@@ -804,7 +806,7 @@ Route::middleware(['auth'])->group(function() {
         ->name('courses.index')
         ->middleware('can:view_course');
 
-    Route::get('courses/create', [CourseController::class, 'create'])
+    Route::get('courses/create/{teacher_id?}', [CourseController::class, 'create'])
         ->name('courses.create')
         ->middleware('can:create_course');
 
@@ -829,3 +831,66 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_course');
 });
 
+
+
+// Routes for Chapter
+Route::middleware(['auth'])->group(function() {
+    Route::get('chapters', [ChapterController::class, 'index'])
+        ->name('chapters.index')
+        ->middleware('can:view_chapter');
+
+    Route::get('chapters/create/{course_id?}', [ChapterController::class, 'create'])
+        ->name('chapters.create')
+        ->middleware('can:create_chapter');
+
+    Route::post('chapters', [ChapterController::class, 'store'])
+        ->name('chapters.store')
+        ->middleware('can:create_chapter');
+
+    Route::get('chapters/{chapter}', [ChapterController::class, 'show'])
+        ->name('chapters.show')
+        ->middleware('can:view_chapter');
+
+    Route::get('chapters/{chapter}/edit', [ChapterController::class, 'edit'])
+        ->name('chapters.edit')
+        ->middleware('can:edit_chapter');
+
+    Route::put('chapters/{chapter}', [ChapterController::class, 'update'])
+        ->name('chapters.update')
+        ->middleware('can:edit_chapter');
+
+    Route::delete('chapters/{chapter}', [ChapterController::class, 'destroy'])
+        ->name('chapters.destroy')
+        ->middleware('can:delete_chapter');
+});
+
+// Routes for Lesson
+Route::middleware(['auth'])->group(function() {
+    Route::get('lessons', [LessonController::class, 'index'])
+        ->name('lessons.index')
+        ->middleware('can:view_lesson');
+
+    Route::get('lessons/create/{chapter_id?}', [LessonController::class, 'create'])
+        ->name('lessons.create')
+        ->middleware('can:create_lesson');
+
+    Route::post('lessons', [LessonController::class, 'store'])
+        ->name('lessons.store')
+        ->middleware('can:create_lesson');
+
+    Route::get('lessons/{lesson}', [LessonController::class, 'show'])
+        ->name('lessons.show')
+        ->middleware('can:view_lesson');
+
+    Route::get('lessons/{lesson}/edit', [LessonController::class, 'edit'])
+        ->name('lessons.edit')
+        ->middleware('can:edit_lesson');
+
+    Route::put('lessons/{lesson}', [LessonController::class, 'update'])
+        ->name('lessons.update')
+        ->middleware('can:edit_lesson');
+
+    Route::delete('lessons/{lesson}', [LessonController::class, 'destroy'])
+        ->name('lessons.destroy')
+        ->middleware('can:delete_lesson');
+});

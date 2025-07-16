@@ -5,7 +5,7 @@
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-xs-12 mb-1">
-                    <h2 class="content-header-title">{{ __('dashboard.course.management') }}</h2>
+                    <h2 class="content-header-title">{{ __('dashboard.lesson.management') }}</h2>
                 </div>
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item"><a
                                     href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item active">{{ __('dashboard.course.title') }}
+                            <li class="breadcrumb-item active">{{ __('dashboard.lesson.title') }}
                             </li>
                         </ol>
                     </div>
@@ -25,7 +25,7 @@
                     <div class="col-xs-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">{{ __('dashboard.course.list') }}</h4>
+                                <h4 class="card-title">{{ __('dashboard.lesson.list') }}</h4>
                                 <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
@@ -38,9 +38,9 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
-                                    @can('create_course')
-                                        <a href="{{ route('courses.create') }}" class="btn btn-primary mb-1">
-                                            <i class="icon-plus2"></i> {{ __('dashboard.course.add_new') }}
+                                    @can('create_lesson')
+                                        <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-1">
+                                            <i class="icon-plus2"></i> {{ __('dashboard.lesson.add_new') }}
                                         </a>
                                     @endcan
                                 </div>
@@ -49,53 +49,45 @@
                                         <thead class="thead-inverse">
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
-                                            <th>{{ __("dashboard.course.fields.name") }}</th>
-                                            <th>{{ __("dashboard.course.fields.year") }}</th>
-                                            <th>{{ __("dashboard.course.fields.teacher_id") }}</th>
-                                            <th>{{ __("dashboard.educationtype.title") }}</th>
-                                            <th>{{ __("dashboard.stage.title") }}</th>
-                                            <th>{{ __("dashboard.grade.title") }}</th>
-                                            <th>{{ __("dashboard.division.title") }}</th>
-                                            <th>{{ __("dashboard.semister.title") }}</th>
-                                            <th>{{ __("dashboard.subject.title") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.name") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.desc") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.video_link") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.video_image") }}</th>
+                                            <th>{{ __("dashboard.chapter.title") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @forelse($courses as $course)
+                                        @forelse($lessons as $lesson)
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $course->name }}</td>
-                                                <td>{{ $course->year  }}</td>
-                                                <td>{{ $course->teacher->name }}</td>
-                                                <td>{{ $course->educationType->name }}</td>
-                                                <td>{{ $course->stage->name }}</td>
-                                                <td>{{ $course->grade->name }}</td>
-                                                <td>{{ $course->division->name }}</td>
-                                                <td>{{ $course->semister->name }}</td>
-                                                <td>{{ $course->subject->name }}</td>
+                                                <td>{{ $lesson->name }}</td>
+                                                <td>{{ $lesson->desc }}</td>
+                                                <td><a href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a></td>
+                                                <td><img src="{{ $lesson->video_image }}" width="100px"></td>
+                                                <td>{{ $lesson->chapter->name }}</td>
                                                 <td>
-                                                    @can('view_course')
-                                                        <a href="{{ route('courses.show', $course->id) }}"
+                                                    @can('view_lesson')
+                                                        <a href="{{ route('lessons.show', $lesson->id) }}"
                                                            class="btn btn-info btn-sm">
                                                             <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}
                                                         </a>
                                                     @endcan
 
-                                                    @can('edit_course')
-                                                        <a href="{{ route('courses.edit', $course->id) }}"
+                                                    @can('edit_lesson')
+                                                        <a href="{{ route('lessons.edit', $lesson->id) }}"
                                                            class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
                                                         </a>
                                                     @endcan
 
-                                                    @can('delete_course')
-                                                        <form action="{{ route('courses.destroy', $course->id) }}"
+                                                    @can('delete_lesson')
+                                                        <form action="{{ route('lessons.destroy', $lesson->id) }}"
                                                               method="POST" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger btn-sm"
-                                                                    onclick="return confirm('{{ __('dashboard.course.delete_confirm') }}');">
+                                                                    onclick="return confirm('{{ __('dashboard.lesson.delete_confirm') }}');">
                                                                 <i class="icon-trash4"></i> {{ __('dashboard.common.delete') }}
                                                             </button>
                                                         </form>
@@ -104,13 +96,13 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('courses')) }}"
-                                                    class="text-center">{{ __('dashboard.course.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('lessons')) }}"
+                                                    class="text-center">{{ __('dashboard.lesson.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$courses->links()}}
+                                    {{$lessons->links()}}
 
                                 </div>
                             </div>

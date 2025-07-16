@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class Teacher extends Model
+class Lesson extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate'];
+    protected $fillable = ['name', 'desc', 'video_link', 'video_image', 'chapter_id'];
 
     /**
      * Get the table associated with the model.
@@ -30,37 +30,22 @@ class Teacher extends Model
      }
 
 
-    public function subjects()
+    public function chapter()
     {
-        return $this->belongsToMany(\App\Models\Subject::class);
+        return $this->belongsTo(\App\Models\Chapter::class);
     }
 
-    public function stages()
+    public function getVideoImageAttribute()
     {
-        return $this->belongsToMany(\App\Models\Stage::class);
-    }
-
-    public function grades()
-    {
-        return $this->belongsToMany(\App\Models\Grade::class);
-    }
-
-    public function divisions()
-    {
-        return $this->belongsToMany(\App\Models\Division::class);
-    }
-
-    public function getImageAttribute()
-    {
-        if ($this->attributes['image']) {
+        if ($this->attributes['video_image']) {
             // Check if it's a full URL (for external images)
-            if (filter_var($this->attributes['image'], FILTER_VALIDATE_URL)) {
-                return $this->attributes['image'];
+            if (filter_var($this->attributes['video_image'], FILTER_VALIDATE_URL)) {
+                return $this->attributes['video_image'];
             }
 
             // Check if file exists in storage
-            if (Storage::disk('public')->exists($this->attributes['image'])) {
-                return asset(Storage::url($this->attributes['image']));
+            if (Storage::disk('public')->exists($this->attributes['video_image'])) {
+                return asset(Storage::url($this->attributes['video_image']));
             }
         }
 
@@ -72,7 +57,7 @@ class Teacher extends Model
      * Set the user's image.
      * This is a setter that handles image upload
      */
-    public function setImageAttribute($value)
+    public function setVideoImageAttribute($value)
     {
         // If value is null or empty, keep existing image
         if (empty($value)) {
@@ -82,22 +67,17 @@ class Teacher extends Model
         // If it's an uploaded file
         if ($value instanceof \Illuminate\Http\UploadedFile) {
             // Delete old image if exists
-            if ($this->attributes['image'] ?? null) {
-                Storage::disk('public')->delete($this->attributes['image']);
+            if ($this->attributes['video_image'] ?? null) {
+                Storage::disk('public')->delete($this->attributes['video_image']);
             }
 
             // Store new image
             $path = $value->store('users/avatars', 'public');
-            $this->attributes['image'] = $path;
+            $this->attributes['video_image'] = $path;
         }
         // If it's a string path
         else if (is_string($value)) {
-            $this->attributes['image'] = $value;
+            $this->attributes['video_image'] = $value;
         }
-    }
-
-    public function courses()
-    {
-        return $this->hasMany(\App\Models\Course::class);
     }
 }

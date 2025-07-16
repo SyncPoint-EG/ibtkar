@@ -43,7 +43,7 @@ class CourseController extends Controller
      *
      * @return View
      */
-    public function create(): View
+    public function create($teacher_id = null): View
     {
         $educationTypes = EducationType::all();
         $stages = Stage::all();
@@ -52,8 +52,11 @@ class CourseController extends Controller
         $semisters = Semister::all();
         $subjects = Subject::all();
         $teachers = Teacher::all();
-
-        return view('dashboard.courses.create',compact('educationTypes', 'stages', 'grades','divisions','semisters','subjects','teachers'));
+        $selectedTeacher = null;
+        if ($teacher_id) {
+            $selectedTeacher = Teacher::find($teacher_id);
+        }
+        return view('dashboard.courses.create',compact('educationTypes', 'stages', 'grades','divisions','semisters','subjects','teachers','selectedTeacher'));
     }
 
     /**
@@ -67,7 +70,7 @@ class CourseController extends Controller
         try {
             $this->courseService->create($request->validated());
 
-            return redirect()->route('courses.index')
+            return redirect()->back()
                 ->with('success', 'Course created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()

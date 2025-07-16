@@ -5,14 +5,14 @@
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-xs-12 mb-1">
-                    <h2 class="content-header-title">{{ __('dashboard.educationType.management') }}</h2>
+                    <h2 class="content-header-title">{{ __('dashboard.educationtype.management') }}</h2>
                 </div>
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item active">{{ __('dashboard.educationType.title') }}
+                            <li class="breadcrumb-item active">{{ __('dashboard.educationtype.title') }}
                             </li>
                         </ol>
                     </div>
@@ -37,9 +37,9 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
-                                    @can('create_educationType')
+                                    @can('create_educationtype')
                                         <a href="{{ route('education-types.create') }}" class="btn btn-primary mb-1">
-                                            <i class="icon-plus2"></i> {{ __('dashboard.educationType.add_new') }}
+                                            <i class="icon-plus2"></i> {{ __('dashboard.educationtype.add_new') }}
                                         </a>
                                     @endcan
                                 </div>
@@ -83,7 +83,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('education-types')) }}" class="text-center">{{ __('dashboard.educationType.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('education-types')) }}" class="text-center">{{ __('dashboard.educationtype.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

@@ -85,3 +85,12 @@
 <li class=" nav-item"><a href="{{ route('courses.index') }}"><i class="icon-list"></i><span data-i18n="nav.courses.main" class="menu-title">{{__('dashboard.course.title_plural')}}</span></a>
 </li>
 @endcan
+
+@can('view_chapter')
+<li class=" nav-item"><a href="{{ route('chapters.index') }}"><i class="icon-list"></i><span data-i18n="nav.chapters.main" class="menu-title">{{__('dashboard.chapter.title_plural')}}</span></a>
+</li>
+@endcan
+@can('view_lesson')
+<li class=" nav-item"><a href="{{ route('lessons.index') }}"><i class="icon-list"></i><span data-i18n="nav.lessons.main" class="menu-title">{{__('dashboard.lesson.title_plural')}}</span></a>
+</li>
+@endcan

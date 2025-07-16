@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('year');
-            $table->foreignId('teacher_id')->constrained();
-            $table->foreignId('education_type_id')->constrained();
-            $table->foreignId('stage_id')->constrained();
-            $table->foreignId('grade_id')->constrained();
-            $table->foreignId('division_id')->constrained();
-            $table->foreignId('semister_id')->constrained();
-            $table->foreignId('subject_id')->constrained();
+            $table->string('year');
+            $table->foreignId('teacher_id')->nullable()->constrained();
+            $table->foreignId('education_type_id')->nullable()->constrained();
+            $table->foreignId('stage_id')->nullable()->constrained();
+            $table->foreignId('grade_id')->nullable()->constrained();
+            $table->foreignId('division_id')->nullable()->constrained();
+            $table->foreignId('semister_id')->nullable()->constrained();
+            $table->foreignId('subject_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

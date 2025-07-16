@@ -63,4 +63,9 @@ class Course extends Model
     {
         return $this->belongsTo(\App\Models\Teacher::class);
     }
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class);
+    }
 }
