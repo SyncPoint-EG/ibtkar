@@ -94,3 +94,7 @@
 <li class=" nav-item"><a href="{{ route('lessons.index') }}"><i class="icon-list"></i><span data-i18n="nav.lessons.main" class="menu-title">{{__('dashboard.lesson.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_exam')
+<li class=" nav-item"><a href="{{ route('exams.index') }}"><i class="icon-list"></i><span data-i18n="nav.exams.main" class="menu-title">{{__('dashboard.exam.title_plural')}}</span></a>
+</li>
+@endcan

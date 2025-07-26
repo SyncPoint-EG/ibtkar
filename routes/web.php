@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\ExamTakingController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Dashboard\SemisterController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\ExamController;
 
 
 Route::get('/dashboard2', function () {
@@ -893,4 +895,63 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('lessons/{lesson}', [LessonController::class, 'destroy'])
         ->name('lessons.destroy')
         ->middleware('can:delete_lesson');
+});
+
+
+// Routes for Exam
+Route::middleware(['auth'])->group(function() {
+    Route::get('exams', [ExamController::class, 'index'])
+        ->name('exams.index')
+        ->middleware('can:view_exam');
+
+    Route::get('exams/create', [ExamController::class, 'create'])
+        ->name('exams.create')
+        ->middleware('can:create_exam');
+
+    Route::post('exams', [ExamController::class, 'store'])
+        ->name('exams.store')
+        ->middleware('can:create_exam');
+
+    Route::get('exams/{exam}', [ExamController::class, 'show'])
+        ->name('exams.show')
+        ->middleware('can:view_exam');
+
+    Route::get('exams/{exam}/edit', [ExamController::class, 'edit'])
+        ->name('exams.edit')
+        ->middleware('can:edit_exam');
+
+    Route::put('exams/{exam}', [ExamController::class, 'update'])
+        ->name('exams.update')
+        ->middleware('can:edit_exam');
+
+    Route::delete('exams/{exam}', [ExamController::class, 'destroy'])
+        ->name('exams.destroy')
+        ->middleware('can:delete_exam');
+});
+Route::middleware(['auth'])->group(function () {
+    // Exam CRUD routes
+    Route::resource('exams', ExamController::class);
+
+    // Additional exam routes
+    Route::post('exams/{exam}/questions', [ExamController::class, 'addQuestion'])->name('exams.add-question');
+    Route::delete('exams/{exam}/questions/{question}', [ExamController::class, 'removeQuestion'])->name('exams.remove-question');
+    Route::patch('exams/{exam}/toggle-active', [ExamController::class, 'toggleActive'])->name('exams.toggle-active');
+});
+Route::middleware(['auth'])->group(function () {
+    // Student exam taking routes
+    Route::get('exams/{exam}/take', [ExamTakingController::class, 'takeExam'])->name('exams.take');
+    Route::post('exams/{exam}/submit', [ExamTakingController::class, 'submitExam'])->name('exams.submit');
+    Route::post('exams/{exam}/save-answer', [ExamTakingController::class, 'saveAnswer'])->name('exams.save-answer');
+    Route::get('exam-attempts/{attempt}/results', [ExamTakingController::class, 'showResults'])->name('exam-attempts.results');
+
+    // Admin exam management routes (if not already added)
+    Route::resource('exams', ExamController::class);
+    Route::post('exams/{exam}/questions', [ExamController::class, 'addQuestion'])->name('exams.add-question');
+    Route::delete('exams/{exam}/questions/{question}', [ExamController::class, 'removeQuestion'])->name('exams.remove-question');
+    Route::patch('exams/{exam}/toggle-active', [ExamController::class, 'toggleActive'])->name('exams.toggle-active');
+
+    // Exam attempts management (for instructors)
+    Route::get('exams/{exam}/attempts', [ExamController::class, 'viewAttempts'])->name('exams.attempts');
+    Route::get('exam-attempts/{attempt}/grade', [ExamController::class, 'gradeAttempt'])->name('exam-attempts.grade');
+    Route::post('exam-attempts/{attempt}/grade', [ExamController::class, 'updateGrade'])->name('exam-attempts.update-grade');
 });
