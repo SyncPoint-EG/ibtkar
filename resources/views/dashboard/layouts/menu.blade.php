@@ -98,3 +98,7 @@
 <li class=" nav-item"><a href="{{ route('exams.index') }}"><i class="icon-list"></i><span data-i18n="nav.exams.main" class="menu-title">{{__('dashboard.exam.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_homework')
+<li class=" nav-item"><a href="{{ route('homework.index') }}"><i class="icon-list"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.homework.title_plural')}}</span></a>
+</li>
+@endcan

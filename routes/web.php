@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Dashboard\ExamTakingController;
+use App\Http\Controllers\Dashboard\HomeworkController;
+use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
@@ -955,3 +957,45 @@ Route::middleware(['auth'])->group(function () {
     Route::get('exam-attempts/{attempt}/grade', [ExamController::class, 'gradeAttempt'])->name('exam-attempts.grade');
     Route::post('exam-attempts/{attempt}/grade', [ExamController::class, 'updateGrade'])->name('exam-attempts.update-grade');
 });
+
+
+// Routes for Homework
+
+Route::middleware(['auth'])->group(function () {
+    // Homework routes
+    Route::get('homework', [HomeworkController::class, 'index'])
+        ->name('homework.index')
+        ->middleware('can:view_homework');
+
+    Route::get('homework/create', [HomeworkController::class, 'create'])
+        ->name('homework.create')
+        ->middleware('can:create_homework');
+
+    Route::post('homework', [HomeworkController::class, 'store'])
+        ->name('homework.store')
+        ->middleware('can:create_homework');
+
+    Route::get('homework/{homework}', [HomeworkController::class, 'show'])
+        ->name('homework.show')
+        ->middleware('can:view_homework');
+
+    Route::get('homework/{homework}/edit', [HomeworkController::class, 'edit'])
+        ->name('homework.edit')
+        ->middleware('can:edit_homework');
+
+    Route::put('homework/{homework}', [HomeworkController::class, 'update'])
+        ->name('homework.update')
+        ->middleware('can:edit_homework');
+
+    Route::delete('homework/{homework}', [HomeworkController::class, 'destroy'])
+        ->name('homework.destroy')
+        ->middleware('can:delete_homework');
+    Route::patch('homework/{homework}/toggle-status', [HomeworkController::class, 'toggleStatus'])->name('homework.toggle-status');
+
+    // Homework Question routes (inline)
+    Route::post('homework/{homework}/questions', [HomeworkQuestionController::class, 'store'])->name('homework-questions.store');
+    Route::patch('homework-questions/{question}', [HomeworkQuestionController::class, 'update'])->name('homework-questions.update');
+    Route::delete('homework-questions/{question}', [HomeworkQuestionController::class, 'destroy'])->name('homework-questions.destroy');
+});
+
+
