@@ -68,9 +68,9 @@ class CourseController extends Controller
     public function store(CourseRequest $request): RedirectResponse
     {
         try {
-            $this->courseService->create($request->validated());
+            $this->courseService->create($request->all());
 
-            return redirect()->back()
+            return redirect()->route('courses.index')
                 ->with('success', 'Course created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
