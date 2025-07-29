@@ -28,6 +28,7 @@ class Student extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 

@@ -52,8 +52,7 @@
                                             <th>{{ __("dashboard.student.fields.first_name") }}</th>
                                             <th>{{ __("dashboard.student.fields.last_name") }}</th>
                                             <th>{{ __("dashboard.student.fields.phone") }}</th>
-                                            <th>{{ __("dashboard.student.fields.password") }}</th>
-                                            <th>{{ __("dashboard.governorate.title") }}</th>
+{{--                                            <th>{{ __("dashboard.governorate.title") }}</th>--}}
                                             <th>{{ __("dashboard.district.title") }}</th>
                                             <th>{{ __("dashboard.center.title") }}</th>
                                             <th>{{ __("dashboard.stage.title") }}</th>
@@ -72,8 +71,7 @@
                                                 <td>{{ $student->first_name }}</td>
                                                 <td>{{ $student->last_name }}</td>
                                                 <td>{{ $student->phone }}</td>
-                                                <td>{{ $student->password }}</td>
-                                                <td>{{ $student->governorate?->nmae }}</td>
+{{--                                                <td>{{ $student->governorate?->nmae }}</td>--}}
                                                 <td>{{ $student->district?->name }}</td>
                                                 <td>{{ $student->center?->name }}</td>
                                                 <td>{{ $student->stage?->name }}</td>
