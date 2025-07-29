@@ -56,9 +56,9 @@ class ChapterController extends Controller
     public function store(ChapterRequest $request): RedirectResponse
     {
         try {
-            $this->chapterService->create($request->validated());
+            $chapter =$this->chapterService->create($request->validated());
 
-            return redirect()->back()->with('success', 'Chapter created successfully');
+            return redirect()->route('chapters.show',$chapter->id)->with('success', 'Chapter created successfully');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
