@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
+use App\Models\Center;
+use App\Models\District;
+use App\Models\Division;
+use App\Models\Governorate;
+use App\Models\Grade;
+use App\Models\Stage;
 use App\Services\StudentService;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -38,7 +44,13 @@ class StudentController extends Controller
      */
     public function create(): View
     {
-        return view('dashboard.students.create');
+        $governorates = Governorate::all();
+        $districts = District::all();
+        $centers = Center::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+        return view('dashboard.students.create',compact('governorates','districts','centers','stages','grades','divisions'));
     }
 
     /**
@@ -80,7 +92,13 @@ class StudentController extends Controller
      */
     public function edit(Student $student): View
     {
-        return view('dashboard.students.edit', compact('student'));
+        $governorates = Governorate::all();
+        $districts = District::all();
+        $centers = Center::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+        return view('dashboard.students.edit', compact('student','governorates','districts','centers','stages','grades','divisions'));
     }
 
     /**

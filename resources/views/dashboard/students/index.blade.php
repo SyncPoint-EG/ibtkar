@@ -10,7 +10,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.student.title') }}
                             </li>
@@ -49,18 +50,18 @@
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.student.fields.first_name") }}</th>
-                <th>{{ __("dashboard.student.fields.last_name") }}</th>
-                <th>{{ __("dashboard.student.fields.phone") }}</th>
-                <th>{{ __("dashboard.student.fields.password") }}</th>
-                <th>{{ __("dashboard.student.fields.governorate_id") }}</th>
-                <th>{{ __("dashboard.student.fields.district_id") }}</th>
-                <th>{{ __("dashboard.student.fields.center_id") }}</th>
-                <th>{{ __("dashboard.student.fields.stage_id") }}</th>
-                <th>{{ __("dashboard.student.fields.grade_id") }}</th>
-                <th>{{ __("dashboard.student.fields.division_id") }}</th>
-                <th>{{ __("dashboard.student.fields.gender") }}</th>
-                <th>{{ __("dashboard.student.fields.birth_date") }}</th>
-                <th>{{ __("dashboard.student.fields.status") }}</th>
+                                            <th>{{ __("dashboard.student.fields.last_name") }}</th>
+                                            <th>{{ __("dashboard.student.fields.phone") }}</th>
+                                            <th>{{ __("dashboard.student.fields.password") }}</th>
+                                            <th>{{ __("dashboard.governorate.title") }}</th>
+                                            <th>{{ __("dashboard.district.title") }}</th>
+                                            <th>{{ __("dashboard.center.title") }}</th>
+                                            <th>{{ __("dashboard.stage.title") }}</th>
+                                            <th>{{ __("dashboard.grade.title") }}</th>
+                                            <th>{{ __("dashboard.division.title") }}</th>
+                                            <th>{{ __("dashboard.student.fields.gender") }}</th>
+                                            <th>{{ __("dashboard.student.fields.birth_date") }}</th>
+                                            <th>{{ __("dashboard.student.fields.status") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -69,36 +70,40 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $student->first_name }}</td>
-                <td>{{ $student->last_name }}</td>
-                <td>{{ $student->phone }}</td>
-                <td>{{ $student->password }}</td>
-                <td>{{ $student->governorate_id }}</td>
-                <td>{{ $student->district_id }}</td>
-                <td>{{ $student->center_id }}</td>
-                <td>{{ $student->stage_id }}</td>
-                <td>{{ $student->grade_id }}</td>
-                <td>{{ $student->division_id }}</td>
-                <td>{{ $student->gender }}</td>
-                <td>{{ $student->birth_date ? $student->birth_date->format('Y-m-d') : '' }}</td>
-                <td>{{ $student->status ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $student->last_name }}</td>
+                                                <td>{{ $student->phone }}</td>
+                                                <td>{{ $student->password }}</td>
+                                                <td>{{ $student->governorate?->nmae }}</td>
+                                                <td>{{ $student->district?->name }}</td>
+                                                <td>{{ $student->center?->name }}</td>
+                                                <td>{{ $student->stage?->name }}</td>
+                                                <td>{{ $student->grade?->name }}</td>
+                                                <td>{{ $student->division?->name }}</td>
+                                                <td>{{ $student->gender }}</td>
+                                                <td>{{ $student->birth_date ? $student->birth_date->format('Y-m-d') : '' }}</td>
+                                                <td>{{ $student->status ? 'Yes' : 'No' }}</td>
                                                 <td>
                                                     @can('view_student')
-                                                        <a href="{{ route('students.show', $student->id) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ route('students.show', $student->id) }}"
+                                                           class="btn btn-info btn-sm">
                                                             <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('edit_student')
-                                                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('students.edit', $student->id) }}"
+                                                           class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('delete_student')
-                                                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: inline-block;">
+                                                        <form action="{{ route('students.destroy', $student->id) }}"
+                                                              method="POST" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('dashboard.student.delete_confirm') }}');">
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('{{ __('dashboard.student.delete_confirm') }}');">
                                                                 <i class="icon-trash4"></i> {{ __('dashboard.common.delete') }}
                                                             </button>
                                                         </form>
@@ -107,7 +112,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('students')) }}" class="text-center">{{ __('dashboard.student.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('students')) }}"
+                                                    class="text-center">{{ __('dashboard.student.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>
