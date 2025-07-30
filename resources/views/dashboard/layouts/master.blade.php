@@ -65,7 +65,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/css/style.css') }}">
     @endif
     <style>
-        .card .card-body .card-text p {
+        .card .card-body .card-text p , .invalid-feedback {
             color: red;
         }
     </style>
