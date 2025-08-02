@@ -24,20 +24,19 @@ class TeacherRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'other_phone' => 'nullable|string|max:20',
-            'bio' => 'nullable|string',
-            'image' => 'nullable|image',
-            'rate' => 'nullable|numeric',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'exists:subjects,id',
-            'stages' => 'nullable|array',
-            'stages.*' => 'exists:stages,id',
-            'grades' => 'nullable|array',
-            'grades.*' => 'exists:grades,id',
-            'divisions' => 'nullable|array',
-            'divisions.*' => 'exists:divisions,id',
+            'name'         => 'required|string|max:255',
+            'phone'        => 'required|string|max:20',
+            'other_phone'  => 'nullable|string|max:20',
+            'bio'          => 'nullable|string',
+            'image'        => 'nullable|image',
+            'rate'         => 'nullable|numeric',
+
+            // Validate assignments (new way)
+            'assignments' => 'required|array|min:1',
+            'assignments.*.subject_id'  => 'required|exists:subjects,id',
+            'assignments.*.stage_id'    => 'required|exists:stages,id',
+            'assignments.*.grade_id'    => 'required|exists:grades,id',
+            'assignments.*.division_id' => 'nullable|exists:divisions,id',
         ];
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('image')->nullable();
             $table->float('rate')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

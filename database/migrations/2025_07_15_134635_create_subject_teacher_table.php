@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('subject_id')->constrained();
             $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('stage_id')->nullable()->constrained();
+            $table->foreignId('grade_id')->nullable()->constrained();
+            $table->foreignId('division_id')->nullable()->constrained();
 
         });
     }

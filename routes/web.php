@@ -723,7 +723,7 @@ Route::middleware(['auth'])->group(function() {
         ->name('teachers.store')
         ->middleware('can:create_teacher');
 
-    Route::get('teachers/{teacher}', [TeacherController::class, 'show'])
+    Route::get('teacher/{teacher}', [TeacherController::class, 'show'])
         ->name('teachers.show')
         ->middleware('can:view_teacher');
 
@@ -738,6 +738,19 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('teachers/{teacher}', [TeacherController::class, 'destroy'])
         ->name('teachers.destroy')
         ->middleware('can:delete_teacher');
+
+    Route::post('teachers/{teacher}/toggle-activation', [TeacherController::class, 'toggleActivation'])
+        ->name('teachers.toggle-activation')
+        ->middleware('can:edit_teacher');
+
+    Route::get('teachers/export', [TeacherController::class, 'export'])
+        ->name('teachers.export')
+        ->middleware('can:view_teacher');
+
+    // AJAX search route
+    Route::get('teachers/search', [TeacherController::class, 'search'])
+        ->name('teachers.search')
+        ->middleware('can:view_teacher');
 });
 
 // Routes for EducationType

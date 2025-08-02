@@ -32,7 +32,13 @@ class Teacher extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(\App\Models\Subject::class);
+        return $this->belongsToMany(Subject::class)
+            ->withPivot(['stage_id','grade_id','division_id'])
+            ;
+    }
+    public function subjectTeacherAssignments()
+    {
+        return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
     }
 
     public function stages()
@@ -99,5 +105,33 @@ class Teacher extends Model
     public function courses()
     {
         return $this->hasMany(\App\Models\Course::class);
+    }
+
+    public function students()
+    {
+        return Student::first();
+    }
+
+    public function getLessonsCountAttribute()
+    {
+        $teacherStages = $this->subjectTeacherAssignments->pluck('stage_id');
+        $teacherGrades = $this->subjectTeacherAssignments->pluck('grade_id');
+        $teacherDivisions = $this->subjectTeacherAssignments->pluck('division_id');
+        return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
+            $q->wherein('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
+            ->whereIn('division_id',$teacherDivisions);
+        })->count();
+    }
+
+    public function getStudentsCountAttribute()
+    {
+        $teacherStages = $this->subjectTeacherAssignments->pluck('stage_id');
+        $teacherGrades = $this->subjectTeacherAssignments->pluck('grade_id');
+        $teacherDivisions = $this->subjectTeacherAssignments->pluck('division_id');
+        return Student::where(function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
+            $q->whereIn('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
+                ->whereIn('division_id',$teacherDivisions);
+        })
+        ->count();
     }
 }
