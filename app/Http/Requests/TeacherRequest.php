@@ -32,11 +32,11 @@ class TeacherRequest extends FormRequest
             'rate'         => 'nullable|numeric',
 
             // Validate assignments (new way)
-            'assignments' => 'required|array|min:1',
-            'assignments.*.subject_id'  => 'required|exists:subjects,id',
-            'assignments.*.stage_id'    => 'required|exists:stages,id',
-            'assignments.*.grade_id'    => 'required|exists:grades,id',
-            'assignments.*.division_id' => 'nullable|exists:divisions,id',
+//            'assignments' => 'required|array|min:1',
+//            'assignments.*.subject_id'  => 'required|exists:subjects,id',
+//            'assignments.*.stage_id'    => 'required|exists:stages,id',
+//            'assignments.*.grade_id'    => 'required|exists:grades,id',
+//            'assignments.*.division_id' => 'nullable|exists:divisions,id',
         ];
     }
 }

@@ -98,7 +98,14 @@ class CourseController extends Controller
      */
     public function edit(Course $course): View
     {
-        return view('dashboard.courses.edit', compact('course'));
+        $teachers = Teacher::all();
+        $educationTypes = EducationType::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+        $semisters = Semister::all();
+        $subjects = Subject::all();
+        return view('dashboard.courses.edit', compact('course','teachers','educationTypes','stages','grades','divisions','semisters','subjects'));
     }
 
     /**

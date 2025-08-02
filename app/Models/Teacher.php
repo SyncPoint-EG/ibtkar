@@ -114,9 +114,9 @@ class Teacher extends Model
 
     public function getLessonsCountAttribute()
     {
-        $teacherStages = $this->subjectTeacherAssignments->pluck('stage_id');
-        $teacherGrades = $this->subjectTeacherAssignments->pluck('grade_id');
-        $teacherDivisions = $this->subjectTeacherAssignments->pluck('division_id');
+        $teacherStages = $this->courses->pluck('stage_id');
+        $teacherGrades = $this->courses->pluck('grade_id');
+        $teacherDivisions = $this->courses->pluck('division_id');
         return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
             $q->wherein('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
             ->whereIn('division_id',$teacherDivisions);
@@ -125,9 +125,9 @@ class Teacher extends Model
 
     public function getStudentsCountAttribute()
     {
-        $teacherStages = $this->subjectTeacherAssignments->pluck('stage_id');
-        $teacherGrades = $this->subjectTeacherAssignments->pluck('grade_id');
-        $teacherDivisions = $this->subjectTeacherAssignments->pluck('division_id');
+        $teacherStages = $this->courses->pluck('stage_id');
+        $teacherGrades = $this->courses->pluck('grade_id');
+        $teacherDivisions = $this->courses->pluck('division_id');
         return Student::where(function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
             $q->whereIn('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
                 ->whereIn('division_id',$teacherDivisions);

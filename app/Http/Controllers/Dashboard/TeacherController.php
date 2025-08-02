@@ -48,10 +48,10 @@ class TeacherController extends Controller
 
         // Build query with eager loading of assignments and related models
         $query = Teacher::with([
-            'subjectTeacherAssignments.subject',
-            'subjectTeacherAssignments.grade',
-            'subjectTeacherAssignments.stage',
-            'subjectTeacherAssignments.division'
+            'courses.subject',
+            'courses.grade',
+            'courses.stage',
+            'courses.division'
         ]);
 
 //            ->withCount(['students', 'lectures', 'courses']);
@@ -72,7 +72,7 @@ class TeacherController extends Controller
 
         // Filter by subject_teacher pivot assignments
         if ($subject_id || $stage_id || $grade_id || $division_id) {
-            $query->whereHas('subjectTeacherAssignments', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+            $query->whereHas('courses', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
                 if ($subject_id) {
                     $q->where('subject_id', $subject_id);
                 }
@@ -195,30 +195,30 @@ class TeacherController extends Controller
         try {
             $teacher = $this->teacherService->create($request->validated());
 
-            // Handle subject assignments
-            $assignments = $request->input('assignments', []);
-            $pivotData = [];
-            foreach ($assignments as $assignment) {
-                // Required: subject_id, stage_id, grade_id
-                if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
-                    $pivotData[] = [
-                        'subject_id'  => $assignment['subject_id'],
-                        'stage_id'    => $assignment['stage_id'],
-                        'grade_id'    => $assignment['grade_id'],
-                        'division_id' => $assignment['division_id'] ?? null,
-                    ];
-                }
-            }
-
-            // Insert into pivot
-            foreach($pivotData as $pd) {
-                $teacher->subjects()
-                    ->attach($pd['subject_id'], [
-                        'stage_id'    => $pd['stage_id'],
-                        'grade_id'    => $pd['grade_id'],
-                        'division_id' => $pd['division_id'],
-                    ]);
-            }
+//            // Handle subject assignments
+//            $assignments = $request->input('assignments', []);
+//            $pivotData = [];
+//            foreach ($assignments as $assignment) {
+//                // Required: subject_id, stage_id, grade_id
+//                if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
+//                    $pivotData[] = [
+//                        'subject_id'  => $assignment['subject_id'],
+//                        'stage_id'    => $assignment['stage_id'],
+//                        'grade_id'    => $assignment['grade_id'],
+//                        'division_id' => $assignment['division_id'] ?? null,
+//                    ];
+//                }
+//            }
+//
+//            // Insert into pivot
+//            foreach($pivotData as $pd) {
+//                $teacher->subjects()
+//                    ->attach($pd['subject_id'], [
+//                        'stage_id'    => $pd['stage_id'],
+//                        'grade_id'    => $pd['grade_id'],
+//                        'division_id' => $pd['division_id'],
+//                    ]);
+//            }
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher created successfully.');
@@ -322,10 +322,10 @@ class TeacherController extends Controller
 
         // Build query with eager loading of assignments and related models
         $query = Teacher::with([
-            'subjectTeacherAssignments.subject',
-            'subjectTeacherAssignments.grade',
-            'subjectTeacherAssignments.stage',
-            'subjectTeacherAssignments.division',
+            'courses.subject',
+            'courses.grade',
+            'courses.stage',
+            'courses.division',
         ]);
 //            ->withCount(['students', 'courses', 'lectures']);
 
@@ -345,7 +345,7 @@ class TeacherController extends Controller
 
         // Filter by assignments pivot data
         if ($subject_id || $stage_id || $grade_id || $division_id) {
-            $query->whereHas('subjectTeacherAssignments', function($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+            $query->whereHas('courses', function($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
                 if ($subject_id) {
                     $q->where('subject_id', $subject_id);
                 }

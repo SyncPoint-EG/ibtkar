@@ -85,73 +85,73 @@
                                                     @error('rate') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
 
-                                                {{-- Subject Assignments --}}
-                                                <div class="form-group">
-                                                    <label>{{ __("dashboard.teacher.subject_assignments") }}</label>
+{{--                                                --}}{{-- Subject Assignments --}}
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label>{{ __("dashboard.teacher.subject_assignments") }}</label>--}}
 
-                                                    <div id="assignments-container">
-                                                        {{-- Assignment rows will be inserted here --}}
-                                                        @if(old('assignments'))
-                                                            @foreach(old('assignments') as $idx => $assignment)
-                                                                <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">
-                                                                    <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">
-                                                                        <i class="icon-trash"></i>
-                                                                    </button>
-                                                                    <div class="row">
-                                                                        <div class="col-md-3">
-                                                                            <select name="assignments[{{ $idx }}][subject_id]" class="form-control" required>
-                                                                                <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>
-                                                                                @foreach($subjects as $subject)
-                                                                                    <option value="{{ $subject->id }}" {{ $assignment['subject_id'] == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-3">
-                                                                            <select name="assignments[{{ $idx }}][stage_id]" class="form-control" required>
-                                                                                <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>
-                                                                                @foreach($stages as $stage)
-                                                                                    <option value="{{ $stage->id }}" {{ $assignment['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-3">
-                                                                            <select name="assignments[{{ $idx }}][grade_id]" class="form-control" required>
-                                                                                <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>
-                                                                                @foreach($grades as $grade)
-                                                                                    <option value="{{ $grade->id }}" {{ $assignment['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-3">
-                                                                            <select name="assignments[{{ $idx }}][division_id]" class="form-control">
-                                                                                <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>
-                                                                                @foreach($divisions as $division)
-                                                                                    <option value="{{ $division->id }}" {{ (isset($assignment['division_id']) && $assignment['division_id'] == $division->id) ? 'selected' : '' }}>{{ $division->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    <button type="button" class="btn btn-info mt-1" id="add-assignment">
-                                                        <i class="icon-plus2"></i> {{ __("dashboard.teacher.add_assignment") }}
-                                                    </button>
+{{--                                                    <div id="assignments-container">--}}
+{{--                                                        --}}{{-- Assignment rows will be inserted here --}}
+{{--                                                        @if(old('assignments'))--}}
+{{--                                                            @foreach(old('assignments') as $idx => $assignment)--}}
+{{--                                                                <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">--}}
+{{--                                                                    <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">--}}
+{{--                                                                        <i class="icon-trash"></i>--}}
+{{--                                                                    </button>--}}
+{{--                                                                    <div class="row">--}}
+{{--                                                                        <div class="col-md-3">--}}
+{{--                                                                            <select name="assignments[{{ $idx }}][subject_id]" class="form-control" required>--}}
+{{--                                                                                <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>--}}
+{{--                                                                                @foreach($subjects as $subject)--}}
+{{--                                                                                    <option value="{{ $subject->id }}" {{ $assignment['subject_id'] == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>--}}
+{{--                                                                                @endforeach--}}
+{{--                                                                            </select>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="col-md-3">--}}
+{{--                                                                            <select name="assignments[{{ $idx }}][stage_id]" class="form-control" required>--}}
+{{--                                                                                <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>--}}
+{{--                                                                                @foreach($stages as $stage)--}}
+{{--                                                                                    <option value="{{ $stage->id }}" {{ $assignment['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>--}}
+{{--                                                                                @endforeach--}}
+{{--                                                                            </select>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="col-md-3">--}}
+{{--                                                                            <select name="assignments[{{ $idx }}][grade_id]" class="form-control" required>--}}
+{{--                                                                                <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>--}}
+{{--                                                                                @foreach($grades as $grade)--}}
+{{--                                                                                    <option value="{{ $grade->id }}" {{ $assignment['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>--}}
+{{--                                                                                @endforeach--}}
+{{--                                                                            </select>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="col-md-3">--}}
+{{--                                                                            <select name="assignments[{{ $idx }}][division_id]" class="form-control">--}}
+{{--                                                                                <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>--}}
+{{--                                                                                @foreach($divisions as $division)--}}
+{{--                                                                                    <option value="{{ $division->id }}" {{ (isset($assignment['division_id']) && $assignment['division_id'] == $division->id) ? 'selected' : '' }}>{{ $division->name }}</option>--}}
+{{--                                                                                @endforeach--}}
+{{--                                                                            </select>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </div>--}}
+{{--                                                                </div>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        @endif--}}
+{{--                                                    </div>--}}
+{{--                                                    <button type="button" class="btn btn-info mt-1" id="add-assignment">--}}
+{{--                                                        <i class="icon-plus2"></i> {{ __("dashboard.teacher.add_assignment") }}--}}
+{{--                                                    </button>--}}
 
-                                                    @error('assignments')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                    @error('assignments.*.subject_id')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                    @error('assignments.*.stage_id')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                    @error('assignments.*.grade_id')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+{{--                                                    @error('assignments')--}}
+{{--                                                    <div class="text-danger">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                    @error('assignments.*.subject_id')--}}
+{{--                                                    <div class="text-danger">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                    @error('assignments.*.stage_id')--}}
+{{--                                                    <div class="text-danger">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                    @error('assignments.*.grade_id')--}}
+{{--                                                    <div class="text-danger">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                </div>--}}
 
                                             </div>
                                             <div class="form-actions">

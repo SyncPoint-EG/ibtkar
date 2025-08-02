@@ -137,69 +137,69 @@
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <!-- Multi-select for Subjects -->
-                                            <div class="form-group">
-                                                <label for="subjects">{{ __("dashboard.teacher.fields.subjects") }}</label>
-                                                <select id="subjects" name="subjects[]" class="form-control select2 @error('subjects') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.subjects") }}">
-                                                    @foreach($subjects as $subject)
-                                                        <option value="{{ $subject->id }}"
-                                                            {{ in_array($subject->id, old('subjects', isset($teacher) ? $teacher->subjects->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                                                            {{ $subject->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('subjects')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+{{--                                            <!-- Multi-select for Subjects -->--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <label for="subjects">{{ __("dashboard.teacher.fields.subjects") }}</label>--}}
+{{--                                                <select id="subjects" name="subjects[]" class="form-control select2 @error('subjects') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.subjects") }}">--}}
+{{--                                                    @foreach($subjects as $subject)--}}
+{{--                                                        <option value="{{ $subject->id }}"--}}
+{{--                                                            {{ in_array($subject->id, old('subjects', isset($teacher) ? $teacher->subjects->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
+{{--                                                            {{ $subject->name }}--}}
+{{--                                                        </option>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </select>--}}
+{{--                                                @error('subjects')--}}
+{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                @enderror--}}
+{{--                                            </div>--}}
 
-                                            <!-- Multi-select for Stages -->
-                                            <div class="form-group">
-                                                <label for="stages">{{ __("dashboard.teacher.fields.stages") }}</label>
-                                                <select id="stages" name="stages[]" class="form-control select2 @error('stages') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.stages") }}">
-                                                    @foreach($stages as $stage)
-                                                        <option value="{{ $stage->id }}"
-                                                            {{ in_array($stage->id, old('stages', isset($teacher) ? $teacher->stages->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                                                            {{ $stage->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('stages')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+{{--                                            <!-- Multi-select for Stages -->--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <label for="stages">{{ __("dashboard.teacher.fields.stages") }}</label>--}}
+{{--                                                <select id="stages" name="stages[]" class="form-control select2 @error('stages') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.stages") }}">--}}
+{{--                                                    @foreach($stages as $stage)--}}
+{{--                                                        <option value="{{ $stage->id }}"--}}
+{{--                                                            {{ in_array($stage->id, old('stages', isset($teacher) ? $teacher->stages->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
+{{--                                                            {{ $stage->name }}--}}
+{{--                                                        </option>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </select>--}}
+{{--                                                @error('stages')--}}
+{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                @enderror--}}
+{{--                                            </div>--}}
 
-                                            <!-- Multi-select for Grades -->
-                                            <div class="form-group">
-                                                <label for="grades">{{ __("dashboard.teacher.fields.grades") }}</label>
-                                                <select id="grades" name="grades[]" class="form-control select2 @error('grades') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.grades") }}">
-                                                    @foreach($grades as $grade)
-                                                        <option value="{{ $grade->id }}"
-                                                            {{ in_array($grade->id, old('grades', isset($teacher) ? $teacher->grades->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                                                            {{ $grade->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('grades')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+{{--                                            <!-- Multi-select for Grades -->--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <label for="grades">{{ __("dashboard.teacher.fields.grades") }}</label>--}}
+{{--                                                <select id="grades" name="grades[]" class="form-control select2 @error('grades') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.grades") }}">--}}
+{{--                                                    @foreach($grades as $grade)--}}
+{{--                                                        <option value="{{ $grade->id }}"--}}
+{{--                                                            {{ in_array($grade->id, old('grades', isset($teacher) ? $teacher->grades->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
+{{--                                                            {{ $grade->name }}--}}
+{{--                                                        </option>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </select>--}}
+{{--                                                @error('grades')--}}
+{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                @enderror--}}
+{{--                                            </div>--}}
 
-                                            <!-- Multi-select for Divisions -->
-                                            <div class="form-group">
-                                                <label for="divisions">{{ __("dashboard.teacher.fields.divisions") }}</label>
-                                                <select id="divisions" name="divisions[]" class="form-control select2 @error('divisions') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.divisions") }}">
-                                                    @foreach($divisions as $division)
-                                                        <option value="{{ $division->id }}"
-                                                            {{ in_array($division->id, old('divisions', isset($teacher) ? $teacher->divisions->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                                                            {{ $division->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('divisions')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+{{--                                            <!-- Multi-select for Divisions -->--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <label for="divisions">{{ __("dashboard.teacher.fields.divisions") }}</label>--}}
+{{--                                                <select id="divisions" name="divisions[]" class="form-control select2 @error('divisions') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.divisions") }}">--}}
+{{--                                                    @foreach($divisions as $division)--}}
+{{--                                                        <option value="{{ $division->id }}"--}}
+{{--                                                            {{ in_array($division->id, old('divisions', isset($teacher) ? $teacher->divisions->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
+{{--                                                            {{ $division->name }}--}}
+{{--                                                        </option>--}}
+{{--                                                    @endforeach--}}
+{{--                                                </select>--}}
+{{--                                                @error('divisions')--}}
+{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                @enderror--}}
+{{--                                            </div>--}}
                                             <div class="form-actions">
                                                 <a href="{{ route('teachers.index') }}" class="btn btn-warning mr-1">
                                                     <i class="icon-cross2"></i> {{ __('dashboard.common.cancel') }}
