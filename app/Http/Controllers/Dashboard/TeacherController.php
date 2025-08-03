@@ -268,13 +268,17 @@ class TeacherController extends Controller
     public function update(TeacherRequest $request, Teacher $teacher): RedirectResponse
     {
         try {
-            $this->teacherService->update($teacher, $request->validated());
+            $this->teacherService->update($teacher, $request->except('password'));
 
-            // Sync many-to-many relationships
-            $teacher->subjects()->sync($request->subjects ?? []);
-            $teacher->stages()->sync($request->stages ?? []);
-            $teacher->grades()->sync($request->grades ?? []);
-            $teacher->divisions()->sync($request->divisions ?? []);
+            if($request->password !=null){
+                $teacher->password = $request->password;
+                $teacher->save();
+            }
+//            // Sync many-to-many relationships
+//            $teacher->subjects()->sync($request->subjects ?? []);
+//            $teacher->stages()->sync($request->stages ?? []);
+//            $teacher->grades()->sync($request->grades ?? []);
+//            $teacher->divisions()->sync($request->divisions ?? []);
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher updated successfully.');

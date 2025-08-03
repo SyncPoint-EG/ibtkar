@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Requests\StudentRequest;
 use App\Http\Resources\StudentResource;
+use App\Models\Guardian;
+use App\Models\Setting;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +18,15 @@ class StudentAuthController
         $validated = $request->validated();
         $validated['verification_code'] = rand(1000, 9999);
         $student = Student::create($request->validated());
+        if($request->referral_code){
+            $this->handleReferralCode($request , $student);
+        }
+        if($request->guardian_number && !Guardian::query()->where('phone', $request->guardian_number)->exists()){
+            Guardian::create([
+                'phone' => $request->guardian_number,
+                'password'=> $request->guardian_number,
+            ]);
+        }
 
 
         // sending code must be here
@@ -26,6 +37,14 @@ class StudentAuthController
             'student' => new StudentResource($student),
             'code' => $student->verification_code,
         ]);
+    }
+    public function handleReferralCode(Request $request , Student $student)
+    {
+        $referrer = Student::where('referral_code', $request->input('referral_code'))->first();
+        $data['referred_by'] = $referrer ? $referrer->id : null;
+        $student->update($data);
+        $referral_points = Setting::where('key', 'referral points')->value('value');
+        $referrer->increment('points', $referral_points);
     }
 
     public function verifyPhone(Request $request, Student $student)

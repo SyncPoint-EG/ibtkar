@@ -37,6 +37,8 @@ class StudentRequest extends FormRequest
             'center_id' => ['required', 'exists:centers,id'],
             'governorate_id' => ['required', 'exists:governorates,id'],
             'district_id' => ['nullable', 'exists:districts,id'],
+            'referral_code' => 'nullable|exists:students,referral_code',
+            'guardian_number' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

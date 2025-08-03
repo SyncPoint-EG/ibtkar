@@ -23,6 +23,9 @@ class TeacherRequest extends FormRequest
      */
     public function rules()
     {
+        $passwordRules = $this->isMethod('post')
+            ? ['required', 'string', 'min:6', 'confirmed']
+            : ['nullable', 'string', 'min:6', 'confirmed'];
         return [
             'name'         => 'required|string|max:255',
             'phone'        => 'required|string|max:20',
@@ -30,6 +33,7 @@ class TeacherRequest extends FormRequest
             'bio'          => 'nullable|string',
             'image'        => 'nullable|image',
             'rate'         => 'nullable|numeric',
+            'password'     => $passwordRules,
 
             // Validate assignments (new way)
 //            'assignments' => 'required|array|min:1',

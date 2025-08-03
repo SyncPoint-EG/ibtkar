@@ -15,7 +15,14 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate'];
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password'];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 
     /**
      * Get the table associated with the model.

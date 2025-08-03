@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\SettingsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\PostController;
 use App\Http\Controllers\Dashboard\CompanyController;
@@ -1002,4 +1003,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('homework-questions/{question}', [HomeworkQuestionController::class, 'destroy'])->name('homework-questions.destroy');
 });
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('settings/bulk-edit', [SettingsController::class, 'bulkEdit'])
+        ->name('settings.bulkEdit')
+    ->middleware('can:update_settings');
+    Route::put('settings/bulk-update', [SettingsController::class, 'bulkUpdate'])
+        ->name('settings.bulkUpdate')
+        ->middleware('can:update_settings');
+});
 

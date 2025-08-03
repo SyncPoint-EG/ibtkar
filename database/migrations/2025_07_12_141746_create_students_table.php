@@ -17,17 +17,21 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone');
             $table->string('password');
-            $table->foreignId('governorate_id')->constrained('governorates')->cascadeOnDelete();
-            $table->foreignId('district_id')->constrained('districts')->cascadeOnDelete();
-            $table->foreignId('center_id')->constrained('centers')->cascadeOnDelete();
+            $table->foreignId('governorate_id')->nullable()->constrained('governorates')->cascadeOnDelete();
+            $table->foreignId('guardian_id')->nullable()->constrained('guardians')->cascadeOnDelete();
+            $table->foreignId('district_id')->nullable()->constrained('districts')->cascadeOnDelete();
+            $table->foreignId('center_id')->nullable()->constrained('centers')->cascadeOnDelete();
             $table->foreignId('stage_id')->constrained('stages')->cascadeOnDelete();
             $table->foreignId('grade_id')   ->constrained('grades')->cascadeOnDelete();
-            $table->foreignId('division_id')->constrained('divisions')->cascadeOnDelete()                           ;
+            $table->foreignId('division_id')->nullable()->constrained('divisions')->cascadeOnDelete()                           ;
             $table->string('gender');
-            $table->date('birth_date');
+            $table->date('birth_date')->nullable();
             $table->boolean('status')->default(false);
             $table->string('verification_code')->nullable();
-            $table->timestamps();
+            $table->string('referral_code')->unique();
+            $table->integer('points')->default(0);
+            $table->unsignedBigInteger('referred_by')->nullable();
+            $table->foreign('referred_by')->references('id')->on('students')->onDelete('set null');            $table->timestamps();
         });
     }
 

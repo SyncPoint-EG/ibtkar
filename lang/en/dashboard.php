@@ -35,7 +35,14 @@ return [
             'search_error' => 'Search failed. Please try again.',
             'not_available' => 'N/A',
             'not_assigned' => 'Not Assigned',
+            'save_changes' => 'Save Changes',
         ],
+    'settings' => [
+        'title' => 'Settings',
+        'edit_all_settings' => 'Edit All Settings',
+        'updated_successfully' => 'Settings updated successfully.',
+        'description_optional' => 'Description (optional)',
+    ],
         'user' => [
             'title' => 'User',
             'title_plural' => 'Users',

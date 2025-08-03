@@ -200,6 +200,20 @@
 {{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
 {{--                                                @enderror--}}
 {{--                                            </div>--}}
+                                            <div class="form-group">
+                                                <label for="password">{{ __("dashboard.student.fields.password") }}</label>
+                                                <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
+                                                       name="password" value="{{ old('password') }}"
+                                                       placeholder="{{ __("dashboard.student.fields.password") }}">
+                                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password_confirmation">{{ __("dashboard.common.password_confirmation") }}</label>
+                                                <input type="text" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                       name="password_confirmation" value="{{ old('password_confirmation') }}"
+                                                       placeholder="{{ __("dashboard.common.password_confirmation") }}">
+                                                @error('password_confirmation') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </div>
                                             <div class="form-actions">
                                                 <a href="{{ route('teachers.index') }}" class="btn btn-warning mr-1">
                                                     <i class="icon-cross2"></i> {{ __('dashboard.common.cancel') }}

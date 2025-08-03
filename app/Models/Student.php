@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class Student extends Authenticatable
@@ -24,6 +25,23 @@ class Student extends Authenticatable
      * @return string
      */
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($student) {
+            do {
+                $code = strtoupper(Str::random(8));
+            } while (self::where('referral_code', $code)->exists());
+
+            $student->referral_code = $code;
+        });
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(Student::class, 'referred_by');
+    }
     protected function casts(): array
     {
         return [

@@ -110,3 +110,7 @@
     <li class=" nav-item"><a href="{{ route('homework.index') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.homework.title_plural')}}</span></a>
     </li>
 @endcan
+@can('update_settings')
+    <li class=" nav-item"><a href="{{ route('settings.bulkEdit') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.settings.title')}}</span></a>
+    </li>
+@endcan
