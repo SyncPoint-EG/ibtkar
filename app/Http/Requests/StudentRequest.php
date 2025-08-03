@@ -30,13 +30,13 @@ class StudentRequest extends FormRequest
             'phone' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
             'gender' => ['required','in:Male,Female'],
-            'birth_date' => ['required', 'date'],
+            'birth_date' => ['nullable', 'date'],
             'stage_id' => ['required', 'exists:stages,id'],
             'grade_id' => ['required', 'exists:grades,id'],
             'division_id' => ['required', 'exists:divisions,id'],
             'center_id' => ['required', 'exists:centers,id'],
             'governorate_id' => ['required', 'exists:governorates,id'],
-            'district_id' => ['required', 'exists:districts,id'],
+            'district_id' => ['nullable', 'exists:districts,id'],
         ];
     }
 }
