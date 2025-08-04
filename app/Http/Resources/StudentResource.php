@@ -18,13 +18,15 @@ class StudentResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name ,
             'phone'      => $this->phone ,
-            'governorate'  => $this->governorate->name,
-            'district'     => $this->district->name ,
-            'stage'        => $this->stage->name,
-            'grade'        => $this->grade->name,
-            'division'     => $this->division->name,
-            'center'       => $this->center->name ,
+            'governorate'  => $this->governorate?->name,
+            'district'     => $this->district?->name ,
+            'stage'        => $this->stage?->name,
+            'grade'        => $this->grade?->name,
+            'division'     => $this->division?->name,
+            'center'       => $this->center?->name ,
             'status'       => $this->status ,
+            'points'       => $this->points,
+            'referral_code'       => $this->referral_code,
         ];
     }
 }
