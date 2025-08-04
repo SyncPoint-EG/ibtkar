@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CentersResource;
 use App\Http\Resources\DivisionsResource;
+use App\Http\Resources\EducationTypeResource;
 use App\Http\Resources\GovernoratesResource;
 use App\Http\Resources\GradesResource;
 use App\Http\Resources\StagesResource;
 use App\Models\Center;
 use App\Models\District;
 use App\Models\Division;
+use App\Models\EducationType;
 use App\Models\Governorate;
 use App\Models\Grade;
 use App\Models\Stage;
@@ -56,6 +58,11 @@ class HomeController extends Controller
     {
         $centers = Center::all();
         return CentersResource::collection($centers);
+    }
+    public function getEducationTypes()
+    {
+        $educationTypes =EducationType::all();
+        return EducationTypeResource::collection($educationTypes);
     }
 
     public function getGovernorates()

@@ -24,6 +24,7 @@ class StudentResource extends JsonResource
             'grade'        => $this->grade?->name,
             'division'     => $this->division?->name,
             'center'       => $this->center?->name ,
+            'education_type'       => $this->center?->name ,
             'status'       => $this->status ,
             'points'       => $this->points,
             'referral_code'       => $this->referral_code,

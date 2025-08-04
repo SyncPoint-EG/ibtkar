@@ -111,4 +111,10 @@ class StudentAuthController
             'message' => 'Logged out successfully'
         ]);
     }
+
+    public function profile()
+    {
+        $student = auth('student')->user();
+        return new StudentResource($student);
+    }
 }

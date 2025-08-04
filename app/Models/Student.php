@@ -90,6 +90,10 @@ class Student extends Authenticatable
     {
         return $this->belongsTo(\App\Models\Division::class);
     }
+    public function educationType()
+    {
+        return $this->belongsTo(\App\Models\EducationType::class);
+    }
 
     public function generateVerificationCode()
     {
