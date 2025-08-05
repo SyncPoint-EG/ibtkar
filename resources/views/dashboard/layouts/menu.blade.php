@@ -114,3 +114,18 @@
     <li class=" nav-item"><a href="{{ route('settings.bulkEdit') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.settings.title')}}</span></a>
     </li>
 @endcan
+
+@can('edit_action_points')
+    <li class=" nav-item"><a href="{{ route('action-points.edit') }}"><i class="icon-trophy"></i><span data-i18n="nav.action-points.main" class="menu-title">{{ trans('dashboard.action_points.title') }}</span></a>
+    </li>
+@endcan
+
+@can('edit_reward_points')
+    <li class=" nav-item"><a href="{{ route('reward-points.edit') }}"><i class="icon-gift"></i><span data-i18n="nav.reward-points.main" class="menu-title">{{ trans('dashboard.reward_points.title') }}</span></a>
+    </li>
+@endcan
+
+@can('edit_luck_wheel')
+    <li class=" nav-item"><a href="{{ route('luck-wheel.edit') }}"><i class="icon-disc"></i><span data-i18n="nav.luck-wheel.main" class="menu-title">{{ trans('dashboard.luck_wheel.title') }}</span></a>
+    </li>
+@endcan

@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\GamificationController;
 use App\Http\Controllers\Dashboard\SettingsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\PostController;
@@ -1011,5 +1012,16 @@ Route::middleware(['auth'])->group(function () {
     Route::put('settings/bulk-update', [SettingsController::class, 'bulkUpdate'])
         ->name('settings.bulkUpdate')
         ->middleware('can:update_settings');
+});
+
+// Routes for Gamification
+Route::middleware(['auth'])->group(function() {
+        Route::get('action-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editActionPoints'])->name('action-points.edit')->middleware('can:edit_action_points');
+    Route::put('action-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateActionPoints'])->name('action-points.update')->middleware('can:edit_action_points');
+        Route::get('reward-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editRewardPoints'])->name('reward-points.edit')->middleware('can:edit_reward_points');
+    Route::put('reward-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateRewardPoints'])->name('reward-points.update')->middleware('can:edit_reward_points');
+
+    Route::get('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editLuckWheelItems'])->name('luck-wheel.edit')->middleware('can:edit_luck_wheel');
+    Route::put('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateLuckWheelItems'])->name('luck-wheel.update')->middleware('can:edit_luck_wheel');
 });
 

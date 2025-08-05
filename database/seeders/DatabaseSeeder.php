@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             AdminUserSeeder::class,
             AllDataSeeder::class,
-            SettingsTableSeeder::class
+            SettingsTableSeeder::class,
+            ActionPointsSeeder::class,
+            RewardPointsSeeder::class,
+            LuckWheelItemSeeder::class
             // Add other seeders here if needed
         ]);
 //        User::factory()->create([

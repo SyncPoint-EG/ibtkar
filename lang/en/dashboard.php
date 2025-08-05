@@ -535,4 +535,36 @@ return [
                 'name' => 'Name',
             ],
         ],
+        'action_points' => [
+            'title' => 'Action Points',
+            'management' => 'Action Points Management',
+            'edit' => 'Edit Action Points',
+            'update_success' => 'Action points updated successfully.',
+            'fields' => [
+                'action' => 'Action',
+                'points' => 'Points',
+            ],
+        ],
+        'reward_points' => [
+            'title' => 'Reward Points',
+            'management' => 'Reward Points Management',
+            'edit' => 'Edit Reward Points',
+            'update_success' => 'Reward points updated successfully.',
+            'fields' => [
+                'reward' => 'Reward',
+                'points_cost' => 'Points Cost',
+            ],
+        ],
+        'luck_wheel' => [
+            'title' => 'Luck Wheel',
+            'title_plural' => 'Luck Wheel Items',
+            'management' => 'Luck Wheel Management',
+            'edit' => 'Edit Luck Wheel Items',
+            'update_success' => 'Luck Wheel items updated successfully.',
+            'update_error' => 'The sum of all appearance percentages cannot exceed 100.',
+            'fields' => [
+                'gift' => 'Gift',
+                'appearance_percentage' => 'Appearance Percentage',
+            ],
+        ],
     ];
