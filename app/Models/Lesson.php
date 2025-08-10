@@ -15,7 +15,7 @@ class Lesson extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'desc', 'video_link', 'video_image', 'chapter_id'];
+    protected $fillable = ['name', 'desc', 'video_link', 'video_image', 'chapter_id', 'price'];
 
     /**
      * Get the table associated with the model.

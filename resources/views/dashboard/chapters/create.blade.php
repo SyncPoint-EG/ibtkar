@@ -65,6 +65,21 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="price">{{ __("dashboard.chapter.fields.price") }}</label>
+                                                    <input type="number" id="price"
+                                                           class="form-control @error('price') is-invalid @enderror"
+                                                           name="price"
+                                                           value="{{ isset($chapter) ? $chapter->price : old('price') }}"
+                                                           step="0.01"
+                                                           placeholder="{{ __("dashboard.chapter.fields.price") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.chapter.fields.price") }}">
+                                                    @error('price')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="course_id">{{ __("dashboard.chapter.fields.course_id") }}</label>
                                                     <select id="course_id" name="course_id"
                                                             class="form-control @error('course_id') is-invalid @enderror"

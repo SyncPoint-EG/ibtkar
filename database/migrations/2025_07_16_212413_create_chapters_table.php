@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('course_id');
+            $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
         });
     }

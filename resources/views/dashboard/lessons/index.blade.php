@@ -54,6 +54,7 @@
                                             <th>{{ __("dashboard.lesson.fields.video_link") }}</th>
                                             <th>{{ __("dashboard.lesson.fields.video_image") }}</th>
                                             <th>{{ __("dashboard.chapter.title") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.price") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -66,6 +67,7 @@
                                                 <td><a href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a></td>
                                                 <td><img src="{{ $lesson->video_image }}" width="100px"></td>
                                                 <td>{{ $lesson->chapter->name }}</td>
+                                                <td>{{ $lesson->price }}</td>
                                                 <td>
                                                     @can('view_lesson')
                                                         <a href="{{ route('lessons.show', $lesson->id) }}"

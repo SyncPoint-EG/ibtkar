@@ -14,7 +14,7 @@ class Course extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'year', 'teacher_id', 'education_type_id', 'stage_id', 'grade_id', 'division_id', 'semister_id', 'subject_id'];
+    protected $fillable = ['name', 'year', 'teacher_id', 'education_type_id', 'stage_id', 'grade_id', 'division_id', 'semister_id', 'subject_id', 'price'];
 
     /**
      * Get the table associated with the model.

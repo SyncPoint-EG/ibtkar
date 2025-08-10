@@ -58,6 +58,7 @@
                                             <th>{{ __("dashboard.division.title") }}</th>
                                             <th>{{ __("dashboard.semister.title") }}</th>
                                             <th>{{ __("dashboard.subject.title") }}</th>
+                                            <th>{{ __("dashboard.course.fields.price") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -74,6 +75,7 @@
                                                 <td>{{ $course->division->name }}</td>
                                                 <td>{{ $course->semister->name }}</td>
                                                 <td>{{ $course->subject->name }}</td>
+                                                <td>{{ $course->price }}</td>
                                                 <td>
                                                     @can('view_course')
                                                         <a href="{{ route('courses.show', $course->id) }}"

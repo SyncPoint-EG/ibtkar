@@ -51,6 +51,7 @@
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.chapter.fields.name") }}</th>
                                             <th>{{ __("dashboard.course.title") }}</th>
+                                            <th>{{ __("dashboard.chapter.fields.price") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -60,6 +61,7 @@
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $chapter->name }}</td>
                                                 <td>{{ $chapter->course->name }}</td>
+                                                <td>{{ $chapter->price }}</td>
                                                 <td>
                                                     @can('view_chapter')
                                                         <a href="{{ route('chapters.show', $chapter->id) }}"

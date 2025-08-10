@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('division_id')->nullable()->constrained();
             $table->foreignId('semister_id')->nullable()->constrained();
             $table->foreignId('subject_id')->nullable()->constrained();
+            $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
         });
     }

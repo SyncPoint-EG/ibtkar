@@ -34,6 +34,7 @@ class CourseRequest extends FormRequest
             'division_id' => 'required|exists:divisions,id',
             'semister_id' => 'required|exists:semisters,id',
             'subject_id' => 'required|exists:subjects,id',
+            'price' => 'nullable|numeric',
         ];
     }
 }

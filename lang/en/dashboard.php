@@ -411,6 +411,7 @@ return [
                 'division_id' => 'Division Id',
                 'semister_id' => 'Semister Id',
                 'subject_id' => 'Subject Id',
+                'price' => 'Price',
             ],
         ],
         'educationtype' => [
@@ -456,6 +457,7 @@ return [
             'fields' => [
                 'name' => 'Name',
                 'course_id' => 'Course Id',
+                'price' => 'Price',
             ],
         ],
         'lesson' => [
@@ -482,6 +484,7 @@ return [
                 'video_link' => 'Video Link',
                 'video_image' => 'Video Image',
                 'chapter_id' => 'Chapter Id',
+                'price' => 'Price',
             ],
         ],
         'exam' => [

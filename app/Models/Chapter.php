@@ -14,7 +14,7 @@ class Chapter extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'course_id'];
+    protected $fillable = ['name', 'course_id', 'price'];
 
     /**
      * Get the table associated with the model.

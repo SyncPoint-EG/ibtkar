@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('video_link');
             $table->string('video_image');
             $table->integer('chapter_id');
+            $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
         });
     }

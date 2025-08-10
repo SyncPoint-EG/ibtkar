@@ -27,6 +27,7 @@ class ChapterRequest extends FormRequest
 
             'name' => 'required',
             'course_id' => 'required|exists:courses,id',
+            'price' => 'nullable|numeric',
         ];
     }
 }

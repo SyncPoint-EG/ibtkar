@@ -29,7 +29,8 @@ class LessonRequest extends FormRequest
             'desc' => 'required',
             'chapter_id' => 'required|exists:chapters,id',
             'video_link' => 'required',
-            'video_image' => 'required'
+            'video_image' => 'required',
+            'price' => 'nullable|numeric',
         ];
     }
 }
