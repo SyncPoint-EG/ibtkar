@@ -30,6 +30,7 @@ use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\ExamController;
+use App\Http\Controllers\Dashboard\BannerController;
 
 
 Route::get('/dashboard2', function () {
@@ -1025,3 +1026,35 @@ Route::middleware(['auth'])->group(function() {
     Route::put('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateLuckWheelItems'])->name('luck-wheel.update')->middleware('can:edit_luck_wheel');
 });
 
+
+
+// Routes for Banner
+Route::middleware(['auth'])->group(function() {
+    Route::get('banners', [BannerController::class, 'index'])
+        ->name('banners.index')
+        ->middleware('can:view_banner');
+
+    Route::get('banners/create', [BannerController::class, 'create'])
+        ->name('banners.create')
+        ->middleware('can:create_banner');
+
+    Route::post('banners', [BannerController::class, 'store'])
+        ->name('banners.store')
+        ->middleware('can:create_banner');
+
+    Route::get('banners/{banner}', [BannerController::class, 'show'])
+        ->name('banners.show')
+        ->middleware('can:view_banner');
+
+    Route::get('banners/{banner}/edit', [BannerController::class, 'edit'])
+        ->name('banners.edit')
+        ->middleware('can:edit_banner');
+
+    Route::put('banners/{banner}', [BannerController::class, 'update'])
+        ->name('banners.update')
+        ->middleware('can:edit_banner');
+
+    Route::delete('banners/{banner}', [BannerController::class, 'destroy'])
+        ->name('banners.destroy')
+        ->middleware('can:delete_banner');
+});

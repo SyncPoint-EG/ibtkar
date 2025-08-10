@@ -25,6 +25,7 @@ class SubjectService
      */
     public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
     {
+        $perPage = request()->perPage ?? $perPage ;
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 

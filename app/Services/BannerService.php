@@ -2,23 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Course;
+use App\Models\Banner;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class CourseService
+class BannerService
 {
-    protected Course $model;
+    protected Banner $model;
 
-    public function __construct(Course $model)
+    public function __construct(Banner $model)
     {
         $this->model = $model;
     }
 
     /**
-     * Get all courses with pagination
+     * Get all banners with pagination
      *
      * @param int $perPage
      * @return LengthAwarePaginator
@@ -30,7 +30,7 @@ class CourseService
     }
 
     /**
-     * Get all courses without pagination
+     * Get all banners without pagination
      *
      * @return Collection
      */
@@ -40,79 +40,79 @@ class CourseService
     }
 
     /**
-     * Find course by ID
+     * Find banner by ID
      *
      * @param int $id
-     * @return Course|null
+     * @return Banner|null
      */
-    public function findById(int $id): ?Course
+    public function findById(int $id): ?Banner
     {
         return $this->model->find($id);
     }
 
     /**
-     * Find course by ID or fail
+     * Find banner by ID or fail
      *
      * @param int $id
-     * @return Course
+     * @return Banner
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function findByIdOrFail(int $id): Course
+    public function findByIdOrFail(int $id): Banner
     {
         return $this->model->findOrFail($id);
     }
 
     /**
-     * Create a new course
+     * Create a new banner
      *
      * @param array $data
-     * @return Course
+     * @return Banner
      * @throws \Exception
      */
-    public function create(array $data): Course
+    public function create(array $data): Banner
     {
         try {
             DB::beginTransaction();
 
-            $course = $this->model->create($data);
+            $banner = $this->model->create($data);
 
             DB::commit();
 
-            Log::info('Course created successfully', ['id' => $course->id]);
+            Log::info('Banner created successfully', ['id' => $banner->id]);
 
-            return $course;
+            return $banner;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating Course', ['error' => $e->getMessage(), 'data' => $data]);
+            Log::error('Error creating Banner', ['error' => $e->getMessage(), 'data' => $data]);
             throw $e;
         }
     }
 
     /**
-     * Update an existing course
+     * Update an existing banner
      *
-     * @param Course $course
+     * @param Banner $banner
      * @param array $data
-     * @return Course
+     * @return Banner
      * @throws \Exception
      */
-    public function update(Course $course, array $data): Course
+    public function update(Banner $banner, array $data): Banner
     {
         try {
             DB::beginTransaction();
 
-            $course->update($data);
-            $course->refresh();
+            $banner->update($data);
+            $banner->refresh();
 
             DB::commit();
 
-            Log::info('Course updated successfully', ['id' => $course->id]);
+            Log::info('Banner updated successfully', ['id' => $banner->id]);
 
-            return $course;
+            return $banner;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error updating Course', [
-                'id' => $course->id,
+            Log::error('Error updating Banner', [
+                'id' => $banner->id,
                 'error' => $e->getMessage(),
                 'data' => $data
             ]);
@@ -121,28 +121,28 @@ class CourseService
     }
 
     /**
-     * Delete a course
+     * Delete a banner
      *
-     * @param Course $course
+     * @param Banner $banner
      * @return bool
      * @throws \Exception
      */
-    public function delete(Course $course): bool
+    public function delete(Banner $banner): bool
     {
         try {
             DB::beginTransaction();
 
-            $deleted = $course->delete();
+            $deleted = $banner->delete();
 
             DB::commit();
 
-            Log::info('Course deleted successfully', ['id' => $course->id]);
+            Log::info('Banner deleted successfully', ['id' => $banner->id]);
 
             return $deleted;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error deleting Course', [
-                'id' => $course->id,
+            Log::error('Error deleting Banner', [
+                'id' => $banner->id,
                 'error' => $e->getMessage()
             ]);
             throw $e;
@@ -150,7 +150,7 @@ class CourseService
     }
 
     /**
-     * Search courses based on criteria
+     * Search banners based on criteria
      *
      * @param array $criteria
      * @return LengthAwarePaginator
@@ -189,7 +189,7 @@ class CourseService
     }
 
     /**
-     * Bulk delete courses
+     * Bulk delete banners
      *
      * @param array $ids
      * @return int
@@ -204,7 +204,7 @@ class CourseService
 
             DB::commit();
 
-            Log::info('Bulk delete courses completed', [
+            Log::info('Bulk delete banners completed', [
                 'ids' => $ids,
                 'deleted_count' => $deleted
             ]);
@@ -212,7 +212,7 @@ class CourseService
             return $deleted;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error in bulk delete courses', [
+            Log::error('Error in bulk delete banners', [
                 'ids' => $ids,
                 'error' => $e->getMessage()
             ]);
@@ -221,7 +221,7 @@ class CourseService
     }
 
     /**
-     * Get courses by specific field
+     * Get banners by specific field
      *
      * @param string $field
      * @param mixed $value
@@ -233,7 +233,7 @@ class CourseService
     }
 
     /**
-     * Count total courses
+     * Count total banners
      *
      * @return int
      */
@@ -243,7 +243,7 @@ class CourseService
     }
 
     /**
-     * Check if course exists
+     * Check if banner exists
      *
      * @param int $id
      * @return bool
@@ -254,7 +254,7 @@ class CourseService
     }
 
     /**
-     * Get latest courses
+     * Get latest banners
      *
      * @param int $limit
      * @return Collection
@@ -265,34 +265,34 @@ class CourseService
     }
 
     /**
-     * Duplicate a course
+     * Duplicate a banner
      *
-     * @param Course $course
-     * @return Course
+     * @param Banner $banner
+     * @return Banner
      * @throws \Exception
      */
-    public function duplicate(Course $course): Course
+    public function duplicate(Banner $banner): Banner
     {
         try {
             DB::beginTransaction();
 
-            $data = $course->toArray();
+            $data = $banner->toArray();
             unset($data['id'], $data['created_at'], $data['updated_at']);
 
-            $newCourse = $this->model->create($data);
+            $newBanner = $this->model->create($data);
 
             DB::commit();
 
-            Log::info('Course duplicated successfully', [
-                'original_id' => $course->id,
-                'new_id' => $newCourse->id
+            Log::info('Banner duplicated successfully', [
+                'original_id' => $banner->id,
+                'new_id' => $newBanner->id
             ]);
 
-            return $newCourse;
+            return $newBanner;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error duplicating Course', [
-                'id' => $course->id,
+            Log::error('Error duplicating Banner', [
+                'id' => $banner->id,
                 'error' => $e->getMessage()
             ]);
             throw $e;

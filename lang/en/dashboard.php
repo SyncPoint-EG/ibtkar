@@ -21,9 +21,7 @@ return [
             'information' => 'Information',
             'name' => 'Name',
             'password_confirmation' => 'Confirm Password',
-
             'close' => 'Close',
-
             'status' => 'Status',
             'active' => 'Active',
             'inactive' => 'Inactive',
@@ -37,12 +35,12 @@ return [
             'not_assigned' => 'Not Assigned',
             'save_changes' => 'Save Changes',
         ],
-    'settings' => [
-        'title' => 'Settings',
-        'edit_all_settings' => 'Edit All Settings',
-        'updated_successfully' => 'Settings updated successfully.',
-        'description_optional' => 'Description (optional)',
-    ],
+        'settings' => [
+            'title' => 'Settings',
+            'edit_all_settings' => 'Edit All Settings',
+            'updated_successfully' => 'Settings updated successfully.',
+            'description_optional' => 'Description (optional)',
+        ],
         'user' => [
             'title' => 'User',
             'title_plural' => 'Users',
@@ -568,6 +566,30 @@ return [
             'fields' => [
                 'gift' => 'Gift',
                 'appearance_percentage' => 'Appearance Percentage',
+            ],
+        ],
+        'banner' => [
+            'title' => 'Banner',
+            'title_plural' => 'Banners',
+            'management' => 'Banners Management',
+            'list' => 'Banners List',
+            'create' => 'Create Banner',
+            'edit' => 'Edit Banner',
+            'view' => 'View Banner',
+            'delete' => 'Delete Banner',
+            'add_new' => 'Add New Banner',
+            'create_new' => 'Create New Banner',
+            'update' => 'Update Banner',
+            'show' => 'Show Banner',
+            'actions' => 'Actions',
+            'no_records' => 'No Banners found.',
+            'fill_required' => 'Please fill in all required fields to create a new Banner.',
+            'update_info' => 'Update the information for this Banner.',
+            'delete_confirm' => 'Are you sure you want to delete this Banner?',
+            'fields' => [
+                'name' => 'Name',
+                'image' => 'Image',
+                'is_active' => 'Is Active',
             ],
         ],
     ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Requests\StudentRequest;
 use App\Http\Resources\StudentResource;
+use App\Models\ActionPoint;
 use App\Models\Guardian;
 use App\Models\Setting;
 use App\Models\Student;
@@ -43,7 +44,7 @@ class StudentAuthController
         $referrer = Student::where('referral_code', $request->input('referral_code'))->first();
         $data['referred_by'] = $referrer ? $referrer->id : null;
         $student->update($data);
-        $referral_points = Setting::where('key', 'referral points')->value('value');
+        $referral_points = ActionPoint::where('action_name', 'successful_referral')->value('points');
         $referrer->increment('points', $referral_points);
     }
 
@@ -112,9 +113,5 @@ class StudentAuthController
         ]);
     }
 
-    public function profile()
-    {
-        $student = auth('student')->user();
-        return new StudentResource($student);
-    }
+    
 }

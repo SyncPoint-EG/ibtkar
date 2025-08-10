@@ -129,3 +129,8 @@
     <li class=" nav-item"><a href="{{ route('luck-wheel.edit') }}"><i class="icon-disc"></i><span data-i18n="nav.luck-wheel.main" class="menu-title">{{ trans('dashboard.luck_wheel.title') }}</span></a>
     </li>
 @endcan
+
+@can('view_banner')
+<li class=" nav-item"><a href="{{ route('banners.index') }}"><i class="icon-list"></i><span data-i18n="nav.banners.main" class="menu-title">{{__('dashboard.banner.title_plural')}}</span></a>
+</li>
+@endcan
