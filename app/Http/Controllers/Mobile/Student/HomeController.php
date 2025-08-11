@@ -4,8 +4,14 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BannerResource;
+use App\Http\Resources\DivisionResource;
+use App\Http\Resources\GradesResource;
+use App\Http\Resources\StagesResource;
 use App\Http\Resources\SubjectResource;
 use App\Models\Banner;
+use App\Models\Division;
+use App\Models\Grade;
+use App\Models\Stage;
 use App\Models\Subject;
 use App\Services\BannerService;
 use App\Services\SubjectService;
@@ -29,11 +35,26 @@ class HomeController extends Controller
     }
     public function getSubjects()
     {
-        $subjects = $this->subjectService->getAllPaginated();
+        $subjects = $this->subjectService->getAll();
         return SubjectResource::collection($subjects);
     }
     public function getSubject(Subject $subject)
     {
         return new SubjectResource($subject);
+    }
+    public function getDivisions()
+    {
+        $divisions = Division::all();
+        return DivisionResource::collection($divisions);
+    }
+    public function getStages()
+    {
+        $stages = Stage::all();
+        return StagesResource::collection($stages);
+    }
+    public function getGrades()
+    {
+        $grades = Grade::all();
+        return GradesResource::collection($grades);
     }
 }

@@ -36,4 +36,10 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     //teachers routes
     Route::get('teachers', [TeacherController::class, 'index']);
+    Route::get('teacher/{teacher}', [TeacherController::class, 'show']);
+
+    // selects routes
+    Route::get('divisions',[HomeController::class,'getDivisions']);
+    Route::get('stages',[HomeController::class,'getStages']);
+    Route::get('grades',[HomeController::class,'getGrades']);
 });
