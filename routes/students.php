@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('register',[StudentAuthController::class, 'register']);
-Route::post('verify-phone',[StudentAuthController::class, 'verifyPhone']);
+Route::post('verify-phone/{student}',[StudentAuthController::class, 'verifyPhone']);
 Route::post('login',[StudentAuthController::class, 'login']);
 Route::post('reset-password',[StudentAuthController::class, 'resetPassword']);
 Route::post('logout',[StudentAuthController::class, 'logout']);
