@@ -49,11 +49,12 @@ class StudentAuthController
         $referrer->increment('points', $referral_points);
     }
 
-    public function verifyPhone(Request $request, Student $student)
+    public function verifyPhone(Request $request,  $studentId)
     {
+        $student = Student::findOrFail($studentId) ;
         if ($student->verification_code == $request->get('verification_code')) {
             $student->status = true;
-            $student->verifivation_code = null;
+            $student->verification_code = null;
             $student->save();
         }
         $token = $student->createToken('StudentToken')->plainTextToken;

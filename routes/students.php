@@ -5,12 +5,13 @@ use App\Http\Controllers\Mobile\Student\HomeController;
 use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
+use App\Http\Controllers\Mobile\Student\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 Route::post('register',[StudentAuthController::class, 'register']);
-Route::post('verify-phone/{student}',[StudentAuthController::class, 'verifyPhone']);
+Route::post('verify-phone/{id}',[StudentAuthController::class, 'verifyPhone']);
 Route::post('login',[StudentAuthController::class, 'login']);
 Route::post('reset-password',[StudentAuthController::class, 'resetPassword']);
 Route::post('logout',[StudentAuthController::class, 'logout']);
@@ -20,6 +21,8 @@ Route::post('logout',[StudentAuthController::class, 'logout']);
 Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
     Route::post('purchase',[PaymentController::class, 'store']);
+
+    // profile routes
     Route::get('profile', [ProfileController::class, 'show']);
     Route::post('profile', [ProfileController::class, 'update']);
 
@@ -30,4 +33,7 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     Route::get('courses', [CourseController::class, 'index']);
     Route::get('courses/{course}', [CourseController::class, 'show']);
+
+    //teachers routes
+    Route::get('teachers', [TeacherController::class, 'index']);
 });
