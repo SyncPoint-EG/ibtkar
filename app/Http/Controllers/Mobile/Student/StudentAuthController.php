@@ -17,8 +17,9 @@ class StudentAuthController
     public function register(StudentRequest $request)
     {
         $validated = $request->validated();
-        $validated['verification_code'] = rand(1000, 9999);
+//        $validated['verification_code'] = rand(1000, 9999);
         $student = Student::create($request->validated());
+        $student->generateVerificationCode();
         if($request->referral_code){
             $this->handleReferralCode($request , $student);
         }
@@ -113,5 +114,5 @@ class StudentAuthController
         ]);
     }
 
-    
+
 }

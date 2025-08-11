@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Mobile\Student\CourseController;
 use App\Http\Controllers\Mobile\Student\HomeController;
+use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ Route::post('logout',[StudentAuthController::class, 'logout']);
 
 
 Route::group(['middleware' => 'auth:student'], function () {
+    // purchase routes
+    Route::post('purchase',[PaymentController::class, 'store']);
     Route::get('profile', [ProfileController::class, 'show']);
     Route::post('profile', [ProfileController::class, 'update']);
 
