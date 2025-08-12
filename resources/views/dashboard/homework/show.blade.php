@@ -86,7 +86,7 @@
                                 </h4>
                             </div>
                             <div class="card-body px-1" id="questionFormContainer" style="display: none;">
-                                <form id="questionForm">
+                                <form id="questionForm" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="form-group">
@@ -116,6 +116,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="image">Question Image</label>
+                                        <input type="file" class="form-control" id="image" name="image">
+                                        <div class="invalid-feedback" id="image_error"></div>
+                                    </div>
 
                                     <!-- True/False Options -->
                                     <div id="trueFalseOptions" style="display: none;">
@@ -143,6 +148,13 @@
                                             <button type="button" id="addOption" class="btn btn-success btn-sm">Add Option</button>
                                             <div class="invalid-feedback" id="options_error"></div>
                                         </div>
+                                    </div>
+
+                                    <!-- Essay Correct Answer -->
+                                    <div class="form-group" id="essayCorrectAnswer" style="display: none;">
+                                        <label for="correct_essay_answer">Correct Answer (for Essay) *</label>
+                                        <textarea class="form-control" id="correct_essay_answer" name="correct_essay_answer" rows="5"></textarea>
+                                        <div class="invalid-feedback" id="correct_essay_answer_error"></div>
                                     </div>
 
                                     <div class="form-actions">
@@ -243,10 +255,13 @@
                     });
                 }
 
+                const essayCorrectAnswer = document.getElementById('essayCorrectAnswer');
+
                 // Handle question type change
                 questionType.addEventListener('change', function() {
                     trueFalseOptions.style.display = 'none';
                     multipleChoiceOptions.style.display = 'none';
+                    essayCorrectAnswer.style.display = 'none'; // Hide by default
 
                     if (this.value === 'true_false') {
                         trueFalseOptions.style.display = 'block';
@@ -255,6 +270,8 @@
                         if (optionCount === 0) {
                             addInitialOptions();
                         }
+                    } else if (this.value === 'essay') {
+                        essayCorrectAnswer.style.display = 'block';
                     }
                 });
 
@@ -381,6 +398,15 @@
             `;
                     }
 
+                    let imageHtml = '';
+                    if (question.image) {
+                        imageHtml = `
+                <div class="mt-2">
+                    <img src="${question.image}" width="100px">
+                </div>
+            `;
+                    }
+
                     return `
             <div class="card mb-2 question-item" data-question-id="${question.id}">
                 <div class="card-body">
@@ -392,7 +418,14 @@
                                 <span class="badge badge-secondary">${question.marks} ${question.marks == 1 ? 'Mark' : 'Marks'}</span>
                             </h6>
                             <p class="card-text">${question.question_text}</p>
+                            ${imageHtml}
                             ${optionsHtml}
+                            ${question.question_type === 'essay' && question.correct_essay_answer ? `
+                                <div class="mt-2">
+                                    <strong>Correct Answer:</strong>
+                                    <p class="text-muted">${question.correct_essay_answer}</p>
+                                </div>
+                            ` : ''}
                         </div>
                         <div class="ml-2">
                             <div class="btn-group-vertical">

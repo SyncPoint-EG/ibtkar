@@ -120,44 +120,52 @@
                             <div class="card-body collapse in mx-1">
                                 @if($exam->questions->count() > 0)
                                     @foreach($exam->questions as $index => $question)
-                                        <div class="card bg-light mb-1">
+                                        <div class="card mb-2 question-item" data-question-id="{{ $question->id }}">
                                             <div class="card-body">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <div class="flex-grow-1">
-                                                        <h5>{{ __('Question') }} {{ $index + 1 }}
-                                                            <span class="tag tag-primary">{{ ucfirst(str_replace('_', ' ', $question->question_type)) }}</span>
-                                                            <span class="tag tag-info">{{ $question->marks }} {{ __('marks') }}</span>
-                                                        </h5>
-                                                        <p class="mb-1">{{ $question->question_text }}</p>
-
-                                                        @if($question->question_type !== 'essay' && $question->options->count() > 0)
-                                                            <div class="mt-1">
-                                                                <strong>{{ __('Options:') }}</strong>
-                                                                <ul class="list-unstyled ml-1">
+                                                        <h6 class="card-subtitle mb-1">
+                                                            Question {{ $index + 1 }}
+                                                            <span class="badge badge-info">{{ ucwords(str_replace('_', ' ', $question->question_type)) }}</span>
+                                                            <span class="badge badge-secondary">{{ $question->marks }} {{ $question->marks == 1 ? 'Mark' : 'Marks' }}</span>
+                                                        </h6>
+                                                        <p class="card-text">{{ $question->question_text }}</p>
+                                                        @if($question->image)
+                                                            <div class="mt-2">
+                                                                <img src="{{ $question->image }}" width="100px">
+                                                            </div>
+                                                        @endif
+                                                        @if($question->question_type !== 'essay' && $question->options)
+                                                            <div class="mt-2">
+                                                                <strong>Options:</strong>
+                                                                <ul class="list-unstyled ml-2">
                                                                     @foreach($question->options as $option)
-                                                                        <li class="mb-0">
-                                                                            @if($option->is_correct)
-                                                                                <i class="icon-check text-success"></i>
-                                                                            @else
-                                                                                <i class="icon-radio-unchecked text-muted"></i>
-                                                                            @endif
+                                                                        <li class="mb-1">
+                                                                            <span class="badge badge-{{ $option->is_correct ? 'success' : 'light' }}">
+                                                                                {{ $option->is_correct ? '✓' : '○' }}
+                                                                            </span>
                                                                             {{ $option->option_text }}
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
                                                             </div>
                                                         @endif
+                                                        @if($question->question_type === 'essay' && $question->correct_essay_answer)
+                                                            <div class="mt-2">
+                                                                <strong>{{ __('Correct Answer:') }}</strong>
+                                                                <p class="text-muted">{{ $question->correct_essay_answer }}</p>
+                                                            </div>
+                                                        @endif
                                                     </div>
-                                                    <div class="ml-1">
-                                                        <form action="{{ route('exams.remove-question', [$exam, $question]) }}" method="POST"
-                                                              onsubmit="return confirm('{{ __('Are you sure you want to remove this question?') }}')"
-                                                              style="display: inline-block;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" title="{{ __('Remove Question') }}">
+                                                    <div class="ml-2">
+                                                        <div class="btn-group-vertical">
+                                                            <button type="button" class="btn btn-warning btn-sm edit-question" data-question-id="{{ $question->id }}">
+                                                                <i class="icon-pencil"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-sm delete-question" data-question-id="{{ $question->id }}">
                                                                 <i class="icon-trash"></i>
                                                             </button>
-                                                        </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +190,7 @@
                             </div>
 
                             <div class="card-body collapse in mx-1">
-                                <form action="{{ route('exams.add-question', $exam) }}" method="POST" id="questionForm">
+                                <form action="{{ route('exams.add-question', $exam) }}" method="POST" id="questionForm" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="form-group">
@@ -213,6 +221,15 @@
                                         <input type="number" class="form-control @error('marks') is-invalid @enderror"
                                                id="marks" name="marks" value="{{ old('marks', 1) }}" min="1" required>
                                         @error('marks')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="image">{{ __('Question Image') }}</label>
+                                        <input type="file" class="form-control @error('image') is-invalid @enderror"
+                                               id="image" name="image">
+                                        @error('image')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -280,14 +297,19 @@
             const optionsContainer = document.getElementById('optionsContainer');
             const addOptionBtn = document.getElementById('addOption');
 
+            const essayCorrectAnswer = document.getElementById('essayCorrectAnswer');
+
             questionType.addEventListener('change', function() {
                 trueFalseOptions.style.display = 'none';
                 multipleChoiceOptions.style.display = 'none';
+                essayCorrectAnswer.style.display = 'none'; // Hide by default
 
                 if (this.value === 'true_false') {
                     trueFalseOptions.style.display = 'block';
                 } else if (this.value === 'multiple_choice') {
                     multipleChoiceOptions.style.display = 'block';
+                } else if (this.value === 'essay') {
+                    essayCorrectAnswer.style.display = 'block';
                 }
             });
 
@@ -327,10 +349,78 @@
                 });
             }
 
-            // Trigger change event if there's an old value
-            if (questionType.value) {
-                questionType.dispatchEvent(new Event('change'));
-            }
+            // Trigger change event on page load to set initial visibility
+            questionType.dispatchEvent(new Event('change'));
         });
+
+        function createQuestionHtml(question, index) {
+            let optionsHtml = '';
+            if (question.question_type !== 'essay' && question.options) {
+                optionsHtml = `
+        <div class="mt-2">
+            <strong>Options:</strong>
+            <ul class="list-unstyled ml-2">
+                ${question.options.map(option => `
+                    <li class="mb-1">
+                        <span class="badge badge-${option.is_correct ? 'success' : 'light'}">
+                            ${option.is_correct ? '✓' : '○'}
+                        </span>
+                        ${option.option_text}
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `;
+            }
+
+            let imageHtml = '';
+            if (question.image) {
+                imageHtml = `
+        <div class="mt-2">
+            <img src="${question.image}" width="100px">
+        </div>
+    `;
+            }
+
+            let essayAnswerHtml = '';
+            if (question.question_type === 'essay' && question.correct_essay_answer) {
+                essayAnswerHtml = `
+        <div class="mt-2">
+            <strong>{{ __('Correct Answer:') }}</strong>
+            <p class="text-muted">${question.correct_essay_answer}</p>
+        </div>
+    `;
+            }
+
+            return `
+    <div class="card mb-2 question-item" data-question-id="${question.id}">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                    <h6 class="card-subtitle mb-1">
+                        Question ${index + 1}
+                        <span class="badge badge-info">${question.question_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        <span class="badge badge-secondary">${question.marks} ${question.marks == 1 ? 'Mark' : 'Marks'}</span>
+                    </h6>
+                    <p class="card-text">${question.question_text}</p>
+                    ${imageHtml}
+                    ${optionsHtml}
+                    ${essayAnswerHtml}
+                </div>
+                <div class="ml-2">
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn btn-warning btn-sm edit-question" data-question-id="${question.id}">
+                            <i class="icon-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm delete-question" data-question-id="${question.id}">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+        }
     </script>
 @endsection

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExamRequest;
 use App\Models\Exam;
 use App\Models\Lesson;
 use App\Models\Question;
@@ -25,18 +26,24 @@ class ExamController extends Controller
         return view('dashboard.exams.create', compact('lessons'));
     }
 
-    public function store(Request $request)
+    public function store(ExamRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'lesson_id' => 'nullable|exists:lessons,id',
-            'duration_minutes' => 'required|integer|min:1',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
-
-        $exam = Exam::create($request->all());
+//        $request->validate([
+//            'title' => 'required|string|max:255',
+//            'description' => 'nullable|string',
+//            'lesson_id' => 'nullable|exists:lessons,id',
+//            'duration_minutes' => 'required|integer|min:1',
+//            'start_date' => 'nullable|date',
+//            'end_date' => 'nullable|date|after:start_date',
+//        ]);
+        $validated = $request->validated();
+        $validated['total_marks'] = 0 ;
+        if($request->is_active){
+            $validated['is_active'] = 1;
+        }else{
+            $validated['is_active'] = 0;
+        }
+        $exam = Exam::create($validated);
 
         return redirect()->route('exams.show', $exam)
             ->with('success', 'Exam created successfully.');
@@ -54,18 +61,24 @@ class ExamController extends Controller
         return view('dashboard.exams.edit', compact('exam', 'lessons'));
     }
 
-    public function update(Request $request, Exam $exam)
+    public function update(ExamRequest $request, Exam $exam)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'lesson_id' => 'required|exists:lessons,id',
-            'duration_minutes' => 'required|integer|min:1',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date',
-        ]);
+//        $request->validate([
+//            'title' => 'required|string|max:255',
+//            'description' => 'nullable|string',
+//            'lesson_id' => 'required|exists:lessons,id',
+//            'duration_minutes' => 'required|integer|min:1',
+//            'start_date' => 'nullable|date',
+//            'end_date' => 'nullable|date|after:start_date',
+//        ]);
+        $validated = $request->validated();
 
-        $exam->update($request->all());
+        if($request->is_active){
+            $validated['is_active'] = 1;
+        }else{
+            $validated['is_active'] = 0;
+        }
+        $exam->update($validated);
 
         return redirect()->route('exams.show', $exam)
             ->with('success', 'Exam updated successfully.');
@@ -86,20 +99,32 @@ class ExamController extends Controller
             'question_type' => 'required|in:true_false,multiple_choice,essay',
             'marks' => 'required|integer|min:0',
             'options' => 'required_if:question_type,multiple_choice|array|min:2',
-            'options.*' => 'required_if:question_type,multiple_choice|string',
+            'options.*' => 'required_if:question_type,multiple_choice',
             'correct_answer' => 'required_if:question_type,multiple_choice|integer',
             'true_false_answer' => 'required_if:question_type,true_false|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'correct_essay_answer' => 'required_if:question_type,essay|nullable|string',
         ]);
 
         DB::beginTransaction();
         try {
-            $question = Question::create([
+            $questionData = [
                 'exam_id' => $exam->id,
                 'question_text' => $request->question_text,
                 'question_type' => $request->question_type,
                 'marks' => $request->marks,
                 'order' => $exam->questions()->count() + 1,
-            ]);
+            ];
+
+            if ($request->hasFile('image')) {
+                $questionData['image'] = $request->file('image');
+            }
+
+            if ($request->question_type === 'essay') {
+                $questionData['correct_essay_answer'] = $request->correct_essay_answer;
+            }
+
+            $question = Question::create($questionData);
 
             if ($request->question_type === 'multiple_choice') {
                 foreach ($request->options as $index => $optionText) {

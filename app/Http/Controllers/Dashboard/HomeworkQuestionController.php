@@ -19,14 +19,21 @@ class HomeworkQuestionController extends Controller
             'options.*' => 'required_if:question_type,multiple_choice|string',
             'correct_option' => 'required_if:question_type,multiple_choice|integer',
             'correct_answer' => 'required_if:question_type,true_false|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $question = $homework->questions()->create([
+        $questionData = [
             'question_text' => $request->question_text,
             'question_type' => $request->question_type,
             'marks' => $request->marks,
             'order' => $homework->questions()->count() + 1,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $questionData['image'] = $request->file('image');
+        }
+
+        $question = $homework->questions()->create($questionData);
 
         // Handle different question types
         if ($request->question_type === 'multiple_choice') {
@@ -75,13 +82,20 @@ class HomeworkQuestionController extends Controller
             'options.*' => 'required_if:question_type,multiple_choice|string',
             'correct_option' => 'required_if:question_type,multiple_choice|integer',
             'correct_answer' => 'required_if:question_type,true_false|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $question->update([
+        $questionData = [
             'question_text' => $request->question_text,
             'question_type' => $request->question_type,
             'marks' => $request->marks,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $questionData['image'] = $request->file('image');
+        }
+
+        $question->update($questionData);
 
         // Delete existing options
         $question->options()->delete();

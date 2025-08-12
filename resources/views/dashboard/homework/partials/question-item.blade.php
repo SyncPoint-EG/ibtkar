@@ -8,6 +8,11 @@
                     <span class="badge badge-secondary">{{ $question->marks }} {{ $question->marks == 1 ? 'Mark' : 'Marks' }}</span>
                 </h6>
                 <p class="card-text">{{ $question->question_text }}</p>
+                @if($question->image)
+                    <div class="mt-2">
+                        <img src="{{ $question->image }}" width="100px">
+                    </div>
+                @endif
 
                 @if($question->question_type !== 'essay')
                     <div class="mt-2">

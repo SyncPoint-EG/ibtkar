@@ -24,12 +24,20 @@ class ExamRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255',
+//            'title' => 'required|max:255',
+//            'description' => 'nullable|string',
+//            'lesson_id' => 'required|exists:lessons,id',
+//            'duration_minutes' => 'required|integer|min:1',
+//            'total_marks' => 'required|integer|min:1',
+//            'is_active' => 'boolean',
+//            'start_date' => 'nullable|date',
+//            'end_date' => 'nullable|date|after:start_date',
+
+
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'lesson_id' => 'required|exists:lessons,id',
             'duration_minutes' => 'required|integer|min:1',
-            'total_marks' => 'required|integer|min:1',
-            'is_active' => 'boolean',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
         ];
