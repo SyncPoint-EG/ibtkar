@@ -8,7 +8,7 @@
     <meta name="keywords" content="admin template, robust admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ app()->getLocale() == 'ar' ? 'القالب الإداري المتقدم' : 'Ico Moon - Robust Free Bootstrap Admin Template' }}</title>
+    <title>{{ app()->getLocale() == 'ar' ? 'ابتكار' : 'IBTKAR' }}</title>
 
     <!-- Apple Icons -->
     <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('dashboard/app-assets/images/ico/apple-icon-60.png') }}">

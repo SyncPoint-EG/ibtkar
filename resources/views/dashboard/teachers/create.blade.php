@@ -85,6 +85,15 @@
                                                     @error('rate') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="is_featured">{{ __("dashboard.teacher.fields.is_featured") }}</label>
+                                                    <input type="checkbox" id="is_featured"
+                                                           name="is_featured" value="1"
+                                                        {{ old('is_featured') ? 'checked' : '' }}>
+                                                    @error('is_featured')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="password">{{ __("dashboard.student.fields.password") }}</label>
                                                     <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
                                                            name="password" value="{{ old('password') }}"

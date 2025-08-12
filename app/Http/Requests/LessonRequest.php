@@ -31,6 +31,7 @@ class LessonRequest extends FormRequest
             'video_link' => 'required',
             'video_image' => 'required',
             'price' => 'nullable|numeric',
+            'is_featured' => 'nullable|boolean',
         ];
     }
 }

@@ -331,6 +331,7 @@ return [
             'delete_confirm_title' => 'Confirm Deletion',
             'delete_warning' => 'This action cannot be undone. All related data will be permanently deleted.',
             'status_updated' => 'Teacher status updated successfully',
+            'featured_status_updated' => 'Teacher featured status updated successfully',
             'fields' => [
                 'name' => 'Name',
                 'phone' => 'Phone',
@@ -339,6 +340,7 @@ return [
                 'image' => 'Image',
                 'rate' => 'Rating',
                 'status' => 'Status',
+                'is_featured' => 'Is Featured',
                 'grades' => 'Grades',
                 'subjects' => 'Subjects',
                 'stages' => 'Stages',
@@ -476,6 +478,7 @@ return [
             'fill_required' => 'Please fill in all required fields to create a new Lesson.',
             'update_info' => 'Update the information for this Lesson.',
             'delete_confirm' => 'Are you sure you want to delete this Lesson?',
+            'featured_status_updated' => 'Lesson featured status updated successfully',
             'fields' => [
                 'name' => 'Name',
                 'desc' => 'Desc',
@@ -483,6 +486,7 @@ return [
                 'video_image' => 'Video Image',
                 'chapter_id' => 'Chapter Id',
                 'price' => 'Price',
+                'is_featured' => 'Is Featured',
             ],
         ],
         'exam' => [

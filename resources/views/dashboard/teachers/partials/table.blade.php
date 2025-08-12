@@ -16,6 +16,7 @@
             <th>{{ __("dashboard.teacher.fields.total_students") }}</th>
             <th>{{ __("dashboard.teacher.fields.total_lessons") }}</th>
             <th>{{ __("dashboard.teacher.fields.status") }}</th>
+            <th>{{ __("dashboard.teacher.fields.is_featured") }}</th>
             <th>{{ __('dashboard.common.actions') }}</th>
         </tr>
         </thead>
@@ -74,6 +75,14 @@
                         <input type="checkbox" class="status-toggle"
                                data-teacher-id="{{ $teacher->id }}"
                             {{ $teacher->status ? 'checked' : '' }}>
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+                <td>
+                    <label class="switch">
+                        <input type="checkbox" class="featured-toggle"
+                               data-teacher-id="{{ $teacher->id }}"
+                            {{ $teacher->is_featured ? 'checked' : '' }}>
                         <span class="slider round"></span>
                     </label>
                 </td>

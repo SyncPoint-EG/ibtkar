@@ -362,6 +362,33 @@
                     });
                 });
 
+                // Featured toggle
+                $('.featured-toggle').off('change').on('change', function() {
+                    const teacherId = $(this).data('teacher-id');
+                    const isChecked = $(this).is(':checked');
+                    const toggle = $(this);
+
+                    $.ajax({
+                        url: `/teachers/${teacherId}/toggle-featured`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                            } else {
+                                toastr.error(response.message);
+                                toggle.prop('checked', !isChecked);
+                            }
+                        },
+                        error: function() {
+                            toastr.error('{{ __("dashboard.common.error") }}');
+                            toggle.prop('checked', !isChecked);
+                        }
+                    });
+                });
+
                 // Delete confirmation
                 $('.delete-teacher').off('click').on('click', function() {
                     const teacherId = $(this).data('teacher-id');

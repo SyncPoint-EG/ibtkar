@@ -746,6 +746,10 @@ Route::middleware(['auth'])->group(function() {
         ->name('teachers.toggle-activation')
         ->middleware('can:edit_teacher');
 
+    Route::post('teachers/{teacher}/toggle-featured', [TeacherController::class, 'toggleFeatured'])
+        ->name('teachers.toggle-featured')
+        ->middleware('can:edit_teacher');
+
     Route::get('teachers/export', [TeacherController::class, 'export'])
         ->name('teachers.export')
         ->middleware('can:view_teacher');
@@ -913,6 +917,10 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('lessons/{lesson}', [LessonController::class, 'destroy'])
         ->name('lessons.destroy')
         ->middleware('can:delete_lesson');
+
+    Route::post('lessons/{lesson}/toggle-featured', [LessonController::class, 'toggleFeatured'])
+        ->name('lessons.toggle-featured')
+        ->middleware('can:edit_lesson');
 });
 
 

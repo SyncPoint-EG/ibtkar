@@ -15,7 +15,7 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password'];
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured'];
 
     protected function casts(): array
     {

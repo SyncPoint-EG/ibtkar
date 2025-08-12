@@ -55,6 +55,7 @@
                                             <th>{{ __("dashboard.lesson.fields.video_image") }}</th>
                                             <th>{{ __("dashboard.chapter.title") }}</th>
                                             <th>{{ __("dashboard.lesson.fields.price") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.is_featured") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -68,6 +69,9 @@
                                                 <td><img src="{{ $lesson->video_image }}" width="100px"></td>
                                                 <td>{{ $lesson->chapter->name }}</td>
                                                 <td>{{ $lesson->price }}</td>
+                                                <td>
+                                                    <input type="checkbox" class="featured-toggle" data-lesson-id="{{ $lesson->id }}" {{ $lesson->is_featured ? 'checked' : '' }} />
+                                                </td>
                                                 <td>
                                                     @can('view_lesson')
                                                         <a href="{{ route('lessons.show', $lesson->id) }}"
@@ -115,4 +119,36 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('page_scripts')
+    <script>
+        $(document).ready(function() {
+            $('.featured-toggle').on('change', function() {
+                const lessonId = $(this).data('lesson-id');
+                const isChecked = $(this).is(':checked');
+                const toggle = $(this);
+
+                $.ajax({
+                    url: `/lessons/${lessonId}/toggle-featured`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                            toggle.prop('checked', !isChecked);
+                        }
+                    },
+                    error: function() {
+                        toastr.error('{{ __("dashboard.common.error") }}');
+                        toggle.prop('checked', !isChecked);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

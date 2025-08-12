@@ -10,6 +10,7 @@ use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class LessonController extends Controller
 {
@@ -65,7 +66,10 @@ class LessonController extends Controller
     public function store(LessonRequest $request): RedirectResponse
     {
         try {
-            $this->lessonService->create($request->validated());
+            $data = $request->validated();
+            $data['is_featured'] = $request->has('is_featured');
+
+            $this->lessonService->create($data);
 
             return redirect()->route('lessons.index')
                 ->with('success', 'Lesson created successfully.');
@@ -109,7 +113,10 @@ class LessonController extends Controller
     public function update(LessonRequest $request, Lesson $lesson): RedirectResponse
     {
         try {
-            $this->lessonService->update($lesson, $request->validated());
+            $data = $request->validated();
+            $data['is_featured'] = $request->has('is_featured');
+
+            $this->lessonService->update($lesson, $data);
 
             return redirect()->route('lessons.index')
                 ->with('success', 'Lesson updated successfully.');
@@ -136,6 +143,25 @@ class LessonController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Error deleting Lesson: ' . $e->getMessage());
+        }
+    }
+
+    public function toggleFeatured(Lesson $lesson): JsonResponse
+    {
+        try {
+            $lesson->is_featured = !$lesson->is_featured;
+            $lesson->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('dashboard.lesson.featured_status_updated'),
+                'is_featured' => $lesson->is_featured
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+            ], 500);
         }
     }
 }

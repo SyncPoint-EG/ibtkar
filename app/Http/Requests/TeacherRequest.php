@@ -34,6 +34,7 @@ class TeacherRequest extends FormRequest
             'image'        => 'nullable|image',
             'rate'         => 'nullable|numeric',
             'password'     => $passwordRules,
+            'is_featured' => 'nullable|boolean',
 
             // Validate assignments (new way)
 //            'assignments' => 'required|array|min:1',

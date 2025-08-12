@@ -149,6 +149,25 @@ class TeacherController extends Controller
         }
     }
 
+    public function toggleFeatured(Teacher $teacher): JsonResponse
+    {
+        try {
+            $teacher->is_featured = !$teacher->is_featured;
+            $teacher->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('dashboard.teacher.featured_status_updated'),
+                'is_featured' => $teacher->is_featured
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Export teachers data
      */
@@ -193,7 +212,10 @@ class TeacherController extends Controller
     public function store(TeacherRequest $request): RedirectResponse
     {
         try {
-            $teacher = $this->teacherService->create($request->validated());
+            $data = $request->validated();
+            $data['is_featured'] = $request->has('is_featured');
+
+            $teacher = $this->teacherService->create($data);
 
 //            // Handle subject assignments
 //            $assignments = $request->input('assignments', []);
@@ -268,7 +290,10 @@ class TeacherController extends Controller
     public function update(TeacherRequest $request, Teacher $teacher): RedirectResponse
     {
         try {
-            $this->teacherService->update($teacher, $request->except('password'));
+            $data = $request->except('password');
+            $data['is_featured'] = $request->has('is_featured');
+
+            $this->teacherService->update($teacher, $data);
 
             if($request->password !=null){
                 $teacher->password = $request->password;

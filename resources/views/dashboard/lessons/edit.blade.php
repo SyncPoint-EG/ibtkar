@@ -124,6 +124,15 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="is_featured">{{ __("dashboard.lesson.fields.is_featured") }}</label>
+                                                    <input type="checkbox" id="is_featured"
+                                                           name="is_featured" value="1"
+                                                        {{ (isset($lesson) && $lesson->is_featured) || old('is_featured') ? 'checked' : '' }}>
+                                                    @error('is_featured')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label
                                                         for="chapter_id">{{ __("dashboard.lesson.fields.chapter_id") }}</label>
                                                     <select id="chapter_id" name="chapter_id"
