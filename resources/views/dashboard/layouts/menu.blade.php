@@ -110,6 +110,11 @@
     <li class=" nav-item"><a href="{{ route('homework.index') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.homework.title_plural')}}</span></a>
     </li>
 @endcan
+
+@can('view_center_exam')
+    <li class=" nav-item"><a href="{{ route('center-exams.index') }}"><i class="icon-clipboard"></i><span data-i18n="nav.center_exams.main" class="menu-title">Center Exams</span></a>
+    </li>
+@endcan
 @can('update_settings')
     <li class=" nav-item"><a href="{{ route('settings.bulkEdit') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.settings.title')}}</span></a>
     </li>

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Dashboard\ExamTakingController;
 use App\Http\Controllers\Dashboard\HomeworkController;
 use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\PermissionController;
@@ -8,6 +7,7 @@ use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\GamificationController;
 use App\Http\Controllers\Dashboard\SettingsController;
+use App\Http\Controllers\Dashboard\CenterExamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\PostController;
 use App\Http\Controllers\Dashboard\CompanyController;
@@ -74,6 +74,36 @@ Route::middleware(['auth'])->group(function () {
 
     // Logout route
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
+
+    // Routes for Center Exams
+    Route::get('center-exams', [CenterExamController::class, 'index'])
+        ->name('center-exams.index')
+        ->middleware('can:view_center_exam');
+
+    Route::get('center-exams/create', [CenterExamController::class, 'create'])
+        ->name('center-exams.create')
+        ->middleware('can:create_center_exam');
+
+    Route::post('center-exams', [CenterExamController::class, 'store'])
+        ->name('center-exams.store')
+        ->middleware('can:create_center_exam');
+
+    Route::get('center-exams/{centerExam}', [CenterExamController::class, 'show'])
+        ->name('center-exams.show')
+        ->middleware('can:view_center_exam');
+
+    Route::get('center-exams/{centerExam}/edit', [CenterExamController::class, 'edit'])
+        ->name('center-exams.edit')
+        ->middleware('can:edit_center_exam');
+
+    Route::put('center-exams/{centerExam}', [CenterExamController::class, 'update'])
+        ->name('center-exams.update')
+        ->middleware('can:edit_center_exam');
+
+    Route::delete('center-exams/{centerExam}', [CenterExamController::class, 'destroy'])
+        ->name('center-exams.destroy')
+        ->middleware('can:delete_center_exam');
+
 });
 
 
