@@ -96,7 +96,7 @@ class TeacherController extends Controller
 
         // rate  filter
         if ($rate !== null && $rate !== '') {
-            $query->where('rate','<=', $status);
+            $query->where('rate','<=', $rate);
         }
 
         // Filter by subject_teacher pivot assignments

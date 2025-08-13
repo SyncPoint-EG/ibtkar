@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Mobile\Student\CourseController;
 use App\Http\Controllers\Mobile\Student\HomeController;
+use App\Http\Controllers\Mobile\Student\LessonController;
+use App\Http\Controllers\Mobile\Student\LuckWheelController;
 use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
@@ -34,6 +36,10 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('courses', [CourseController::class, 'index']);
     Route::get('courses/{course}', [CourseController::class, 'show']);
 
+    //lessons routes
+    Route::get('lessons', [LessonController::class, 'getLessons']);
+    Route::get('lesson/{lesson}', [LessonController::class, 'getLesson']);
+
     //teachers routes
     Route::get('teachers', [TeacherController::class, 'index']);
     Route::get('teacher/{teacher}', [TeacherController::class, 'show']);
@@ -42,4 +48,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('divisions',[HomeController::class,'getDivisions']);
     Route::get('stages',[HomeController::class,'getStages']);
     Route::get('grades',[HomeController::class,'getGrades']);
+
+    // luck wheel items
+    Route::get('luck-wheel',[LuckWheelController::class, 'index']);
 });
