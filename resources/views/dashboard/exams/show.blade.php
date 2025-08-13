@@ -70,7 +70,7 @@
                                     <div class="col-md-6">
                                         <p><strong>{{ __('Lesson:') }}</strong> {{ $exam->lesson->title ?? 'N/A' }}</p>
                                         <p><strong>{{ __('Duration:') }}</strong> {{ $exam->duration_minutes }} {{ __('minutes') }}</p>
-                                        <p><strong>{{ __('Total Marks:') }}</strong> {{ $exam->total_marks }}</p>
+                                        <p id="total-marks-display"><strong>{{ __('Total Marks:') }}</strong> {{ $exam->total_marks }}</p>
                                     </div>
                                     <div class="col-md-6">
                                         <p><strong>{{ __('Status:') }}</strong>
@@ -323,251 +323,395 @@
         </div>
     </div>
 
+@endsection
+@section('page_scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const questionType = document.getElementById('question_type');
-            const trueFalseOptions = document.getElementById('trueFalseOptions');
-            const multipleChoiceOptions = document.getElementById('multipleChoiceOptions');
-            const essayCorrectAnswer = document.getElementById('essayCorrectAnswer');
-            const optionsContainer = document.getElementById('optionsContainer');
-            const addOptionBtn = document.getElementById('addOption');
-
-            // Handle question type change
-            questionType.addEventListener('change', function() {
-                trueFalseOptions.style.display = 'none';
-                multipleChoiceOptions.style.display = 'none';
-                essayCorrectAnswer.style.display = 'none';
-
+        $(function () {
+            // ==== Question type change visibility ====
+            $('#question_type').on('change', function () {
+                $('#trueFalseOptions, #multipleChoiceOptions, #essayCorrectAnswer').hide();
                 if (this.value === 'true_false') {
-                    trueFalseOptions.style.display = 'block';
+                    $('#trueFalseOptions').show();
                 } else if (this.value === 'multiple_choice') {
-                    multipleChoiceOptions.style.display = 'block';
+                    $('#multipleChoiceOptions').show();
                 } else if (this.value === 'essay') {
-                    essayCorrectAnswer.style.display = 'block';
+                    $('#essayCorrectAnswer').show();
                 }
-            });
+            }).trigger('change');
 
-            // Add option functionality
-            addOptionBtn.addEventListener('click', function(e) {
+            // ==== Add option in create form ====
+            $('#addOption').on('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const optionCount = optionsContainer.children.length;
-                const newOption = document.createElement('div');
-                newOption.className = 'form-group option-group';
-                newOption.innerHTML = `
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <input type="radio" name="correct_answer" value="${optionCount}">
-                </span>
-                <input type="text" class="form-control" name="options[]" placeholder="{{ __('Option') }} ${optionCount + 1}">
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-danger remove-option">
-                        <i class="icon-trash"></i>
-                    </button>
-                </span>
-            </div>
-        `;
-                optionsContainer.appendChild(newOption);
-
-                newOption.querySelector('.remove-option').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    newOption.remove();
-                    updateOptionValues();
-                });
+                let optionCount = $('#optionsContainer .option-group').length;
+                let newOption = `
+                    <div class="form-group option-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="radio" name="correct_answer" value="${optionCount}">
+                            </span>
+                            <input type="text" class="form-control" name="options[]" placeholder="{{ __('Option') }} ${optionCount + 1}">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger remove-option"><i class="icon-trash"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                $('#optionsContainer').append(newOption);
             });
 
-            function updateOptionValues() {
-                const options = optionsContainer.querySelectorAll('.option-group');
-                options.forEach((option, index) => {
-                    const radio = option.querySelector('input[type="radio"]');
-                    const input = option.querySelector('input[type="text"]');
-                    radio.value = index;
-                    input.placeholder = `{{ __('Option') }} ${index + 1}`;
+            // ==== Remove option ====
+            $(document).on('click', '.remove-option', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).closest('.option-group').remove();
+                updateOptionValues($('#optionsContainer'));
+            });
+
+            function updateOptionValues(container) {
+                container.find('.option-group').each(function (i) {
+                    $(this).find('input[type="radio"]').val(i);
+                    $(this).find('input[type="text"]').attr('placeholder', `{{ __('Option') }} ${i + 1}`);
                 });
             }
 
-            // FIXED: Delete and Edit question functionality with proper event handling
-            document.addEventListener('click', function(e) {
-                // Prevent multiple event handling
+            // ==== Delete question ====
+            $(document).on('click', '.delete-question', function (e) {
+                e.preventDefault();
                 e.stopPropagation();
 
-                // Handle delete button clicks
-                if (e.target.classList.contains('delete-question') ||
-                    (e.target.parentElement && e.target.parentElement.classList.contains('delete-question'))) {
+                let btn = $(this);
+                let questionId = btn.data('question-id');
+                let examId = {{ $exam->id }};
 
-                    e.preventDefault();
-
-                    const button = e.target.classList.contains('delete-question') ? e.target : e.target.parentElement;
-                    const questionId = button.getAttribute('data-question-id');
-
-                    if (questionId && confirm('{{ __("Are you sure you want to delete this question?") }}')) {
-                        // Disable the button to prevent multiple clicks
-                        button.disabled = true;
-                        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-
-                        deleteQuestion(questionId, button);
-                    }
-                    return false;
+                if (!confirm('{{ __("Are you sure you want to delete this question?") }}')) {
+                    return;
                 }
 
-                // Handle edit button clicks
-                if (e.target.classList.contains('edit-question') ||
-                    (e.target.parentElement && e.target.parentElement.classList.contains('edit-question'))) {
+                // Disable button to prevent multiple clicks
+                btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
 
-                    e.preventDefault();
-
-                    const button = e.target.classList.contains('edit-question') ? e.target : e.target.parentElement;
-                    const questionId = button.getAttribute('data-question-id');
-
-                    if (questionId) {
-                        editQuestion(questionId);
-                    }
-                    return false;
-                }
-            });
-
-            // FIXED: Delete function with proper error handling
-            function deleteQuestion(questionId, button) {
-                const examId = {{ $exam->id }};
-
-                fetch(`/exams/${examId}/questions/${questionId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
+                $.ajax({
+                    url: `/exams/${examId}/questions/${questionId}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
                     },
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.success) {
                             // Remove question from DOM
-                            const questionElement = document.querySelector(`[data-question-id="${questionId}"]`);
-                            if (questionElement) {
-                                questionElement.remove();
-                            }
+                            $(`[data-question-id="${questionId}"]`).remove();
 
-                            // Update questions count
+                            // Update counts and UI
                             updateQuestionsCount();
-
-                            // Renumber questions
                             renumberQuestions();
 
-                            // Show success message
-                            showAlert('success', data.message || 'Question deleted successfully');
-
-                            // Update total marks in the display
-                            if (data.total_marks !== undefined) {
-                                const totalMarksElement = document.querySelector('p:contains("Total Marks:")');
-                                if (totalMarksElement) {
-                                    totalMarksElement.innerHTML = `<strong>{{ __('Total Marks:') }}</strong> ${data.total_marks}`;
-                                }
+                            // Update total marks display
+                            if (res.total_marks !== undefined) {
+                                $('#total-marks-display').html(`<strong>{{ __('Total Marks:') }}</strong> ${res.total_marks}`);
                             }
+
+                            showAlert('success', res.message || 'Question deleted successfully');
                         } else {
-                            showAlert('danger', data.message || 'Failed to delete question');
+                            showAlert('danger', res.message || 'Failed to delete question');
                             // Re-enable button on failure
-                            button.disabled = false;
-                            button.innerHTML = '<i class="icon-trash"></i>';
+                            btn.prop('disabled', false).html('<i class="icon-trash"></i>');
                         }
-                    })
-                    .catch(error => {
-                        console.error('Delete Error:', error);
-                        showAlert('danger', 'An error occurred while deleting the question');
+                    },
+                    error: function (xhr) {
+                        console.error('Delete Error:', xhr.responseText);
+                        showAlert('danger', '{{ __("An error occurred while deleting the question") }}');
                         // Re-enable button on error
-                        button.disabled = false;
-                        button.innerHTML = '<i class="icon-trash"></i>';
-                    });
-            }
-
-            // Rest of your functions remain the same...
-            function editQuestion(questionId) {
-                const examId = {{ $exam->id }};
-
-                fetch(`/exams/${examId}/questions/${questionId}`, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json'
+                        btn.prop('disabled', false).html('<i class="icon-trash"></i>');
                     }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            populateEditModal(data.question);
+                });
+            });
+
+            // ==== Edit question ====
+            $(document).on('click', '.edit-question', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let questionId = $(this).data('question-id');
+                let examId = {{ $exam->id }};
+
+                $.ajax({
+                    url: `/exams/${examId}/questions/${questionId}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.success) {
+                            populateEditModal(res.question);
                             $('#editQuestionModal').modal('show');
                         } else {
-                            showAlert('danger', data.message);
+                            showAlert('danger', res.message);
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    },
+                    error: function (xhr) {
+                        console.error('Edit Error:', xhr.responseText);
                         showAlert('danger', '{{ __("An error occurred while fetching question data") }}');
-                    });
-            }
+                    }
+                });
+            });
 
-            // Your other functions remain the same...
+            // ==== Submit edit form ====
+            $('#editQuestionForm').on('submit', function (e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let formData = new FormData(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            $('#editQuestionModal').modal('hide');
+                            updateQuestionInDOM(res.question);
+
+                            if (res.total_marks !== undefined) {
+                                $('#total-marks-display').html(`<strong>{{ __('Total Marks:') }}</strong> ${res.total_marks}`);
+                            }
+
+                            showAlert('success', res.message);
+                        } else {
+                            showAlert('danger', res.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Update Error:', xhr.responseText);
+                        showAlert('danger', '{{ __("An error occurred while updating the question") }}');
+                    }
+                });
+            });
+
+            // ==== Helper Functions ====
+
             function updateQuestionsCount() {
-                const count = document.querySelectorAll('.question-item').length;
-                document.getElementById('questions-count').textContent = count;
+                let count = $('.question-item').length;
+                $('#questions-count').text(count);
 
                 if (count === 0) {
-                    document.getElementById('questions-container').innerHTML = `
-                <div class="text-center py-3" id="no-questions-message">
-                    <i class="icon-help font-large-2 text-muted"></i>
-                    <h4 class="mt-1">{{ __('No questions added yet') }}</h4>
-                    <p class="text-muted">{{ __('Start by adding your first question') }}</p>
-                </div>
-            `;
+                    $('#questions-container').html(`
+                        <div class="text-center py-3" id="no-questions-message">
+                            <i class="icon-help font-large-2 text-muted"></i>
+                            <h4 class="mt-1">{{ __('No questions added yet') }}</h4>
+                            <p class="text-muted">{{ __('Start by adding your first question') }}</p>
+                        </div>
+                    `);
                 }
             }
 
             function renumberQuestions() {
-                const questions = document.querySelectorAll('.question-item');
-                questions.forEach((question, index) => {
-                    const questionTitle = question.querySelector('.card-subtitle');
-                    if (questionTitle) {
-                        const titleText = questionTitle.innerHTML;
-                        const newTitleText = titleText.replace(/Question \d+/, `Question ${index + 1}`);
-                        questionTitle.innerHTML = newTitleText;
+                $('.question-item').each(function (i) {
+                    let subtitle = $(this).find('.card-subtitle');
+                    let currentHtml = subtitle.html();
+                    let newHtml = currentHtml.replace(/Question \d+/, `Question ${i + 1}`);
+                    subtitle.html(newHtml);
+                });
+            }
+
+            function updateQuestionInDOM(question) {
+                let questionElement = $(`[data-question-id="${question.id}"]`);
+                if (questionElement.length) {
+                    let index = $('.question-item').index(questionElement);
+                    let newHtml = createQuestionHtml(question, index);
+                    questionElement.replaceWith(newHtml);
+                }
+            }
+
+            function createQuestionHtml(question, index) {
+                let optionsHtml = '';
+                if (question.question_type !== 'essay' && question.options && question.options.length) {
+                    optionsHtml = `
+                        <div class="mt-2">
+                            <strong>Options:</strong>
+                            <ul class="list-unstyled ml-2">
+                                ${question.options.map(opt => `
+                                    <li class="mb-1">
+                                        <span class="badge badge-${opt.is_correct ? 'success' : 'light'}">
+                                            ${opt.is_correct ? '✓' : '○'}
+                                        </span> ${opt.option_text}
+                                    </li>`).join('')}
+                            </ul>
+                        </div>`;
+                }
+
+                let imgHtml = question.image ? `<div class="mt-2"><img src="${question.image}" width="100px"></div>` : '';
+                let essayAns = question.question_type === 'essay' && question.correct_essay_answer ?
+                    `<div class="mt-2"><strong>{{ __('Correct Answer:') }}</strong><p class="text-muted">${question.correct_essay_answer}</p></div>` : '';
+
+                return `
+                    <div class="card mb-2 question-item" data-question-id="${question.id}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="card-subtitle mb-1">
+                                        Question ${index + 1}
+                                        <span class="badge badge-info">${question.question_type.replace('_', ' ')}</span>
+                                        <span class="badge badge-secondary">${question.marks} ${question.marks == 1 ? 'Mark' : 'Marks'}</span>
+                                    </h6>
+                                    <p class="card-text">${question.question_text}</p>
+                                    ${imgHtml}${optionsHtml}${essayAns}
+                                </div>
+                                <div class="ml-2">
+                                    <div class="btn-group-vertical">
+                                        <button type="button" class="btn btn-warning btn-sm edit-question" data-question-id="${question.id}">
+                                            <i class="icon-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm delete-question" data-question-id="${question.id}">
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            function populateEditModal(question) {
+                const form = $('#editQuestionForm');
+                form.attr('action', `/exams/{{ $exam->id }}/questions/${question.id}`);
+
+                let optionsHtml = '';
+                let correctAnswerSection = '';
+
+                // Generate form fields based on question type
+                if (question.question_type === 'multiple_choice') {
+                    optionsHtml = `
+                        <div class="form-group">
+                            <label>{{ __('Options') }} <span class="text-danger">*</span></label>
+                            <div id="editOptionsContainer">`;
+
+                    if (question.options) {
+                        question.options.forEach((option, index) => {
+                            optionsHtml += `
+                                <div class="form-group option-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <input type="radio" name="correct_answer" value="${index}" ${option.is_correct ? 'checked' : ''}>
+                                        </span>
+                                        <input type="text" class="form-control" name="options[]" value="${option.option_text}" placeholder="{{ __('Option') }} ${index + 1}">
+                                        ${index > 1 ? `<span class="input-group-btn"><button type="button" class="btn btn-danger remove-edit-option"><i class="icon-trash"></i></button></span>` : ''}
+                                    </div>
+                                </div>`;
+                        });
                     }
+
+                    optionsHtml += `
+                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary" id="editAddOption">
+                                <i class="icon-plus"></i> {{ __('Add Option') }}
+                    </button>
+                </div>`;
+                } else if (question.question_type === 'true_false') {
+                    const trueCorrect = question.options && question.options.find(opt => opt.option_text === 'True' && opt.is_correct);
+                    correctAnswerSection = `
+                        <div class="form-group">
+                            <label>{{ __('Correct Answer') }} <span class="text-danger">*</span></label>
+                            <div class="radio">
+                                <input type="radio" name="true_false_answer" value="1" ${trueCorrect ? 'checked' : ''}>
+                                <label>{{ __('True') }}</label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" name="true_false_answer" value="0" ${!trueCorrect ? 'checked' : ''}>
+                                <label>{{ __('False') }}</label>
+                            </div>
+                        </div>`;
+                } else if (question.question_type === 'essay') {
+                    correctAnswerSection = `
+                        <div class="form-group">
+                            <label>{{ __('Correct Answer') }}</label>
+                            <textarea class="form-control" name="correct_essay_answer" rows="4" placeholder="{{ __('Enter the correct answer for this essay question (optional)') }}">${question.correct_essay_answer || ''}</textarea>
+                        </div>`;
+                }
+
+                const modalBody = form.find('.modal-body');
+                modalBody.html(`
+                    <div class="form-group">
+                        <label>{{ __('Question Text') }} <span class="text-danger">*</span></label>
+                        <textarea class="form-control" name="question_text" rows="3" required>${question.question_text}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('Question Type') }} <span class="text-danger">*</span></label>
+                        <select class="form-control" name="question_type" required>
+                            <option value="true_false" ${question.question_type === 'true_false' ? 'selected' : ''}>{{ __('True/False') }}</option>
+                            <option value="multiple_choice" ${question.question_type === 'multiple_choice' ? 'selected' : ''}>{{ __('Multiple Choice') }}</option>
+                            <option value="essay" ${question.question_type === 'essay' ? 'selected' : ''}>{{ __('Essay') }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('Marks') }} <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="marks" value="${question.marks}" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('Question Image') }}</label>
+                        <input type="file" class="form-control" name="image">
+                        ${question.image ? `<small class="text-muted">{{ __('Current image will be replaced if new image is uploaded') }}</small>` : ''}
+                    </div>
+                    ${optionsHtml}
+                    ${correctAnswerSection}
+                `);
+
+                // Add event handlers for edit modal
+                $('#editAddOption').off('click').on('click', function() {
+                    const container = $('#editOptionsContainer');
+                    const optionCount = container.find('.option-group').length;
+                    const newOption = `
+                        <div class="form-group option-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" name="correct_answer" value="${optionCount}">
+                                </span>
+                                <input type="text" class="form-control" name="options[]" placeholder="{{ __('Option') }} ${optionCount + 1}">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-danger remove-edit-option"><i class="icon-trash"></i></button>
+                                </span>
+                            </div>
+                        </div>`;
+                    container.append(newOption);
+                });
+
+                $(document).off('click', '.remove-edit-option').on('click', '.remove-edit-option', function() {
+                    $(this).closest('.option-group').remove();
+                    // Update radio values
+                    $('#editOptionsContainer .option-group').each(function(i) {
+                        $(this).find('input[type="radio"]').val(i);
+                        $(this).find('input[type="text"]').attr('placeholder', `{{ __('Option') }} ${i + 1}`);
+                    });
                 });
             }
 
             function showAlert(type, message) {
-                // Remove existing alerts first
-                const existingAlerts = document.querySelectorAll('.alert');
-                existingAlerts.forEach(alert => alert.remove());
+                // Remove existing alerts
+                $('.alert').remove();
 
                 const alertHtml = `
-            <div class="alert alert-${type} alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                ${message}
-            </div>
-        `;
+                    <div class="alert alert-${type} alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        ${message}
+                    </div>`;
 
-                const contentBody = document.querySelector('.content-body');
-                contentBody.insertAdjacentHTML('afterbegin', alertHtml);
+                $('.content-body').prepend(alertHtml);
 
                 // Auto remove after 5 seconds
                 setTimeout(() => {
-                    const alert = contentBody.querySelector('.alert');
-                    if (alert) {
-                        alert.remove();
-                    }
+                    $('.alert').fadeOut(300, function() {
+                        $(this).remove();
+                    });
                 }, 5000);
             }
-
-            // Trigger change event on page load
-            questionType.dispatchEvent(new Event('change'));
         });
     </script>
+
 @endsection
