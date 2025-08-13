@@ -963,8 +963,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('exam-attempts/{attempt}/results', [ExamTakingController::class, 'showResults'])->name('exam-attempts.results');
 
     // Admin exam management routes (if not already added)
+    Route::get('exams/{exam}/questions/{question}', [ExamController::class, 'getQuestion'])->name('exams.get-question');
     Route::post('exams/{exam}/questions', [ExamController::class, 'addQuestion'])->name('exams.add-question');
     Route::delete('exams/{exam}/questions/{question}', [ExamController::class, 'removeQuestion'])->name('exams.remove-question');
+    Route::put('exams/{exam}/questions/{question}', [ExamController::class, 'updateQuestion'])->name('exams.update-question');
     Route::patch('exams/{exam}/toggle-active', [ExamController::class, 'toggleActive'])->name('exams.toggle-active');
 
     // Exam attempts management (for instructors)
