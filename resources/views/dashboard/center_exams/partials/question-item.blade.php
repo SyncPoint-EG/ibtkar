@@ -10,7 +10,7 @@
                 <p class="card-text">{{ $question->question_text }}</p>
                 @if($question->image)
                     <div class="mt-2">
-                        <img src="{{ $question->image }}" width="100px">
+                        <img src="{{ Storage::url($question->image) }}" width="100px">
                     </div>
                 @endif
 
@@ -27,6 +27,12 @@
                                 </li>
                             @endforeach
                         </ul>
+                    </div>
+                @endif
+                @if($question->question_type === 'essay' && $question->correct_essay_answer)
+                    <div class="mt-2">
+                        <strong>Correct Answer:</strong>
+                        <p class="text-muted">{{ $question->correct_essay_answer }}</p>
                     </div>
                 @endif
             </div>

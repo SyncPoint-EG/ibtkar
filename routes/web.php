@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CenterExamQuestionController;
 use App\Http\Controllers\Dashboard\HomeworkController;
 use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\PermissionController;
@@ -1043,6 +1044,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('homework/{homework}/questions', [HomeworkQuestionController::class, 'store'])->name('homework-questions.store');
     Route::patch('homework-questions/{question}', [HomeworkQuestionController::class, 'update'])->name('homework-questions.update');
     Route::delete('homework-questions/{question}', [HomeworkQuestionController::class, 'destroy'])->name('homework-questions.destroy');
+});
+
+// Routes for Center Exam Questions
+Route::middleware(['auth'])->group(function () {
+    Route::post('center-exams/{centerExam}/questions', [CenterExamQuestionController::class, 'store'])->name('center-exam-questions.store');
+    Route::patch('center-exam-questions/{question}', [CenterExamQuestionController::class, 'update'])->name('center-exam-questions.update');
+    Route::delete('center-exam-questions/{question}', [CenterExamQuestionController::class, 'destroy'])->name('center-exam-questions.destroy');
+    Route::get('center-exam-questions/{question}/edit', [CenterExamQuestionController::class, 'edit'])->name('center-exam-questions.edit');
 });
 
 

@@ -72,7 +72,7 @@ class CenterExamController extends Controller
      */
     public function show(CenterExam $centerExam)
     {
-        $centerExam->load(['center', 'stage', 'grade', 'division']);
+        $centerExam->load(['center', 'stage', 'grade', 'division', 'questions.options']);
         return view('dashboard.center_exams.show', compact('centerExam'));
     }
 

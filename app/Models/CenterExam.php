@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CenterExam extends Model
 {
@@ -20,6 +21,11 @@ class CenterExam extends Model
         'start_time',
         'end_time',
         'is_active',
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     public function center(): BelongsTo
@@ -40,5 +46,10 @@ class CenterExam extends Model
     public function division(): BelongsTo
     {
         return $this->belongsTo(Division::class);
+    }
+
+    public function questions(): HasMany
+    {
+        return $this->hasMany(CenterExamQuestion::class);
     }
 }
