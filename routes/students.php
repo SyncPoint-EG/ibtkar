@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Mobile\Student\CenterExamController;
 use App\Http\Controllers\Mobile\Student\CourseController;
+use App\Http\Controllers\Mobile\Student\ExamController;
 use App\Http\Controllers\Mobile\Student\HomeController;
+use App\Http\Controllers\Mobile\Student\HomeworkController;
 use App\Http\Controllers\Mobile\Student\LessonController;
 use App\Http\Controllers\Mobile\Student\LuckWheelController;
 use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
 use App\Http\Controllers\Mobile\Student\TeacherController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -51,4 +53,19 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     // luck wheel items
     Route::get('luck-wheel',[LuckWheelController::class, 'index']);
+
+    // exams routes
+    Route::get('exams', [ExamController::class, 'index']);
+    Route::get('exam/{exam}', [ExamController::class, 'show']);
+    Route::post('exam/{exam}/submit', [ExamController::class, 'submit']);
+
+    // homeworks routes
+    Route::get('homeworks', [HomeworkController::class, 'index']);
+    Route::get('homework/{homework}', [HomeworkController::class, 'show']);
+    Route::post('homework/{homework}/submit', [HomeworkController::class, 'submit']);
+
+    // center exams routes
+    Route::get('center-exams', [CenterExamController::class, 'index']);
+    Route::get('center-exam/{centerExam}', [CenterExamController::class, 'show']);
+    Route::post('center-exam/{centerExam}/submit', [CenterExamController::class, 'submit']);
 });

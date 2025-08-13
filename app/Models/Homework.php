@@ -42,4 +42,9 @@ class Homework extends Model
     {
         return $this->answers()->where('user_id', $userId);
     }
+
+    public function attempts()
+    {
+        return $this->hasMany(HomeworkAttempt::class);
+    }
 }

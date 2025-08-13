@@ -346,4 +346,10 @@ class ExamController extends Controller
         $status = $exam->is_active ? 'activated' : 'deactivated';
         return back()->with('success', "Exam {$status} successfully.");
     }
+
+    public function submissions(Exam $exam)
+    {
+        $exam->load('attempts.student', 'attempts.answers.question.options');
+        return view('dashboard.exams.submissions', compact('exam'));
+    }
 }

@@ -123,5 +123,11 @@ class CenterExamController extends Controller
         return redirect()->route('center-exams.index')
             ->with('success', 'Center Exam deleted successfully.');
     }
+
+    public function submissions(CenterExam $centerExam)
+    {
+        $centerExam->load('attempts.student', 'attempts.answers.question.options');
+        return view('dashboard.center_exams.submissions', compact('centerExam'));
+    }
 }
 

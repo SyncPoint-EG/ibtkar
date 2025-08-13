@@ -78,4 +78,10 @@ class HomeworkController extends Controller
         return redirect()->back()
             ->with('success', "Homework {$status} successfully.");
     }
+
+    public function submissions(Homework $homework)
+    {
+        $homework->load('attempts.student', 'attempts.answers.question.options');
+        return view('dashboard.homework.submissions', compact('homework'));
+    }
 }

@@ -72,6 +72,9 @@
                                                         <a href="{{ route('homework.edit', $hw) }}" class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil"></i>
                                                         </a>
+                                                        <a href="{{ route('homework.submissions', $hw) }}" class="btn btn-success btn-sm" title="{{ __('Submissions') }}">
+                                                            <i class="icon-list"></i>
+                                                        </a>
                                                         <form action="{{ route('homework.toggle-status', $hw) }}" method="POST" style="display: inline;">
                                                             @csrf
                                                             @method('PATCH')

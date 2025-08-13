@@ -74,6 +74,9 @@
                                                         <a href="{{ route('center-exams.edit', $exam) }}" class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil"></i>
                                                         </a>
+                                                        <a href="{{ route('center-exams.submissions', $exam) }}" class="btn btn-success btn-sm" title="{{ __('Submissions') }}">
+                                                            <i class="icon-list"></i>
+                                                        </a>
                                                         <form action="{{ route('center-exams.destroy', $exam) }}" method="POST" style="display: inline;">
                                                             @csrf
                                                             @method('DELETE')

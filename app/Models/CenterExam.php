@@ -52,4 +52,9 @@ class CenterExam extends Model
     {
         return $this->hasMany(CenterExamQuestion::class);
     }
+
+    public function attempts()
+    {
+        return $this->hasMany(CenterExamAttempt::class);
+    }
 }

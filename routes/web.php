@@ -105,6 +105,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('center-exams.destroy')
         ->middleware('can:delete_center_exam');
 
+    Route::get('center-exams/{centerExam}/submissions', [CenterExamController::class, 'submissions'])
+        ->name('center-exams.submissions')
+        ->middleware('can:view_center_exam');
+
 });
 
 
@@ -984,6 +988,10 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('exams/{exam}', [ExamController::class, 'destroy'])
         ->name('exams.destroy')
         ->middleware('can:delete_exam');
+
+    Route::get('exams/{exam}/submissions', [ExamController::class, 'submissions'])
+        ->name('exams.submissions')
+        ->middleware('can:view_exam');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -1038,6 +1046,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('homework/{homework}', [HomeworkController::class, 'destroy'])
         ->name('homework.destroy')
         ->middleware('can:delete_homework');
+
+    Route::get('homework/{homework}/submissions', [HomeworkController::class, 'submissions'])
+        ->name('homework.submissions')
+        ->middleware('can:view_homework');
     Route::patch('homework/{homework}/toggle-status', [HomeworkController::class, 'toggleStatus'])->name('homework.toggle-status');
 
     // Homework Question routes (inline)

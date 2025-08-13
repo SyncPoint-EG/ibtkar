@@ -89,6 +89,9 @@
                                                             <a href="{{ route('exams.edit', $exam) }}" class="btn btn-warning btn-sm" title="{{ __('Edit') }}">
                                                                 <i class="icon-pencil"></i>
                                                             </a>
+                                                            <a href="{{ route('exams.submissions', $exam) }}" class="btn btn-success btn-sm" title="{{ __('Submissions') }}">
+                                                                <i class="icon-list"></i>
+                                                            </a>
                                                             <form action="{{ route('exams.toggle-active', $exam) }}" method="POST" style="display: inline-block;">
                                                                 @csrf
                                                                 @method('PATCH')
