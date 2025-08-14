@@ -75,6 +75,9 @@
                                                             <strong>{{ __("dashboard.lesson.fields.chapter_id") }}
                                                                 :</strong> {{ $lesson->chapter_id }}
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.lesson.fields.type") }}:</strong> {{ __('dashboard.lesson.types.' . $lesson->type) }}
+                                                        </div>
 
                                                         <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
@@ -110,6 +113,33 @@
                     </div>
                 </section>
                 <!-- Basic example section end -->
+
+                <!-- Attachments section start -->
+                <section id="attachments">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">{{ __('dashboard.lesson.attachments') }}</h4>
+                                    <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+                                            <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body collapse in">
+                                    <div class="card-block">
+                                        @include('dashboard.lessons.partials._attachments_form')
+                                        @include('dashboard.lessons.partials._attachments_table')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Attachments section end -->
             </div>
         </div>
     </div>

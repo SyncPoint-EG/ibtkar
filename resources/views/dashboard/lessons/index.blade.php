@@ -56,6 +56,7 @@
                                             <th>{{ __("dashboard.chapter.title") }}</th>
                                             <th>{{ __("dashboard.lesson.fields.price") }}</th>
                                             <th>{{ __("dashboard.lesson.fields.is_featured") }}</th>
+                                            <th>{{ __("dashboard.lesson.fields.type") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -72,6 +73,7 @@
                                                 <td>
                                                     <input type="checkbox" class="featured-toggle" data-lesson-id="{{ $lesson->id }}" {{ $lesson->is_featured ? 'checked' : '' }} />
                                                 </td>
+                                                <td>{{ __('dashboard.lesson.types.' . $lesson->type) }}</td>
                                                 <td>
                                                     @can('view_lesson')
                                                         <a href="{{ route('lessons.show', $lesson->id) }}"

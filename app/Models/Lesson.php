@@ -15,7 +15,7 @@ class Lesson extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'desc', 'video_link', 'video_image', 'chapter_id', 'price', 'is_featured'];
+    protected $fillable = ['name', 'desc', 'video_link', 'video_image', 'chapter_id', 'price', 'is_featured', 'type'];
 
     /**
      * Get the table associated with the model.
@@ -33,6 +33,11 @@ class Lesson extends Model
     public function chapter()
     {
         return $this->belongsTo(\App\Models\Chapter::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(LessonAttachment::class);
     }
 
     public function getVideoImageAttribute()

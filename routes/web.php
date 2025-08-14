@@ -30,6 +30,7 @@ use App\Http\Controllers\Dashboard\SemisterController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\LessonAttachmentController;
 use App\Http\Controllers\Dashboard\ExamController;
 use App\Http\Controllers\Dashboard\BannerController;
 
@@ -956,6 +957,9 @@ Route::middleware(['auth'])->group(function() {
     Route::post('lessons/{lesson}/toggle-featured', [LessonController::class, 'toggleFeatured'])
         ->name('lessons.toggle-featured')
         ->middleware('can:edit_lesson');
+
+    Route::post('lessons/{lesson}/attachments', [LessonAttachmentController::class, 'store'])->name('lessons.attachments.store')->middleware('can:create_lesson');
+    Route::delete('lesson-attachments/{attachment}', [LessonAttachmentController::class, 'destroy'])->name('lessons.attachments.destroy')->middleware('can:delete_lesson');
 });
 
 

@@ -133,6 +133,17 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="type">{{ __("dashboard.lesson.fields.type") }}</label>
+                                                    <select id="type" name="type" class="form-control @error('type') is-invalid @enderror">
+                                                        <option value="explanation" {{ $lesson->type == 'explanation' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.explanation') }}</option>
+                                                        <option value="revision" {{ $lesson->type == 'revision' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.revision') }}</option>
+                                                        <option value="solve_homework" {{ $lesson->type == 'solve_homework' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.solve_homework') }}</option>
+                                                    </select>
+                                                    @error('type')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label
                                                         for="chapter_id">{{ __("dashboard.lesson.fields.chapter_id") }}</label>
                                                     <select id="chapter_id" name="chapter_id"

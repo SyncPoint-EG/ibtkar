@@ -32,6 +32,7 @@ class LessonRequest extends FormRequest
             'video_image' => 'required',
             'price' => 'nullable|numeric',
             'is_featured' => 'nullable|boolean',
+            'type' => 'required|in:explanation,revision,solve_homework',
         ];
     }
 }
