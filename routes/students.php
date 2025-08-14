@@ -22,7 +22,7 @@ Route::post('logout',[StudentAuthController::class, 'logout']);
 
 
 
-Route::group(['middleware' => 'auth:student'], function () {
+//Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
     Route::post('purchase',[PaymentController::class, 'store']);
 
@@ -68,4 +68,4 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('center-exams', [CenterExamController::class, 'index']);
     Route::get('center-exam/{centerExam}', [CenterExamController::class, 'show']);
     Route::post('center-exam/{centerExam}/submit', [CenterExamController::class, 'submit']);
-});
+//});

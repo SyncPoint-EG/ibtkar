@@ -62,8 +62,9 @@ class TeacherController extends Controller
 
 
 
-    public function show(Teacher $teacher)
+    public function show($id)
     {
+        $teacher = Teacher::findOrFail($id);
         $teacher->load(['subjects', 'grades', 'stages', 'divisions']);
         return new TeacherResource($teacher);
     }
