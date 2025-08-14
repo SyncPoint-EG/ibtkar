@@ -107,8 +107,10 @@ class StudentAuthController
     public function logout(Request $request)
     {
         // Delete current access token
-        $request->user()->currentAccessToken()->delete();
+        $user = auth('student')->user(); // get the authenticated user
 
+        // delete all tokens for this user
+        $user->tokens()->delete();
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully'
