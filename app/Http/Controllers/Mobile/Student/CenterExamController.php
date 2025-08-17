@@ -13,7 +13,7 @@ class CenterExamController extends Controller
 {
     public function index()
     {
-        $student = Auth::user();
+        $student = auth('student')->user();
         $centerExams = CenterExam::where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
@@ -30,7 +30,7 @@ class CenterExamController extends Controller
 
     public function submit(Request $request, CenterExam $centerExam)
     {
-        $student = Auth::user();
+        $student = auth('student')->user();
         $validated = $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:center_exam_questions,id',

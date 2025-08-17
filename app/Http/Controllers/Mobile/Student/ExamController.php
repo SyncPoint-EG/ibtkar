@@ -13,7 +13,7 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $student = Auth::user();
+        $student = auth('student')->user();
         $exams = Exam::whereHas('lesson.chapter.course', function ($query) use ($student) {
             $query->where('stage_id', $student->stage_id)
                 ->where('grade_id', $student->grade_id)
@@ -31,7 +31,7 @@ class ExamController extends Controller
 
     public function submit(Request $request, Exam $exam)
     {
-        $student = Auth::user();
+        $student = auth('student')->user();
         $validated = $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
