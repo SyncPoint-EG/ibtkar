@@ -19,6 +19,11 @@ class TeacherResource extends JsonResource
             'name' => $this->name,
             'bio' => $this->bio,
             'image' => $this->image,
+            'stages' => $this->stages->pluck('name'),
+            'grades' => $this->grades->pluck('name'),
+            'divisions' => $this->divisions->pluck('name'),
+            'subjects' => SubjectResource::collection($this->subjects),
+            'courses' => CourseResource::collection($this->courses),
         ];
     }
 }
