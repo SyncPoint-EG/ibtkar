@@ -37,31 +37,31 @@ class Teacher extends Model
      }
 
 
-    public function subjects()
-    {
-        return $this->belongsToMany(Subject::class)
-            ->withPivot(['stage_id','grade_id','division_id'])
-            ;
-    }
-    public function subjectTeacherAssignments()
-    {
-        return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
-    }
+//    public function subjects()
+//    {
+//        return $this->belongsToMany(Subject::class)
+//            ->withPivot(['stage_id','grade_id','division_id'])
+//            ;
+//    }
+//    public function subjectTeacherAssignments()
+//    {
+//        return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
+//    }
 
-    public function stages()
-    {
-        return $this->belongsToMany(\App\Models\Stage::class);
-    }
-
-    public function grades()
-    {
-        return $this->belongsToMany(\App\Models\Grade::class);
-    }
-
-    public function divisions()
-    {
-        return $this->belongsToMany(\App\Models\Division::class);
-    }
+//    public function stages()
+//    {
+//        return $this->belongsToMany(\App\Models\Stage::class);
+//    }
+//
+//    public function grades()
+//    {
+//        return $this->belongsToMany(\App\Models\Grade::class);
+//    }
+//
+//    public function divisions()
+//    {
+//        return $this->belongsToMany(\App\Models\Division::class);
+//    }
 
     public function getImageAttribute()
     {
@@ -114,6 +114,23 @@ class Teacher extends Model
         return $this->hasMany(\App\Models\Course::class);
     }
 
+    // Get stages through courses
+    public function stages()
+    {
+        return $this->hasManyThrough(Stage::class, Course::class, 'teacher_id', 'id', 'id', 'stage_id');
+    }
+
+    // Get grades through courses
+    public function grades()
+    {
+        return $this->hasManyThrough(Grade::class, Course::class, 'teacher_id', 'id', 'id', 'grade_id');
+    }
+
+    // Get divisions through courses
+    public function divisions()
+    {
+        return $this->hasManyThrough(Division::class, Course::class, 'teacher_id', 'id', 'id', 'division_id');
+    }
     public function students()
     {
         return Student::first();
