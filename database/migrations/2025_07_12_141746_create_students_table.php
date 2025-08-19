@@ -32,7 +32,9 @@ return new class extends Migration
             $table->string('referral_code')->unique();
             $table->integer('points')->default(0);
             $table->unsignedBigInteger('referred_by')->nullable();
-            $table->foreign('referred_by')->references('id')->on('students')->onDelete('set null');            $table->timestamps();
+            $table->foreign('referred_by')->references('id')->on('students')->onDelete('set null');
+            $table->float('wallet')->default(0);
+            $table->timestamps();
         });
     }
 

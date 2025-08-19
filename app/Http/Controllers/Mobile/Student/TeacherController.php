@@ -79,6 +79,7 @@ class TeacherController extends Controller
         $subject_id    = $request->get('subject_id');
         $grade_id      = $request->get('grade_id'); // Optional
         $division_id   = $request->get('division_id'); // Optional
+        $is_featured   = $request->get('is_featured'); // to display in home screen
 
 
         // Search filter
@@ -118,6 +119,9 @@ class TeacherController extends Controller
             });
         }
 
+        if($is_featured){
+            $query->where('is_featured', 1);
+        }
         return $query ;
     }
 

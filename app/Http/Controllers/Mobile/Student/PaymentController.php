@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Lesson;
@@ -11,7 +12,32 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function store(Request $request)
+    public function store(PaymentRequest $request)
+    {
+        $student = auth('student')->user();
+        $student_id = $student->id;
+        $amount = $this->getAmount($request);
+        $validated = $request->validated();
+        $validated['student_id'] = $student_id;
+        $validated['amount'] = $amount;
+        $validated['total_amount'] = $amount;
+        if(in_array($request->payment_method , ['instapay', 'wallet'])){
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+        }
+        if($request->payment_method == 'ibtkar_wallet' && $student->wallet < $amount){
+          return response()->json([
+              'status' => false,
+              'message'  => 'لا يوجد لديك رصيد كافي في المحفظة للشراء'
+          ]);
+        }
+        $payment = Payment::create($validated);
+
+        return response()->json([
+            'status' => true,
+            'message'  => 'تمت عملية الشراء بنجاح'
+        ]);
+    }
+    private function getAmount(Request $request)
     {
         $amount = 0 ;
         if($request->course_id){
@@ -21,15 +47,6 @@ class PaymentController extends Controller
         }elseif ($request->lesson_id){
             $amount = Lesson::find($request->lesson_id)->price ;
         }
-        $payment = Payment::create([
-            'student_id' => $request->student_id,
-            'course_id' => $request->course_id,
-            'chapter_id' => $request->chapter_id,
-            'lesson_id' => $request->lesson_id,
-            'payment_method' => $request->payment_method,
-            'amount' => $amount ,
-            'total_amount' => $amount
-
-        ]);
+        return $amount ;
     }
 }
