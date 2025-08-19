@@ -33,6 +33,7 @@ use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\LessonAttachmentController;
 use App\Http\Controllers\Dashboard\ExamController;
 use App\Http\Controllers\Dashboard\BannerController;
+use App\Http\Controllers\Dashboard\CodeController;
 
 
 Route::get('/dashboard2', function () {
@@ -1122,4 +1123,36 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('banners/{banner}', [BannerController::class, 'destroy'])
         ->name('banners.destroy')
         ->middleware('can:delete_banner');
+});
+
+
+// Routes for Code
+Route::middleware(['auth'])->group(function() {
+    Route::get('codes', [CodeController::class, 'index'])
+        ->name('codes.index')
+        ->middleware('can:view_code');
+
+    Route::get('codes/create', [CodeController::class, 'create'])
+        ->name('codes.create')
+        ->middleware('can:create_code');
+
+    Route::post('codes', [CodeController::class, 'store'])
+        ->name('codes.store')
+        ->middleware('can:create_code');
+
+    Route::get('codes/{code}', [CodeController::class, 'show'])
+        ->name('codes.show')
+        ->middleware('can:view_code');
+
+    Route::get('codes/{code}/edit', [CodeController::class, 'edit'])
+        ->name('codes.edit')
+        ->middleware('can:edit_code');
+
+    Route::put('codes/{code}', [CodeController::class, 'update'])
+        ->name('codes.update')
+        ->middleware('can:edit_code');
+
+    Route::delete('codes/{code}', [CodeController::class, 'destroy'])
+        ->name('codes.destroy')
+        ->middleware('can:delete_code');
 });

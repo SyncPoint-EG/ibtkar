@@ -26,6 +26,7 @@ class PaymentController extends Controller
             'course_id' => $request->course_id,
             'chapter_id' => $request->chapter_id,
             'lesson_id' => $request->lesson_id,
+            'payment_method' => $request->payment_method,
             'amount' => $amount ,
             'total_amount' => $amount
 

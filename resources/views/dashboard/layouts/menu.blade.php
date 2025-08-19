@@ -139,3 +139,7 @@
 <li class=" nav-item"><a href="{{ route('banners.index') }}"><i class="icon-list"></i><span data-i18n="nav.banners.main" class="menu-title">{{__('dashboard.banner.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_code')
+<li class=" nav-item"><a href="{{ route('codes.index') }}"><i class="icon-list"></i><span data-i18n="nav.codes.main" class="menu-title">{{__('dashboard.code.title_plural')}}</span></a>
+</li>
+@endcan
