@@ -24,6 +24,7 @@ class TeacherResource extends JsonResource
             'divisions' => $this->divisions->pluck('name'),
             'subjects' => SubjectResource::collection($this->subjects),
             'courses' => CourseResource::collection($this->courses),
+            'lessons' => LessonResource::collection($this->lessons()->get()),
         ];
     }
 }

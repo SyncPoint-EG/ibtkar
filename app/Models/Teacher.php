@@ -140,6 +140,15 @@ class Teacher extends Model
         return Student::first();
     }
 
+    public function lessons()
+    {
+        return Lesson::whereIn('chapter_id',
+            Chapter::whereIn('course_id',
+                $this->courses()->pluck('id')
+            )->pluck('id')
+        );
+    }
+
     public function getLessonsCountAttribute()
     {
         $teacherStages = $this->courses->pluck('stage_id');

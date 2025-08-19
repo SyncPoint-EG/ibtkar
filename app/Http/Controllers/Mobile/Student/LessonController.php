@@ -12,7 +12,7 @@ class LessonController extends Controller
     public function getLessons()
     {
         $perPage = \request()->query('perPage',10);
-        $lessons = Lesson::query()->paginate($perPage);
+        $lessons = Lesson::where('is_featured',1)->query()->paginate($perPage);
         return LessonResource::collection($lessons);
     }
     public function getLesson(Lesson $lesson)
