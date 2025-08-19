@@ -131,6 +131,10 @@ class Teacher extends Model
     {
         return $this->hasManyThrough(Division::class, Course::class, 'teacher_id', 'id', 'id', 'division_id');
     }
+    public function subjects()
+    {
+        return $this->hasManyThrough(Subject::class, Course::class, 'teacher_id', 'id', 'id', 'subject_id');
+    }
     public function students()
     {
         return Student::first();
