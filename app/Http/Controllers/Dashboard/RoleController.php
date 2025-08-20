@@ -36,7 +36,9 @@ class RoleController extends Controller
         ]);
 
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            $permissions = Permission::whereIn('id', $request->permissions)->pluck('name')->toArray();
+
+            $role->syncPermissions($permissions);
         }
 
         return redirect()->route('roles.index')
