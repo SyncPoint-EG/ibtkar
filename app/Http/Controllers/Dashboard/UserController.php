@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $users = $this->userService->getAllPaginated(15 , ['company','team']);
+        $users = $this->userService->getAllPaginated(15 , []);
 
         return view('dashboard.users.index', compact('users'));
     }
