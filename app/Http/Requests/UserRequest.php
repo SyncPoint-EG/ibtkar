@@ -27,6 +27,7 @@ class UserRequest extends FormRequest
             'name' => 'required|max:255',
 //            'name_ar' => 'required|max:255',
             'is_active' => 'required',
+            'role' => 'required|exists:roles,id',
 //            'company_id' => 'required|exists:companies,id',
 //            'team_id' => 'required|exists:teams,id',
 //            'image' => 'nullable',

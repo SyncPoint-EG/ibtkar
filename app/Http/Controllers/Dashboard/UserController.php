@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -40,8 +41,9 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        $roles = Role::all(); // Get all available roles
 
-        return view('dashboard.users.create');
+        return view('dashboard.users.create',compact('roles'));
     }
 
     /**
@@ -52,17 +54,33 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-//        try {
-            $this->userService->create($request->validated());
+        try {
+            $userData = $request->validated();
+            $roleId = $userData['role'] ?? null;
+
+            // Remove role from user data as it's not a user field
+            unset($userData['role']);
+
+            // Create the user
+            $user = $this->userService->create($userData);
+
+            // Assign role to user if role is selected
+            if ($roleId) {
+                $role = Role::find($roleId);
+                if ($role) {
+                    $user->assignRole($role->name);
+                }
+            }
 
             return redirect()->route('users.index')
                 ->with('success', 'User created successfully.');
-//        } catch (\Exception $e) {
-//            return redirect()->back()
-//                ->withInput()
-//                ->with('error', 'Error creating User: ' . $e->getMessage());
-//        }
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error creating User: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Display the specified resource.

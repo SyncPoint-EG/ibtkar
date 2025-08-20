@@ -65,6 +65,26 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+                                                <!-- Role Selection Field -->
+                                                <div class="form-group">
+                                                    <label for="role">{{ __("dashboard.user.fields.role") }}</label>
+                                                    <select id="role" name="role"
+                                                            class="form-control @error('role') is-invalid @enderror"
+                                                            data-toggle="tooltip" data-trigger="hover"
+                                                            data-placement="top"
+                                                            data-title="{{ __("dashboard.user.fields.role") }}">
+                                                        <option value="">{{ __("dashboard.user.select_role") }}</option>
+                                                        @foreach($roles as $role)
+                                                            <option value="{{ $role->id }}"
+                                                                {{ (isset($user) && $user->hasRole($role->name)) || old('role') == $role->id ? 'selected' : '' }}>
+                                                                {{ $role->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('role')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 {{--                                                <div class="form-group">--}}
 {{--                                                    <label--}}
 {{--                                                        for="name_ar">{{ __("dashboard.user.fields.name_ar") }}</label>--}}
