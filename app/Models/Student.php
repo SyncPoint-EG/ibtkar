@@ -115,4 +115,8 @@ class Student extends Authenticatable
     {
         return $this->belongsTo(Guardian::class);
     }
+    public function watches()
+    {
+        return $this->hasMany(Watch::class);
+    }
 }

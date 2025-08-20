@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     //lessons routes
     Route::get('lessons', [LessonController::class, 'getLessons']);
     Route::get('lesson/{lesson}', [LessonController::class, 'getLesson']);
+    Route::post('lesson-watch/{lesson}', [LessonController::class, 'watch']);
 
     //lessons attachment routes
     Route::get('attachments', [AttachmentController::class, 'allAttachments']);

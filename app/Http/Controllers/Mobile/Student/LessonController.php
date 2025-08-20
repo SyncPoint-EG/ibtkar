@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LessonResource;
 use App\Models\Lesson;
 use App\Models\Payment;
+use App\Models\Watch;
 use Illuminate\Http\Request;
 
 class LessonController extends Controller
@@ -27,6 +28,13 @@ class LessonController extends Controller
                 ->orWhere('chapter_id',$chapter->id)
                 ->orWhere('course_id',$course->id);
         })->exists();
+        $max_watches = $student->watches()->where('lesson_id', $lesson->id)->first();
+        if ($max_watches && $max_watches->count > 3) {
+            return response()->json([
+                'status' => false,
+                'message' => 'لقد شاهدت هذا الدرس بالفعل أكثر من 3 مرات',
+            ]);
+        }
         if($is_purchased){
             return new LessonResource($lesson);
         }else{
@@ -35,5 +43,29 @@ class LessonController extends Controller
                 'message' => 'لا يمكنك مشاهدة هذا الفيديو'
             ]);
         }
+    }
+    public function watch($id)
+    {
+
+        $student = auth('student')->user();
+        $watch = $student->watches()->where('lesson_id',$id)->first();
+        if(!$watch){
+            $watch = new Watch();
+            $watch->student_id = $student->id;
+            $watch->lesson_id = $id;
+            $watch->save();
+        }elseif ($watch && $watch->count < 3) {
+            $watch->count += 1;
+            $watch->save();
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'لقد شاهدت هذا الدرس بالفعل أكثر من 3 مرات',
+            ]);
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'تم مشاهدة الدرس بنجاح',
+        ]);
     }
 }
