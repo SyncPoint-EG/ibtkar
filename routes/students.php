@@ -25,6 +25,7 @@ Route::post('logout',[StudentAuthController::class, 'logout']);
 Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
     Route::post('purchase',[PaymentController::class, 'store']);
+    Route::post('chharge-wallet',[PaymentController::class, 'chargeWallet']);
 
     // profile routes
     Route::get('profile', [ProfileController::class, 'show']);

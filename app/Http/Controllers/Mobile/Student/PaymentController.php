@@ -23,12 +23,19 @@ class PaymentController extends Controller
         $validated['total_amount'] = $amount;
         if(in_array($request->payment_method , ['instapay', 'wallet'])){
             $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+        }else{
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['accepted'];
         }
-        if($request->payment_method == 'ibtkar_wallet' && $student->wallet < $amount){
-          return response()->json([
-              'status' => false,
-              'message'  => 'لا يوجد لديك رصيد كافي في المحفظة للشراء'
-          ]);
+        if($request->payment_method == 'ibtkar_wallet'){
+            if($student->wallet < $amount){
+                return response()->json([
+                    'status' => false,
+                    'message'  => 'لا يوجد لديك رصيد كافي في المحفظة للشراء'
+                ]);
+            }
+            $student->wallet -= $amount;
+            $student->save();
+
         }
         $payment = Payment::create($validated);
 
@@ -48,5 +55,10 @@ class PaymentController extends Controller
             $amount = Lesson::find($request->lesson_id)->price ;
         }
         return $amount ;
+    }
+
+    public function chargeWallet(Request $request)
+    {
+
     }
 }
