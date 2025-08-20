@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('for');
             $table->integer('number_of_uses');
-            $table->date('expires_at');
+            $table->date('expires_at')->nullable();
             $table->timestamps();
         });
     }
