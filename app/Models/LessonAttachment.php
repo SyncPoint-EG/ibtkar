@@ -20,4 +20,5 @@ class LessonAttachment extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
 }

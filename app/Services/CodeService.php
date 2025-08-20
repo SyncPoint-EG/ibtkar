@@ -297,4 +297,12 @@ class CodeService
             throw $e;
         }
     }
+    public function generateUniqueCode()
+    {
+        $code = null ;
+        do{
+            $code = str_pad(random_int(1000000000, 9999999999), 10, '0', STR_PAD_LEFT);
+        }while(Code::query()->where('code', $code)->exists());
+        return $code;
+    }
 }

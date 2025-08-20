@@ -171,4 +171,12 @@ class Teacher extends Model
         })
         ->count();
     }
+
+    public function attachments()
+    {
+        $attachments = LessonAttachment::query()->whereHas('lesson.chapter.course', function ($query) {
+            $query->whereIn('teacher_id', [$this->id]);
+        })->latest();
+        return $attachments ;
+    }
 }

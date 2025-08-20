@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
+use App\Http\Resources\SingleTeacherResource;
 use App\Http\Resources\TeacherResource;
 use App\Models\Division;
 use App\Models\Grade;
@@ -66,7 +67,7 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $teacher->load(['subjects', 'grades', 'stages', 'divisions']);
-        return new TeacherResource($teacher);
+        return new SingleTeacherResource($teacher);
     }
 
     public function filter($query , $request)

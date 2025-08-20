@@ -68,7 +68,10 @@ class CodeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $validatedData['number_of_uses'] = 1;
+            $validatedData['number_of_uses'] = 0;
+            if(!$request->code){
+                $validatedData['code'] = $this->codeService->generateUniqueCode();
+            }
             $code = $this->codeService->create($validatedData);
 
             if ($request->expectsJson()) {
