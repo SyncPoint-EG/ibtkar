@@ -52,16 +52,16 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        try {
+//        try {
             $this->userService->create($request->validated());
 
             return redirect()->route('users.index')
                 ->with('success', 'User created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Error creating User: ' . $e->getMessage());
-        }
+//        } catch (\Exception $e) {
+//            return redirect()->back()
+//                ->withInput()
+//                ->with('error', 'Error creating User: ' . $e->getMessage());
+//        }
     }
 
     /**

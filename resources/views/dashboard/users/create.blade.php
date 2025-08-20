@@ -53,33 +53,33 @@
                                                 <div class="form-group">
                                                     <label
                                                         for="name_en">{{ __("dashboard.user.fields.name_en") }}</label>
-                                                    <input type="text" id="name_en"
-                                                           class="form-control @error('name_en') is-invalid @enderror"
-                                                           name="name_en"
-                                                           value="{{ isset($user) ? $user->name_en : old('name_en') }}"
+                                                    <input type="text" id="name"
+                                                           class="form-control @error('name') is-invalid @enderror"
+                                                           name="name"
+                                                           value="{{ isset($user) ? $user->name : old('name') }}"
                                                            placeholder="{{ __("dashboard.user.fields.name_en") }}"
                                                            data-toggle="tooltip" data-trigger="hover"
                                                            data-placement="top"
                                                            data-title="{{ __("dashboard.user.fields.name_en") }}">
-                                                    @error('name_en')
+                                                    @error('name')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="form-group">
-                                                    <label
-                                                        for="name_ar">{{ __("dashboard.user.fields.name_ar") }}</label>
-                                                    <input type="text" id="name_ar"
-                                                           class="form-control @error('name_ar') is-invalid @enderror"
-                                                           name="name_ar"
-                                                           value="{{ isset($user) ? $user->name_ar : old('name_ar') }}"
-                                                           placeholder="{{ __("dashboard.user.fields.name_ar") }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.user.fields.name_ar") }}">
-                                                    @error('name_ar')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label--}}
+{{--                                                        for="name_ar">{{ __("dashboard.user.fields.name_ar") }}</label>--}}
+{{--                                                    <input type="text" id="name_ar"--}}
+{{--                                                           class="form-control @error('name_ar') is-invalid @enderror"--}}
+{{--                                                           name="name_ar"--}}
+{{--                                                           value="{{ isset($user) ? $user->name_ar : old('name_ar') }}"--}}
+{{--                                                           placeholder="{{ __("dashboard.user.fields.name_ar") }}"--}}
+{{--                                                           data-toggle="tooltip" data-trigger="hover"--}}
+{{--                                                           data-placement="top"--}}
+{{--                                                           data-title="{{ __("dashboard.user.fields.name_ar") }}">--}}
+{{--                                                    @error('name_ar')--}}
+{{--                                                    <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                </div>--}}
                                                 <div class="form-group">
                                                     <label for="email">{{ __("dashboard.user.fields.email") }}</label>
                                                     <input type="text" id="email"
