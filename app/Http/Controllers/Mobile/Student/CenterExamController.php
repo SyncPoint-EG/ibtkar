@@ -17,7 +17,14 @@ class CenterExamController extends Controller
         $centerExams = CenterExam::where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
-            ->get();
+            ->where('start_time','>' ,now());
+        if(\request()->center_id){
+             $centerExams = $centerExams->where('center_id', \request()->center_id);
+        }
+        if(\request()->teacher_id){
+            $centerExams = $centerExams->where('teacher_id', \request()->teacher_id);
+        }
+        $centerExams = $centerExams->get();
 
         return response()->json($centerExams);
     }

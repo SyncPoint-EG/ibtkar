@@ -152,10 +152,19 @@
                                                         <option value="revision" {{ old('type') == 'revision' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.revision') }}</option>
                                                         <option value="solve_homework" {{ old('type') == 'solve_homework' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.solve_homework') }}</option>
                                                     </select>
-                                                    @error('type')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                        @error('type')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="date">{{ trans('dashboard.lesson.fields.date') }}</label>
+                                        <input type="date" class="form-control @error('date') is-invalid @enderror"
+                                               id="date" name="date" value="{{ old('date') }}">
+                                        @error('date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                                 <div class="form-group">
                                                     <label for="chapter_id">{{ __("dashboard.lesson.fields.chapter_id") }}</label>
                                                     <select id="chapter_id" name="chapter_id"

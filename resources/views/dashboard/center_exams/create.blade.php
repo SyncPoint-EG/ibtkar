@@ -54,6 +54,22 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="teacher_id">{{ trans('dashboard.center_exam.fields.teacher') }} *</label>
+                                        <select class="form-control @error('teacher_id') is-invalid @enderror"
+                                                id="teacher_id" name="teacher_id" required>
+                                            <option value="">{{ trans('dashboard.center_exam.placeholders.select_teacher') }}</option>
+                                            @foreach($teachers as $teacher)
+                                                <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                                    {{ $teacher->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('teacher_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="stage_id">Stage *</label>
                                         <select class="form-control @error('stage_id') is-invalid @enderror"
                                                 id="stage_id" name="stage_id" required>

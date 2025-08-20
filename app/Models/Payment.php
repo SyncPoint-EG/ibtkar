@@ -60,4 +60,13 @@ class Payment extends Model
             $this->attributes['payment_image'] = $value;
         }
     }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+    public function chapter()
+    {
+        return $this->belongsTo(Chapter::class);
+    }
 }

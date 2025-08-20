@@ -107,4 +107,8 @@ class Student extends Authenticatable
         return $code;
     }
 
+    public function purchases()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

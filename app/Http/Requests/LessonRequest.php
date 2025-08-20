@@ -33,6 +33,7 @@ class LessonRequest extends FormRequest
             'price' => 'nullable|numeric',
             'is_featured' => 'nullable|boolean',
             'type' => 'required|in:explanation,revision,solve_homework',
+            'date' => 'nullable|date',
         ];
     }
 }

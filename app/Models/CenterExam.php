@@ -11,6 +11,7 @@ class CenterExam extends Model
     protected $fillable = [
         'center_id',
         'stage_id',
+        'teacher_id',
         'grade_id',
         'division_id',
         'title',

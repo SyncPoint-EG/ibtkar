@@ -68,6 +68,7 @@ class LessonController extends Controller
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
+            $data['date'] = $request->date;
 
             $this->lessonService->create($data);
 
@@ -115,6 +116,7 @@ class LessonController extends Controller
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
+            $data['date'] = $request->date;
 
             $this->lessonService->update($lesson, $data);
 

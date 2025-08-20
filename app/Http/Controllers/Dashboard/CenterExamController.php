@@ -8,6 +8,7 @@ use App\Models\CenterExam;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Stage;
+use App\Models\Teacher;
 use App\Services\CenterExamService;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,8 @@ class CenterExamController extends Controller
         $stages = Stage::all();
         $grades = Grade::all();
         $divisions = Division::all(); // Or filter based on stage/grade if needed
-        return view('dashboard.center_exams.create', compact('centers', 'stages', 'grades', 'divisions'));
+        $teachers = Teacher::all();
+        return view('dashboard.center_exams.create', compact('centers', 'stages', 'grades', 'divisions', 'teachers'));
     }
 
     /**
@@ -49,6 +51,7 @@ class CenterExamController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'center_id' => 'required|exists:centers,id',
+            'teacher_id' => 'required|exists:teachers,id',
             'stage_id' => 'required|exists:stages,id',
             'grade_id' => 'required|exists:grades,id',
             'division_id' => 'nullable|exists:divisions,id',
@@ -85,7 +88,8 @@ class CenterExamController extends Controller
         $stages = Stage::all();
         $grades = Grade::all();
         $divisions = Division::all(); // Or filter based on stage/grade if needed
-        return view('dashboard.center_exams.edit', compact('centerExam', 'centers', 'stages', 'grades', 'divisions'));
+        $teachers = Teacher::all();
+        return view('dashboard.center_exams.edit', compact('centerExam', 'centers', 'stages', 'grades', 'divisions', 'teachers'));
     }
 
     /**
@@ -96,6 +100,7 @@ class CenterExamController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'center_id' => 'required|exists:centers,id',
+            'teacher_id' => 'required|exists:teachers,id',
             'stage_id' => 'required|exists:stages,id',
             'grade_id' => 'required|exists:grades,id',
             'division_id' => 'nullable|exists:divisions,id',
