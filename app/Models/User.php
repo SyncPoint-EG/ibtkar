@@ -116,15 +116,15 @@ class User extends Authenticatable
     }
 
 
-    public function team()
-    {
-        return $this->belongsTo(\App\Models\Team::class);
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(\App\Models\Company::class);
-    }
+//    public function team()
+//    {
+//        return $this->belongsTo(\App\Models\Team::class);
+//    }
+//
+//    public function company()
+//    {
+//        return $this->belongsTo(\App\Models\Company::class);
+//    }
 
 
     public function scopeActive($query)
