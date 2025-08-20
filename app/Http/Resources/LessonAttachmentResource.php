@@ -14,6 +14,14 @@ class LessonAttachmentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'path' => $this->path,
+            'type' => $this->type,
+            'lesson' => $this->lesson?->name,
+            'chapter' => $this->lesson?->chapter->name,
+            'course' => $this->lesson?->chapter->course->name,
+        ];
     }
 }
