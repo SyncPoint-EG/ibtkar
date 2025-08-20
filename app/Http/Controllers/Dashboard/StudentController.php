@@ -32,7 +32,7 @@ class StudentController extends Controller
      */
     public function index(): View
     {
-        $students = $this->studentService->getAllPaginated();
+        $students = $this->studentService->getAllPaginated(15,['']);
 
         return view('dashboard.students.index', compact('students'));
     }

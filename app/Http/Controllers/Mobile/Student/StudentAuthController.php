@@ -24,10 +24,12 @@ class StudentAuthController
             $this->handleReferralCode($request , $student);
         }
         if($request->guardian_number && !Guardian::query()->where('phone', $request->guardian_number)->exists()){
-            Guardian::create([
+            $guardian = Guardian::create([
                 'phone' => $request->guardian_number,
                 'password'=> $request->guardian_number,
             ]);
+            $student->guardian_id = $guardian->id;
+            $student->save();
         }
 
 

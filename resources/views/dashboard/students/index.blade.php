@@ -52,7 +52,7 @@
                                             <th>{{ __("dashboard.student.fields.first_name") }}</th>
                                             <th>{{ __("dashboard.student.fields.last_name") }}</th>
                                             <th>{{ __("dashboard.student.fields.phone") }}</th>
-{{--                                            <th>{{ __("dashboard.governorate.title") }}</th>--}}
+                                            <th>{{ __("dashboard.student.fields.guardian_number") }}</th>
                                             <th>{{ __("dashboard.district.title") }}</th>
                                             <th>{{ __("dashboard.center.title") }}</th>
                                             <th>{{ __("dashboard.stage.title") }}</th>
@@ -61,6 +61,7 @@
                                             <th>{{ __("dashboard.student.fields.gender") }}</th>
                                             <th>{{ __("dashboard.student.fields.birth_date") }}</th>
                                             <th>{{ __("dashboard.student.fields.status") }}</th>
+                                            <th>{{ __("dashboard.student.fields.referral_code") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -71,7 +72,7 @@
                                                 <td>{{ $student->first_name }}</td>
                                                 <td>{{ $student->last_name }}</td>
                                                 <td>{{ $student->phone }}</td>
-{{--                                                <td>{{ $student->governorate?->nmae }}</td>--}}
+                                                <td>{{ $student->guardian?->phone }}</td>
                                                 <td>{{ $student->district?->name }}</td>
                                                 <td>{{ $student->center?->name }}</td>
                                                 <td>{{ $student->stage?->name }}</td>
@@ -80,6 +81,7 @@
                                                 <td>{{ $student->gender }}</td>
                                                 <td>{{ $student->birth_date ? $student->birth_date->format('Y-m-d') : '' }}</td>
                                                 <td>{{ $student->status ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $student->referral_code }}</td>
                                                 <td>
                                                     @can('view_student')
                                                         <a href="{{ route('students.show', $student->id) }}"

@@ -111,4 +111,8 @@ class Student extends Authenticatable
     {
         return $this->hasMany(Payment::class);
     }
+    public function guardian()
+    {
+        return $this->belongsTo(Guardian::class);
+    }
 }

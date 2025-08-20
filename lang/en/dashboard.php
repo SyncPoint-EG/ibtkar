@@ -240,6 +240,8 @@ return [
                 'gender' => 'Gender',
                 'birth_date' => 'Birth Date',
                 'status' => 'Status',
+                'referral_code' => 'Referral Code',
+                'guardian_number' => 'Guardian Phone',
             ],
         ],
         'guardian' => [
