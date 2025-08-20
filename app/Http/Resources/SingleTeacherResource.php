@@ -30,7 +30,7 @@ class SingleTeacherResource extends JsonResource
             'divisions' => $this->divisions->pluck('name'),
             'subjects' => SubjectResource::collection($this->subjects),
             'courses' => CourseResource::collection($this->courses),
-            'lessons' => LessonResource::collection($this->lessons()->take(5)->get()),
+            'lessons' => LessonResource::collection($this->lessons()->latest()->take(5)->get()),
             'exams'   => Exam::whereHas('lesson.chapter.course', function ($query) {
                 $query->whereIn('teacher_id', [$this->id]);
             })->where('start_date','>',now())->take(5)->get(),

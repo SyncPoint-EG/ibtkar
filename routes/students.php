@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Mobile\Student\AttachmentController;
 use App\Http\Controllers\Mobile\Student\CenterExamController;
 use App\Http\Controllers\Mobile\Student\CourseController;
 use App\Http\Controllers\Mobile\Student\ExamController;
@@ -25,7 +26,7 @@ Route::post('logout',[StudentAuthController::class, 'logout']);
 Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
     Route::post('purchase',[PaymentController::class, 'store']);
-    Route::post('chharge-wallet',[PaymentController::class, 'chargeWallet']);
+    Route::post('charge-wallet',[PaymentController::class, 'chargeWallet']);
 
     // profile routes
     Route::get('profile', [ProfileController::class, 'show']);
@@ -42,6 +43,9 @@ Route::group(['middleware' => 'auth:student'], function () {
     //lessons routes
     Route::get('lessons', [LessonController::class, 'getLessons']);
     Route::get('lesson/{lesson}', [LessonController::class, 'getLesson']);
+
+    //lessons attachment routes
+    Route::get('attachments', [AttachmentController::class, 'allAttachments']);
 
     //teachers routes
     Route::get('teachers', [TeacherController::class, 'index']);
