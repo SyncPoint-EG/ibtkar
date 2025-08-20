@@ -40,10 +40,8 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $companies = Company::query()->active()->get();
-        $teams = Team::query()->active()->get();
 
-        return view('dashboard.users.create',compact('companies','teams'));
+        return view('dashboard.users.create');
     }
 
     /**

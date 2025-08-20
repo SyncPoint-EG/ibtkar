@@ -108,48 +108,28 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="form-group">
-                                                    <label
-                                                        for="company_id">{{ __("dashboard.user.fields.company_id") }}</label>
-                                                    <select id="company_id" name="company_id"
-                                                            class="form-control @error('company_id') is-invalid @enderror"
-                                                            data-toggle="tooltip" data-trigger="hover"
-                                                            data-placement="top"
-                                                            data-title="{{ __("dashboard.user.fields.company_id") }}">
-                                                        <option
-                                                            value="">{{ __("dashboard.common.select") }} {{ __("dashboard.user.fields.company_id") }}</option>
-                                                        @foreach($companies as $company)
-                                                            <option
-                                                                value="{{ $company->id }}" {{ isset($user) && $user->company_id == $company->id ? 'selected' : '' }}>
-                                                                {{ $company->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('company_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                                <div class="form-group">
-                                                    <label
-                                                        for="team_id">{{ __("dashboard.user.fields.team_id") }}</label>
-                                                    <select id="team_id" name="team_id"
-                                                            class="form-control @error('team_id') is-invalid @enderror"
-                                                            data-toggle="tooltip" data-trigger="hover"
-                                                            data-placement="top"
-                                                            data-title="{{ __("dashboard.user.fields.team_id") }}">
-                                                        <option
-                                                            value="">{{ __("dashboard.common.select") }} {{ __("dashboard.user.fields.team_id") }}</option>
-                                                        @foreach($teams as $team)
-                                                            <option
-                                                                value="{{ $team->id }}" {{ isset($user) && $user->team_id == $team->id ? 'selected' : '' }}>
-                                                                {{ $team->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('team_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label--}}
+{{--                                                        for="team_id">{{ __("dashboard.user.fields.team_id") }}</label>--}}
+{{--                                                    <select id="team_id" name="team_id"--}}
+{{--                                                            class="form-control @error('team_id') is-invalid @enderror"--}}
+{{--                                                            data-toggle="tooltip" data-trigger="hover"--}}
+{{--                                                            data-placement="top"--}}
+{{--                                                            data-title="{{ __("dashboard.user.fields.team_id") }}">--}}
+{{--                                                        <option--}}
+{{--                                                            value="">{{ __("dashboard.common.select") }} {{ __("dashboard.user.fields.team_id") }}</option>--}}
+{{--                                                        @foreach($teams as $team)--}}
+{{--                                                            <option--}}
+{{--                                                                value="{{ $team->id }}" {{ isset($user) && $user->team_id == $team->id ? 'selected' : '' }}>--}}
+{{--                                                                {{ $team->name }}--}}
+{{--                                                            </option>--}}
+{{--                                                        @endforeach--}}
+{{--                                                    </select>--}}
+{{--                                                    @error('team_id')--}}
+{{--                                                    <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                </div>--}}
                                                 <div class="form-group">
                                                     <label
                                                         for="is_active">{{ __("dashboard.user.fields.is_active") }}</label>
