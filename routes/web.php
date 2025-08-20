@@ -34,6 +34,7 @@ use App\Http\Controllers\Dashboard\LessonAttachmentController;
 use App\Http\Controllers\Dashboard\ExamController;
 use App\Http\Controllers\Dashboard\BannerController;
 use App\Http\Controllers\Dashboard\CodeController;
+use App\Http\Controllers\Dashboard\PaymentApprovalController;
 
 
 Route::get('/dashboard2', function () {
@@ -77,6 +78,19 @@ Route::middleware(['auth'])->group(function () {
 
     // Logout route
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
+
+    // Routes for Payment Approvals
+    Route::get('payment-approvals', [PaymentApprovalController::class, 'index'])
+        ->name('payment_approvals.index')
+        ->middleware('can:view_payment_approval');
+
+    Route::post('payment-approvals/{payment}/accept', [PaymentApprovalController::class, 'accept'])
+        ->name('payment_approvals.accept')
+        ->middleware('can:accept_payment_approval');
+
+    Route::post('payment-approvals/{payment}/reject', [PaymentApprovalController::class, 'reject'])
+        ->name('payment_approvals.reject')
+        ->middleware('can:reject_payment_approval');
 
     // Routes for Center Exams
     Route::get('center-exams', [CenterExamController::class, 'index'])

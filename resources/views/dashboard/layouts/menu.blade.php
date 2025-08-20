@@ -143,3 +143,7 @@
 <li class=" nav-item"><a href="{{ route('codes.index') }}"><i class="icon-list"></i><span data-i18n="nav.codes.main" class="menu-title">{{__('dashboard.code.title_plural')}}</span></a>
 </li>
 @endcan
+@can('view_payment_approval')
+<li class=" nav-item"><a href="{{ route('payment_approvals.index') }}"><i class="icon-credit-card"></i><span data-i18n="nav.payment_approvals.main" class="menu-title">{{__('dashboard.payment_approval.title_plural')}}</span></a>
+</li>
+@endcan

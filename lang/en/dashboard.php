@@ -675,4 +675,22 @@ return [
                 'select_teacher' => 'Select Teacher',
             ],
         ],
+        'payment_approval' => [
+            'title' => 'Payment Approval',
+            'title_plural' => 'Payment Approvals',
+            'management' => 'Payment Approvals Management',
+            'list' => 'Pending Payments List',
+            'accept' => 'Accept',
+            'reject' => 'Reject',
+            'accept_confirm' => 'Are you sure you want to accept this payment?',
+            'reject_confirm' => 'Are you sure you want to reject this payment?',
+            'no_records' => 'No pending payments found.',
+            'fields' => [
+                'student_name' => 'Student Name',
+                'amount' => 'Amount',
+                'payment_method' => 'Payment Method',
+                'status' => 'Status',
+                'date' => 'Date',
+            ],
+        ],
     ];
