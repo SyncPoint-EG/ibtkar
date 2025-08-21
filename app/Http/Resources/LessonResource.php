@@ -23,6 +23,7 @@ class LessonResource extends JsonResource
             'is_featured' => $this->is_featured,
             'type' => $this->type,
             'chapter_id' => $this->chapter_id,
+            'price' => $this->price,
             'course_id' => $this->chapter ? $this->chapter->course_id : null,
             'subject' => new SubjectResource($this->chapter->course->subject),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
