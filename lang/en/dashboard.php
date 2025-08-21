@@ -59,7 +59,10 @@ return [
             'fill_required' => 'Please fill in all required fields to create a new User.',
             'update_info' => 'Update the information for this User.',
             'delete_confirm' => 'Are you sure you want to delete this User?',
+            'edit_user' => 'Edit User',
+            'select_role' => 'Select Role',
             'fields' => [
+                'name' => 'Name',
                 'name_en' => 'Name En',
                 'name_ar' => 'Name Ar',
                 'company_id' => 'Company Id',
@@ -69,6 +72,7 @@ return [
                 'email' => 'Email',
                 'password' => 'Password',
                 'phone' => 'Phone',
+                'role' => 'Role',
             ],
         ],
         'governorate' => [

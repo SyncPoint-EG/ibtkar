@@ -51,8 +51,6 @@
                                             <th>{{ __("dashboard.common.name") }}</th>
                                             <th>{{ __("dashboard.user.fields.email") }}</th>
                                             <th>{{ __("dashboard.user.fields.phone") }}</th>
-                                            <th>{{ __("dashboard.company.title") }}</th>
-                                            <th>{{ __("dashboard.team.title") }}</th>
                                             <th>{{ __("dashboard.user.fields.is_active") }}</th>
 {{--                <th>{{ __("dashboard.user.fields.image") }}</th>--}}
                                             <th>{{ __('dashboard.common.actions') }}</th>
@@ -65,8 +63,7 @@
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>{{ $user->phone }}</td>
-                                                <td>{{ $user->company?->name }}</td>
-                                                <td>{{ $user->team?->name }}</td>
+
                                                 <td>{{ $user->is_active ? 'Yes' : 'No' }}</td>
 {{--                <td>{{ $user->image }}</td>--}}
                                                 <td>

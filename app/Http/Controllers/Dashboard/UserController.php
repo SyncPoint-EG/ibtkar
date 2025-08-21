@@ -101,9 +101,9 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $companies = Company::query()->active()->get();
-        $teams = Team::query()->active()->get();
-        return view('dashboard.users.edit', compact('user','companies','teams'));
+        $roles = Role::all(); // Get all available roles
+
+        return view('dashboard.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -116,7 +116,22 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user): RedirectResponse
     {
         try {
-            $this->userService->update($user, $request->validated());
+            $userData = $request->validated();
+            $roleId = $userData['role'] ?? null;
+
+            // Remove role from user data as it's not a user field
+            unset($userData['role']);
+
+            // Update the user
+            $this->userService->update($user, $userData);
+
+            // Assign role to user if role is selected
+            if ($roleId) {
+                $role = Role::find($roleId);
+                if ($role) {
+                    $user->syncRoles([$role->name]);
+                }
+            }
 
             return redirect()->route('users.index')
                 ->with('success', 'User updated successfully.');
