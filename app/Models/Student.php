@@ -146,7 +146,5 @@ class Student extends Authenticatable
             ->where('lesson_id', $lessonId)
             ->exists();
     }
-    {
 
-    }
 }
