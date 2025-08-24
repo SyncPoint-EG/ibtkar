@@ -14,6 +14,7 @@ class LessonResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = auth('student')->user();
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -29,6 +30,7 @@ class LessonResource extends JsonResource
             'attachments' => $this->attachments,
             'homework' => $this->homework,
             'exams' => $this->exams,
+            'watches' => $this->watches()->where('student_id', $user->id)->first() ? $this->watches()->where('student_id', $user->id)->first()->count : 3,
 
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),

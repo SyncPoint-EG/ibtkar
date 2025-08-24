@@ -93,4 +93,9 @@ class Lesson extends Model
             $this->attributes['video_image'] = $value;
         }
     }
+
+    public function watches()
+    {
+        return $this->hasMany(Watch::class);
+    }
 }
