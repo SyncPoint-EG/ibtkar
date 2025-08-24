@@ -12,6 +12,7 @@ use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
 use App\Http\Controllers\Mobile\Student\TeacherController;
+use App\Http\Controllers\Mobile\Student\PurchasedLessonsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -74,4 +75,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('center-exams', [CenterExamController::class, 'index']);
     Route::get('center-exam/{centerExam}', [CenterExamController::class, 'show']);
     Route::post('center-exam/{centerExam}/submit', [CenterExamController::class, 'submit']);
+
+    // purchased lessons
+    Route::get('my-lessons', [PurchasedLessonsController::class, 'index']);
 });

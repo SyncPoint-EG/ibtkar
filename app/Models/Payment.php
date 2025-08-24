@@ -69,4 +69,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Chapter::class);
     }
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
+    }
 }
