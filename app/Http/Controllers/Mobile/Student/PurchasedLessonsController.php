@@ -16,7 +16,7 @@ class PurchasedLessonsController extends Controller
         $subjectId = $request->input('subject_id');
 
         $payments = Payment::where('student_id', $student->id)
-            ->where('payment_status', Payment::PAYMENT_STATUS['accepted'])
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->get();
 
         $lessonIds = $payments->whereNotNull('lesson_id')->pluck('lesson_id');
