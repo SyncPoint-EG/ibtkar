@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CenterExamResource;
 use App\Models\CenterExam;
 use App\Models\CenterExamAnswer;
 use App\Models\CenterExamAttempt;
@@ -26,13 +27,13 @@ class CenterExamController extends Controller
         }
         $centerExams = $centerExams->get();
 
-        return response()->json($centerExams);
+        return CenterExamResource::collection($centerExams);
     }
 
     public function show(CenterExam $centerExam)
     {
         $centerExam->load('questions.options');
-        return response()->json($centerExam);
+        return new CenterExamResource($centerExam);
     }
 
     public function submit(Request $request, CenterExam $centerExam)

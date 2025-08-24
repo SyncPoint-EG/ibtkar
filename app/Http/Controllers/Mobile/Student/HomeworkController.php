@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HomeworkResource;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
 use App\Models\HomeworkAttempt;
@@ -20,13 +21,13 @@ class HomeworkController extends Controller
                 ->where('division_id', $student->division_id);
         })->get();
 
-        return response()->json($homeworks);
+        return HomeworkResource::collection($homeworks);
     }
 
     public function show(Homework $homework)
     {
         $homework->load('questions.options');
-        return response()->json($homework);
+        return new HomeworkResource($homework);
     }
 
     public function submit(Request $request, Homework $homework)

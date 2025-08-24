@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ExamResource;
 use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
@@ -20,13 +21,13 @@ class ExamController extends Controller
                 ->where('division_id', $student->division_id);
         })->get();
 
-        return response()->json($exams);
+        return ExamResource::collection($exams);
     }
 
     public function show(Exam $exam)
     {
         $exam->load('questions.options');
-        return response()->json($exam);
+        return new ExamResource($exam);
     }
 
     public function submit(Request $request, Exam $exam)

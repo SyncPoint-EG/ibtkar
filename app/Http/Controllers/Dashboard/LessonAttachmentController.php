@@ -16,16 +16,10 @@ class LessonAttachmentController extends Controller
             'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,ppt,pptx,xls,xlsx|max:20480',
         ]);
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $path = $file->store('lesson_attachments', 'public');
-
-            $lesson->attachments()->create([
-                'name' => $request->name,
-                'path' => $path,
-                'type' => $file->getClientMimeType(),
-            ]);
-        }
+        $lesson->attachments()->create([
+            'name' => $request->name,
+            'file' => $request->file('file'),
+        ]);
 
         return back()->with('success', 'Attachment uploaded successfully.');
     }
