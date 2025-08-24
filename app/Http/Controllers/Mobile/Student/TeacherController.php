@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
+use App\Http\Resources\CourseResource;
 use App\Http\Resources\SingleTeacherResource;
 use App\Http\Resources\TeacherResource;
 use App\Models\Division;
@@ -68,6 +69,31 @@ class TeacherController extends Controller
         $teacher = Teacher::findOrFail($id);
         $teacher->load(['subjects', 'grades', 'stages', 'divisions']);
         return new SingleTeacherResource($teacher);
+    }
+
+    public function timeline(Teacher $teacher)
+    {
+        $courses = $teacher->courses()->with(['chapters.lessons', 'stage', 'grade'])->get();
+
+        $timeline = $courses->groupBy(function ($course) {
+            return $course->stage->name . ' - ' . $course->grade->name;
+        });
+
+        return response()->json($timeline);
+    }
+
+    public function lessonsBySubject(Teacher $teacher)
+    {
+        $courses = $teacher->courses()->with(['chapters.lessons', 'subject'])
+            ->whereHas('courses.chapters.lessons',function ($q){
+                $q->where('date','>=',now());
+            })->get();
+
+        $lessonsBySubject = $courses->groupBy(function ($course) {
+            return $course->subject->name;
+        });
+
+        return CourseResource::collection($lessonsBySubject);
     }
 
     public function filter($query , $request)

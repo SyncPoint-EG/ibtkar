@@ -24,6 +24,7 @@ class LessonResource extends JsonResource
             'is_featured' => $this->is_featured,
             'type' => $this->type,
             'chapter_id' => $this->chapter_id,
+            'chapter_name' => $this->chapter->name,
             'price' => $this->price,
             'course_id' => $this->chapter ? $this->chapter->course_id : null,
             'subject' => new SubjectResource($this->chapter->course->subject),

@@ -20,6 +20,7 @@ class CourseResource extends JsonResource
             'price' => $this->price,
             'teacher' => new TeacherResource($this->whenLoaded('teacher')),
             'subject' => new SubjectResource($this->whenLoaded('subject')),
+            'chapters' => ChapterResource::collection($this->chapters),
         ];
     }
 }
