@@ -19,12 +19,12 @@ class TeacherResource extends JsonResource
             'name' => $this->name,
             'bio' => $this->bio,
             'image' => $this->image,
-            'stages' => $this->stages->pluck('name'),
-            'grades' => $this->grades->pluck('name'),
-            'divisions' => $this->divisions->pluck('name'),
-            'subjects' => SubjectResource::collection($this->subjects),
-            'courses' => CourseResource::collection($this->courses),
-            'lessons' => LessonResource::collection($this->lessons()->get()),
+            'stages' => $this->stages->unique('id')->pluck('name')->values(),
+            'grades' => $this->grades->unique('id')->pluck('name')->values(),
+            'divisions' => $this->divisions->unique('id')->pluck('name')->values(),
+            'subjects' => SubjectResource::collection($this->subjects->unique('id')),
+            'courses' => CourseResource::collection($this->courses->unique('id')),
+            'lessons' => LessonResource::collection($this->lessons()->get()->unique('id')),
         ];
     }
 }
