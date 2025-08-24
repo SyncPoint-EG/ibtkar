@@ -119,4 +119,34 @@ class Student extends Authenticatable
     {
         return $this->hasMany(Watch::class);
     }
+    public function isLessonPurchased($lessonId)
+    {
+        return Payment::where('student_id', $this->id)
+            ->where(function ($query) use ($lessonId) {
+                $query->where('lesson_id', $lessonId)
+                    ->orWhereHas('lesson', function ($q) use ($lessonId) {
+                        $q->where('chapter_id', function ($subQ) use ($lessonId) {
+                            $subQ->select('chapter_id')
+                                ->from('lessons')
+                                ->where('id', $lessonId);
+                        });
+                    })
+                    ->orWhereHas('chapter', function ($q) use ($lessonId) {
+                        $q->where('course_id', function ($subQ) use ($lessonId) {
+                            $subQ->select('course_id')
+                                ->from('chapters')
+                                ->whereIn('id', function ($subSubQ) use ($lessonId) {
+                                    $subSubQ->select('chapter_id')
+                                        ->from('lessons')
+                                        ->where('id', $lessonId);
+                                });
+                        });
+                    });
+            })
+            ->where('lesson_id', $lessonId)
+            ->exists();
+    }
+    {
+
+    }
 }

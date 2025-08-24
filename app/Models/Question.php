@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Question extends Model
 {
+
+    public $with = ['options'];
     protected $fillable = [
         'exam_id',
         'question_text',

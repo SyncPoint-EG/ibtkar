@@ -31,7 +31,7 @@ class LessonResource extends JsonResource
             'homework' => $this->homework,
             'exams' => $this->exams,
             'watches_count' => $this->watches()->where('student_id', $user->id)->first() ? $this->watches()->where('student_id', $user->id)->first()->count : 3,
-
+            'is_purchased' => $user ? $user->isLessonPurchased($this->id) : false,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
 
