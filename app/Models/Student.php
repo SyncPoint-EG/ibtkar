@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Lesson;
+use App\Models\Chapter;
+use App\Models\Payment;
 
 class Student extends Authenticatable
 {
-    use HasApiTokens;
+    use HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.
