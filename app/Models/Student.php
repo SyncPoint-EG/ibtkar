@@ -121,30 +121,40 @@ class Student extends Authenticatable
     }
     public function isLessonPurchased($lessonId)
     {
-        return Payment::where('student_id', $this->id)
-            ->where(function ($query) use ($lessonId) {
-                $query->where('lesson_id', $lessonId)
-                    ->orWhereHas('lesson', function ($q) use ($lessonId) {
-                        $q->where('chapter_id', function ($subQ) use ($lessonId) {
-                            $subQ->select('chapter_id')
-                                ->from('lessons')
-                                ->where('id', $lessonId);
-                        });
-                    })
-                    ->orWhereHas('chapter', function ($q) use ($lessonId) {
-                        $q->where('course_id', function ($subQ) use ($lessonId) {
-                            $subQ->select('course_id')
-                                ->from('chapters')
-                                ->whereIn('id', function ($subSubQ) use ($lessonId) {
-                                    $subSubQ->select('chapter_id')
-                                        ->from('lessons')
-                                        ->where('id', $lessonId);
-                                });
-                        });
-                    });
-            })
+        $lesson = Lesson::find($lessonId);
+
+        if (!$lesson) {
+            return false;
+        }
+
+        // Check for lesson purchase
+        $isPurchased = Payment::where('student_id', $this->id)
             ->where('lesson_id', $lessonId)
             ->exists();
+
+        if ($isPurchased) {
+            return true;
+        }
+
+        // Check for chapter purchase
+        $isPurchased = Payment::where('student_id', $this->id)
+            ->where('chapter_id', $lesson->chapter_id)
+            ->exists();
+
+        if ($isPurchased) {
+            return true;
+        }
+
+        // Check for course purchase
+        $chapter = Chapter::find($lesson->chapter_id);
+
+        if ($chapter) {
+            $isPurchased = Payment::where('student_id', $this->id)
+                ->where('course_id', $chapter->course_id)
+                ->exists();
+        }
+
+        return $isPurchased;
     }
 
 }
