@@ -26,6 +26,10 @@ class LessonResource extends JsonResource
             'price' => $this->price,
             'course_id' => $this->chapter ? $this->chapter->course_id : null,
             'subject' => new SubjectResource($this->chapter->course->subject),
+            'attachments' => $this->attachments,
+            'homework' => $this->homework,
+            'exams' => $this->exams,
+
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
 

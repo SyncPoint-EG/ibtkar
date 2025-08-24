@@ -40,6 +40,14 @@ class Lesson extends Model
         return $this->hasMany(LessonAttachment::class);
     }
 
+    public function homework()
+    {
+        return $this->hasMany(Homework::class);
+    }
+    public function exams()
+    {
+        return $this->hasMany(Exam::class);
+    }
     public function getVideoImageAttribute()
     {
         if ($this->attributes['video_image']) {
