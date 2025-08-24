@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CenterExam extends Model
 {
+
+    public $with = ['questions'];
+
     protected $fillable = [
         'center_id',
         'stage_id',

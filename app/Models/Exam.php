@@ -14,6 +14,8 @@ class Exam extends Model
      *
      * @var array
      */
+
+    public $with = ['questions'];
     protected $fillable = [
         'title',
         'description',

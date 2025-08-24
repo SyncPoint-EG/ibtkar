@@ -9,6 +9,8 @@ class Homework extends Model
 {
     use HasFactory;
 
+    public $with = ['questions'];
+
     protected $fillable = [
         'title',
         'description',
