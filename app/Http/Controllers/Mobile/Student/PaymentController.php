@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChargeRequest;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Chapter;
+use App\Models\Charge;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
@@ -57,7 +59,7 @@ class PaymentController extends Controller
         return $amount ;
     }
 
-    public function chargeWallet(Request $request)
+    public function chargeWallet(ChargeRequest $request)
     {
         $validated = $request->validated();
         $student = auth('student')->user();
@@ -67,5 +69,13 @@ class PaymentController extends Controller
         }else{
             $validated['payment_status'] = Payment::PAYMENT_STATUS['accepted'];
         }
+        $validated['student_id'] = $student->id;
+        $validated['amount'] = $amount;
+        Charge::create($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'تم الشحن و بانتظار موافقة الادمن'
+        ]);
     }
 }
