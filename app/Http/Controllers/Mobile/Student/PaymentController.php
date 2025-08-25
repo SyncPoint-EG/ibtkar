@@ -59,6 +59,13 @@ class PaymentController extends Controller
 
     public function chargeWallet(Request $request)
     {
-
+        $validated = $request->validated();
+        $student = auth('student')->user();
+        $amount = $request->amount;
+        if(in_array($request->payment_method , ['instapay', 'wallet'])){
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+        }else{
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['accepted'];
+        }
     }
 }
