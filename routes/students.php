@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('divisions',[HomeController::class,'getDivisions']);
     Route::get('stages',[HomeController::class,'getStages']);
     Route::get('grades',[HomeController::class,'getGrades']);
+    Route::get('timeline', [HomeController::class, 'timeline']);
 
     // luck wheel items
     Route::get('luck-wheel',[LuckWheelController::class, 'index']);
