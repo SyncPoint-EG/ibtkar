@@ -35,6 +35,7 @@ use App\Http\Controllers\Dashboard\ExamController;
 use App\Http\Controllers\Dashboard\BannerController;
 use App\Http\Controllers\Dashboard\CodeController;
 use App\Http\Controllers\Dashboard\PaymentApprovalController;
+use App\Http\Controllers\Dashboard\ChargeApprovalController;
 
 
 Route::get('/dashboard2', function () {
@@ -91,6 +92,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('payment-approvals/{payment}/reject', [PaymentApprovalController::class, 'reject'])
         ->name('payment_approvals.reject')
         ->middleware('can:reject_payment_approval');
+
+    // Routes for Charge Approvals
+    Route::get('charge-approvals', [ChargeApprovalController::class, 'index'])
+        ->name('charge_approvals.index')
+        ->middleware('can:view_charge_approval');
+
+    Route::post('charge-approvals/{charge}/accept', [ChargeApprovalController::class, 'accept'])
+        ->name('charge_approvals.accept')
+        ->middleware('can:accept_charge_approval');
+
+    Route::post('charge-approvals/{charge}/reject', [ChargeApprovalController::class, 'reject'])
+        ->name('charge_approvals.reject')
+        ->middleware('can:reject_charge_approval');
 
     // Routes for Center Exams
     Route::get('center-exams', [CenterExamController::class, 'index'])

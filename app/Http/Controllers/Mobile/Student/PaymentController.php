@@ -64,11 +64,7 @@ class PaymentController extends Controller
         $validated = $request->validated();
         $student = auth('student')->user();
         $amount = $request->amount;
-        if(in_array($request->payment_method , ['instapay', 'wallet'])){
-            $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
-        }else{
-            $validated['payment_status'] = Payment::PAYMENT_STATUS['accepted'];
-        }
+        $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
         $validated['student_id'] = $student->id;
         $validated['amount'] = $amount;
         Charge::create($validated);

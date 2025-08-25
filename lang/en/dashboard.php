@@ -697,4 +697,22 @@ return [
                 'date' => 'Date',
             ],
         ],
+        'charge_approval' => [
+            'title' => 'Charge Approval',
+            'title_plural' => 'Charge Approvals',
+            'management' => 'Charge Approvals Management',
+            'list' => 'Pending Charges List',
+            'accept' => 'Accept',
+            'reject' => 'Reject',
+            'accept_confirm' => 'Are you sure you want to accept this charge?',
+            'reject_confirm' => 'Are you sure you want to reject this charge?',
+            'no_records' => 'No pending charges found.',
+            'fields' => [
+                'student_name' => 'Student Name',
+                'amount' => 'Amount',
+                'payment_method' => 'Payment Method',
+                'status' => 'Status',
+                'date' => 'Date',
+            ],
+        ],
     ];
