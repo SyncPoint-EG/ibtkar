@@ -24,7 +24,7 @@ class PaymentController extends Controller
         if(in_array($request->payment_method , ['instapay', 'wallet'])){
             $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
         }else{
-            $validated['payment_status'] = Payment::PAYMENT_STATUS['accepted'];
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['approved'];
         }
         if($request->payment_method == 'ibtkar_wallet'){
             if($student->wallet < $amount){
