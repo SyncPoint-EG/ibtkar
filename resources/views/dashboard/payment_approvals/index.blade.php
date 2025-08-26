@@ -60,7 +60,7 @@
                                                 <td>{{ $payment->payment_status }}</td>
                                                 <td>{{ $payment->created_at->format('Y-m-d H:i') }}</td>
                                                 <td>
-                                                    @if($payment->status === 'pending')
+                                                    @if($payment->payment_status === 'pending')
                                                         @can('accept_payment_approval')
                                                             <form
                                                                 action="{{ route('payment_approvals.accept', $payment->id) }}"
@@ -84,10 +84,10 @@
                                                                 </button>
                                                             </form>
                                                         @endcan
-                                                    @elseif($payment->status === 'approved')
+                                                    @elseif($payment->payment_status === 'approved')
                                                         <span
                                                             class="badge badge-success">{{ __('dashboard.payment_approval.accepted') }}</span>
-                                                    @elseif($payment->status == 'rejected')
+                                                    @elseif($payment->payment_status == 'rejected')
                                                         <span
                                                             class="badge badge-danger">{{ __('dashboard.payment_approval.rejected') }}</span>
                                                     @endif
