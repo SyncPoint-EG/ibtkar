@@ -23,23 +23,22 @@ class ExamRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-//            'title' => 'required|max:255',
-//            'description' => 'nullable|string',
-//            'lesson_id' => 'required|exists:lessons,id',
-//            'duration_minutes' => 'required|integer|min:1',
-//            'total_marks' => 'required|integer|min:1',
-//            'is_active' => 'boolean',
-//            'start_date' => 'nullable|date',
-//            'end_date' => 'nullable|date|after:start_date',
-
-
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'lesson_id' => 'required|exists:lessons,id',
             'duration_minutes' => 'required|integer|min:1',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
+            'exam_for' => 'required|in:lesson,teacher',
         ];
+
+        if ($this->input('exam_for') === 'lesson') {
+            $rules['lesson_id'] = 'required|exists:lessons,id';
+        } else {
+            $rules['teacher_id'] = 'required|exists:teachers,id';
+            $rules['course_id'] = 'required|exists:courses,id';
+        }
+
+        return $rules;
     }
 }

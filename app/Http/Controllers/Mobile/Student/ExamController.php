@@ -15,7 +15,11 @@ class ExamController extends Controller
     public function index()
     {
         $student = auth('student')->user();
-        $exams = Exam::whereHas('lesson.chapter.course', function ($query) use ($student) {
+        $exams = Exam::query()->whereHas('lesson.chapter.course', function ($query) use ($student) {
+            $query->where('stage_id', $student->stage_id)
+                ->where('grade_id', $student->grade_id)
+                ->where('division_id', $student->division_id);
+        })->orWhereHas('course', function ($query) use ($student) {
             $query->where('stage_id', $student->stage_id)
                 ->where('grade_id', $student->grade_id)
                 ->where('division_id', $student->division_id);

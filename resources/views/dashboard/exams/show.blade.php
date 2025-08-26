@@ -68,7 +68,12 @@
                             <div class="card-body collapse in">
                                 <div class="row p-1">
                                     <div class="col-md-6">
-                                        <p><strong>{{ __('Lesson:') }}</strong> {{ $exam->lesson->title ?? 'N/A' }}</p>
+                                        @if($exam->lesson)
+                                        <p><strong>{{ __('Lesson:') }}</strong> {{ $exam->lesson->name ?? 'N/A' }}</p>
+                                        @elseif($exam->teacher)
+                                        <p><strong>{{ __('Teacher:') }}</strong> {{ $exam->teacher->name ?? 'N/A' }}</p>
+                                        <p><strong>{{ __('Course:') }}</strong> {{ $exam->course->name ?? 'N/A' }}</p>
+                                        @endif
                                         <p><strong>{{ __('Duration:') }}</strong> {{ $exam->duration_minutes }} {{ __('minutes') }}</p>
                                         <p id="total-marks-display"><strong>{{ __('Total Marks:') }}</strong> {{ $exam->total_marks }}</p>
                                     </div>

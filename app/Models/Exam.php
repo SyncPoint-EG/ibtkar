@@ -20,6 +20,8 @@ class Exam extends Model
         'title',
         'description',
         'lesson_id',
+        'teacher_id',
+        'course_id',
         'duration_minutes',
         'total_marks',
         'is_active',
@@ -36,6 +38,16 @@ class Exam extends Model
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function questions()

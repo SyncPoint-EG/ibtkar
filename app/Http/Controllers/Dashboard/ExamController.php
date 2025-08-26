@@ -24,20 +24,21 @@ class ExamController extends Controller
     public function create()
     {
         $lessons = Lesson::all();
-        return view('dashboard.exams.create', compact('lessons'));
+        $teachers = \App\Models\Teacher::all();
+        return view('dashboard.exams.create', compact('lessons', 'teachers'));
     }
 
     public function store(ExamRequest $request)
     {
-//        $request->validate([
-//            'title' => 'required|string|max:255',
-//            'description' => 'nullable|string',
-//            'lesson_id' => 'nullable|exists:lessons,id',
-//            'duration_minutes' => 'required|integer|min:1',
-//            'start_date' => 'nullable|date',
-//            'end_date' => 'nullable|date|after:start_date',
-//        ]);
         $validated = $request->validated();
+
+        if ($request->exam_for === 'lesson') {
+            $validated['teacher_id'] = null;
+            $validated['course_id'] = null;
+        } else {
+            $validated['lesson_id'] = null;
+        }
+
         $validated['total_marks'] = 0 ;
         if($request->is_active){
             $validated['is_active'] = 1;
@@ -59,20 +60,20 @@ class ExamController extends Controller
     public function edit(Exam $exam)
     {
         $lessons = Lesson::all();
-        return view('dashboard.exams.edit', compact('exam', 'lessons'));
+        $teachers = \App\Models\Teacher::all();
+        return view('dashboard.exams.edit', compact('exam', 'lessons', 'teachers'));
     }
 
     public function update(ExamRequest $request, Exam $exam)
     {
-//        $request->validate([
-//            'title' => 'required|string|max:255',
-//            'description' => 'nullable|string',
-//            'lesson_id' => 'required|exists:lessons,id',
-//            'duration_minutes' => 'required|integer|min:1',
-//            'start_date' => 'nullable|date',
-//            'end_date' => 'nullable|date|after:start_date',
-//        ]);
         $validated = $request->validated();
+
+        if ($request->exam_for === 'lesson') {
+            $validated['teacher_id'] = null;
+            $validated['course_id'] = null;
+        } else {
+            $validated['lesson_id'] = null;
+        }
 
         if($request->is_active){
             $validated['is_active'] = 1;

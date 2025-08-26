@@ -50,24 +50,62 @@
                                         @enderror
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="lesson_id">{{ __('Lesson') }} <span class="text-danger">*</span></label>
-                                                <select class="form-control @error('lesson_id') is-invalid @enderror"
-                                                        id="lesson_id" name="lesson_id" required>
-                                                    <option value="">{{ __('Select Lesson') }}</option>
-                                                    @foreach($lessons as $lesson)
-                                                        <option value="{{ $lesson->id }}" {{ old('lesson_id') == $lesson->id ? 'selected' : '' }}>
-                                                            {{ $lesson->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('lesson_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                    <div class="form-group">
+                                        <label>{{ __('Exam For') }}</label>
+                                        <div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="exam_for" value="lesson" checked> {{ __('Lesson') }}
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="exam_for" value="teacher"> {{ __('Teacher') }}
+                                            </label>
                                         </div>
+                                    </div>
+
+                                    <div id="lesson-group" class="form-group">
+                                        <label for="lesson_id">{{ __('Lesson') }} <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('lesson_id') is-invalid @enderror"
+                                                id="lesson_id" name="lesson_id" required>
+                                            <option value="">{{ __('Select Lesson') }}</option>
+                                            @foreach($lessons as $lesson)
+                                                <option value="{{ $lesson->id }}" {{ old('lesson_id') == $lesson->id ? 'selected' : '' }}>
+                                                    {{ $lesson->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('lesson_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div id="teacher-group" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="teacher_id">{{ __('Teacher') }} <span class="text-danger">*</span></label>
+                                            <select class="form-control @error('teacher_id') is-invalid @enderror"
+                                                    id="teacher_id" name="teacher_id">
+                                                <option value="">{{ __('Select Teacher') }}</option>
+                                                @foreach($teachers as $teacher)
+                                                    <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
+                                                        {{ $teacher->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('teacher_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group" id="course-group" style="display: none;">
+                                            <label for="course_id">{{ __('Course') }} <span class="text-danger">*</span></label>
+                                            <select class="form-control @error('course_id') is-invalid @enderror"
+                                                    id="course_id" name="course_id">
+                                                <option value="">{{ __('Select Course') }}</option>
+                                            </select>
+                                            @error('course_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -152,3 +190,49 @@
         </div>
     </div>
 @endsection
+
+
+@section('page_scripts')
+    <script>
+        $(document).ready(function () {
+            $('input[name="exam_for"]').change(function () {
+                if ($(this).val() === 'lesson') {
+                    $('#lesson-group').show();
+                    $('#teacher-group').hide();
+                    $('#lesson_id').prop('required', true);
+                    $('#teacher_id').prop('required', false);
+                    $('#course_id').prop('required', false);
+                } else {
+                    $('#lesson-group').hide();
+                    $('#teacher-group').show();
+                    $('#lesson_id').prop('required', false);
+                    $('#teacher_id').prop('required', true);
+                    $('#course_id').prop('required', true);
+                }
+            });
+
+            $('#teacher_id').change(function () {
+                var teacherId = $(this).val();
+                if (teacherId) {
+                    $.ajax({
+                        url: '/teachers/' + teacherId + '/courses',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#course_id').empty().append('<option value="">{{ __('Select Course') }}</option>');
+                            $.each(data, function (key, value) {
+                                $('#course_id').append('<option value="' + key + '">' + value + '</option>');
+                            });
+                            $('#course-group').show();
+                        }
+                    });
+                } else {
+                    $('#course-group').hide();
+                    $('#course_id').empty().append('<option value="">{{ __('Select Course') }}</option>');
+                }
+            });
+        });
+    </script>
+@endsection
+
+

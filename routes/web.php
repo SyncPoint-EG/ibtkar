@@ -823,6 +823,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('teachers/search', [TeacherController::class, 'search'])
         ->name('teachers.search')
         ->middleware('can:view_teacher');
+
+    Route::get('teachers/{teacher}/courses', [TeacherController::class, 'getCourses'])
+        ->name('teachers.courses')
+        ->middleware('can:view_teacher');
 });
 
 // Routes for EducationType

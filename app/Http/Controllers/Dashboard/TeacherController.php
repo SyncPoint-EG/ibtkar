@@ -407,5 +407,10 @@ class TeacherController extends Controller
         ]);
     }
 
+    public function getCourses(Teacher $teacher)
+    {
+        return response()->json($teacher->courses->pluck('name', 'id'));
+    }
+
 
 }
