@@ -10,7 +10,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.payment_approval.title') }}
                             </li>
@@ -59,28 +60,44 @@
                                                 <td>{{ $payment->payment_status }}</td>
                                                 <td>{{ $payment->created_at->format('Y-m-d H:i') }}</td>
                                                 <td>
-                                                    @can('accept_payment_approval')
-                                                        <form action="{{ route('payment_approvals.accept', $payment->id) }}" method="POST" style="display: inline-block;">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('{{ __('dashboard.payment_approval.accept_confirm') }}');">
-                                                                <i class="icon-check"></i> {{ __('dashboard.common.accept') }}
-                                                            </button>
-                                                        </form>
-                                                    @endcan
+                                                    @if($payment->status === 'pending')
+                                                        @can('accept_payment_approval')
+                                                            <form
+                                                                action="{{ route('payment_approvals.accept', $payment->id) }}"
+                                                                method="POST" style="display: inline-block;">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-success btn-sm"
+                                                                        onclick="return confirm('{{ __('dashboard.payment_approval.accept_confirm') }}');">
+                                                                    <i class="icon-check"></i> {{ __('dashboard.common.accept') }}
+                                                                </button>
+                                                            </form>
+                                                        @endcan
 
-                                                    @can('reject_payment_approval')
-                                                        <form action="{{ route('payment_approvals.reject', $payment->id) }}" method="POST" style="display: inline-block;">
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('dashboard.payment_approval.reject_confirm') }}');">
-                                                                <i class="icon-cross"></i> {{ __('dashboard.common.reject') }}
-                                                            </button>
-                                                        </form>
-                                                    @endcan
+                                                        @can('reject_payment_approval')
+                                                            <form
+                                                                action="{{ route('payment_approvals.reject', $payment->id) }}"
+                                                                method="POST" style="display: inline-block;">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                                        onclick="return confirm('{{ __('dashboard.payment_approval.reject_confirm') }}');">
+                                                                    <i class="icon-cross"></i> {{ __('dashboard.common.reject') }}
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @elseif($payment->status === 'approved')
+                                                        <span
+                                                            class="badge badge-success">{{ __('dashboard.payment_approval.accepted') }}</span>
+                                                    @elseif($payment->status == 'rejected')
+                                                        <span
+                                                            class="badge badge-danger">{{ __('dashboard.payment_approval.rejected') }}</span>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center">{{ __('dashboard.payment_approval.no_records') }}</td>
+                                                <td colspan="7"
+                                                    class="text-center">{{ __('dashboard.payment_approval.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

@@ -688,6 +688,8 @@ return [
             'list' => 'Pending Payments List',
             'accept' => 'Accept',
             'reject' => 'Reject',
+            'accepted' => 'Accepted',
+            'rejected' => 'Rejected',
             'accept_confirm' => 'Are you sure you want to accept this payment?',
             'reject_confirm' => 'Are you sure you want to reject this payment?',
             'no_records' => 'No pending payments found.',
