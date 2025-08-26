@@ -10,6 +10,8 @@ return [
             'delete' => 'Delete',
             'view' => 'View',
             'actions' => 'Actions',
+            'accept' => 'Accept',
+            'reject' => 'Reject',
             'yes' => 'Yes',
             'no' => 'No',
             'select' => 'Select',
