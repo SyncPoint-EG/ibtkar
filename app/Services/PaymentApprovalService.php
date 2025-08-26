@@ -37,7 +37,7 @@ class PaymentApprovalService
             throw new \Exception('Payment is not in pending status.');
         }
 
-        $payment->payment_status = Payment::PAYMENT_STATUS['accepted'];
+        $payment->payment_status = Payment::PAYMENT_STATUS['approved'];
         $payment->save();
 
         // If the payment was for wallet top-up, add amount to student's wallet
