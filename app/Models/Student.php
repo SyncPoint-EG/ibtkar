@@ -53,10 +53,10 @@ class Student extends Authenticatable
         ];
     }
 
-     public function getNameAttribute()
-     {
-         return $this->attributes['name_'.app()->getLocale()];
-     }
+//     public function getNameAttribute()
+//     {
+//         return $this->attributes['name_'.app()->getLocale()];
+//     }
 
      public function scopeActive($query)
      {
