@@ -53,7 +53,7 @@
                                         @forelse($payments as $payment)
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $payment->student->name ?? 'N/A' }}</td>
+                                                <td>{{ $payment->student->first_name . ' ' . $payment->student->last_name ?? 'N/A' }}</td>
                                                 <td>{{ $payment->amount }}</td>
                                                 <td>{{ $payment->payment_method }}</td>
                                                 <td>{{ $payment->payment_status }}</td>
