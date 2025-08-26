@@ -29,6 +29,11 @@ class SettingsTableSeeder extends Seeder
                 'value' => 10 ,
                 'description' => 'points that student get when another student registered with his referral code',
             ],
+            [
+                'key' => 'general plan price',
+                'value' => 10 ,
+                'description' => 'the price of general plan for students that he can access to all courses',
+            ],
             // Add as many as you like
         ];
 
