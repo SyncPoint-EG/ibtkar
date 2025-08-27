@@ -89,7 +89,8 @@ class TeacherController extends Controller
     {
         $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacher) {
             $q->where('teacher_id', $teacher->id);
-        })->whereDate('date', '>=', now())
+        })
+//            ->whereDate('date', '>=', now())
           ->with(['chapter.course.subject'])
           ->get();
 
