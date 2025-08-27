@@ -85,10 +85,10 @@ class TeacherController extends Controller
         return response()->json($timeline);
     }
 
-    public function lessonsBySubject(Teacher $teacher)
-    {return $teacher ;
-        $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacher) {
-//            $q->where('teacher_id', $teacher->id);
+    public function lessonsBySubject( $teacherID)
+    {return $teacherID ;
+        $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacherID) {
+            $q->where('teacher_id', $teacherID);
         })
             ->whereDate('date', '>=', now())
           ->with(['chapter','attachments','homework','exams'])
