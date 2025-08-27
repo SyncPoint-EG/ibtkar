@@ -95,9 +95,9 @@ class TeacherController extends Controller
           ->get();
 
 
-        $lessonsBySubject = $lessons->groupBy(function ($lesson) {
-            return $lesson->chapter->course->subject->name;
-        });
+//        $lessonsBySubject = $lessons->groupBy(function ($lesson) {
+//            return $lesson->chapter->course->subject->name;
+//        });
 
         return LessonResource::collection($lessons);
     }
