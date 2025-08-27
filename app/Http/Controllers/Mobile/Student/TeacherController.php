@@ -90,14 +90,14 @@ class TeacherController extends Controller
         $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacher) {
 //            $q->where('teacher_id', $teacher->id);
         })
-//            ->whereDate('date', '>=', now())
-//          ->with(['chapter.course.subject'])
+            ->whereDate('date', '>=', now())
+          ->with(['chapter.course.subject'])
           ->get();
 
 
-//        $lessonsBySubject = $lessons->groupBy(function ($lesson) {
-//            return $lesson->chapter->course->subject->name;
-//        });
+        $lessonsBySubject = $lessons->groupBy(function ($lesson) {
+            return $lesson->chapter->course->subject->name;
+        });
 
         return LessonResource::collection($lessons);
     }
