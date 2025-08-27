@@ -86,7 +86,7 @@ class TeacherController extends Controller
     }
 
     public function lessonsBySubject( $teacherID)
-    {return $teacherID ;
+    {
         $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacherID) {
             $q->where('teacher_id', $teacherID);
         })
