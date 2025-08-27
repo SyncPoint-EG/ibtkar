@@ -86,7 +86,7 @@ class TeacherController extends Controller
     {
         $courses = $teacher->courses()->with(['chapters.lessons', 'subject'])
             ->whereHas('chapters.lessons',function ($q){
-                $q->where('date','>=',now());
+                $q->whereDate('date','>=',now());
             })->get();
 
         $lessonsBySubject = $courses->groupBy(function ($course) {
