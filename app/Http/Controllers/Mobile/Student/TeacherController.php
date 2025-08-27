@@ -91,7 +91,7 @@ class TeacherController extends Controller
 //            $q->where('teacher_id', $teacher->id);
         })
             ->whereDate('date', '>=', now())
-          ->with(['chapter','attachments','homework','exams',''])
+          ->with(['chapter','attachments','homework','exams'])
           ->get();
 
 
