@@ -37,7 +37,7 @@ class HomeController extends Controller
     }
 
     public function getStages(){
-        $stages = Grade::all();
+        $stages = Stage::all();
         return StagesResource::collection($stages);
     }
 
