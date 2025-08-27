@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LessonRequest;
 use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\CourseResource;
+use App\Http\Resources\LessonResource;
 use App\Http\Resources\SingleTeacherResource;
 use App\Http\Resources\TeacherResource;
 use App\Models\Division;
 use App\Models\Grade;
+use App\Models\Lesson;
 use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Subject;
@@ -84,16 +87,18 @@ class TeacherController extends Controller
 
     public function lessonsBySubject(Teacher $teacher)
     {
-        $courses = $teacher->courses()->with(['chapters.lessons', 'subject'])
-            ->whereHas('chapters.lessons',function ($q){
-                $q->whereDate('date','>=',now());
-            })->get();
+        $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacher) {
+            $q->where('teacher_id', $teacher->id);
+        })->whereDate('date', '>=', now())
+          ->with(['chapter.course.subject'])
+          ->get();
 
-        $lessonsBySubject = $courses->groupBy(function ($course) {
-            return $course->subject->name;
+
+        $lessonsBySubject = $lessons->groupBy(function ($lesson) {
+            return $lesson->chapter->course->subject->name;
         });
 
-        return CourseResource::collection($lessonsBySubject);
+        return LessonResource::collection($lessons);
     }
 
     public function filter($query , $request)
