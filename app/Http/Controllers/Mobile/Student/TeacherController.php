@@ -110,9 +110,11 @@ class TeacherController extends Controller
         $rate          = $request->get('rate');
         $stage_id      = $request->get('stage_id');
         $subject_id    = $request->get('subject_id');
+        $education_type_id    = $request->get('education_type_id') ; // Optional
         $grade_id      = $request->get('grade_id'); // Optional
         $division_id   = $request->get('division_id'); // Optional
         $is_featured   = $request->get('is_featured'); // to display in home screen
+        $lesson_price   = $request->get('lesson_price'); // to display in home screen
 
 
         // Search filter
@@ -135,8 +137,8 @@ class TeacherController extends Controller
         }
 
         // Filter by subject_teacher pivot assignments
-        if ($subject_id || $stage_id || $grade_id || $division_id) {
-            $query->whereHas('courses', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+        if ($subject_id || $stage_id || $grade_id || $division_id || $education_type_id) {
+            $query->whereHas('courses', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id, $education_type_id)  {
                 if ($subject_id) {
                     $q->where('subject_id', $subject_id);
                 }
@@ -149,11 +151,19 @@ class TeacherController extends Controller
                 if ($division_id) {
                     $q->where('division_id', $division_id);
                 }
+                if ($education_type_id) {
+                    $q->where('education_type_id', $education_type_id);
+                }
             });
         }
 
         if($is_featured){
             $query->where('is_featured', 1);
+        }
+        if($lesson_price){
+            $query->whereHas('courses.chapters.lessons', function ($q) use ($lesson_price) {
+                    $q->where('price','<=', $lesson_price);
+            });
         }
         return $query ;
     }
