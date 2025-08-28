@@ -73,8 +73,17 @@ class StudentAuthController
     {
 
         $student = Student::where('phone', $request->get('phone'))->first();
+        if($student && $student->mac_address && $student->mac_address != $request->mac_address){
+            return response()->json([
+                'success' => false,
+                'message' => 'The user is already logged in from other device',
+            ]);
+        }
         if ($student && Hash::check($request->get('password'), $student->password)) {
 
+            if($student->mac_address == null ){
+                $student->mac_address = $request->mac_address;
+            }
             $token = $student->createToken('StudentToken')->plainTextToken;
             return response()->json([
                 'success' => true,
@@ -110,7 +119,8 @@ class StudentAuthController
     {
         // Delete current access token
         $user = auth('student')->user(); // get the authenticated user
-
+        $user->mac_address = null ;
+        $user->save();
         // delete all tokens for this user
         $user->tokens()->delete();
         return response()->json([

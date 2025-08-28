@@ -4,6 +4,7 @@ use App\Http\Controllers\Mobile\Student\AttachmentController;
 use App\Http\Controllers\Mobile\Student\CenterExamController;
 use App\Http\Controllers\Mobile\Student\CourseController;
 use App\Http\Controllers\Mobile\Student\ExamController;
+use App\Http\Controllers\Mobile\Student\FavoritesController;
 use App\Http\Controllers\Mobile\Student\HomeController;
 use App\Http\Controllers\Mobile\Student\HomeworkController;
 use App\Http\Controllers\Mobile\Student\LessonController;
@@ -83,4 +84,9 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     // purchased lessons
     Route::get('my-lessons', [PurchasedLessonsController::class, 'index']);
+
+
+    // favorites routes
+
+    Route::post('add-to-favorite',[FavoritesController::class,'addToFavorite']);
 });

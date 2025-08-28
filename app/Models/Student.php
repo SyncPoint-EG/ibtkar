@@ -20,7 +20,7 @@ class Student extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status','verification_code'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status','verification_code','mac_address','referral_code'];
 
     /**
      * Get the table associated with the model.
@@ -158,6 +158,11 @@ class Student extends Authenticatable
         }
 
         return $isPurchased;
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Favorite::class, 'favorites');
     }
 
 }
