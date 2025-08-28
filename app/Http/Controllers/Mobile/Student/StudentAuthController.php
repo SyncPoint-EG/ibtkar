@@ -120,4 +120,13 @@ class StudentAuthController
     }
 
 
+    public function deleteAccount()
+    {
+        $user = auth('student')->user();
+        $user->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Account deleted successfully'
+        ]);
+    }
 }

@@ -76,7 +76,11 @@ class TeacherController extends Controller
 
     public function timeline(Teacher $teacher)
     {
-        $courses = $teacher->courses()->with(['chapters.lessons', 'stage', 'grade'])->get();
+        $student = auth('student')->user();
+        $courses = $teacher->courses()->with(['chapters.lessons', 'stage', 'grade'])
+            ->where('stage_id',$student->stage->id)
+            ->where('grade_Id',$student->grade_id)
+            ->where('division_id',$student->division_id)->get();
 
         $timeline = $courses->groupBy(function ($course) {
             return $course->stage->name . ' - ' . $course->grade->name;
@@ -87,8 +91,13 @@ class TeacherController extends Controller
 
     public function lessonsBySubject( $teacherID)
     {
-        $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacherID) {
-            $q->where('teacher_id', $teacherID);
+        $student = auth('student')->user();
+        $lessons = Lesson::whereHas('chapter.course', function ($q) use ($teacherID, $student) {
+            $q->where('teacher_id', $teacherID)
+                ->where('stage_id',$student->stage->id)
+                ->where('grade_Id',$student->grade_id)
+                ->where('division_id',$student->division_id);
+
         })
             ->whereDate('date', '>=', now())
           ->with(['chapter','attachments','homework','exams'])
