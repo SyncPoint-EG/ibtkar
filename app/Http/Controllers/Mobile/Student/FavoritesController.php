@@ -16,16 +16,27 @@ class FavoritesController extends Controller
     public function addToFavorite(Request $request)
     {
         $request->validate([
-            'lessons_ids' => ['required', 'array'],
-            'lessons_ids.*' => ['required', 'exists:lessons,id'],
+            'lesson_id' => ['required', 'exists:lessons,id'],
         ]);
 
         $student = auth('student')->user();
-        $student->favorites()->attach($request->lessons_ids);
+        $student->favorites()->attach([$request->lessons_ids]);
         return response()->json([
             'success' => true,
             'message' => 'success'
         ]);
 
+    }
+
+    public function removeFromFavorite(Request $request){
+        $request->validate([
+            'lesson_id' => ['required', 'exists:lessons,id'],
+        ]);
+        $student = auth('student')->user();
+        $student->favorites()->detach([$request->lessons_ids]);
+        return response()->json([
+            'success' => true,
+            'message' => 'success'
+        ]);
     }
 }

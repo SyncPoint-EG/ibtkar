@@ -89,4 +89,5 @@ Route::group(['middleware' => 'auth:student'], function () {
     // favorites routes
     Route::get('favorite',[FavoritesController::class,'listFavorites']);
     Route::post('add-to-favorite',[FavoritesController::class,'addToFavorite']);
+    Route::post('remove-from-favorite',[FavoritesController::class,'removeFromFavorite']);
 });
