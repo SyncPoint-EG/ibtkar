@@ -11,6 +11,7 @@
                 {{ __("dashboard.teacher.fields.name") }}
                 <i class="icon-arrow-up-down2 float-right"></i>
             </th>
+            <th>{{ __("dashboard.teacher.fields.uuid") }}</th>
             <th>{{ __("dashboard.teacher.fields.grades") }}</th>
             <th>{{ __("dashboard.teacher.fields.subjects") }}</th>
             <th>{{ __("dashboard.teacher.fields.total_students") }}</th>
@@ -47,6 +48,7 @@
                     @endif
                 </td>
 
+                <td>{{$teacher->uuid}}</td>
                 {{-- Subjects column from subjectTeacherAssignments --}}
                 <td>
                     @php

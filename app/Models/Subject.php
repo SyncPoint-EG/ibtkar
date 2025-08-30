@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Subject extends Model
 {
@@ -15,7 +16,7 @@ class Subject extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'logo', 'second_logo'];
+    protected $fillable = ['name', 'logo', 'second_logo','uuid'];
 
     /**
      * Get the table associated with the model.
@@ -27,7 +28,18 @@ class Subject extends Model
 //     {
 //         return $this->attributes['name_'.app()->getLocale()];
 //     }
+    public static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($subject) {
+            do {
+                $code = strtoupper(Str::random(8));
+            } while (self::where('uuid', $code)->exists());
+
+            $subject->uuid = $code;
+        });
+    }
      public function scopeActive($query)
      {
          return $query->where('is_active', 1);

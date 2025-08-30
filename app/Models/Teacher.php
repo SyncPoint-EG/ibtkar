@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Teacher extends Model
 {
@@ -15,7 +16,8 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured'];
+
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid'];
 
     protected function casts(): array
     {
@@ -31,7 +33,20 @@ class Teacher extends Model
      */
 
 
-     public function scopeActive($query)
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($teacher) {
+            do {
+                $code = strtoupper(Str::random(8));
+            } while (self::where('uuid', $code)->exists());
+
+            $teacher->uuid = $code;
+        });
+    }
+
+    public function scopeActive($query)
      {
          return $query->where('is_active', 1);
      }

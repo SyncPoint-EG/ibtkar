@@ -16,9 +16,8 @@ class PaymentApprovalService
      */
     public function getPendingPaymentsPaginated(int $perPage): LengthAwarePaginator
     {
-        return Payment::where('payment_status', Payment::PAYMENT_STATUS['pending'])
-            ->whereIn('payment_method', ['instapay', 'wallet'])
-            ->with('student') // Assuming a relationship exists
+//        return Payment::where('payment_status', Payment::PAYMENT_STATUS['pending'])
+        return Payment::with('student') // Assuming a relationship exists
             ->paginate($perPage);
     }
 

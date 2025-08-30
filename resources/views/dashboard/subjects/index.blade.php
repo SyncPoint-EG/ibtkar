@@ -50,6 +50,8 @@
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.subject.fields.name") }}</th>
+                                            <th>{{ __("dashboard.teacher.fields.uuid") }}</th>
+
                                             <th>{{ __("dashboard.subject.fields.logo") }}</th>
                                             <th>{{ __("dashboard.subject.fields.second_logo") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
@@ -60,6 +62,7 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $subject->name }}</td>
+                                                <td>{{ $subject->uuid }}</td>
                                                 <td><img width="100px" src="{{ $subject->logo }}"></td>
                                                 <td><img width="100px" src="{{ $subject->second_logo }}"></td>
                                                 <td>
