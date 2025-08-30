@@ -62,6 +62,8 @@
                                             <th>{{ __("dashboard.student.fields.birth_date") }}</th>
                                             <th>{{ __("dashboard.student.fields.status") }}</th>
                                             <th>{{ __("dashboard.student.fields.referral_code") }}</th>
+                                            <th>{{ __("dashboard.student.fields.points") }}</th>
+                                            <th>{{ __("dashboard.student.fields.purchased_lessons") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -82,6 +84,8 @@
                                                 <td>{{ $student->birth_date ? $student->birth_date->format('Y-m-d') : '' }}</td>
                                                 <td>{{ $student->status ? 'Yes' : 'No' }}</td>
                                                 <td>{{ $student->referral_code }}</td>
+                                                <td>{{ $student->points }}</td>
+                                                <td>{{ $student->purchased_lessons_count }}</td>
                                                 <td>
                                                     @can('view_student')
                                                         <a href="{{ route('students.show', $student->id) }}"

@@ -36,6 +36,8 @@ return [
         'not_available' => 'N/A',
         'not_assigned' => 'Not Assigned',
         'save_changes' => 'Save Changes',
+        'male' => 'Male',
+        'female' => 'Female',
     ],
     'settings' => [
         'title' => 'Settings',
@@ -248,6 +250,10 @@ return [
             'status' => 'Status',
             'referral_code' => 'Referral Code',
             'guardian_number' => 'Guardian Phone',
+            'purchased_lessons' => 'Purchased Lessons Count',
+            'points' => 'Points',
+            'education_type_id' => 'Education Type Id',
+
         ],
     ],
     'guardian' => [

@@ -32,7 +32,7 @@ class StudentController extends Controller
      */
     public function index(): View
     {
-        $students = $this->studentService->getAllPaginated(15,['']);
+        $students = $this->studentService->getAllPaginated(15,[]);
 
         return view('dashboard.students.index', compact('students'));
     }
@@ -50,7 +50,8 @@ class StudentController extends Controller
         $stages = Stage::all();
         $grades = Grade::all();
         $divisions = Division::all();
-        return view('dashboard.students.create',compact('governorates','districts','centers','stages','grades','divisions'));
+        $educationTypes = \App\Models\EducationType::all();
+        return view('dashboard.students.create',compact('governorates','districts','centers','stages','grades','divisions','educationTypes'));
     }
 
     /**
@@ -98,7 +99,8 @@ class StudentController extends Controller
         $stages = Stage::all();
         $grades = Grade::all();
         $divisions = Division::all();
-        return view('dashboard.students.edit', compact('student','governorates','districts','centers','stages','grades','divisions'));
+        $educationTypes = \App\Models\EducationType::all();
+        return view('dashboard.students.edit', compact('student','governorates','districts','centers','stages','grades','divisions','educationTypes'));
     }
 
     /**

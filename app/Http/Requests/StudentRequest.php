@@ -40,7 +40,7 @@ class StudentRequest extends FormRequest
             'district_id' => ['nullable', 'exists:districts,id'],
             'referral_code' => 'nullable|exists:students,referral_code',
             'guardian_number' => ['nullable', 'string', 'max:255'],
-            'mac_address' => ['required', 'string', 'max:255'],
+            'mac_address' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

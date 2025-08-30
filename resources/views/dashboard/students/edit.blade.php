@@ -168,10 +168,26 @@
             @enderror
         </div>
                 <div class="form-group">
+            <label for="education_type_id">{{ __("dashboard.student.fields.education_type_id") }}</label>
+            <select id="education_type_id" name="education_type_id" class="form-control @error('education_type_id') is-invalid @enderror" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.student.fields.education_type_id") }}">
+                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.student.fields.education_type_id") }}</option>
+                @foreach($educationTypes as $educationType)
+                    <option value="{{ $educationType->id }}" {{ isset($student) && $student->education_type_id == $educationType->id ? 'selected' : '' }}>
+                        {{ $educationType->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('education_type_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+                <div class="form-group">
             <label for="gender">{{ __("dashboard.student.fields.gender") }}</label>
-            <input type="text" id="gender" class="form-control @error('gender') is-invalid @enderror"
-                   name="gender" value="{{ isset($student) ? $student->gender : old('gender') }}"
-                   placeholder="{{ __("dashboard.student.fields.gender") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.student.fields.gender") }}">
+            <select id="gender" name="gender" class="form-control @error('gender') is-invalid @enderror" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.student.fields.gender") }}">
+                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.student.fields.gender") }}</option>
+                <option value="Male" {{ isset($student) && $student->gender == 'male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
+                <option value="Female" {{ isset($student) && $student->gender == 'female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
+            </select>
             @error('gender')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

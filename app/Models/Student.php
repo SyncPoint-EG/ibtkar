@@ -110,9 +110,47 @@ class Student extends Authenticatable
         return $code;
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function purchases()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    protected function purchasedLessonsCount(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: function () {
+                $totalLessons = 0;
+
+                // Eager load relationships to avoid N+1 problem
+                $payments = $this->payments()->with([
+                    'course.chapters.lessons',
+                    'chapter.lessons',
+                    'lesson'
+                ])->get();
+
+                foreach ($payments as $payment) {
+                    if ($payment->lesson_id) {
+                        // Purchase of a single lesson
+                        $totalLessons++;
+                    } elseif ($payment->chapter_id && $payment->chapter) {
+                        // Purchase of a chapter, count its lessons
+                        $totalLessons += $payment->chapter->lessons->count();
+                    } elseif ($payment->course_id && $payment->course) {
+                        // Purchase of a course, count lessons in all its chapters
+                        foreach ($payment->course->chapters as $chapter) {
+                            $totalLessons += $chapter->lessons->count();
+                        }
+                    }
+                }
+
+                return $totalLessons;
+            }
+        );
     }
     public function guardian()
     {
