@@ -20,6 +20,71 @@
                 </div>
             </div>
             <div class="content-body">
+                <!-- Statistics start -->
+                <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="p-2 text-xs-center bg-success-gradient media-left media-middle">
+                                        <i class="icon-users font-large-2 "></i>
+                                    </div>
+                                    <div class="p-2 media-body">
+                                        <h5 class="success">{{ $statistics['students_paid_count'] }}</h5>
+                                        <h5 class="text-bold-400">{{ __('dashboard.payment_approval.stats.students_paid') }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="p-2 text-xs-center bg-info-gradient media-left media-middle">
+                                        <i class="icon-graduation-cap font-large-2 "></i>
+                                    </div>
+                                    <div class="p-2 media-body">
+                                        <h5 class="info">{{ $statistics['lessons_paid_count'] }}</h5>
+                                        <h5 class="text-bold-400">{{ __('dashboard.payment_approval.stats.lessons_paid') }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="p-2 text-xs-center bg-warning-gradient media-left media-middle">
+                                        <i class="icon-folder-open font-large-2 "></i>
+                                    </div>
+                                    <div class="p-2 media-body">
+                                        <h5 class="warning">{{ $statistics['courses_paid_count'] }}</h5>
+                                        <h5 class="text-bold-400">{{ __('dashboard.payment_approval.stats.courses_paid') }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="p-2 text-xs-center bg-danger-gradient media-left media-middle">
+                                        <i class="icon-bookmark font-large-2 "></i>
+                                    </div>
+                                    <div class="p-2 media-body">
+                                        <h5 class="danger">{{ $statistics['chapters_paid_count'] }}</h5>
+                                        <h5 class="text-bold-400">{{ __('dashboard.payment_approval.stats.chapters_paid') }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Statistics end -->
+
                 <!-- Table head options start -->
                 <div class="row">
                     <div class="col-xs-12">
@@ -41,24 +106,52 @@
                                     <table class="table">
                                         <thead class="thead-inverse">
                                         <tr>
-                                            <th>#</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.id') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.student_id') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.student_name') }}</th>
-                                            <th>{{ __('dashboard.payment_approval.fields.amount') }}</th>
-                                            <th>{{ __('dashboard.payment_approval.fields.payment_method') }}</th>
-                                            <th>{{ __('dashboard.payment_approval.fields.status') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.date') }}</th>
-                                            <th>{{ __('dashboard.common.actions') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.time') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.payment_method') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.subject_name') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.course') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.lesson') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.academic_level') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.teacher_id') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.status') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.actions') }}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @forelse($payments as $payment)
                                             <tr>
-                                                <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $payment->student->first_name . ' ' . $payment->student->last_name ?? 'N/A' }}</td>
-                                                <td>{{ $payment->amount }}</td>
+                                                <td>{{ $payment->id }}</td>
+                                                <td>{{ $payment->student_id }}</td>
+                                                <td>{{ $payment->student?->first_name . ' ' . $payment->student?->last_name }}</td>
+                                                <td>{{ $payment->created_at->format('Y-m-d') }}</td>
+                                                <td>{{ $payment->created_at->format('H:i') }}</td>
                                                 <td>{{ $payment->payment_method }}</td>
+                                                <td>
+                                                    @if($payment->lesson)
+                                                        {{ $payment->lesson?->chapter?->course?->subject?->name }}
+                                                    @elseif($payment->chapter)
+                                                        {{ $payment->chapter?->course?->subject?->name }}
+                                                    @elseif($payment->course)
+                                                        {{ $payment->course?->subject?->name }}
+                                                    @endif
+                                                </td>
+                                                <td>{{ $payment->course?->name }}</td>
+                                                <td>{{ $payment->lesson?->name }}</td>
+                                                <td>{{ $payment->student?->stage?->name . ' - ' . $payment->student?->grade?->name . ' - ' . $payment->student?->division?->name }}</td>
+                                                <td>
+                                                    @if($payment->lesson)
+                                                        {{ $payment->lesson?->chapter?->course?->teacher?->id }}
+                                                    @elseif($payment->chapter)
+                                                        {{ $payment->chapter?->course?->teacher?->id }}
+                                                    @elseif($payment->course)
+                                                        {{ $payment->course?->teacher?->id }}
+                                                    @endif
+                                                </td>
                                                 <td>{{ $payment->payment_status }}</td>
-                                                <td>{{ $payment->created_at->format('Y-m-d H:i') }}</td>
                                                 <td>
                                                     @if($payment->payment_status === \App\Models\Payment::PAYMENT_STATUS['pending'])
                                                         @can('accept_payment_approval')
@@ -70,7 +163,7 @@
                                                                         onclick="return confirm('{{ __('dashboard.payment_approval.accept_confirm') }}');">
                                                                     <i class="icon-check"></i> {{ __('dashboard.common.accept') }}
                                                                 </button>
-                                                            </form>
+.                                                            </form>
                                                         @endcan
 
                                                         @can('reject_payment_approval')
@@ -96,7 +189,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7"
+                                                <td colspan="13"
                                                     class="text-center">{{ __('dashboard.payment_approval.no_records') }}</td>
                                             </tr>
                                         @endforelse

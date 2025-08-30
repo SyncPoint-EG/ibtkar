@@ -28,16 +28,18 @@ class PaymentApprovalController extends Controller
     public function index(Request $request)
     {
         $payments = $this->paymentApprovalService->getPendingPaymentsPaginated($request->get('per_page', 15));
+        $statistics = $this->paymentApprovalService->getPaymentStatistics();
 
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'data' => $payments,
+                'statistics' => $statistics,
                 'message' => 'Pending payments retrieved successfully.'
             ]);
         }
 
-        return view('dashboard.payment_approvals.index', compact('payments'));
+        return view('dashboard.payment_approvals.index', compact('payments', 'statistics'));
     }
 
     /**

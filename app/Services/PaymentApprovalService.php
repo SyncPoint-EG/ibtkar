@@ -16,9 +16,34 @@ class PaymentApprovalService
      */
     public function getPendingPaymentsPaginated(int $perPage): LengthAwarePaginator
     {
-//        return Payment::where('payment_status', Payment::PAYMENT_STATUS['pending'])
-        return Payment::with('student') // Assuming a relationship exists
-            ->paginate($perPage);
+        return Payment::with([
+            'student.stage',
+            'student.grade',
+            'student.division',
+            'course.subject',
+            'course.teacher',
+            'lesson.chapter.course.subject',
+            'lesson.chapter.course.teacher',
+            'chapter.course.subject',
+            'chapter.course.teacher'
+        ])->latest()->paginate($perPage);
+    }
+
+    public function getPaymentStatistics(): array
+    {
+        $approvedPayments = Payment::where('payment_status', 'approved');
+
+        $studentsPaidCount = (clone $approvedPayments)->distinct('student_id')->count();
+        $lessonsPaidCount = (clone $approvedPayments)->whereNotNull('lesson_id')->count();
+        $coursesPaidCount = (clone $approvedPayments)->whereNotNull('course_id')->count();
+        $chaptersPaidCount = (clone $approvedPayments)->whereNotNull('chapter_id')->count();
+
+        return [
+            'students_paid_count' => $studentsPaidCount,
+            'lessons_paid_count' => $lessonsPaidCount,
+            'courses_paid_count' => $coursesPaidCount,
+            'chapters_paid_count' => $chaptersPaidCount,
+        ];
     }
 
     /**
