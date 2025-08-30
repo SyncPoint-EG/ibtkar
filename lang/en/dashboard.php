@@ -773,6 +773,8 @@ return [
             'lesson' => 'Lesson',
             'academic_level' => 'Academic Level',
             'teacher_id' => 'Teacher ID',
+            'teacher_uuid' => 'Teacher UUID',
+            'teacher_name' => 'Teacher Name',
             'status' => 'Status',
             'actions' => 'Actions',
         ],

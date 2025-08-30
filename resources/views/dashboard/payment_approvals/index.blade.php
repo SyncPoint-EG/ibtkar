@@ -116,7 +116,8 @@
                                             <th>{{ __('dashboard.payment_approval.fields.course') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.lesson') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.academic_level') }}</th>
-                                            <th>{{ __('dashboard.payment_approval.fields.teacher_id') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.teacher_uuid') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.teacher_name') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.status') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.actions') }}</th>
                                         </tr>
@@ -144,11 +145,20 @@
                                                 <td>{{ $payment->student?->stage?->name . ' - ' . $payment->student?->grade?->name . ' - ' . $payment->student?->division?->name }}</td>
                                                 <td>
                                                     @if($payment->lesson)
-                                                        {{ $payment->lesson?->chapter?->course?->teacher?->id }}
+                                                        {{ $payment->lesson?->chapter?->course?->teacher?->uuid }}
                                                     @elseif($payment->chapter)
-                                                        {{ $payment->chapter?->course?->teacher?->id }}
+                                                        {{ $payment->chapter?->course?->teacher?->uuid }}
                                                     @elseif($payment->course)
-                                                        {{ $payment->course?->teacher?->id }}
+                                                        {{ $payment->course?->teacher?->uuid }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($payment->lesson)
+                                                        {{ $payment->lesson?->chapter?->course?->teacher?->name }}
+                                                    @elseif($payment->chapter)
+                                                        {{ $payment->chapter?->course?->teacher?->name }}
+                                                    @elseif($payment->course)
+                                                        {{ $payment->course?->teacher?->name }}
                                                     @endif
                                                 </td>
                                                 <td>{{ $payment->payment_status }}</td>
