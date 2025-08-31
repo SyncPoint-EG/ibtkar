@@ -85,7 +85,7 @@ class ExamController extends Controller
         return response()->json([
             'message' => 'Exam submitted successfully.',
             'score' => $total_score,
-            'total_degree' => $exam->questions()->sum('degree'),
+            'total_degree' => $exam->questions()->sum('marks'),
             'exam_attempt' => $examAttempt
         ]);
     }
