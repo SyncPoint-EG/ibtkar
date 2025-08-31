@@ -10,6 +10,7 @@ use App\Models\Charge;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
+use App\Models\Watch;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -41,6 +42,20 @@ class PaymentController extends Controller
         }
         $payment = Payment::create($validated);
 
+        if($request->course_id){
+            $course = Course::find($request->course_id);
+            $chapterIds = $course->chapters->pluck('id')->toArray();
+            $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id')->toArray();
+            Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
+        }
+        if($request->chapter_id){
+            $lessonIds = Lesson::where('chapter_id', $request->chapter_id)->pluck('id')->toArray();
+            Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
+
+        }
+        if($request->lesson_id){
+            Watch::where('student_id', $student_id)->where('lesson_id', $request->lesson_id)->update(['count'=>3]);
+        }
         return response()->json([
             'status' => true,
             'message'  => 'تمت عملية الشراء بنجاح'
