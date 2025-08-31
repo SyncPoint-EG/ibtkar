@@ -3,18 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CentersResource;
+use App\Http\Resources\CourseResource;
 use App\Http\Resources\DivisionsResource;
 use App\Http\Resources\EducationTypeResource;
 use App\Http\Resources\GovernoratesResource;
 use App\Http\Resources\GradesResource;
+use App\Http\Resources\LessonAttachmentResource;
 use App\Http\Resources\StagesResource;
+use App\Http\Resources\TeacherResource;
 use App\Models\Center;
+use App\Models\Course;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\EducationType;
 use App\Models\Governorate;
 use App\Models\Grade;
+use App\Models\LessonAttachment;
 use App\Models\Stage;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -74,6 +80,54 @@ class HomeController extends Controller
     {
         $districts = District::where('governorate_id', $governorate->id)->get();
         return response()->json($districts);
+    }
+
+    public function getCourses()
+    {
+        $courses = Course::query();
+        if(request()->stage_id){
+            $courses = $courses->where('stage_id', request()->stage_id);
+        }
+        if(request()->grade_id){
+            $courses = $courses->where('grade_id', request()->grade_id);
+        }
+        if(request()->division_id){
+            $courses = $courses->where('division_id', request()->division_id);
+        }
+        if(request()->subject_id){
+            $courses = $courses->where('subject_id', request()->subject_id);
+        }
+        $courses = $courses->latest()->limit(10)->get();
+        return CourseResource::collection($courses);
+    }
+
+    public function getTeachers()
+    {
+        $teachers = Teacher::query()->paginate(request()->perpage ?? 6);
+        return TeacherResource::collection($teachers);
+
+    }
+
+    public function getAttachments()
+    {
+        $attachments = LessonAttachment::query()
+            ->whereHas('lesson.chapter.course', function ($query) {
+                $query->when(request('stage_id'), function ($q, $stageId) {
+                    $q->where('stage_id', $stageId);
+                })
+                    ->when(request('grade_id'), function ($q, $gradeId) {
+                        $q->where('grade_id', $gradeId);
+                    })
+                    ->when(request('division_id'), function ($q, $divisionId) {
+                        $q->where('division_id', $divisionId);
+                    })
+                    ->when(request('subject_id'), function ($q, $subjectId) {
+                        $q->where('subject_id', $subjectId);
+                    });
+            })
+            ->paginate(request('perpage', 6));
+
+        return LessonAttachmentResource::collection($attachments);
     }
 
 }

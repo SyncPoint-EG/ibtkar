@@ -15,3 +15,9 @@ Route::get('centers',[HomeController::class, 'getCenters']);
 Route::get('education-types',[HomeController::class, 'getEducationTypes']);
 Route::get('governorates',[HomeController::class, 'getGovernorates']);
 Route::get('districts/{governorate}',[HomeController::class, 'getDistricts']);
+
+
+
+Route::get('courses',[HomeController::class, 'getCourses']);
+Route::get('teachers',[HomeController::class, 'getTeachers']);
+Route::get('attachments',[HomeController::class, 'getAttachments']);
