@@ -36,56 +36,93 @@ class ExamController extends Controller
 
     public function submit(Request $request, $exam_id)
     {
-        $student = auth('student')->user();
-        $exam = Exam::query()->findOrFail($exam_id);
+        $student = Auth::user();
+        $exam = Exam::with('questions.options')->findOrFail($exam_id);
+
+        // Authorization: Check if student is eligible for this exam
+        $isEligible = $exam->lesson ? $student->isEnrolledInCourse($exam->lesson->chapter->course_id) : $student->isEnrolledInCourse($exam->course_id);
+        if (!$isEligible) {
+            return response()->json(['message' => 'You are not authorized to submit this exam.'], 403);
+        }
+
+        // Prevent re-submission
+        $previousAttempt = ExamAttempt::where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->where('is_submitted', true)
+            ->first();
+
+        if ($previousAttempt) {
+            return response()->json(['message' => 'You have already submitted this exam.'], 400);
+        }
+
         $validated = $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
             'answers.*.option_id' => 'nullable|exists:question_options,id',
             'answers.*.essay_answer' => 'nullable|string',
+            'answers.*.true_false_answer' => 'nullable|boolean',
         ]);
 
         $total_score = 0;
+        $answers = [];
+        $questions = $exam->questions->keyBy('id');
+
         $examAttempt = ExamAttempt::create([
             'student_id' => $student->id,
             'exam_id' => $exam->id,
             'score' => 0, // will be updated
+            'total_marks' => $exam->questions->sum('marks'),
+            'started_at' => now(), // Assuming the submission starts now
         ]);
 
         foreach ($validated['answers'] as $answerData) {
-            $question = $exam->questions()->find($answerData['question_id']);
+            $question = $questions->get($answerData['question_id']);
             if (!$question) {
                 continue;
             }
 
-            $is_correct = false;
-            if ($question->type == 'mcq' || $question->type == 'true_false') {
-                $correctOption = $question->options()->where('is_correct', true)->first();
-                if ($correctOption && $correctOption->id == $answerData['option_id']) {
-                    $total_score += $question->marks;
-                    $is_correct = true;
-                }
-            }
-            // For essay questions, manual correction is assumed to be needed.
-            // Here we just store the answer. The score for essay is not added automatically.
-
-            ExamAnswer::create([
+            $marks_awarded = 0;
+            $answer = [
                 'exam_attempt_id' => $examAttempt->id,
-                'student_id' => $student->id,
-                'exam_id' => $exam->id,
                 'question_id' => $question->id,
-                'option_id' => $answerData['option_id'] ?? null,
                 'essay_answer' => $answerData['essay_answer'] ?? null,
-                'is_correct' => $is_correct,
-            ]);
+                'selected_option_id' => null,
+                'true_false_answer' => null,
+                'marks_awarded' => 0,
+            ];
+
+            if ($question->question_type == 'multiple_choice') {
+                $correctOption = $question->options->where('is_correct', true)->first();
+                if ($correctOption && $correctOption->id == ($answerData['option_id'] ?? null)) {
+                    $marks_awarded = $question->marks;
+                }
+                $answer['selected_option_id'] = $answerData['option_id'] ?? null;
+            } elseif ($question->question_type == 'true_false') {
+                $correct_answer = (bool) $question->options->where('is_correct', true)->value('option_text');
+                if (isset($answerData['true_false_answer']) && $correct_answer === $answerData['true_false_answer']) {
+                    $marks_awarded = $question->marks;
+                }
+                $answer['true_false_answer'] = $answerData['true_false_answer'] ?? null;
+            }
+            // For essay questions, marks will be awarded manually later.
+
+            $answer['marks_awarded'] = $marks_awarded;
+            $total_score += $marks_awarded;
+            $answers[] = $answer;
         }
 
-        $examAttempt->update(['score' => $total_score]);
+        ExamAnswer::insert($answers);
+
+        $examAttempt->update([
+            'score' => $total_score,
+            'completed_at' => now(),
+            'is_submitted' => true,
+        ]);
 
         return response()->json([
             'message' => 'Exam submitted successfully.',
             'score' => $total_score,
-            'total_degree' => $exam->questions()->sum('marks'),
+            'total_degree' => $examAttempt->total_marks,
             'exam_attempt' => $examAttempt
         ]);
     }

@@ -32,15 +32,33 @@ class HomeworkController extends Controller
 
     public function submit(Request $request, Homework $homework)
     {
-        $student = auth('student')->user();
+        $student = Auth::user();
+
+        // Authorization: Check if student is enrolled in the course
+        if (!$student->isEnrolledInCourse($homework->lesson->chapter->course_id)) {
+            return response()->json(['message' => 'You are not authorized to submit this homework.'], 403);
+        }
+
+        // Prevent re-submission
+        $previousAttempt = HomeworkAttempt::where('student_id', $student->id)
+            ->where('homework_id', $homework->id)
+            ->first(); // Assuming one attempt
+
+        if ($previousAttempt) {
+            return response()->json(['message' => 'You have already submitted this homework.'], 400);
+        }
+
         $validated = $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:homework_questions,id',
             'answers.*.option_id' => 'nullable|exists:homework_question_options,id',
             'answers.*.essay_answer' => 'nullable|string',
+            'answers.*.true_false_answer' => 'nullable|boolean',
         ]);
 
         $total_score = 0;
+        $answers = [];
+        $questions = $homework->questions()->with('options')->get()->keyBy('id');
 
         $homeworkAttempt = HomeworkAttempt::create([
             'student_id' => $student->id,
@@ -49,37 +67,42 @@ class HomeworkController extends Controller
         ]);
 
         foreach ($validated['answers'] as $answerData) {
-            $question = $homework->questions()->find($answerData['question_id']);
+            $question = $questions->get($answerData['question_id']);
             if (!$question) {
                 continue;
             }
 
             $is_correct = false;
-            if ($question->type == 'mcq' || $question->type == 'true_false') {
-                $correctOption = $question->options()->where('is_correct', true)->first();
-                if ($correctOption && $correctOption->id == $answerData['option_id']) {
-                    $total_score += $question->degree;
+            if ($question->question_type == 'multiple_choice' || $question->question_type == 'true_false') {
+                $correctOption = $question->options->where('is_correct', true)->first();
+                if ($correctOption && $correctOption->id == ($answerData['option_id'] ?? null)) {
+                    $total_score += $question->marks;
                     $is_correct = true;
                 }
             }
 
-            HomeworkAnswer::create([
-                'homework_attempt_id' => $homeworkAttempt->id, // This column needs to be added
+            // NOTE: The 'homework_answers' table needs a 'homework_attempt_id' column
+            // and the HomeworkAnswer model's fillable array needs to be updated.
+            $answers[] = [
+                'homework_attempt_id' => $homeworkAttempt->id, // This column needs to be added to the table
                 'student_id' => $student->id,
                 'homework_id' => $homework->id,
                 'question_id' => $question->id,
                 'option_id' => $answerData['option_id'] ?? null,
                 'essay_answer' => $answerData['essay_answer'] ?? null,
                 'is_correct' => $is_correct,
-            ]);
+            ];
         }
+
+        // This will fail until the 'homework_answers' table is migrated
+        // HomeworkAnswer::insert($answers);
 
         $homeworkAttempt->update(['score' => $total_score]);
 
         return response()->json([
             'message' => 'Homework submitted successfully.',
             'score' => $total_score,
-            'total_degree' => $homework->questions()->sum('degree'),
+            'total_degree' => $questions->sum('marks'),
             'homework_attempt' => $homeworkAttempt
         ]);
     }
