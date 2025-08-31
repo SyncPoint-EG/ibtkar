@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('exam_attempts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('exam_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->datetime('started_at');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->datetime('started_at')->nullable();
             $table->datetime('completed_at')->nullable();
             $table->integer('score')->nullable();
-            $table->integer('total_marks');
+            $table->integer('total_marks')->nullable();
             $table->boolean('is_submitted')->default(false);
             $table->timestamps();
         });
