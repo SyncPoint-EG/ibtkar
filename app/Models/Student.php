@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Lesson;
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Lesson;
 use App\Models\Chapter;
-use App\Models\Payment;
 
 class Student extends Authenticatable
 {
@@ -198,7 +198,18 @@ class Student extends Authenticatable
         return $isPurchased;
     }
 
-    public function isEnrolledInCourse(Lesson $lesson)
+    public function isEnrolledInCourse($courseId)
+    {
+        if (!$courseId) {
+            return false;
+        }
+
+        return Payment::where('student_id', $this->id)
+            ->where('course_id', $courseId)
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->exists();
+    }
+    public function isEnrolledInLesson(Lesson $lesson)
     {
         if (!$lesson) {
             return false;

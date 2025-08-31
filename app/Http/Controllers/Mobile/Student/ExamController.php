@@ -38,11 +38,12 @@ class ExamController extends Controller
     {
         $student = Auth::user();
         $exam = Exam::with('questions.options')->findOrFail($exam_id);
+
         // Authorization: Check if student is eligible for this exam
-        $isEligible = $exam->lesson ? $student->isEnrolledInCourse($exam->lesson->chapter->course_id) : $student->isEnrolledInCourse($exam->lesson);
-//        if (!$isEligible) {
-//            return response()->json(['message' => 'You are not authorized to submit this exam.(purchase the course first)'], 403);
-//        }
+        $isEligible = $exam->lesson ? $student->isEnrolledInLesson($exam->lesson) : $student->isEnrolledInCourse($exam->course_id);
+        if (!$isEligible) {
+            return response()->json(['message' => 'You are not authorized to submit this exam.(purchase the course first)'], 403);
+        }
 
         // Prevent re-submission
         $previousAttempt = ExamAttempt::where('student_id', $student->id)
