@@ -198,14 +198,17 @@ class Student extends Authenticatable
         return $isPurchased;
     }
 
-    public function isEnrolledInCourse($courseId)
+    public function isEnrolledInCourse(Lesson $lesson)
     {
-        if (!$courseId) {
+        if (!$lesson) {
             return false;
         }
-
         return Payment::where('student_id', $this->id)
-            ->where('course_id', $courseId)
+            ->where(function ($query) use ($lesson) {
+                $query->where('lesson_id', $lesson->id)
+                    ->orWhere('chapter_id', $lesson->chapter_id)
+                    ->orWhere('course_id', $lesson->chapter->course_id);
+            })
             ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->exists();
     }
