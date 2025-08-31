@@ -42,7 +42,7 @@ class ExamController extends Controller
         // Authorization: Check if student is eligible for this exam
         $isEligible = $exam->lesson ? $student->isEnrolledInCourse($exam->lesson->chapter->course_id) : $student->isEnrolledInCourse($exam->course_id);
         if (!$isEligible) {
-            return response()->json(['message' => 'You are not authorized to submit this exam.'], 403);
+            return response()->json(['message' => 'You are not authorized to submit this exam.(purchase the course first)'], 403);
         }
 
         // Prevent re-submission
