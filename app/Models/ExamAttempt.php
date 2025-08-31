@@ -8,7 +8,7 @@ class ExamAttempt extends Model
 {
     protected $fillable = [
         'exam_id',
-        'user_id',
+        'student_id',
         'started_at',
         'completed_at',
         'score',
