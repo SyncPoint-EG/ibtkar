@@ -62,7 +62,7 @@ class ExamController extends Controller
             if ($question->type == 'mcq' || $question->type == 'true_false') {
                 $correctOption = $question->options()->where('is_correct', true)->first();
                 if ($correctOption && $correctOption->id == $answerData['option_id']) {
-                    $total_score += $question->degree;
+                    $total_score += $question->marks;
                     $is_correct = true;
                 }
             }
