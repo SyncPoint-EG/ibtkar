@@ -63,7 +63,7 @@
                                                             <label for="guard_name">Guard Name</label>
                                                             <select id="guard_name" class="form-control @error('guard_name') is-invalid @enderror" name="guard_name">
                                                                 <option value="web" {{ old('guard_name', 'web') === 'web' ? 'selected' : '' }}>Web</option>
-                                                                <option value="api" {{ old('guard_name') === 'api' ? 'selected' : '' }}>API</option>
+{{--                                                                <option value="api" {{ old('guard_name') === 'api' ? 'selected' : '' }}>API</option>--}}
                                                             </select>
                                                             @error('guard_name')
                                                             <div class="invalid-feedback">{{ $message }}</div>
