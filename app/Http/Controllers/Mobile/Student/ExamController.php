@@ -34,9 +34,10 @@ class ExamController extends Controller
         return new ExamResource($exam);
     }
 
-    public function submit(Request $request, Exam $exam)
+    public function submit(Request $request, $exam_id)
     {
         $student = auth('student')->user();
+        $exam = Exam::query()->findOrFail($exam_id);
         $validated = $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
