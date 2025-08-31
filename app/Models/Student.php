@@ -200,7 +200,7 @@ class Student extends Authenticatable
 
     public function favorites()
     {
-        return $this->belongsToMany(Favorite::class, 'favorites');
+        return $this->belongsToMany(Lesson::class, 'favorites', 'student_id', 'lesson_id');
     }
 
 }
