@@ -46,7 +46,7 @@ class ExamController extends Controller
 
         $total_score = 0;
         $examAttempt = ExamAttempt::create([
-            'user_id' => $student->id,
+            'student_id' => $student->id,
             'exam_id' => $exam->id,
             'score' => 0, // will be updated
         ]);
