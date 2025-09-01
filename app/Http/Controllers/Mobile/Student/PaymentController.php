@@ -26,7 +26,7 @@ class PaymentController extends Controller
         $validated['amount'] = $amount;
         $validated['total_amount'] = $amount;
         if($request->payment_method == 'code'){
-            $code = Code::where('code',$request->code)->first();
+            $code = Code::where('code',$request->payment_code)->first();
             if(!$code){
                 return response()->json([
                     'success' => false,
