@@ -33,7 +33,7 @@ class PaymentController extends Controller
                     'message'  => 'الكود مستخدم من قبل'
                 ]);
             }else{
-                $code->number_of_uses += 1 ;
+                $code->increment('number_of_uses'); ;
                 $code->save();
             }
         }
