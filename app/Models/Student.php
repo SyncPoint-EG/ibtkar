@@ -229,4 +229,78 @@ class Student extends Authenticatable
         return $this->belongsToMany(Lesson::class, 'favorites', 'student_id', 'lesson_id');
     }
 
+    public function getSubjectExamAverages()
+    {
+        $subjectAverages = [];
+
+        // Get all subjects for the student's stage, grade, and division
+        $courseIds = Course::where('stage_id', $this->stage_id)
+            ->where('grade_id', $this->grade_id)
+            ->where('division_id', $this->division_id)
+            ->pluck('id');
+
+        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
+
+        foreach ($subjects as $subject) {
+            // Get all exams for the courses of this subject
+            $examIds = Exam::whereIn('course_id', $courseIds)->whereHas('course', function ($query) use ($subject) {
+                $query->where('subject_id', $subject->id);
+            })->pluck('id');
+
+            // Get all exam attempts for the student for these exams
+            $attempts = ExamAttempt::where('student_id', $this->id)
+                ->whereIn('exam_id', $examIds)
+                ->get();
+
+            if ($attempts->isEmpty()) {
+                $subjectAverages[$subject->name] = 0;
+                continue;
+            }
+
+            // Calculate the average score
+            $totalScore = $attempts->sum('score');
+            $totalMarks = $attempts->sum('total_marks');
+            $average = $totalMarks > 0 ? ($totalScore / $totalMarks) * 100 : 0;
+
+            // Add to the list
+            $subjectAverages[$subject->name] = round($average, 2);
+        }
+
+        return $subjectAverages;
+    }
+
+    public function getLessonAttendancePercentage()
+    {
+        $lessonAttendance = [];
+
+        // Get all subjects for the student's stage, grade, and division
+        $courseIds = Course::where('stage_id', $this->stage_id)
+            ->where('grade_id', $this->grade_id)
+            ->where('division_id', $this->division_id)
+            ->pluck('id');
+        
+        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
+
+        foreach ($subjects as $subject) {
+            // Get all lessons for the subject
+            $lessonIds = Lesson::whereHas('chapter.course', function ($query) use ($subject) {
+                $query->where('subject_id', $subject->id);
+            })->pluck('id');
+
+            if ($lessonIds->isEmpty()) {
+                $lessonAttendance[$subject->name] = 0;
+                continue;
+            }
+
+            // Get all watched lessons for the subject
+            $watchedLessonIds = $this->watches()->whereIn('lesson_id', $lessonIds)->pluck('lesson_id')->unique();
+
+            // Calculate the attendance percentage
+            $percentage = ($watchedLessonIds->count() / $lessonIds->count()) * 100;
+
+            $lessonAttendance[$subject->name] = round($percentage, 2);
+        }
+
+        return $lessonAttendance;
+    }
 }

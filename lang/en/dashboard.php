@@ -704,6 +704,7 @@ return [
             'for' => 'For',
             'number_of_uses' => 'Number Of Uses',
             'expires_at' => 'Expires At',
+            'number_of_codes' => 'Number Of Codes',
         ],
     ],
     'center_exam' => [

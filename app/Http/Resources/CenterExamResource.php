@@ -29,6 +29,8 @@ class CenterExamResource extends JsonResource
             'grade' => new GradesResource($this->grade),
             'division' => new DivisionResource($this->division),
             'questions' => CenterExamQuestionResource::collection($this->questions),
+            'is_answered' => auth('student')->user() ?  $this->attempts()->where('student_id', auth('student')->id())->exists() : null,
+
         ];
     }
 }

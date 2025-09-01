@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->foreignId('lesson_id')->constrained('lessons');
             $table->integer('duration_minutes');
             $table->integer('total_marks');

@@ -30,10 +30,10 @@ class HomeworkController extends Controller
         return new HomeworkResource($homework);
     }
 
-    public function submit(Request $request, Homework $homework)
+    public function submit(Request $request,  $homeworkId)
     {
         $student = Auth::user();
-
+        $homework = Homework::with('questions.options', 'lesson.chapter.course')->findOrFail($homeworkId);
         // Authorization: Check if student is enrolled in the course
         if (!$student->isEnrolledInCourse($homework->lesson->chapter->course_id)) {
             return response()->json(['message' => 'You are not authorized to submit this homework.'], 403);

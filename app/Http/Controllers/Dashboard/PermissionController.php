@@ -28,7 +28,7 @@ class PermissionController extends Controller
     {
         $permission = Permission::create($request->validated());
 
-        return redirect()->route('dashboard.permissions.index')
+        return redirect()->route('permissions.index')
             ->with('success', 'Permission created successfully.');
     }
 
@@ -49,7 +49,7 @@ class PermissionController extends Controller
     {
         $permission->update($request->validated());
 
-        return redirect()->route('dashboard.permissions.index')
+        return redirect()->route('permissions.index')
             ->with('success', 'Permission updated successfully.');
     }
 
@@ -58,7 +58,7 @@ class PermissionController extends Controller
     {
         $permission->delete();
 
-        return redirect()->route('dashboard.permissions.index')
+        return redirect()->route('permissions.index')
             ->with('success', 'Permission deleted successfully.');
     }
 }
