@@ -381,7 +381,8 @@ return [
             'total_students' => 'Total Students',
             'total_courses' => 'Total Courses',
             'total_lessons' => 'Total Lessons',
-            'uuid' => 'Uuid',
+            'uuid' => 'Unique ID',
+//            'uuid' => 'Uuid',
         ],
         'stats' => [
             'total' => 'Total Teachers',
