@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateStudentProfileRequest;
+use App\Http\Resources\StudentProfileResource;
 use App\Http\Resources\StudentResource;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show(Request $request)
     {
-        return new StudentResource($request->user());
+        return new StudentProfileResource(auth('student')->user());
     }
 
     public function update(UpdateStudentProfileRequest $request)
