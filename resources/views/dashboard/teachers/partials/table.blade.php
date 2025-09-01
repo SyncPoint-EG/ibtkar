@@ -30,6 +30,7 @@
                          class="rounded-circle" alt="{{ $teacher->name }}">
                 </td>
                 <td>{{ $teacher->name }}</td>
+                <td>{{$teacher->uuid}}</td>
 
                 {{-- Grades column from subjectTeacherAssignments --}}
                 <td>
@@ -64,7 +65,6 @@
                         <span class="badge badge-secondary">+{{ $totalSubjectsCount - 2 }}</span>
                     @endif
                 </td>
-                <td>{{$teacher->uuid}}</td>
 
                 <td>
                     <span class="badge badge-success">{{ $teacher->students_count ?? 0 }}</span>
