@@ -17,7 +17,8 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TeachersExport;
-use PDF;
+use App\Imports\TeachersImport;
+
 
 class TeacherController extends Controller
 {
@@ -171,21 +172,35 @@ class TeacherController extends Controller
     /**
      * Export teachers data
      */
-    public function export(Request $request)
+    public function export()
     {
-        $format = $request->get('format', 'excel');
+        return Excel::download(new TeachersExport(), 'teachers.xlsx');
+    }
 
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $import = new TeachersImport();
         try {
-            if ($format === 'pdf') {
-                $teachers = Teacher::with(['subjects', 'grades', 'stages'])->get();
-                $pdf = PDF::loadView('dashboard.teachers.export-pdf', compact('teachers'));
-                return $pdf->download('teachers-' . date('Y-m-d') . '.pdf');
-            } else {
-                return Excel::download(new TeachersExport, 'teachers-' . date('Y-m-d') . '.xlsx');
+            Excel::import($import, $request->file('file'));
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = [];
+            foreach ($failures as $failure) {
+                $errors[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
             }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Export failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', $errors);
         }
+
+        if (!empty($import->getErrors())) {
+            return redirect()->back()->with('error', $import->getErrors());
+        }
+
+        return redirect()->route('teachers.index')
+            ->with('success', 'Teachers imported successfully.');
     }
 
     /**

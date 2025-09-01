@@ -43,6 +43,58 @@
                                             <i class="icon-plus2"></i> {{ __('dashboard.student.add_new') }}
                                         </a>
                                     @endcan
+
+                                    @can('view_student')
+                                        <a href="{{ route('students.export') }}" class="btn btn-success mb-1">
+                                            <i class="icon-download"></i> {{ __('dashboard.common.export') }}
+                                        </a>
+                                    @endcan
+
+                                    @can('create_student')
+                                        <button type="button" class="btn btn-info mb-1" data-toggle="modal" data-target="#importModal">
+                                            <i class="icon-upload"></i> {{ __('dashboard.common.import') }}
+                                        </button>
+                                    @endcan
+
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">{{ __('dashboard.student.import_students') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="file">{{ __('dashboard.common.choose_file') }}</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                    <hr>
+                    <h6>{{ __('dashboard.common.instructions') }}</h6>
+                    <p>{{ __('dashboard.student.import_instructions') }}</p>
+                    <ul>
+                        <li>{{ __('dashboard.student.import_column_first_name') }}</li>
+                        <li>{{ __('dashboard.student.import_column_last_name') }}</li>
+                        <li>{{ __('dashboard.student.import_column_phone') }}</li>
+                        <li>{{ __('dashboard.student.import_column_guardian_phone') }}</li>
+                        <li>{{ __('dashboard.student.import_column_district') }}</li>
+                        <li>{{ __('dashboard.student.import_column_center') }}</li>
+                        <li>{{ __('dashboard.student.import_column_stage') }}</li>
+                        <li>{{ __('dashboard.student.import_column_grade') }}</li>
+                        <li>{{ __('dashboard.student.import_column_division') }}</li>
+                        <li>{{ __('dashboard.student.import_column_gender') }}</li>
+                        <li>{{ __('dashboard.student.import_column_birth_date') }}</li>
+                        <li>{{ __('dashboard.student.import_column_status') }}</li>
+                    </ul>
+                    <button type="submit" class="btn btn-primary">{{ __('dashboard.common.import') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table">

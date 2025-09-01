@@ -682,37 +682,14 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('students/{student}', [StudentController::class, 'destroy'])
         ->name('students.destroy')
         ->middleware('can:delete_student');
-});
 
-// Routes for Student
-Route::middleware(['auth'])->group(function() {
-    Route::get('students', [StudentController::class, 'index'])
-        ->name('students.index')
+    Route::get('students/export/data', [StudentController::class, 'export'])
+        ->name('students.export')
         ->middleware('can:view_student');
 
-    Route::get('students/create', [StudentController::class, 'create'])
-        ->name('students.create')
+    Route::post('students/import', [StudentController::class, 'import'])
+        ->name('students.import')
         ->middleware('can:create_student');
-
-    Route::post('students', [StudentController::class, 'store'])
-        ->name('students.store')
-        ->middleware('can:create_student');
-
-    Route::get('students/{student}', [StudentController::class, 'show'])
-        ->name('students.show')
-        ->middleware('can:view_student');
-
-    Route::get('students/{student}/edit', [StudentController::class, 'edit'])
-        ->name('students.edit')
-        ->middleware('can:edit_student');
-
-    Route::put('students/{student}', [StudentController::class, 'update'])
-        ->name('students.update')
-        ->middleware('can:edit_student');
-
-    Route::delete('students/{student}', [StudentController::class, 'destroy'])
-        ->name('students.destroy')
-        ->middleware('can:delete_student');
 });
 
 // Routes for Guardian
@@ -818,6 +795,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('teachers/export', [TeacherController::class, 'export'])
         ->name('teachers.export')
         ->middleware('can:view_teacher');
+
+    Route::post('teachers/import', [TeacherController::class, 'import'])
+        ->name('teachers.import')
+        ->middleware('can:create_teacher');
 
     // AJAX search route
     Route::get('teachers/search', [TeacherController::class, 'search'])

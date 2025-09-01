@@ -48,7 +48,6 @@
                     @endif
                 </td>
 
-                <td>{{$teacher->uuid}}</td>
                 {{-- Subjects column from subjectTeacherAssignments --}}
                 <td>
                     @php
@@ -65,6 +64,7 @@
                         <span class="badge badge-secondary">+{{ $totalSubjectsCount - 2 }}</span>
                     @endif
                 </td>
+                <td>{{$teacher->uuid}}</td>
 
                 <td>
                     <span class="badge badge-success">{{ $teacher->students_count ?? 0 }}</span>

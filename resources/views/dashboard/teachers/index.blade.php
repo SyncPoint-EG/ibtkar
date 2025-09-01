@@ -5,22 +5,30 @@
         .spinner {
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
+
         .sortable {
             cursor: pointer;
             user-select: none;
         }
+
         .sortable:hover {
-            background-color: rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.1);
         }
+
         #loadingIndicator {
             padding: 2rem;
         }
 
-        .media-body span{
+        .media-body span {
             color: #0a0a0a;
         }
     </style>
@@ -146,30 +154,68 @@
                                                 </a>
                                             @endcan
 
-                                            <!-- Export Buttons -->
-                                            <div class="btn-group mb-1" role="group">
-                                                <button type="button" class="btn btn-secondary dropdown-toggle"
-                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="icon-download4"></i> {{ __('dashboard.teacher.export') }}
+                                            @can('view_teacher')
+                                                <a href="{{ route('teachers.export') }}" class="btn btn-success mb-1">
+                                                    <i class="icon-download"></i> {{ __('dashboard.common.export') }}
+                                                </a>
+                                            @endcan
+
+                                            @can('create_teacher')
+                                                <button type="button" class="btn btn-info mb-1" data-toggle="modal"
+                                                        data-target="#importModal">
+                                                    <i class="icon-upload"></i> {{ __('dashboard.common.import') }}
                                                 </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('teachers.export', ['format' => 'excel']) }}">
-                                                        <i class="icon-file-excel"></i> Excel
-                                                    </a>
-                                                    <a class="dropdown-item" href="{{ route('teachers.export', ['format' => 'pdf']) }}">
-                                                        <i class="icon-file-pdf"></i> PDF
-                                                    </a>
+                                            @endcan
+
+                                            <div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+                                                 aria-labelledby="importModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="importModalLabel">{{ __('dashboard.teacher.import_teachers') }}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{{ route('teachers.import') }}" method="POST"
+                                                                  enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="file">{{ __('dashboard.common.choose_file') }}</label>
+                                                                    <input type="file" name="file" class="form-control"
+                                                                           required>
+                                                                </div>
+                                                                <hr>
+                                                                <h6>{{ __('dashboard.common.instructions') }}</h6>
+                                                                <p>{{ __('dashboard.teacher.import_instructions') }}</p>
+                                                                <ul>
+                                                                    <li>{{ __('dashboard.teacher.import_column_name') }}</li>
+                                                                    <li>{{ __('dashboard.teacher.import_column_phone') }}</li>
+                                                                    <li>{{ __('dashboard.teacher.import_column_status') }}</li>
+                                                                    <li>{{ __('dashboard.teacher.import_column_is_featured') }}</li>
+                                                                </ul>
+                                                                <button type="submit"
+                                                                        class="btn btn-primary">{{ __('dashboard.common.import') }}</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-md-6 text-right">
                                             <!-- Per Page Selector -->
-                                            <select id="perPageSelect" class="form-control" style="width: auto; display: inline-block;">
+                                            <select id="perPageSelect" class="form-control"
+                                                    style="width: auto; display: inline-block;">
                                                 <option value="10" {{ $per_page == 10 ? 'selected' : '' }}>10</option>
                                                 <option value="25" {{ $per_page == 25 ? 'selected' : '' }}>25</option>
                                                 <option value="50" {{ $per_page == 50 ? 'selected' : '' }}>50</option>
-                                                <option value="100" {{ $per_page == 100 ? 'selected' : '' }}>100</option>
+                                                <option value="100" {{ $per_page == 100 ? 'selected' : '' }}>100
+                                                </option>
                                             </select>
                                             <label for="perPageSelect">{{ __('dashboard.common.per_page') }}</label>
                                         </div>
@@ -185,15 +231,18 @@
                                         <div class="col-md-2">
                                             <select id="statusFilter" class="form-control">
                                                 <option value="">{{ __('dashboard.teacher.all_status') }}</option>
-                                                <option value="1" {{ $status === '1' ? 'selected' : '' }}>{{ __('dashboard.teacher.active') }}</option>
-                                                <option value="0" {{ $status === '0' ? 'selected' : '' }}>{{ __('dashboard.teacher.inactive') }}</option>
+                                                <option
+                                                    value="1" {{ $status === '1' ? 'selected' : '' }}>{{ __('dashboard.teacher.active') }}</option>
+                                                <option
+                                                    value="0" {{ $status === '0' ? 'selected' : '' }}>{{ __('dashboard.teacher.inactive') }}</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
                                             <select id="stageFilter" class="form-control">
                                                 <option value="">{{ __('dashboard.teacher.all_stages') }}</option>
                                                 @foreach($stages as $stage)
-                                                    <option value="{{ $stage->id }}" {{ $stage_id == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                    <option
+                                                        value="{{ $stage->id }}" {{ $stage_id == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -201,7 +250,8 @@
                                             <select id="subjectFilter" class="form-control">
                                                 <option value="">{{ __('dashboard.teacher.all_subjects') }}</option>
                                                 @foreach($subjects as $subject)
-                                                    <option value="{{ $subject->id }}" {{ $subject_id == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                                                    <option
+                                                        value="{{ $subject->id }}" {{ $subject_id == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -209,7 +259,8 @@
                                             <select id="gradeFilter" class="form-control">
                                                 <option value="">{{ __('dashboard.teacher.all_grades') }}</option>
                                                 @foreach($grades as $grade)
-                                                    <option value="{{ $grade->id }}" {{ $grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                    <option
+                                                        value="{{ $grade->id }}" {{ $grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -217,7 +268,8 @@
                                             <select id="divisionFilter" class="form-control">
                                                 <option value="">{{ __('dashboard.teacher.all_divisions') }}</option>
                                                 @foreach($divisions as $division)
-                                                    <option value="{{ $division->id }}" {{ $division_id == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                    <option
+                                                        value="{{ $division->id }}" {{ $division_id == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -287,7 +339,7 @@
 
 @section('page_scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             let searchTimeout;
             let currentPage = 1;
             let sortBy = '{{ $sort_by }}';
@@ -317,7 +369,7 @@
                     url: '{{ route("teachers.search") }}',
                     method: 'GET',
                     data: data,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             $('#teachersTableContainer').html(response.html).show();
                             $('#paginationContainer').html(response.pagination).show();
@@ -325,10 +377,10 @@
                             bindTableEvents();
                         }
                     },
-                    error: function() {
+                    error: function () {
                         toastr.error('{{ __("dashboard.common.search_error") }}');
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loadingIndicator').hide();
                     }
                 });
@@ -336,7 +388,7 @@
 
             function bindTableEvents() {
                 // Status toggle
-                $('.status-toggle').off('change').on('change', function() {
+                $('.status-toggle').off('change').on('change', function () {
                     const teacherId = $(this).data('teacher-id');
                     const isChecked = $(this).is(':checked');
                     const toggle = $(this);
@@ -347,7 +399,7 @@
                         data: {
                             _token: '{{ csrf_token() }}'
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.success) {
                                 toastr.success(response.message);
                             } else {
@@ -355,7 +407,7 @@
                                 toggle.prop('checked', !isChecked);
                             }
                         },
-                        error: function() {
+                        error: function () {
                             toastr.error('{{ __("dashboard.common.error") }}');
                             toggle.prop('checked', !isChecked);
                         }
@@ -363,7 +415,7 @@
                 });
 
                 // Featured toggle
-                $('.featured-toggle').off('change').on('change', function() {
+                $('.featured-toggle').off('change').on('change', function () {
                     const teacherId = $(this).data('teacher-id');
                     const isChecked = $(this).is(':checked');
                     const toggle = $(this);
@@ -374,7 +426,7 @@
                         data: {
                             _token: '{{ csrf_token() }}'
                         },
-                        success: function(response) {
+                        success: function (response) {
                             if (response.success) {
                                 toastr.success(response.message);
                             } else {
@@ -382,7 +434,7 @@
                                 toggle.prop('checked', !isChecked);
                             }
                         },
-                        error: function() {
+                        error: function () {
                             toastr.error('{{ __("dashboard.common.error") }}');
                             toggle.prop('checked', !isChecked);
                         }
@@ -390,7 +442,7 @@
                 });
 
                 // Delete confirmation
-                $('.delete-teacher').off('click').on('click', function() {
+                $('.delete-teacher').off('click').on('click', function () {
                     const teacherId = $(this).data('teacher-id');
                     const teacherName = $(this).data('teacher-name');
 
@@ -400,7 +452,7 @@
                 });
 
                 // Sorting
-                $('.sortable').off('click').on('click', function(e) {
+                $('.sortable').off('click').on('click', function (e) {
                     e.preventDefault();
                     const newSortBy = $(this).data('sort');
 
@@ -415,7 +467,7 @@
                 });
 
                 // Pagination
-                $('#paginationContainer').off('click', '.pagination a').on('click', '.pagination a', function(e) {
+                $('#paginationContainer').off('click', '.pagination a').on('click', '.pagination a', function (e) {
                     e.preventDefault();
                     const url = new URL($(this).attr('href'), window.location.origin);
                     const page = url.searchParams.get('page');
@@ -425,22 +477,22 @@
                 });
             }
 
-            $('#searchInput').on('input', function() {
+            $('#searchInput').on('input', function () {
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(function() {
+                searchTimeout = setTimeout(function () {
                     searchTeachers(1);
                 }, 500);
             });
 
-            $('#statusFilter, #stageFilter, #subjectFilter, #gradeFilter, #divisionFilter').on('change', function() {
+            $('#statusFilter, #stageFilter, #subjectFilter, #gradeFilter, #divisionFilter').on('change', function () {
                 searchTeachers(1);
             });
 
-            $('#perPageSelect').on('change', function() {
+            $('#perPageSelect').on('change', function () {
                 searchTeachers(1);
             });
 
-            $('#clearFilters').on('click', function() {
+            $('#clearFilters').on('click', function () {
                 $('#searchInput').val('');
                 $('#statusFilter').val('');
                 $('#stageFilter').val('');

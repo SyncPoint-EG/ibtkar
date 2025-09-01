@@ -12,9 +12,12 @@ use App\Models\Grade;
 use App\Models\Stage;
 use App\Services\StudentService;
 use App\Models\Student;
+use App\Exports\StudentsExport;
+use App\Imports\StudentsImport;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -141,5 +144,36 @@ class StudentController extends Controller
             return redirect()->back()
                 ->with('error', 'Error deleting Student: ' . $e->getMessage());
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new StudentsExport(), 'students.xlsx');
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $import = new StudentsImport();
+        try {
+            Excel::import($import, $request->file('file'));
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = [];
+            foreach ($failures as $failure) {
+                $errors[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            return redirect()->back()->with('error', $errors);
+        }
+
+        if (!empty($import->getErrors())) {
+            return redirect()->back()->with('error', $import->getErrors());
+        }
+
+        return redirect()->route('students.index')
+            ->with('success', 'Students imported successfully.');
     }
 }
