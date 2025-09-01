@@ -27,7 +27,13 @@ class PaymentController extends Controller
         $validated['total_amount'] = $amount;
         if($request->payment_method == 'code'){
             $code = Code::where('code',$request->code)->first();
-            if($code && $code->number_of_uses > 0 && now() > $code->expires_at){
+            if(!$code){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Code not found'
+                ]);
+            }
+            elseif($code && $code->number_of_uses > 0 && now() > $code->expires_at){
                 return response()->json([
                     'status' => false,
                     'message'  => 'الكود مستخدم من قبل'
