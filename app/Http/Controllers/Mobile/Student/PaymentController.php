@@ -7,6 +7,7 @@ use App\Http\Requests\ChargeRequest;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Chapter;
 use App\Models\Charge;
+use App\Models\Code;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
@@ -24,6 +25,18 @@ class PaymentController extends Controller
         $validated['student_id'] = $student_id;
         $validated['amount'] = $amount;
         $validated['total_amount'] = $amount;
+        if($request->payment_method == 'code'){
+            $code = Code::where('code',$request->code)->first();
+            if($code && $code->number_of_uses > 0 && now() > $code->expires_at){
+                return response()->json([
+                    'status' => false,
+                    'message'  => 'الكود مستخدم من قبل'
+                ]);
+            }else{
+                $code->number_of_uses += 1 ;
+                $code->save();
+            }
+        }
         if(in_array($request->payment_method , ['instapay', 'wallet'])){
             $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
         }else{

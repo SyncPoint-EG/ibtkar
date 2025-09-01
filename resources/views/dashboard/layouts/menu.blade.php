@@ -14,10 +14,10 @@
     </li>
 @endcan
 
-@can('view_permission')
-    <li class=" nav-item"><a href="{{ route('permissions.index') }}"><i class="icon-key"></i><span data-i18n="nav.permissions.main" class="menu-title">Permissions</span></a>
-    </li>
-@endcan
+{{--@can('view_permission')--}}
+{{--    <li class=" nav-item"><a href="{{ route('permissions.index') }}"><i class="icon-key"></i><span data-i18n="nav.permissions.main" class="menu-title">Permissions</span></a>--}}
+{{--    </li>--}}
+{{--@endcan--}}
 
 @can('view_user')
     <li class=" nav-item"><a href="{{ route('users.index') }}"><i class="icon-users"></i><span data-i18n="nav.users.main" class="menu-title">{{__('dashboard.user.title_plural')}}</span></a>
