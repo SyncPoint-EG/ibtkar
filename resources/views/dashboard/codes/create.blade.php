@@ -55,6 +55,15 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+        <div class="form-group">
+            <label for="number_of_codes">{{ __("dashboard.code.fields.number_of_codes") }}</label>
+            <input type="number" id="number_of_codes" class="form-control @error('number_of_codes') is-invalid @enderror"
+                   name="number_of_codes" value="{{ old('number_of_codes', 1) }}"
+                   placeholder="{{ __("dashboard.code.fields.number_of_codes") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.code.fields.number_of_codes") }}">
+            @error('number_of_codes')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
                 <div class="form-group">
             <label for="for">{{ __("dashboard.code.fields.for") }}</label>
             <select id="for" name="for" class="form-control @error('for') is-invalid @enderror" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.code.fields.for") }}">

@@ -68,22 +68,31 @@ class CodeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $validatedData['number_of_uses'] = 0;
-            if(!$request->code){
-                $validatedData['code'] = $this->codeService->generateUniqueCode();
+            $numberOfCodes = $request->input('number_of_codes', 1);
+
+            if ($numberOfCodes > 1) {
+                for ($i = 0; $i < $numberOfCodes; $i++) {
+                    $validatedData['code'] = $this->codeService->generateUniqueCode();
+                    $validatedData['number_of_uses'] = 0;
+                    $this->codeService->create($validatedData);
+                }
+            } else {
+                $validatedData['number_of_uses'] = 0;
+                if(!$request->code){
+                    $validatedData['code'] = $this->codeService->generateUniqueCode();
+                }
+                $this->codeService->create($validatedData);
             }
-            $code = $this->codeService->create($validatedData);
 
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'data' => $code,
-                    'message' => 'Code created successfully.'
+                    'message' => 'Code(s) created successfully.'
                 ], 201);
             }
 
             return redirect()->route('codes.index')
-                ->with('success', 'Code created successfully.');
+                ->with('success', 'Code(s) created successfully.');
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return response()->json([
