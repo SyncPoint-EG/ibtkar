@@ -23,6 +23,7 @@ class HomeworkResource extends JsonResource
             'due_date' => $this->due_date,
             'lesson_id' => $this->lesson_id,
             'questions' => HomeworkQuestionResource::collection($this->questions),
+            'is_answered' => auth('student')->user() ?  $this->attempts()->where('student_id', auth('student')->id())->exists() : null,
         ];
     }
 }
