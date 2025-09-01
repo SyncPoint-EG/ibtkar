@@ -30,7 +30,7 @@ class LessonRequest extends FormRequest
             'chapter_id' => 'required|exists:chapters,id',
             'video_link' => 'required',
             'video_image' => 'required',
-            'price' => 'nullable|numeric',
+            'price' => 'required|numeric',
             'is_featured' => 'nullable|boolean',
             'type' => 'required|in:explanation,revision,solve_homework',
             'date' => 'nullable|date',

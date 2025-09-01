@@ -81,7 +81,7 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.division.title") }}
-                                                                :</strong> {{ $course->division->name }}
+                                                                :</strong> {{ $course->division?->name ?? '--'}}
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.semister.title") }}

@@ -31,7 +31,7 @@ class CourseRequest extends FormRequest
             'education_type_id' => 'required|exists:education_types,id',
             'stage_id' => 'required|exists:stages,id',
             'grade_id' => 'required|exists:grades,id',
-            'division_id' => 'required|exists:divisions,id',
+            'division_id' => 'nullable|exists:divisions,id',
             'semister_id' => 'required|exists:semisters,id',
             'subject_id' => 'required|exists:subjects,id',
             'price' => 'nullable|numeric',
