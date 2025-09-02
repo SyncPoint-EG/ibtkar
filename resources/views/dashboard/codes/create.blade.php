@@ -81,6 +81,18 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+        <div class="form-group">
+            <label for="teacher_id">{{ __("dashboard.code.fields.teacher") }}</label>
+            <select id="teacher_id" name="teacher_id" class="form-control @error('teacher_id') is-invalid @enderror">
+                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.teacher") }}</option>
+                @foreach($teachers as $teacher)
+                    <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                @endforeach
+            </select>
+            @error('teacher_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
                 
                 <div class="form-group">
             <label for="expires_at">{{ __("dashboard.code.fields.expires_at") }}</label>

@@ -56,6 +56,9 @@
                                             <div class="mb-3">
                                                 <strong>{{__('dashboard.code.fields.expires_at')}}:</strong> {{ $code->expires_at }}
                                             </div>
+                                            <div class="mb-3">
+                                                <strong>{{__('dashboard.code.fields.teacher')}}:</strong> {{ $code->teacher->name ?? '' }}
+                                            </div>
                                         </div>
 
                                         <div class="form-actions">

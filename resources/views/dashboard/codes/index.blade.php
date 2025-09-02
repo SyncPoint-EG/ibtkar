@@ -37,11 +37,45 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
+                                    <form action="{{ route('codes.index') }}" method="GET" class="form-inline mb-1">
+                                        <div class="form-group">
+                                            <label for="teacher_id" class="mr-1">{{ __("dashboard.code.fields.teacher") }}</label>
+                                            <select id="teacher_id" name="teacher_id" class="form-control mr-1">
+                                                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.teacher") }}</option>
+                                                @foreach($teachers as $teacher)
+                                                    <option value="{{ $teacher->id }}" {{ isset($filters['teacher_id']) && $filters['teacher_id'] == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expires_at" class="mr-1">{{ __("dashboard.code.fields.expires_at") }}</label>
+                                            <input type="date" id="expires_at" name="expires_at" class="form-control mr-1" value="{{ $filters['expires_at'] ?? '' }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="for" class="mr-1">{{ __("dashboard.code.fields.for") }}</label>
+                                            <select id="for" name="for" class="form-control mr-1">
+                                                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.for") }}</option>
+                                                @php
+                                                    $forOptions = ['course', 'chapter', 'lesson'];
+                                                @endphp
+                                                @foreach($forOptions as $option)
+                                                    <option value="{{ $option }}" {{ isset($filters['for']) && $filters['for'] == $option ? 'selected' : '' }}>
+                                                        {{ ucfirst($option) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mr-1">{{ __("dashboard.common.search") }}</button>
+                                        <a href="{{ route('codes.index') }}" class="btn btn-secondary mr-1">{{ __("dashboard.common.clear") }}</a>
+                                    </form>
                                     @can('create_code')
                                         <a href="{{ route('codes.create') }}" class="btn btn-primary mb-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.code.add_new') }}
                                         </a>
                                     @endcan
+                                    <a href="{{ route('codes.export', request()->query()) }}" class="btn btn-success mb-1">
+                                        <i class="icon-file-excel"></i> {{ __("dashboard.common.export") }}
+                                    </a>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -52,6 +86,7 @@
                 <th>{{ __("dashboard.code.fields.for") }}</th>
                 <th>{{ __("dashboard.code.fields.number_of_uses") }}</th>
                 <th>{{ __("dashboard.code.fields.expires_at") }}</th>
+                <th>{{ __("dashboard.code.fields.teacher") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -63,6 +98,7 @@
                 <td>{{ $code->for }}</td>
                 <td>{{ $code->number_of_uses }}</td>
                 <td>{{ $code->expires_at ? $code->expires_at->format('Y-m-d') : '' }}</td>
+                <td>{{ $code->teacher->name ?? '' }}</td>
                                                 <td>
                                                     @can('view_code')
                                                         <a href="{{ route('codes.show', $code->id) }}" class="btn btn-info btn-sm">

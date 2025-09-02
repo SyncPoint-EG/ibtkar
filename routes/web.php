@@ -1153,6 +1153,10 @@ Route::middleware(['auth'])->group(function() {
         ->name('codes.store')
         ->middleware('can:create_code');
 
+    Route::get('codes/export', [CodeController::class, 'export'])
+        ->name('codes.export')
+        ->middleware('can:view_code');
+
     Route::get('codes/{code}', [CodeController::class, 'show'])
         ->name('codes.show')
         ->middleware('can:view_code');

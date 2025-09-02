@@ -49,6 +49,8 @@
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.semister.fields.name") }}</th>
+                                            <th>{{ __("dashboard.semister.fields.start_date") }}</th>
+                                            <th>{{ __("dashboard.semister.fields.end_date") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -57,6 +59,8 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $semister->name }}</td>
+                                                <td>{{ $semister->start_day }}/{{ $semister->start_month }}</td>
+                                                <td>{{ $semister->end_day }}/{{ $semister->end_month }}</td>
                                                 <td>
                                                     @can('view_semister')
                                                         <a href="{{ route('semisters.show', $semister->id) }}" class="btn btn-info btn-sm">

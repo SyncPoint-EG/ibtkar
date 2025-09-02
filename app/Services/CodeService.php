@@ -154,28 +154,20 @@ class CodeService
      * @param array $criteria
      * @return LengthAwarePaginator
      */
-    public function search(array $criteria): LengthAwarePaginator
+    public function search(array $criteria, int $perPage = 15, array $with = []): LengthAwarePaginator
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->with($with);
 
-        // Add search logic based on your model's searchable fields
-        // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
-            $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
-                // Add searchable columns here
-                // $q->where('name', 'LIKE', "%{$searchTerm}%")
-                //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
-            });
+        if (isset($criteria['teacher_id']) && !empty($criteria['teacher_id'])) {
+            $query->where('teacher_id', $criteria['teacher_id']);
         }
 
-        // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
-            $query->whereDate('created_at', '>=', $criteria['start_date']);
+        if (isset($criteria['expires_at']) && !empty($criteria['expires_at'])) {
+            $query->whereDate('expires_at', $criteria['expires_at']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
-            $query->whereDate('created_at', '<=', $criteria['end_date']);
+        if (isset($criteria['for']) && !empty($criteria['for'])) {
+            $query->where('for', $criteria['for']);
         }
 
         // Add sorting
@@ -183,7 +175,6 @@ class CodeService
         $sortOrder = $criteria['sort_order'] ?? 'desc';
         $query->orderBy($sortBy, $sortOrder);
 
-        $perPage = $criteria['per_page'] ?? 15;
         return $query->paginate($perPage);
     }
 

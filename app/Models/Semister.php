@@ -14,7 +14,7 @@ class Semister extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'start_month', 'start_day', 'end_month', 'end_day'];
 
     /**
      * Get the table associated with the model.

@@ -26,7 +26,7 @@ class CodeRequest extends FormRequest
         return [
             'code' => 'nullable|string',
             'for' => 'required|string',
-
+            'teacher_id' => 'required|exists:teachers,id',
             'expires_at' => 'nullable|date',
         ];
     }

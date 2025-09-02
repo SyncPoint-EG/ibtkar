@@ -48,14 +48,58 @@
                                             @method('PUT')
                                             <div class="form-body">
                                                 <div class="form-group">
-            <label for="name">{{ __("dashboard.semister.fields.name") }}</label>
-            <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
-                   name="name" value="{{ isset($semister) ? $semister->name : old('name') }}"
-                   placeholder="{{ __("dashboard.semister.fields.name") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.semister.fields.name") }}">
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                                                    <label for="name">{{ __("dashboard.semister.fields.name") }}</label>
+                                                    <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
+                                                           name="name" value="{{ isset($semister) ? $semister->name : old('name') }}"
+                                                           placeholder="{{ __("dashboard.semister.fields.name") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.semister.fields.name") }}">
+                                                    @error('name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="start_month">{{ __("dashboard.semister.fields.start_month") }}</label>
+                                                    <select id="start_month" name="start_month" class="form-control @error('start_month') is-invalid @enderror">
+                                                        @for ($i = 1; $i <= 12; $i++)
+                                                            <option value="{{ $i }}" {{ (isset($semister) && $semister->start_month == $i) || old('start_month') == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 1)) }}</option>
+                                                        @endfor
+                                                    </select>
+                                                    @error('start_month')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="start_day">{{ __("dashboard.semister.fields.start_day") }}</label>
+                                                    <input type="number" id="start_day" class="form-control @error('start_day') is-invalid @enderror"
+                                                           name="start_day" value="{{ isset($semister) ? $semister->start_day : old('start_day') }}"
+                                                           placeholder="{{ __("dashboard.semister.fields.start_day") }}" min="1" max="31">
+                                                    @error('start_day')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="end_month">{{ __("dashboard.semister.fields.end_month") }}</label>
+                                                    <select id="end_month" name="end_month" class="form-control @error('end_month') is-invalid @enderror">
+                                                        @for ($i = 1; $i <= 12; $i++)
+                                                            <option value="{{ $i }}" {{ (isset($semister) && $semister->end_month == $i) || old('end_month') == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 1)) }}</option>
+                                                        @endfor
+                                                    </select>
+                                                    @error('end_month')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="end_day">{{ __("dashboard.semister.fields.end_day") }}</label>
+                                                    <input type="number" id="end_day" class="form-control @error('end_day') is-invalid @enderror"
+                                                           name="end_day" value="{{ isset($semister) ? $semister->end_day : old('end_day') }}"
+                                                           placeholder="{{ __("dashboard.semister.fields.end_day") }}" min="1" max="31">
+                                                    @error('end_day')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                             </div>
 
                                             <div class="form-actions">

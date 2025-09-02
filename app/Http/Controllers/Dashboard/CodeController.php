@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Exports\CodesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CodeRequest;
 use App\Services\CodeService;
+use App\Services\TeacherService;
 use App\Models\Code;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CodeController extends Controller
 {
     protected CodeService $codeService;
+    protected TeacherService $teacherService;
 
-    public function __construct(CodeService $codeService)
+    public function __construct(CodeService $codeService, TeacherService $teacherService)
     {
         $this->codeService = $codeService;
+        $this->teacherService = $teacherService;
     }
 
     /**
@@ -28,7 +33,9 @@ class CodeController extends Controller
      */
     public function index(Request $request)
     {
-        $codes = $this->codeService->getAllPaginated($request->get('per_page', 15));
+        $filters = $request->only(['teacher_id', 'expires_at', 'for']);
+        $codes = $this->codeService->search($filters, $request->get('per_page', 15), ['teacher']);
+        $teachers = $this->teacherService->getAll();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -38,7 +45,7 @@ class CodeController extends Controller
             ]);
         }
 
-        return view('dashboard.codes.index', compact('codes'));
+        return view('dashboard.codes.index', compact('codes', 'teachers', 'filters'));
     }
 
     /**
@@ -55,7 +62,8 @@ class CodeController extends Controller
             ]);
         }
 
-        return view('dashboard.codes.create');
+        $teachers = $this->teacherService->getAll();
+        return view('dashboard.codes.create', compact('teachers'));
     }
 
     /**
@@ -144,7 +152,8 @@ class CodeController extends Controller
             ]);
         }
 
-        return view('dashboard.codes.edit', compact('code'));
+        $teachers = $this->teacherService->getAll();
+        return view('dashboard.codes.edit', compact('code', 'teachers'));
     }
 
     /**
@@ -265,5 +274,11 @@ class CodeController extends Controller
                 'message' => 'Bulk delete error: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function export(Request $request)
+    {
+        $filters = $request->only(['teacher_id', 'expires_at', 'for']);
+        return Excel::download(new CodesExport($filters), 'codes.xlsx');
     }
 }

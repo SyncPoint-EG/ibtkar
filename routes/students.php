@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
     Route::post('purchase',[PaymentController::class, 'store']);
     Route::post('charge-wallet',[PaymentController::class, 'chargeWallet']);
+    Route::get('general-plan-price', [HomeController::class, 'getPlanPrice']);
 
     //delete account
     Route::post('delete-account',[StudentAuthController::class, 'deleteAccount']);

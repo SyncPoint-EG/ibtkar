@@ -422,6 +422,12 @@ return [
         'delete_confirm' => 'Are you sure you want to delete this Semister?',
         'fields' => [
             'name' => 'Name',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
+            'start_month' => 'Start Month',
+            'start_day' => 'Start Day',
+            'end_month' => 'End Month',
+            'end_day' => 'End Day',
         ],
     ],
 //        'course' => [
@@ -731,6 +737,7 @@ return [
             'number_of_uses' => 'Number Of Uses',
             'expires_at' => 'Expires At',
             'number_of_codes' => 'Number Of Codes',
+            'teacher' => 'Teacher',
         ],
     ],
     'center_exam' => [

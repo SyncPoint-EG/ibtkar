@@ -14,11 +14,13 @@ use App\Models\Course;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Lesson;
+use App\Models\Setting;
 use App\Models\Stage;
 use App\Models\Subject;
 use App\Services\BannerService;
 use App\Services\SubjectService;
 use Carbon\Carbon;
+use Hamcrest\Core\Set;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -36,6 +38,13 @@ class HomeController extends Controller
     {
         $banners = $this->bannerService->getAllPaginated();
         return BannerResource::collection($banners);
+    }
+
+    public function getPlanPrice()
+    {
+        return response()->json([
+            'price'  => Setting::where('key','general plan price')->first()->value,
+        ]);
     }
     public function getSubjects()
     {

@@ -43,23 +43,30 @@
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
-                                                        <tr>
-                                                            <th width="200">{{ __('dashboard.common.id') }}</th>
-                                                            <td>{{ $semister->id }}</td>
-                                                        </tr>
-
-                                                        <div class="mb-3">
-        <strong>{{ __("dashboard.semister.fields.name") }}:</strong> {{ $semister->name }}
-    </div>
-
-                                                        <tr>
-                                                            <th>{{ __('dashboard.common.created_at') }}</th>
-                                                            <td>{{ $semister->created_at->format('Y-m-d H:i:s') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>{{ __('dashboard.common.updated_at') }}</th>
-                                                            <td>{{ $semister->updated_at->format('Y-m-d H:i:s') }}</td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th width="200">{{ __('dashboard.common.id') }}</th>
+                                                                <td>{{ $semister->id }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{{ __("dashboard.semister.fields.name") }}</th>
+                                                                <td>{{ $semister->name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{{ __("dashboard.semister.fields.start_date") }}</th>
+                                                                <td>{{ $semister->start_day }}/{{ $semister->start_month }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{{ __("dashboard.semister.fields.end_date") }}</th>
+                                                                <td>{{ $semister->end_day }}/{{ $semister->end_month }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{{ __('dashboard.common.created_at') }}</th>
+                                                                <td>{{ $semister->created_at->format('Y-m-d H:i:s') }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>{{ __('dashboard.common.updated_at') }}</th>
+                                                                <td>{{ $semister->updated_at->format('Y-m-d H:i:s') }}</td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>

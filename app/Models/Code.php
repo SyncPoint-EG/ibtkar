@@ -14,7 +14,7 @@ class Code extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'for', 'number_of_uses', 'expires_at'];
+    protected $fillable = ['code', 'for', 'number_of_uses', 'expires_at', 'teacher_id'];
 
     /**
      * The attributes that should be cast.
@@ -41,6 +41,8 @@ class Code extends Model
          return $query->where('is_active', 1);
      }
 
-
-    
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

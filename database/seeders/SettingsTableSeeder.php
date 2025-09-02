@@ -34,6 +34,16 @@ class SettingsTableSeeder extends Seeder
                 'value' => 10 ,
                 'description' => 'the price of general plan for students that he can access to all courses',
             ],
+            [
+                'key' => 'Instapay Mobile Number',
+                'value' => 10 ,
+                'description' => 'the number that you will receive payments on it by instapay',
+            ],
+            [
+                'key' => 'Wallet Mobile Number',
+                'value' => 10 ,
+                'description' => 'The number that students will pay to charge their wallet using wallets like vodafone cash, etisalat cash, we pay',
+            ],
             // Add as many as you like
         ];
 

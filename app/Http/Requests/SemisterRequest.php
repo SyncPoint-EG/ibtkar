@@ -24,8 +24,11 @@ class SemisterRequest extends FormRequest
     public function rules()
     {
         return [
-
-            'name' => 'required'
+            'name' => 'required',
+            'start_month' => 'required|integer|min:1|max:12',
+            'start_day' => 'required|integer|min:1|max:31',
+            'end_month' => 'required|integer|min:1|max:12',
+            'end_day' => 'required|integer|min:1|max:31',
         ];
     }
 }
