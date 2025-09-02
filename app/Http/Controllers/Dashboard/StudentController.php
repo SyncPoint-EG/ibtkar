@@ -33,11 +33,26 @@ class StudentController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $students = $this->studentService->getAllPaginated(15,[]);
+        $filters = $request->only([
+            'name', 'phone', 'governorate_id', 'center_id', 'stage_id', 
+            'grade_id', 'division_id', 'education_type_id', 'status', 'gender'
+        ]);
 
-        return view('dashboard.students.index', compact('students'));
+        $students = $this->studentService->getAllPaginated(15, $filters);
+
+        $governorates = Governorate::all();
+        $centers = Center::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+        $educationTypes = \App\Models\EducationType::all();
+
+        return view('dashboard.students.index', compact(
+            'students', 'filters', 'governorates', 'centers', 'stages', 
+            'grades', 'divisions', 'educationTypes'
+        ));
     }
 
     /**
@@ -146,9 +161,14 @@ class StudentController extends Controller
         }
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new StudentsExport(), 'students.xlsx');
+        $filters = $request->only([
+            'name', 'phone', 'governorate_id', 'center_id', 'stage_id', 
+            'grade_id', 'division_id', 'education_type_id', 'status', 'gender'
+        ]);
+
+        return Excel::download(new StudentsExport($filters), 'students.xlsx');
     }
 
     public function import(Request $request): RedirectResponse

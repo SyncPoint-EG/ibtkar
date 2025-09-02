@@ -20,6 +20,135 @@
                 </div>
             </div>
             <div class="content-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">{{ __('dashboard.common.filters') }}</h4>
+                        <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+                                <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body collapse in">
+                        <div class="card-block">
+                            <form action="{{ route('students.index') }}" method="GET">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="name">{{ __('dashboard.student.fields.name') }}</label>
+                                            <input type="text" id="name" name="name" class="form-control" value="{{ $filters['name'] ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="phone">{{ __('dashboard.student.fields.phone') }}</label>
+                                            <input type="text" id="phone" name="phone" class="form-control" value="{{ $filters['phone'] ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="governorate_id">{{ __('dashboard.governorate.title') }}</label>
+                                            <select id="governorate_id" name="governorate_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($governorates as $governorate)
+                                                    <option value="{{ $governorate->id }}" {{ isset($filters['governorate_id']) && $filters['governorate_id'] == $governorate->id ? 'selected' : '' }}>{{ $governorate->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="center_id">{{ __('dashboard.center.title') }}</label>
+                                            <select id="center_id" name="center_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($centers as $center)
+                                                    <option value="{{ $center->id }}" {{ isset($filters['center_id']) && $filters['center_id'] == $center->id ? 'selected' : '' }}>{{ $center->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="stage_id">{{ __('dashboard.stage.title') }}</label>
+                                            <select id="stage_id" name="stage_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($stages as $stage)
+                                                    <option value="{{ $stage->id }}" {{ isset($filters['stage_id']) && $filters['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
+                                            <select id="grade_id" name="grade_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($grades as $grade)
+                                                    <option value="{{ $grade->id }}" {{ isset($filters['grade_id']) && $filters['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="division_id">{{ __('dashboard.division.title') }}</label>
+                                            <select id="division_id" name="division_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($divisions as $division)
+                                                    <option value="{{ $division->id }}" {{ isset($filters['division_id']) && $filters['division_id'] == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="education_type_id">{{ __('dashboard.education_type.title') }}</label>
+                                            <select id="education_type_id" name="education_type_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($educationTypes as $educationType)
+                                                    <option value="{{ $educationType->id }}" {{ isset($filters['education_type_id']) && $filters['education_type_id'] == $educationType->id ? 'selected' : '' }}>{{ $educationType->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="status">{{ __('dashboard.student.fields.status') }}</label>
+                                            <select id="status" name="status" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                <option value="1" {{ isset($filters['status']) && $filters['status'] == '1' ? 'selected' : '' }}>{{ __('dashboard.common.active') }}</option>
+                                                <option value="0" {{ isset($filters['status']) && $filters['status'] == '0' ? 'selected' : '' }}>{{ __('dashboard.common.inactive') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="gender">{{ __('dashboard.student.fields.gender') }}</label>
+                                            <select id="gender" name="gender" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                <option value="male" {{ isset($filters['gender']) && $filters['gender'] == 'male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
+                                                <option value="female" {{ isset($filters['gender']) && $filters['gender'] == 'female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                        <a href="{{ route('students.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Table head options start -->
                 <div class="row">
                     <div class="col-xs-12">
@@ -45,7 +174,7 @@
                                     @endcan
 
                                     @can('view_student')
-                                        <a href="{{ route('students.export') }}" class="btn btn-success mb-1">
+                                        <a href="{{ route('students.export', request()->query()) }}" class="btn btn-success mb-1">
                                             <i class="icon-download"></i> {{ __('dashboard.common.export') }}
                                         </a>
                                     @endcan
@@ -134,7 +263,7 @@
                                                 <td>{{ $student->division?->name }}</td>
                                                 <td>{{ $student->gender }}</td>
                                                 <td>{{ $student->birth_date ? $student->birth_date->format('Y-m-d') : '' }}</td>
-                                                <td>{{ $student->status ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $student->status ? __('dashboard.common.active') : __('dashboard.common.inactive') }}</td>
                                                 <td>{{ $student->referral_code }}</td>
                                                 <td>{{ $student->points }}</td>
                                                 <td>{{ $student->purchased_lessons_count }}</td>
@@ -174,7 +303,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$students->links()}}
+                                    {{$students->appends(request()->query())->links()}}
 
                                 </div>
                             </div>

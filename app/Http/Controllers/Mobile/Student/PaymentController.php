@@ -32,16 +32,18 @@ class PaymentController extends Controller
                     'success' => false,
                     'message' => 'Code not found'
                 ]);
-            }
-            elseif($code && $code->number_of_uses > 0 && now() > $code->expires_at){
-                return response()->json([
-                    'status' => false,
-                    'message'  => 'الكود مستخدم من قبل'
-                ]);
             }else{
-                $code->increment('number_of_uses'); ;
-                $code->save();
+                if($code->number_of_uses > 0 || now() > $code->expires_at){
+                    return response()->json([
+                        'status' => false,
+                        'message'  => 'الكود مستخدم من قبل'
+                    ]);
+                }else{
+                    $code->increment('number_of_uses'); ;
+                    $code->save();
+                }
             }
+
         }
         if(in_array($request->payment_method , ['instapay', 'wallet'])){
             $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];

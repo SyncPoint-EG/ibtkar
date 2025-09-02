@@ -155,6 +155,12 @@ class Teacher extends Model
         return Student::first();
     }
 
+    public function chapters()
+    {
+        return Chapter::whereIn('course_id',$this->courses()->pluck('id'));
+
+    }
+
     public function lessons()
     {
         return Lesson::whereIn('chapter_id',

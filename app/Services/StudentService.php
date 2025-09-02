@@ -23,9 +23,54 @@ class StudentService
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
-        return $this->model->with($with)->latest()->paginate($perPage);
+        $query = $this->model->with($with);
+
+        if (!empty($filters['name'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('first_name', 'like', '%' . $filters['name'] . '%')
+                    ->orWhere('last_name', 'like', '%' . $filters['name'] . '%');
+            });
+        }
+
+        if (!empty($filters['phone'])) {
+            $query->where('phone', 'like', '%' . $filters['phone'] . '%');
+        }
+
+        if (!empty($filters['governorate_id'])) {
+            $query->where('governorate_id', $filters['governorate_id']);
+        }
+
+        if (!empty($filters['center_id'])) {
+            $query->where('center_id', $filters['center_id']);
+        }
+
+        if (!empty($filters['stage_id'])) {
+            $query->where('stage_id', $filters['stage_id']);
+        }
+
+        if (!empty($filters['grade_id'])) {
+            $query->where('grade_id', $filters['grade_id']);
+        }
+
+        if (!empty($filters['division_id'])) {
+            $query->where('division_id', $filters['division_id']);
+        }
+
+        if (!empty($filters['education_type_id'])) {
+            $query->where('education_type_id', $filters['education_type_id']);
+        }
+
+        if (isset($filters['status']) && $filters['status'] !== '') {
+            $query->where('status', $filters['status']);
+        }
+
+        if (!empty($filters['gender'])) {
+            $query->where('gender', $filters['gender']);
+        }
+
+        return $query->latest()->paginate($perPage);
     }
 
     /**
