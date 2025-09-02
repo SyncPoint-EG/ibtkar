@@ -60,7 +60,7 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $chapter->name }}</td>
-                                                <td>{{ $chapter->course->name }}</td>
+                                                <td>{{ $chapter->course?->name }}</td>
                                                 <td>{{ $chapter->price }}</td>
                                                 <td>
                                                     @can('view_chapter')
