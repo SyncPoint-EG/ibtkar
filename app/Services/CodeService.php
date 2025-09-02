@@ -170,6 +170,14 @@ class CodeService
             $query->where('for', $criteria['for']);
         }
 
+        if (isset($criteria['created_at_from']) && !empty($criteria['created_at_from'])) {
+            $query->whereDate('created_at', '>=', $criteria['created_at_from']);
+        }
+
+        if (isset($criteria['created_at_to']) && !empty($criteria['created_at_to'])) {
+            $query->whereDate('created_at', '<=', $criteria['created_at_to']);
+        }
+
         // Add sorting
         $sortBy = $criteria['sort_by'] ?? 'created_at';
         $sortOrder = $criteria['sort_order'] ?? 'desc';

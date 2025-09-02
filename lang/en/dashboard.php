@@ -42,6 +42,8 @@ return [
         'export' => 'Export',
         'choose_file' => 'Choose File',
         'instructions' => 'Instructions',
+        'created_at_from' => 'Created From',
+        'created_at_to' => 'Created To',
     ],
     'settings' => [
         'title' => 'Settings',

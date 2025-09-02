@@ -65,6 +65,14 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="created_at_from" class="mr-1">{{ __("dashboard.common.created_at_from") }}</label>
+                                            <input type="date" id="created_at_from" name="created_at_from" class="form-control mr-1" value="{{ $filters['created_at_from'] ?? '' }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="created_at_to" class="mr-1">{{ __("dashboard.common.created_at_to") }}</label>
+                                            <input type="date" id="created_at_to" name="created_at_to" class="form-control mr-1" value="{{ $filters['created_at_to'] ?? '' }}">
+                                        </div>
                                         <button type="submit" class="btn btn-primary mr-1">{{ __("dashboard.common.search") }}</button>
                                         <a href="{{ route('codes.index') }}" class="btn btn-secondary mr-1">{{ __("dashboard.common.clear") }}</a>
                                     </form>
@@ -87,6 +95,7 @@
                 <th>{{ __("dashboard.code.fields.number_of_uses") }}</th>
                 <th>{{ __("dashboard.code.fields.expires_at") }}</th>
                 <th>{{ __("dashboard.code.fields.teacher") }}</th>
+                <th>{{ __("dashboard.common.created_at") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -99,6 +108,7 @@
                 <td>{{ $code->number_of_uses }}</td>
                 <td>{{ $code->expires_at ? $code->expires_at->format('Y-m-d') : '' }}</td>
                 <td>{{ $code->teacher->name ?? '' }}</td>
+                <td>{{ $code->created_at->format('Y-m-d') }}</td>
                                                 <td>
                                                     @can('view_code')
                                                         <a href="{{ route('codes.show', $code->id) }}" class="btn btn-info btn-sm">

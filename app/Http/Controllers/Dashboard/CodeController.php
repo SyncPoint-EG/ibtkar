@@ -33,7 +33,7 @@ class CodeController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = $request->only(['teacher_id', 'expires_at', 'for']);
+        $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to']);
         $codes = $this->codeService->search($filters, $request->get('per_page', 15), ['teacher']);
         $teachers = $this->teacherService->getAll();
 
