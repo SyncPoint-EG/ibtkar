@@ -31,7 +31,7 @@ class LessonResource extends JsonResource
             'attachments' => AttachmentResource::collection($this->attachments ?? collect()),
             'homework' => HomeworkResource::collection($this->homework ?? collect()),
             'exams' => ExamResource::collection($this->exams ?? collect()),
-            'watches_count' => $this->watches()->where('student_id', $user->id)?->first() ? 3 -  $this->watches()->where('student_id', $user->id)?->first()?->count : 3,
+            'watches_count' => $this->resource->watches()->where('student_id', $user->id)?->first() ? 3 -  $this->resource->watches()->where('student_id', $user->id)?->first()?->count : 3,
             'is_purchased' => $user ? $user->isLessonPurchased($this->id) : false,
             'date' => $this->date,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
