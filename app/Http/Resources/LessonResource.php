@@ -28,7 +28,7 @@ class LessonResource extends JsonResource
             'price' => $this->price,
             'course_id' => $this->chapter ? $this->chapter?->course_id : null,
             'subject' => new SubjectResource($this?->chapter?->course?->subject),
-            'attachments' => AttachmentResource::collection($this->attachments ?? collect()),
+            'attachments' => AttachmentResource::collection($this->whenLoaded('attachments')),
             'homework' => HomeworkResource::collection($this->homework),
             'exams' => ExamResource::collection($this->exams),
             'watches_count' => $this->watches()->where('student_id', $user->id)->first() ? 3 -  $this->watches()->where('student_id', $user->id)->first()->count : 3,
