@@ -25,7 +25,7 @@ class TeacherResource extends JsonResource
             'subjects' => SubjectResource::collection($this->subjects->unique('id')),
             'courses' => CourseResource::collection($this->courses->unique('id')),
             'chapters' => LessonResource::collection($this->chapters()->get()->unique('id')),
-            'lessons' => LessonResource::collection($this->lessons()->get()->unique('id')),
+            'lessons' => LessonResource::collection($this->lessons()->with('attachments')->get()->unique('id')),
         ];
     }
 }
