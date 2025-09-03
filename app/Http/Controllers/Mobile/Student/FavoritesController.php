@@ -20,7 +20,7 @@ class FavoritesController extends Controller
         ]);
 
         $student = auth('student')->user();
-        $student->favorites()->attach([$request->lessons_ids]);
+        $student->favorites()->attach($request->lesson_id);
         return response()->json([
             'success' => true,
             'message' => 'success'
@@ -33,7 +33,7 @@ class FavoritesController extends Controller
             'lesson_id' => ['required', 'exists:lessons,id'],
         ]);
         $student = auth('student')->user();
-        $student->favorites()->detach([$request->lessons_ids]);
+        $student->favorites()->detach($request->lesson_id);
         return response()->json([
             'success' => true,
             'message' => 'success'
