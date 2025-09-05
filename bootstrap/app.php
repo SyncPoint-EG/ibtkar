@@ -17,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/students.php'));
             Route::prefix('api/mobile/guardian')
                 ->group(base_path('routes/guardians.php'));
+            Route::prefix('api/mobile/teacher')
+                ->group(base_path('routes/teachers.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware) {

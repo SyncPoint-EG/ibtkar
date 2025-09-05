@@ -53,4 +53,8 @@ class Guardian extends Authenticatable
         return $code;
     }
 
+    public function children()
+    {
+        return $this->hasMany(Student::class, 'guardian_id', 'id');
+    }
 }

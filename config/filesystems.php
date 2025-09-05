@@ -47,6 +47,15 @@ return [
             'report' => false,
         ],
 
+        'stories' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/stories'),
+            'url' => env('APP_URL').'/storage/stories',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

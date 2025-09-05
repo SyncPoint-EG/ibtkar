@@ -44,6 +44,14 @@ return [
             'driver' => 'sanctum',
             'provider' => 'students',
         ],
+        'guardian' => [
+            'driver' => 'sanctum',
+            'provider' => 'guardians',
+        ],
+        'teacher' => [
+            'driver' => 'sanctum',
+            'provider' => 'teachers',
+        ],
     ],
 
     /*
@@ -71,6 +79,14 @@ return [
         'students' => [
             'driver' => 'eloquent',
             'model' => \App\Models\Student::class,
+        ],
+        'guardians' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Guardian::class,
+        ],
+        'teachers' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Teacher::class,
         ],
 
         // 'users' => [
