@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('register',[GuardianAuthController::class, 'register']);
-Route::get('verify-phone',[GuardianAuthController::class, 'verifyPhone']);
-Route::get('login',[GuardianAuthController::class, 'login']);
-Route::get('reset-password',[GuardianAuthController::class, 'resetPassword']);
-Route::get('logout',[GuardianAuthController::class, 'logout']);
+Route::post('register',[GuardianAuthController::class, 'register']);
+Route::post('verify-phone',[GuardianAuthController::class, 'verifyPhone']);
+Route::post('login',[GuardianAuthController::class, 'login']);
+Route::post('reset-password',[GuardianAuthController::class, 'resetPassword']);
 
 
 Route::group(['middleware' => 'auth:guardian'], function () {
+    Route::post('logout',[GuardianAuthController::class, 'logout']);
+
     Route::get('children',[HomeController::class,'getChildren']);
 });
