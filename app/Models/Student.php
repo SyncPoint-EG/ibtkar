@@ -154,7 +154,7 @@ class Student extends Authenticatable
     }
     public function guardian()
     {
-        return $this->belongsTo(Guardian::class , 'guardian_id');
+        return $this->belongsTo(Guardian::class);
     }
     public function watches()
     {
