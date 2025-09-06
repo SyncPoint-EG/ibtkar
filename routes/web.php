@@ -903,6 +903,8 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('courses/{course}', [CourseController::class, 'destroy'])
         ->name('courses.destroy')
         ->middleware('can:delete_course');
+    Route::post('courses/{course}/students/{student}/watches', [CourseController::class, 'updateWatches'])
+        ->name('courses.students.watches.update');
 });
 
 
@@ -936,6 +938,8 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('chapters/{chapter}', [ChapterController::class, 'destroy'])
         ->name('chapters.destroy')
         ->middleware('can:delete_chapter');
+    Route::post('chapters/{chapter}/students/{student}/watches', [ChapterController::class, 'updateWatches'])
+        ->name('chapters.students.watches.update');
 });
 
 // Routes for Lesson
@@ -974,6 +978,8 @@ Route::middleware(['auth'])->group(function() {
 
     Route::post('lessons/{lesson}/attachments', [LessonAttachmentController::class, 'store'])->name('lessons.attachments.store')->middleware('can:create_lesson');
     Route::delete('lesson-attachments/{attachment}', [LessonAttachmentController::class, 'destroy'])->name('lessons.attachments.destroy')->middleware('can:delete_lesson');
+    Route::post('lessons/{lesson}/students/{student}/watches', [LessonController::class, 'updateWatches'])
+        ->name('lessons.students.watches.update');
 });
 
 

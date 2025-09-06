@@ -48,6 +48,7 @@ return [
         'all' => 'All',
         'filter' => 'Filter',
         'reset' => 'Reset',
+        'watches' => 'Watches',
     ],
     'settings' => [
         'title' => 'Settings',
@@ -241,6 +242,7 @@ return [
         'show' => 'Show Student',
         'actions' => 'Actions',
         'no_records' => 'No Students found.',
+        'no_students' => 'No students found for this item.',
         'fill_required' => 'Please fill in all required fields to create a new Student.',
         'update_info' => 'Update the information for this Student.',
         'delete_confirm' => 'Are you sure you want to delete this Student?',

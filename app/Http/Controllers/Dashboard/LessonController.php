@@ -7,6 +7,8 @@ use App\Http\Requests\LessonRequest;
 use App\Models\Chapter;
 use App\Services\LessonService;
 use App\Models\Lesson;
+use App\Models\Student;
+use App\Models\Watch;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -89,7 +91,8 @@ class LessonController extends Controller
      */
     public function show(Lesson $lesson): View
     {
-        return view('dashboard.lessons.show', compact('lesson'));
+        $students = $this->lessonService->getStudents($lesson);
+        return view('dashboard.lessons.show', compact('lesson', 'students'));
     }
 
     /**
@@ -165,5 +168,19 @@ class LessonController extends Controller
                 'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function updateWatches(Request $request, Lesson $lesson, Student $student)
+    {
+        $request->validate([
+            'watches' => 'required|integer|min=0',
+        ]);
+
+        Watch::updateOrCreate(
+            ['student_id' => $student->id, 'lesson_id' => $lesson->id],
+            ['watches' => $request->watches]
+        );
+
+        return redirect()->back()->with('success', 'Watches updated successfully.');
     }
 }

@@ -298,4 +298,32 @@ class CourseService
             throw $e;
         }
     }
+
+    public function getStudents(Course $course)
+    {
+        $students = new Collection();
+        $payments = $course->payments()->with('student')->get();
+        foreach ($payments as $payment) {
+            if ($payment->student) {
+                $students->add($payment->student);
+            }
+        }
+
+        $students = $students->unique('id');
+
+        foreach ($students as $student) {
+            $watches = 0;
+            foreach ($course->chapters as $chapter) {
+                foreach ($chapter->lessons as $lesson) {
+                    $watch = $student->watches()->where('lesson_id', $lesson->id)->first();
+                    if ($watch) {
+                        $watches += $watch->watches;
+                    }
+                }
+            }
+            $student->watches_count = $watches;
+        }
+
+        return $students;
+    }
 }

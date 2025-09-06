@@ -7,6 +7,8 @@ use App\Http\Requests\ChapterRequest;
 use App\Models\Course;
 use App\Services\ChapterService;
 use App\Models\Chapter;
+use App\Models\Student;
+use App\Models\Watch;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -74,7 +76,8 @@ class ChapterController extends Controller
      */
     public function show(Chapter $chapter): View
     {
-        return view('dashboard.chapters.show', compact('chapter'));
+        $students = $this->chapterService->getStudents($chapter);
+        return view('dashboard.chapters.show', compact('chapter', 'students'));
     }
 
     /**
@@ -127,5 +130,21 @@ class ChapterController extends Controller
             return redirect()->back()
                 ->with('error', 'Error deleting Chapter: ' . $e->getMessage());
         }
+    }
+
+    public function updateWatches(Request $request, Chapter $chapter, Student $student)
+    {
+        $request->validate([
+            'watches' => 'required|integer|min=0',
+        ]);
+
+        foreach ($chapter->lessons as $lesson) {
+            Watch::updateOrCreate(
+                ['student_id' => $student->id, 'lesson_id' => $lesson->id],
+                ['watches' => $request->watches]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Watches updated successfully.');
     }
 }

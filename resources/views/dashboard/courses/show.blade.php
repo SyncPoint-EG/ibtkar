@@ -204,6 +204,71 @@
                     </div>
                 </section>
                 <!-- Chapters section end -->
+
+                <!-- Students section start -->
+                <section id="students-section">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">{{ __('dashboard.student.list') }}</h4>
+                                    <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+                                            <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body collapse in">
+                                    <div class="card-block">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @if($students && $students->count() > 0)
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>{{ __('dashboard.student.fields.name') }}</th>
+                                                                <th>{{ __('dashboard.common.watches') }}</th>
+                                                                <th>{{ __('dashboard.common.actions') }}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($students as $student)
+                                                                <tr>
+                                                                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                                                    <td>{{ $student->watches_count }}</td>
+                                                                    <td>
+                                                                        <form action="{{ route('courses.students.watches.update', [$course->id, $student->id]) }}" method="POST">
+                                                                            @csrf
+                                                                            <div class="input-group">
+                                                                                <input type="number" name="watches" class="form-control" value="{{ $student->watches_count }}">
+                                                                                <div class="input-group-append">
+                                                                                    <button type="submit" class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-info">
+                                                        <i class="icon-info"></i> {{ __('dashboard.student.no_students') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Students section end -->
             </div>
         </div>
     </div>

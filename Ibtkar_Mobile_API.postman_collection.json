@@ -1,0 +1,316 @@
+
+{
+	"info": {
+		"_postman_id": "a8b1c2d3-e4f5-4a6b-8c7d-9e8f7a6b5c4d",
+		"name": "Ibtkar Mobile API",
+		"description": "Postman collection for the Guardian and Teacher mobile API routes.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Guardian",
+			"description": "Routes for guardians.",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Phone",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/verify-phone",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"verify-phone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Children",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{guardian_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/guardian/children",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"guardian",
+								"children"
+							]
+						},
+						"description": "Requires authentication with the `auth:guardian` middleware."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teacher",
+			"description": "Routes for teachers. All routes require authentication with the `auth:teacher` middleware.",
+			"item": [
+				{
+					"name": "Get Stories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/stories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"stories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Story",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"type": "file",
+									"description": "The story content (image or mp4 video, max 5MB).",
+									"src": []
+								},
+								{
+									"key": "description",
+									"value": "This is a great story!",
+									"type": "text",
+									"description": "An optional description for the story."
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/stories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"stories"
+							]
+						},
+						"description": "Requires authentication with the `auth:teacher` middleware."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/statistics",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Exams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/exams",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"exams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Homeworks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/homework",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"homework"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attachments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mobile/teacher/attachments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"teacher",
+								"attachments"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{teacher_token}}",
+						"type": "string"
+					}
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://your-domain.com"
+		},
+		{
+			"key": "guardian_token",
+			"value": ""
+		},
+		{
+			"key": "teacher_token",
+			"value": ""
+		}
+	]
+}

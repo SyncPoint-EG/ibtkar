@@ -87,7 +87,8 @@ class CourseController extends Controller
      */
     public function show(Course $course): View
     {
-        return view('dashboard.courses.show', compact('course'));
+        $students = $this->courseService->getStudents($course);
+        return view('dashboard.courses.show', compact('course', 'students'));
     }
 
     /**
@@ -146,5 +147,23 @@ class CourseController extends Controller
             return redirect()->back()
                 ->with('error', 'Error deleting Course: ' . $e->getMessage());
         }
+    }
+
+    public function updateWatches(Request $request, Course $course, Student $student)
+    {
+        $request->validate([
+            'watches' => 'required|integer|min=0',
+        ]);
+
+        foreach ($course->chapters as $chapter) {
+            foreach ($chapter->lessons as $lesson) {
+                Watch::updateOrCreate(
+                    ['student_id' => $student->id, 'lesson_id' => $lesson->id],
+                    ['watches' => $request->watches]
+                );
+            }
+        }
+
+        return redirect()->back()->with('success', 'Watches updated successfully.');
     }
 }

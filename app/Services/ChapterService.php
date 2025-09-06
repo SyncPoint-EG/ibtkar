@@ -297,4 +297,30 @@ class ChapterService
             throw $e;
         }
     }
+
+    public function getStudents(Chapter $chapter)
+    {
+        $students = new Collection();
+        $payments = $chapter->payments()->with('student')->get();
+        foreach ($payments as $payment) {
+            if ($payment->student) {
+                $students->add($payment->student);
+            }
+        }
+
+        $students = $students->unique('id');
+
+        foreach ($students as $student) {
+            $watches = 0;
+            foreach ($chapter->lessons as $lesson) {
+                $watch = $student->watches()->where('lesson_id', $lesson->id)->first();
+                if ($watch) {
+                    $watches += $watch->watches;
+                }
+            }
+            $student->watches_count = $watches;
+        }
+
+        return $students;
+    }
 }

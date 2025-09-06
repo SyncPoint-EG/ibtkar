@@ -297,4 +297,24 @@ class LessonService
             throw $e;
         }
     }
+
+    public function getStudents(Lesson $lesson)
+    {
+        $students = new Collection();
+        $payments = $lesson->payments()->with('student')->get();
+        foreach ($payments as $payment) {
+            if ($payment->student) {
+                $students->add($payment->student);
+            }
+        }
+
+        $students = $students->unique('id');
+
+        foreach ($students as $student) {
+            $watch = $student->watches()->where('lesson_id', $lesson->id)->first();
+            $student->watches_count = $watch ? $watch->watches : 0;
+        }
+
+        return $students;
+    }
 }

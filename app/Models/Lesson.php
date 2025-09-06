@@ -98,4 +98,9 @@ class Lesson extends Model
     {
         return $this->hasMany(Watch::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
