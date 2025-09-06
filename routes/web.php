@@ -38,11 +38,12 @@ use App\Http\Controllers\Dashboard\PaymentApprovalController;
 use App\Http\Controllers\Dashboard\ChargeApprovalController;
 
 
-Route::get('/dashboard2', function () {
+Route::get('/index', function () {
 
     return view('dashboard.temp.index');
 })->name('dashboard');
 
+Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
 
 
 // Authentication Routes

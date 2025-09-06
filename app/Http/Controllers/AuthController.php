@@ -82,7 +82,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Redirect to intended page or dashboard
-            return redirect()->intended('dashboard2');
+            return redirect()->intended('index');
         }
 
         // Failed authentication
