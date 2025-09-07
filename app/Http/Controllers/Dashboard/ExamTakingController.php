@@ -7,12 +7,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
+use App\Services\ExamAttemptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ExamTakingController extends Controller
 {
+    protected ExamAttemptService $examAttemptService;
+
+    public function __construct(ExamAttemptService $examAttemptService)
+    {
+        $this->examAttemptService = $examAttemptService;
+    }
     public function takeExam(Exam $exam)
     {
         // Check if exam is available
@@ -137,6 +144,8 @@ class ExamTakingController extends Controller
                 'is_submitted' => true,
             ]);
 
+            $this->examAttemptService->checkIfPassed($attempt);
+
             DB::commit();
 
             return redirect()->route('exam-attempts.results', $attempt)
@@ -171,6 +180,8 @@ class ExamTakingController extends Controller
             'completed_at' => now(),
             'is_submitted' => true,
         ]);
+
+        $this->examAttemptService->checkIfPassed($attempt);
 
         return redirect()->route('exam-attempts.results', $attempt)
             ->with('warning', 'Time is up! Your exam has been automatically submitted.');

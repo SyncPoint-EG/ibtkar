@@ -26,7 +26,8 @@ class Exam extends Model
         'total_marks',
         'is_active',
         'start_date',
-        'end_date'
+        'end_date',
+        'pass_degree'
     ];
 
     protected $casts = [

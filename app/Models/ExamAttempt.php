@@ -13,7 +13,8 @@ class ExamAttempt extends Model
         'completed_at',
         'score',
         'total_marks',
-        'is_submitted'
+        'is_submitted',
+        'is_passed'
     ];
 
     protected $casts = [

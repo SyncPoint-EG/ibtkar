@@ -7,11 +7,18 @@ use App\Http\Resources\ExamResource;
 use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
+use App\Services\ExamAttemptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
+    protected ExamAttemptService $examAttemptService;
+
+    public function __construct(ExamAttemptService $examAttemptService)
+    {
+        $this->examAttemptService = $examAttemptService;
+    }
     public function index()
     {
         $student = auth('student')->user();
@@ -118,6 +125,8 @@ class ExamController extends Controller
             'completed_at' => now(),
             'is_submitted' => true,
         ]);
+
+        $this->examAttemptService->checkIfPassed($examAttempt);
 
         return response()->json([
             'message' => 'Exam submitted successfully.',

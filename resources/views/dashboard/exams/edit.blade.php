@@ -121,6 +121,17 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="pass_degree">{{ __('Pass Degree') }} <span class="text-danger">*</span></label>
+                                                <input type="number" class="form-control @error('pass_degree') is-invalid @enderror"
+                                                       id="pass_degree" name="pass_degree" value="{{ old('pass_degree', $exam->pass_degree) }}"
+                                                       min="0" required>
+                                                @error('pass_degree')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="row">

@@ -30,6 +30,7 @@ class ExamRequest extends FormRequest
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
             'exam_for' => 'required|in:lesson,teacher',
+            'pass_degree' => 'required|integer|min:0',
         ];
 
         if ($this->input('exam_for') === 'lesson') {
