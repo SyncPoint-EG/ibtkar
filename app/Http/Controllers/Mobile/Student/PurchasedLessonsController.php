@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LessonResource;
+use App\Models\Chapter;
+use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -23,12 +25,16 @@ class PurchasedLessonsController extends Controller
         $chapterIds = $payments->whereNotNull('chapter_id')->pluck('chapter_id');
         $courseIds = $payments->whereNotNull('course_id')->pluck('course_id');
 
+        $chapterIds = $chapterIds->merge(Chapter::where('price',0)->pluck('id'));
+        $courseIds = $courseIds->merge(Course::where('price',0)->pluck('id'));
+
         $lessons = Lesson::query()
             ->whereIn('id', $lessonIds)
             ->orWhereIn('chapter_id', $chapterIds)
             ->orWhereHas('chapter', function ($q) use ($courseIds) {
                 $q->whereIn('course_id', $courseIds);
             })
+            ->orWhere('price',0)
             ->when($subjectId, function ($query) use ($subjectId) {
                 $query->whereHas('chapter.course', function ($q) use ($subjectId) {
                     $q->where('subject_id', $subjectId);
