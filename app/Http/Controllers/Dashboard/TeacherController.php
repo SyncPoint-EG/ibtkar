@@ -278,6 +278,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher): View
     {
+        $teacher->load('subjects'); // Eager-load assignments
         $subjects = Subject::all();
         $stages = Stage::all();
         $grades = Grade::all();
