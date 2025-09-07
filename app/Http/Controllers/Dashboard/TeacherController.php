@@ -233,29 +233,20 @@ class TeacherController extends Controller
             $teacher = $this->teacherService->create($data);
 
 //            // Handle subject assignments
-//            $assignments = $request->input('assignments', []);
-//            $pivotData = [];
-//            foreach ($assignments as $assignment) {
-//                // Required: subject_id, stage_id, grade_id
-//                if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
-//                    $pivotData[] = [
-//                        'subject_id'  => $assignment['subject_id'],
-//                        'stage_id'    => $assignment['stage_id'],
-//                        'grade_id'    => $assignment['grade_id'],
-//                        'division_id' => $assignment['division_id'] ?? null,
-//                    ];
-//                }
-//            }
-//
-//            // Insert into pivot
-//            foreach($pivotData as $pd) {
-//                $teacher->subjects()
-//                    ->attach($pd['subject_id'], [
-//                        'stage_id'    => $pd['stage_id'],
-//                        'grade_id'    => $pd['grade_id'],
-//                        'division_id' => $pd['division_id'],
-//                    ]);
-//            }
+            $assignments = $request->input('assignments', []);
+            $syncData = [];
+            foreach ($assignments as $assignment) {
+                if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
+                    $syncData[$assignment['subject_id']] = [
+                        'stage_id'    => $assignment['stage_id'],
+                        'grade_id'    => $assignment['grade_id'],
+                        'division_id' => $assignment['division_id'] ?? null,
+                    ];
+                }
+            }
+            if (!empty($syncData)) {
+                $teacher->subjects()->sync($syncData);
+            }
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher created successfully.');
