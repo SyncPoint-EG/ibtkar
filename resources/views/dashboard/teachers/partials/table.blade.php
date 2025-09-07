@@ -34,20 +34,9 @@
 
                 {{-- Grades column from subjectTeacherAssignments --}}
                 <td>
-                    @php
-//                        $uniqueGrades = $teacher->courses->pluck('grade')->unique('id')->filter();
-                        $uniqueGrades = $teacher->subjectTeacherAssignments->pluck('grade')->unique('id')->filter();
-                        $totalGradesCount = $uniqueGrades->count();
-                        $gradesToShow = $uniqueGrades->take(2);
-                    @endphp
-
-                    @foreach($gradesToShow as $grade)
-                        <span class="badge badge-info">{{ $grade->name }}</span>
+                    @foreach($teacher->subjectTeacherAssignments->unique(function ($item) { return $item->stage_id . '-' . $item->grade_id . '-' . $item->division_id; }) as $assignment)
+                        <span class="badge badge-info">{{ $assignment->stage?->name }} - {{ $assignment->grade?->name }} - {{ $assignment->division?->name }}</span>
                     @endforeach
-
-                    @if($totalGradesCount > 2)
-                        <span class="badge badge-secondary">+{{ $totalGradesCount - 2 }}</span>
-                    @endif
                 </td>
 
                 {{-- Subjects column from subjectTeacherAssignments --}}
