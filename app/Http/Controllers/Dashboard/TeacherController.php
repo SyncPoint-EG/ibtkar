@@ -308,17 +308,16 @@ class TeacherController extends Controller
             }
 //            // Handle subject assignments
             $assignments = $request->input('assignments', []);
-            $syncData = [];
+            $teacher->subjects()->detach();
             foreach ($assignments as $assignment) {
                 if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
-                    $syncData[$assignment['subject_id']] = [
+                    $teacher->subjects()->attach($assignment['subject_id'], [
                         'stage_id'    => $assignment['stage_id'],
                         'grade_id'    => $assignment['grade_id'],
                         'division_id' => $assignment['division_id'] ?? null,
-                    ];
+                    ]);
                 }
             }
-            $teacher->subjects()->sync($syncData);
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher updated successfully.');
