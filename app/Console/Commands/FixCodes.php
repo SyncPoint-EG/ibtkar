@@ -44,6 +44,7 @@ class FixCodes extends Command
                     $code->price = 220 ;
                 }
             }
+            $code->save();
         }
     }
 }
