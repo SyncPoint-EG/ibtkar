@@ -71,21 +71,43 @@
     </style>
     @yield('page_styles')
     <style>
-    .navbar-header {
-        position: relative; /* Needed for absolute positioning of child */
+    /* Desktop styles for centered logo */
+    @media (min-width: 768px) {
+        .navbar-header {
+            position: relative;
+        }
+        .logo-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+        }
     }
-    .logo-container {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        /* The following are to override template styles that might interfere */
-        top: 0;
-        width: auto;
-        display: block;
-    }
+
+    /* Shared styles for logo size */
     .logo-container .brand-logo {
-        height: 70px; /* A safe height for the navbar */
-        width: 100%;
+        height: 90px;
+        width: auto;
+    }
+
+    /* Mobile styles to ensure visibility and proper layout */
+    @media (max-width: 767px) {
+        .navbar-header .navbar-nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-container .brand-logo{
+            height: 50px;
+        }
+        .logo-container {
+            /* On mobile, it should be part of the flex flow, not absolute */
+            position: static;
+            transform: none;
+            flex-grow: 1;
+            text-align: center;
+        }
     }
 </style>
 
@@ -125,7 +147,7 @@
                             </a>
                         </div>
                     </li>
-                    <li class="dropdown dropdown-notification nav-item"><a href="#" data-toggle="dropdown" class="nav-link nav-link-label"><i class="ficon icon-bell4"></i><span class="tag tag-pill tag-default tag-danger tag-default tag-up">5</span></a>
+{{--                    <li class="dropdown dropdown-notification nav-item"><a href="#" data-toggle="dropdown" class="nav-link nav-link-label"><i class="ficon icon-bell4"></i><span class="tag tag-pill tag-default tag-danger tag-default tag-up">5</span></a>--}}
                         <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                             <li class="dropdown-menu-header">
                                 <h6 class="dropdown-header m-0"><span class="grey darken-2">Notifications</span><span class="notification-tag tag tag-default tag-danger float-xs-right m-0">5 New</span></h6>

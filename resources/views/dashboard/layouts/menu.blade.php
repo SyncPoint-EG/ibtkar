@@ -35,7 +35,7 @@
 @endcan
 
 @can('view_center')
-    <li class=" nav-item"><a href="{{ route('centers.index') }}"><i class="icon-home"></i><span data-i18n="nav.centers.main" class="menu-title">{{__('dashboard.center.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('centers.index') }}"><i class="icon-office"></i><span data-i18n="nav.centers.main" class="menu-title">{{__('dashboard.center.title_plural')}}</span></a>
     </li>
 @endcan
 
@@ -45,7 +45,7 @@
 @endcan
 
 @can('view_grade')
-    <li class=" nav-item"><a href="{{ route('grades.index') }}"><i class="icon-award"></i><span data-i18n="nav.grades.main" class="menu-title">{{__('dashboard.grade.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('grades.index') }}"><i class="icon-star"></i><span data-i18n="nav.grades.main" class="menu-title">{{__('dashboard.grade.title_plural')}}</span></a>
     </li>
 @endcan
 
@@ -107,16 +107,16 @@
 @endcan
 
 @can('view_homework')
-    <li class=" nav-item"><a href="{{ route('homework.index') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.homework.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('homework.index') }}"><i class="icon-pencil-square"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.homework.title_plural')}}</span></a>
     </li>
 @endcan
 
 @can('view_center_exam')
-    <li class=" nav-item"><a href="{{ route('center-exams.index') }}"><i class="icon-clipboard"></i><span data-i18n="nav.center_exams.main" class="menu-title">Center Exams</span></a>
+    <li class=" nav-item"><a href="{{ route('center-exams.index') }}"><i class="icon-file-text"></i><span data-i18n="nav.center_exams.main" class="menu-title">Center Exams</span></a>
     </li>
 @endcan
 @can('update_settings')
-    <li class=" nav-item"><a href="{{ route('settings.bulkEdit') }}"><i class="icon-edit"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.settings.title')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('settings.bulkEdit') }}"><i class="icon-cog"></i><span data-i18n="nav.homework.main" class="menu-title">{{__('dashboard.settings.title')}}</span></a>
     </li>
 @endcan
 
@@ -136,11 +136,11 @@
 @endcan
 
 @can('view_banner')
-<li class=" nav-item"><a href="{{ route('banners.index') }}"><i class="icon-list"></i><span data-i18n="nav.banners.main" class="menu-title">{{__('dashboard.banner.title_plural')}}</span></a>
+<li class=" nav-item"><a href="{{ route('banners.index') }}"><i class="icon-image"></i><span data-i18n="nav.banners.main" class="menu-title">{{__('dashboard.banner.title_plural')}}</span></a>
 </li>
 @endcan
 @can('view_code')
-<li class=" nav-item"><a href="{{ route('codes.index') }}"><i class="icon-list"></i><span data-i18n="nav.codes.main" class="menu-title">{{__('dashboard.code.title_plural')}}</span></a>
+<li class=" nav-item"><a href="{{ route('codes.index') }}"><i class="icon-ticket"></i><span data-i18n="nav.codes.main" class="menu-title">{{__('dashboard.code.title_plural')}}</span></a>
 </li>
 @endcan
 @can('view_payment_approval')
@@ -148,6 +148,6 @@
 </li>
 @endcan
 @can('view_charge_approval')
-<li class=" nav-item"><a href="{{ route('charge_approvals.index') }}"><i class="icon-cash"></i><span data-i18n="nav.charge_approvals.main" class="menu-title">{{__('dashboard.charge_approval.title_plural')}}</span></a>
+<li class=" nav-item"><a href="{{ route('charge_approvals.index') }}"><i class="icon-money"></i><span data-i18n="nav.charge_approvals.main" class="menu-title">{{__('dashboard.charge_approval.title_plural')}}</span></a>
 </li>
 @endcan
