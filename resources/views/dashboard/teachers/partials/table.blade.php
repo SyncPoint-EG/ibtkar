@@ -39,7 +39,7 @@
                     @endphp
 
                     @foreach($uniqueGrades as $grade)
-                        <span class="badge badge-info">{{ $grade->name }}</span>@if(!$loop->last), @endif
+                        <span class="badge badge-info">{{ $grade->name }}</span>@if(!$loop->last) - @endif
                     @endforeach
                 </td>
 
