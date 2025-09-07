@@ -23,19 +23,20 @@ class LessonController extends Controller
         $course = $chapter->course;
 
         $student = auth('student')->user();
+        $is_free = $lesson->price == 0 || $chapter->price == 0 || $course->price == 0;
         $is_purchased = Payment::where('student_id',$student->id)->where(function ($query) use ($lesson ,$chapter, $course) {
             $query->where('lesson_id',$lesson->id)
                 ->orWhere('chapter_id',$chapter->id)
                 ->orWhere('course_id',$course->id);
         })->exists();
         $max_watches = $student->watches()->where('lesson_id', $lesson->id)->first();
-        if ($max_watches && $max_watches->count > 3) {
+        if (!$is_free && $max_watches && $max_watches->count > 3) {
             return response()->json([
                 'status' => false,
                 'message' => 'لقد شاهدت هذا الدرس بالفعل أكثر من 3 مرات',
             ]);
         }
-        if($is_purchased){
+        if($is_purchased || $is_free){
             return new LessonResource($lesson);
         }else{
             return  response()->json([
