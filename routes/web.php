@@ -36,12 +36,10 @@ use App\Http\Controllers\Dashboard\BannerController;
 use App\Http\Controllers\Dashboard\CodeController;
 use App\Http\Controllers\Dashboard\PaymentApprovalController;
 use App\Http\Controllers\Dashboard\ChargeApprovalController;
+use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 
 
-Route::get('/index', function () {
-
-    return view('dashboard.temp.index');
-})->name('dashboard');
+ Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class,'index'])->name('dashboard');
 
 Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
 
@@ -65,10 +63,11 @@ Route::get('/reset-password', [App\Http\Controllers\AuthController::class, 'show
 
 // Profile routes (protected by auth middleware)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/statistics', function () {
-
-        return view('dashboard.temp.index');
-    })->name('dashboard');
+//    Route::get('/statistics', function () {
+//
+//        return view('dashboard.temp.index');
+//    })->name('dashboard');
+//    Route::get('/dashboard', [DashboardHomeController::class, 'index'])->name('dashboard');
     // Profile edit page
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 

@@ -41,6 +41,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Remove duplicates
         $permissions = array_unique($permissions);
+        $permissions[] = 'view_financial_stats';
 
         // Create permissions in database
         $createdPermissions = [];

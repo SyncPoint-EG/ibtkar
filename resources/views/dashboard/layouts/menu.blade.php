@@ -77,7 +77,7 @@
 @endcan
 
 @can('view_educationtype')
-    <li class=" nav-item"><a href="{{ route('education-types.index') }}"><i class="icon-graduation-cap"></i><span data-i18n="nav.education-types.main" class="menu-title">{{__('dashboard.educationtype.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('education-types.index') }}"><i class="icon-graduation-cap"></i><span data-i18n="nav.education-types.main" class="menu-title">{{__('dashboard.education_type.title_plural')}}</span></a>
     </li>
 @endcan
 
