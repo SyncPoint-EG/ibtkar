@@ -36,17 +36,11 @@
                 <td>
                     @php
                         $uniqueGrades = $teacher->subjectTeacherAssignments->pluck('grade')->unique('id')->filter();
-                        $totalGradesCount = $uniqueGrades->count();
-                        $gradesToShow = $uniqueGrades->get();
                     @endphp
 
-                    @foreach($gradesToShow as $grade)
+                    @foreach($uniqueGrades as $grade)
                         <span class="badge badge-info">{{ $grade->name }}</span>
                     @endforeach
-
-                    @if($totalGradesCount > 2)
-                        <span class="badge badge-secondary">+{{ $totalGradesCount - 2 }}</span>
-                    @endif
                 </td>
 
                 {{-- Subjects column from subjectTeacherAssignments --}}
