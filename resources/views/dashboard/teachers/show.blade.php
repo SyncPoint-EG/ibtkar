@@ -81,6 +81,13 @@
                                                                 :</strong> {{ $teacher->rate }}
                                                         </div>
 
+                                                        <div class="mb-3">
+                                                            <strong>{{ __("dashboard.teacher.fields.grades") }}:</strong>
+                                                            @foreach($teacher->subjectTeacherAssignments->unique(function ($item) { return $item->stage_id . '-' . $item->grade_id . '-' . $item->division_id; }) as $assignment)
+                                                                <span class="badge badge-info">{{ $assignment->stage?->name }} - {{ $assignment->grade?->name }} - {{ $assignment->division?->name }}</span>
+                                                            @endforeach
+                                                        </div>
+
                                                         <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
                                                             <td>{{ $teacher->created_at->format('Y-m-d H:i:s') }}</td>
