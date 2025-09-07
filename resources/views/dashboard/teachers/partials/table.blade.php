@@ -37,7 +37,7 @@
                     @php
                         $uniqueGrades = $teacher->subjectTeacherAssignments->pluck('grade')->unique('id')->filter();
                         $totalGradesCount = $uniqueGrades->count();
-                        $gradesToShow = $uniqueGrades->take(2);
+                        $gradesToShow = $uniqueGrades->get();
                     @endphp
 
                     @foreach($gradesToShow as $grade)
