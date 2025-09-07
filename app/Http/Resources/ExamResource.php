@@ -25,7 +25,7 @@ class ExamResource extends JsonResource
             'end_date' => $this->end_date,
             'lesson_id' => $this->lesson_id,
             'questions' => QuestionResource::collection($this->questions),
-            'subject' => new SubjectResource($this->lesson->chapter->course->subject),
+            'subject' => new SubjectResource($this->lesson?->chapter->course->subject),
             'is_answered' => auth('student')->user() ?  $this->attempts()->where('student_id', auth('student')->id())->exists() : null,
 
         ];
