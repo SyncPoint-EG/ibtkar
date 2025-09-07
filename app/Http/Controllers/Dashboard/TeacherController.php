@@ -73,7 +73,7 @@ class TeacherController extends Controller
 
         // Filter by subject_teacher pivot assignments
         if ($subject_id || $stage_id || $grade_id || $division_id) {
-            $query->whereHas('courses', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+            $query->whereHas('subjectTeacherAssignments', function ($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
                 if ($subject_id) {
                     $q->where('subject_id', $subject_id);
                 }
@@ -226,7 +226,7 @@ class TeacherController extends Controller
      */
     public function store(TeacherRequest $request): RedirectResponse
     {
-        try {
+//        try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
 
@@ -250,11 +250,11 @@ class TeacherController extends Controller
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Error creating Teacher: ' . $e->getMessage());
-        }
+//        } catch (\Exception $e) {
+//            return redirect()->back()
+//                ->withInput()
+//                ->with('error', 'Error creating Teacher: ' . $e->getMessage());
+//        }
     }
 
 
@@ -306,11 +306,19 @@ class TeacherController extends Controller
                 $teacher->password = $request->password;
                 $teacher->save();
             }
-//            // Sync many-to-many relationships
-//            $teacher->subjects()->sync($request->subjects ?? []);
-//            $teacher->stages()->sync($request->stages ?? []);
-//            $teacher->grades()->sync($request->grades ?? []);
-//            $teacher->divisions()->sync($request->divisions ?? []);
+//            // Handle subject assignments
+            $assignments = $request->input('assignments', []);
+            $syncData = [];
+            foreach ($assignments as $assignment) {
+                if (!empty($assignment['subject_id']) && !empty($assignment['stage_id']) && !empty($assignment['grade_id'])) {
+                    $syncData[$assignment['subject_id']] = [
+                        'stage_id'    => $assignment['stage_id'],
+                        'grade_id'    => $assignment['grade_id'],
+                        'division_id' => $assignment['division_id'] ?? null,
+                    ];
+                }
+            }
+            $teacher->subjects()->sync($syncData);
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher updated successfully.');
@@ -329,15 +337,15 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher): RedirectResponse
     {
-        try {
+//        try {
             $this->teacherService->delete($teacher);
 
             return redirect()->route('teachers.index')
                 ->with('success', 'Teacher deleted successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Error deleting Teacher: ' . $e->getMessage());
-        }
+//        } catch (\Exception $e) {
+//            return redirect()->back()
+//                ->with('error', 'Error deleting Teacher: ' . $e->getMessage());
+//        }
     }
 
     /**
@@ -381,7 +389,8 @@ class TeacherController extends Controller
 
         // Filter by assignments pivot data
         if ($subject_id || $stage_id || $grade_id || $division_id) {
-            $query->whereHas('courses', function($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+//            $query->whereHas('courses', function($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
+            $query->whereHas('subjectTeacherAssignments', function($q) use ($subject_id, $stage_id, $grade_id, $division_id) {
                 if ($subject_id) {
                     $q->where('subject_id', $subject_id);
                 }

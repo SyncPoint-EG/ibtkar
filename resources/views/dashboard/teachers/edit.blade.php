@@ -53,175 +53,125 @@
                                             @csrf
                                             @method('PUT')
                                             <div class="form-body">
+                                                {{-- Basic Info --}}
                                                 <div class="form-group">
                                                     <label for="name">{{ __("dashboard.teacher.fields.name") }}</label>
-                                                    <input type="text" id="name"
-                                                           class="form-control @error('name') is-invalid @enderror"
-                                                           name="name"
-                                                           value="{{ isset($teacher) ? $teacher->name : old('name') }}"
-                                                           placeholder="{{ __("dashboard.teacher.fields.name") }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.teacher.fields.name") }}">
-                                                    @error('name')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
+                                                           name="name" value="{{ $teacher->name ?? old('name') }}"
+                                                           placeholder="{{ __("dashboard.teacher.fields.name") }}">
+                                                    @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label
-                                                        for="phone">{{ __("dashboard.teacher.fields.phone") }}</label>
-                                                    <input type="text" id="phone"
-                                                           class="form-control @error('phone') is-invalid @enderror"
-                                                           name="phone"
-                                                           value="{{ isset($teacher) ? $teacher->phone : old('phone') }}"
-                                                           placeholder="{{ __("dashboard.teacher.fields.phone") }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.teacher.fields.phone") }}">
-                                                    @error('phone')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <label for="phone">{{ __("dashboard.teacher.fields.phone") }}</label>
+                                                    <input type="text" id="phone" class="form-control @error('phone') is-invalid @enderror"
+                                                           name="phone" value="{{ $teacher->phone ?? old('phone') }}"
+                                                           placeholder="{{ __("dashboard.teacher.fields.phone") }}">
+                                                    @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label
-                                                        for="other_phone">{{ __("dashboard.teacher.fields.other_phone") }}</label>
-                                                    <input type="text" id="other_phone"
-                                                           class="form-control @error('other_phone') is-invalid @enderror"
-                                                           name="other_phone"
-                                                           value="{{ isset($teacher) ? $teacher->other_phone : old('other_phone') }}"
-                                                           placeholder="{{ __("dashboard.teacher.fields.other_phone") }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.teacher.fields.other_phone") }}">
-                                                    @error('other_phone')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <label for="other_phone">{{ __("dashboard.teacher.fields.other_phone") }}</label>
+                                                    <input type="text" id="other_phone" class="form-control @error('other_phone') is-invalid @enderror"
+                                                           name="other_phone" value="{{ $teacher->other_phone ?? old('other_phone') }}"
+                                                           placeholder="{{ __("dashboard.teacher.fields.other_phone") }}">
+                                                    @error('other_phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="bio">{{ __("dashboard.teacher.fields.bio") }}</label>
-                                                    <textarea id="bio" rows="5"
-                                                              class="form-control @error('bio') is-invalid @enderror"
-                                                              name="bio" data-toggle="tooltip" data-trigger="hover"
-                                                              data-placement="top"
-                                                              data-title="{{ __("dashboard.teacher.fields.bio") }}">{{ isset($teacher) ? $teacher->bio : old('bio') }}</textarea>
-                                                    @error('bio')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <textarea id="bio" rows="5" class="form-control @error('bio') is-invalid @enderror"
+                                                              name="bio">{{ $teacher->bio ?? old('bio') }}</textarea>
+                                                    @error('bio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label
-                                                        for="image">{{ __("dashboard.teacher.fields.image") }}</label>
-                                                    <input type="file" id="image"
-                                                           class="form-control @error('image') is-invalid @enderror"
-                                                           name="image"
-                                                           value="{{ isset($teacher) ? $teacher->image : old('image') }}"
-                                                           placeholder="{{ __("dashboard.teacher.fields.image") }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.teacher.fields.image") }}">
-                                                    @error('image')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <label for="image">{{ __("dashboard.teacher.fields.image") }}</label>
+                                                    <input type="file" id="image" class="form-control @error('image') is-invalid @enderror"
+                                                           name="image">
+                                                    @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="rate">{{ __("dashboard.teacher.fields.rate") }}</label>
-                                                    <input type="number" step="0.01" id="rate"
-                                                           class="form-control @error('rate') is-invalid @enderror"
-                                                           name="rate"
-                                                           value="{{ isset($teacher) ? $teacher->rate : old('rate') }}"
-                                                           data-toggle="tooltip" data-trigger="hover"
-                                                           data-placement="top"
-                                                           data-title="{{ __("dashboard.teacher.fields.rate") }}">
-                                                    @error('rate')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
+                                                    <input type="number" step="0.01" id="rate" class="form-control @error('rate') is-invalid @enderror"
+                                                           name="rate" value="{{ $teacher->rate ?? old('rate') }}">
+                                                    @error('rate') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="is_featured">{{ __("dashboard.teacher.fields.is_featured") }}</label>
                                                     <input type="checkbox" id="is_featured"
                                                            name="is_featured" value="1"
-                                                        {{ (isset($teacher) && $teacher->is_featured) || old('is_featured') ? 'checked' : '' }}>
+                                                        {{ ($teacher->is_featured ?? old('is_featured')) ? 'checked' : '' }}>
                                                     @error('is_featured')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                            </div>
-{{--                                            <!-- Multi-select for Subjects -->--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="subjects">{{ __("dashboard.teacher.fields.subjects") }}</label>--}}
-{{--                                                <select id="subjects" name="subjects[]" class="form-control select2 @error('subjects') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.subjects") }}">--}}
-{{--                                                    @foreach($subjects as $subject)--}}
-{{--                                                        <option value="{{ $subject->id }}"--}}
-{{--                                                            {{ in_array($subject->id, old('subjects', isset($teacher) ? $teacher->subjects->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
-{{--                                                            {{ $subject->name }}--}}
-{{--                                                        </option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
-{{--                                                @error('subjects')--}}
-{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                                @enderror--}}
-{{--                                            </div>--}}
+                                                <div class="form-group">
+                                                    <label for="password">{{ __("dashboard.student.fields.password") }}</label>
+                                                    <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
+                                                           name="password" value="{{ old('password') }}"
+                                                           placeholder="{{ __("dashboard.student.fields.password") }}">
+                                                    @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password_confirmation">{{ __("dashboard.common.password_confirmation") }}</label>
+                                                    <input type="text" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                           name="password_confirmation" value="{{ old('password_confirmation') }}"
+                                                           placeholder="{{ __("dashboard.common.password_confirmation") }}">
+                                                    @error('password_confirmation') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                </div>
 
-{{--                                            <!-- Multi-select for Stages -->--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="stages">{{ __("dashboard.teacher.fields.stages") }}</label>--}}
-{{--                                                <select id="stages" name="stages[]" class="form-control select2 @error('stages') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.stages") }}">--}}
-{{--                                                    @foreach($stages as $stage)--}}
-{{--                                                        <option value="{{ $stage->id }}"--}}
-{{--                                                            {{ in_array($stage->id, old('stages', isset($teacher) ? $teacher->stages->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
-{{--                                                            {{ $stage->name }}--}}
-{{--                                                        </option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
-{{--                                                @error('stages')--}}
-{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                                @enderror--}}
-{{--                                            </div>--}}
+                                                {{-- Subject Assignments --}}
+                                                <div class="form-group">
+                                                    <label>{{ __("dashboard.teacher.subject_assignments") }}</label>
 
-{{--                                            <!-- Multi-select for Grades -->--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="grades">{{ __("dashboard.teacher.fields.grades") }}</label>--}}
-{{--                                                <select id="grades" name="grades[]" class="form-control select2 @error('grades') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.grades") }}">--}}
-{{--                                                    @foreach($grades as $grade)--}}
-{{--                                                        <option value="{{ $grade->id }}"--}}
-{{--                                                            {{ in_array($grade->id, old('grades', isset($teacher) ? $teacher->grades->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
-{{--                                                            {{ $grade->name }}--}}
-{{--                                                        </option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
-{{--                                                @error('grades')--}}
-{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                                @enderror--}}
-{{--                                            </div>--}}
+                                                    <div id="assignments-container">
+                                                        {{-- Existing assignments --}}
+                                                        @forelse($teacher->subjects as $idx => $assigned_subject)
+                                                            <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">
+                                                                <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">
+                                                                    <i class="icon-trash"></i>
+                                                                </button>
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <select name="assignments[{{ $idx }}][subject_id]" class="form-control" required>
+                                                                            <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>
+                                                                            @foreach($subjects as $subject)
+                                                                                <option value="{{ $subject->id }}" {{ $assigned_subject->id == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <select name="assignments[{{ $idx }}][stage_id]" class="form-control" required>
+                                                                            <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>
+                                                                            @foreach($stages as $stage)
+                                                                                <option value="{{ $stage->id }}" {{ $assigned_subject->pivot->stage_id == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <select name="assignments[{{ $idx }}][grade_id]" class="form-control" required>
+                                                                            <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>
+                                                                            @foreach($grades as $grade)
+                                                                                <option value="{{ $grade->id }}" {{ $assigned_subject->pivot->grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <select name="assignments[{{ $idx }}][division_id]" class="form-control">
+                                                                            <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>
+                                                                            @foreach($divisions as $division)
+                                                                                <option value="{{ $division->id }}" {{ $assigned_subject->pivot->division_id == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @empty
+                                                            {{-- No assignments, a new row will be added by JS --}}
+                                                        @endforelse
+                                                    </div>
+                                                    <button type="button" class="btn btn-info mt-1" id="add-assignment">
+                                                        <i class="icon-plus2"></i> {{ __("dashboard.teacher.add_assignment") }}
+                                                    </button>
+                                                </div>
 
-{{--                                            <!-- Multi-select for Divisions -->--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <label for="divisions">{{ __("dashboard.teacher.fields.divisions") }}</label>--}}
-{{--                                                <select id="divisions" name="divisions[]" class="form-control select2 @error('divisions') is-invalid @enderror" multiple="multiple" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.teacher.fields.divisions") }}">--}}
-{{--                                                    @foreach($divisions as $division)--}}
-{{--                                                        <option value="{{ $division->id }}"--}}
-{{--                                                            {{ in_array($division->id, old('divisions', isset($teacher) ? $teacher->divisions->pluck('id')->toArray() : [])) ? 'selected' : '' }}>--}}
-{{--                                                            {{ $division->name }}--}}
-{{--                                                        </option>--}}
-{{--                                                    @endforeach--}}
-{{--                                                </select>--}}
-{{--                                                @error('divisions')--}}
-{{--                                                <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                                @enderror--}}
-{{--                                            </div>--}}
-                                            <div class="form-group">
-                                                <label for="password">{{ __("dashboard.student.fields.password") }}</label>
-                                                <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
-                                                       name="password" value="{{ old('password') }}"
-                                                       placeholder="{{ __("dashboard.student.fields.password") }}">
-                                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password_confirmation">{{ __("dashboard.common.password_confirmation") }}</label>
-                                                <input type="text" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
-                                                       name="password_confirmation" value="{{ old('password_confirmation') }}"
-                                                       placeholder="{{ __("dashboard.common.password_confirmation") }}">
-                                                @error('password_confirmation') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                             </div>
                                             <div class="form-actions">
                                                 <a href="{{ route('teachers.index') }}" class="btn btn-warning mr-1">
@@ -232,6 +182,51 @@
                                                 </button>
                                             </div>
                                         </form>
+
+                                        {{-- Hidden template for assignment row --}}
+                                        <div id="assignment-template" style="display:none;">
+                                            <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">
+                                                <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <select name="assignments[__INDEX__][subject_id]" class="form-control" required>
+                                                            <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>
+                                                            @foreach($subjects as $subject)
+                                                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select name="assignments[__INDEX__][stage_id]" class="form-control" required>
+                                                            <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>
+                                                            @foreach($stages as $stage)
+                                                                <option value="{{ $stage->id }}">{{ $stage->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select name="assignments[__INDEX__][grade_id]" class="form-control" required>
+                                                            <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>
+                                                            @foreach($grades as $grade)
+                                                                <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select name="assignments[__INDEX__][division_id]" class="form-control">
+                                                            <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>
+                                                            @foreach($divisions as $division)
+                                                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- End template --}}
+
                                     </div>
                                 </div>
                             </div>
@@ -241,4 +236,31 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('page_scripts')
+    <script>
+        $(function() {
+            let assignmentIndex = {{ $teacher->subjects->count() }};
+
+            function addAssignmentRow() {
+                let tpl = $('#assignment-template').html().replace(/__INDEX__/g, assignmentIndex);
+                $('#assignments-container').append(tpl);
+                assignmentIndex++;
+            }
+
+            $('#add-assignment').on('click', function() {
+                addAssignmentRow();
+            });
+
+            $('#assignments-container').on('click', '.remove-assignment', function() {
+                $(this).closest('.assignment-row').remove();
+            });
+
+            // Add one row if the teacher has no assignments
+            if (assignmentIndex === 0) {
+                addAssignmentRow();
+            }
+        });
+    </script>
 @endsection

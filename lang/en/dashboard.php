@@ -4,6 +4,7 @@ return [
     'common' => [
         'dashboard' => 'Dashboard',
         'save' => 'Save',
+        'optional' => 'Optional',
         'update' => 'Update',
         'cancel' => 'Cancel',
         'edit' => 'Edit',

@@ -35,7 +35,8 @@
                 {{-- Grades column from subjectTeacherAssignments --}}
                 <td>
                     @php
-                        $uniqueGrades = $teacher->courses->pluck('grade')->unique('id')->filter();
+//                        $uniqueGrades = $teacher->courses->pluck('grade')->unique('id')->filter();
+                        $uniqueGrades = $teacher->subjectTeacherAssignments->pluck('grade')->unique('id')->filter();
                         $totalGradesCount = $uniqueGrades->count();
                         $gradesToShow = $uniqueGrades->take(2);
                     @endphp
@@ -52,7 +53,8 @@
                 {{-- Subjects column from subjectTeacherAssignments --}}
                 <td>
                     @php
-                        $uniqueSubjects = $teacher->courses->pluck('subject')->unique('id')->filter();
+//                        $uniqueSubjects = $teacher->courses->pluck('subject')->unique('id')->filter();
+                        $uniqueSubjects = $teacher->subjectTeacherAssignments->pluck('subject')->unique('id')->filter();
                         $totalSubjectsCount = $uniqueSubjects->count();
                         $subjectsToShow = $uniqueSubjects->take(2);
                     @endphp

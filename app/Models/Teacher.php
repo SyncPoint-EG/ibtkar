@@ -54,16 +54,16 @@ class Teacher extends Authenticatable
      }
 
 
-//    public function subjects()
-//    {
-//        return $this->belongsToMany(Subject::class)
-//            ->withPivot(['stage_id','grade_id','division_id'])
-//            ;
-//    }
-//    public function subjectTeacherAssignments()
-//    {
-//        return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
-//    }
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)
+            ->withPivot(['stage_id','grade_id','division_id'])
+            ;
+    }
+    public function subjectTeacherAssignments()
+    {
+        return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
+    }
 
 //    public function stages()
 //    {
@@ -148,10 +148,10 @@ class Teacher extends Authenticatable
     {
         return $this->hasManyThrough(Division::class, Course::class, 'teacher_id', 'id', 'id', 'division_id');
     }
-    public function subjects()
-    {
-        return $this->hasManyThrough(Subject::class, Course::class, 'teacher_id', 'id', 'id', 'subject_id');
-    }
+//    public function subjects()
+//    {
+//        return $this->hasManyThrough(Subject::class, Course::class, 'teacher_id', 'id', 'id', 'subject_id');
+//    }
     public function students()
     {
         return Student::first();
