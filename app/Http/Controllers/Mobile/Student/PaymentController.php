@@ -65,6 +65,15 @@ class PaymentController extends Controller
 
         if($request->course_id){
             $course = Course::find($request->course_id);
+            if($request->payment_method == 'code'){
+                $code = Code::where('code',$request->payment_code)->first();
+                if($code->price != $course->price){
+                    return response()->json([
+                        'status' => false,
+                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                    ]);
+                }
+            }
             $chapterIds = $course->chapters->pluck('id')->toArray();
             $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id')->toArray();
             Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);

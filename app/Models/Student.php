@@ -7,6 +7,7 @@ use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Chapter;
@@ -20,7 +21,7 @@ class Student extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status','verification_code','mac_address','referral_code'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status','verification_code','mac_address','referral_code','image'];
 
     /**
      * Get the table associated with the model.
@@ -41,6 +42,52 @@ class Student extends Authenticatable
         });
     }
 
+
+    public function getImageAttribute()
+    {
+        if ($this->attributes['image']) {
+            // Check if it's a full URL (for external images)
+            if (filter_var($this->attributes['image'], FILTER_VALIDATE_URL)) {
+                return $this->attributes['image'];
+            }
+
+            // Check if file exists in storage
+            if (Storage::disk('public')->exists($this->attributes['image'])) {
+                return asset(Storage::url($this->attributes['image']));
+            }
+        }
+
+        // Return default avatar if no image
+        return asset('dashboard/app-assets/images/portrait/small/avatar-s-1.png');
+    }
+
+    /**
+     * Set the user's image.
+     * This is a setter that handles image upload
+     */
+    public function setImageAttribute($value)
+    {
+        // If value is null or empty, keep existing image
+        if (empty($value)) {
+            return;
+        }
+
+        // If it's an uploaded file
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old image if exists
+            if ($this->attributes['image'] ?? null) {
+                Storage::disk('public')->delete($this->attributes['image']);
+            }
+
+            // Store new image
+            $path = $value->store('students/avatars', 'public');
+            $this->attributes['image'] = $path;
+        }
+        // If it's a string path
+        else if (is_string($value)) {
+            $this->attributes['image'] = $value;
+        }
+    }
     public function referrals()
     {
         return $this->hasMany(Student::class, 'referred_by');

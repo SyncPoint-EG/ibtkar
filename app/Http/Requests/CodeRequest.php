@@ -28,6 +28,8 @@ class CodeRequest extends FormRequest
             'for' => 'required|string',
             'teacher_id' => 'required|exists:teachers,id',
             'expires_at' => 'nullable|date',
+            'code_classification' => 'nullable|string',
+            'price' => 'nullable|numeric',
         ];
     }
 }

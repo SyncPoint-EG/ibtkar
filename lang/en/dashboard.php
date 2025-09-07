@@ -748,6 +748,8 @@ return [
             'expires_at' => 'Expires At',
             'number_of_codes' => 'Number Of Codes',
             'teacher' => 'Teacher',
+            'code_classification' => 'Code Classification',
+            'price' => 'Price',
         ],
     ],
     'center_exam' => [

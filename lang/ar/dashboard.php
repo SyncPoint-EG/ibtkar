@@ -689,6 +689,8 @@ return [
             'expires_at' => 'تاريخ انتهاء الصلاحية',
             'number_of_codes' => 'عدد الأكواد',
             'teacher' => 'المعلم',
+            'code_classification' => 'تصنيف الكود',
+            'price' => 'السعر',
         ],
     ],
     'center_exam' => [

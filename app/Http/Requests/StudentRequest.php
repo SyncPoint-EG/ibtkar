@@ -33,7 +33,7 @@ class StudentRequest extends FormRequest
             'birth_date' => ['nullable', 'date'],
             'stage_id' => ['required', 'exists:stages,id'],
             'grade_id' => ['required', 'exists:grades,id'],
-            'division_id' => ['required', 'exists:divisions,id'],
+            'division_id' => ['nullable', 'exists:divisions,id'],
             'education_type_id' => ['required', 'exists:education_types,id'],
             'center_id' => ['required', 'exists:centers,id'],
             'governorate_id' => ['required', 'exists:governorates,id'],

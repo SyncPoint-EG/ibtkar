@@ -10,7 +10,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ __('dashboard.code.title') }}
                             </li>
@@ -39,49 +40,86 @@
                                 <div class="card-block card-dashboard">
                                     <form action="{{ route('codes.index') }}" method="GET" class="form-inline mb-1">
                                         <div class="form-group">
-                                            <label for="teacher_id" class="mr-1">{{ __("dashboard.code.fields.teacher") }}</label>
+                                            <label for="teacher_id"
+                                                   class="mr-1">{{ __("dashboard.code.fields.teacher") }}</label>
                                             <select id="teacher_id" name="teacher_id" class="form-control mr-1">
-                                                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.teacher") }}</option>
+                                                <option
+                                                    value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.teacher") }}</option>
                                                 @foreach($teachers as $teacher)
-                                                    <option value="{{ $teacher->id }}" {{ isset($filters['teacher_id']) && $filters['teacher_id'] == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                    <option
+                                                        value="{{ $teacher->id }}" {{ isset($filters['teacher_id']) && $filters['teacher_id'] == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="expires_at" class="mr-1">{{ __("dashboard.code.fields.expires_at") }}</label>
-                                            <input type="date" id="expires_at" name="expires_at" class="form-control mr-1" value="{{ $filters['expires_at'] ?? '' }}">
+                                            <label for="expires_at"
+                                                   class="mr-1">{{ __("dashboard.code.fields.expires_at") }}</label>
+                                            <input type="date" id="expires_at" name="expires_at"
+                                                   class="form-control mr-1" value="{{ $filters['expires_at'] ?? '' }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="for" class="mr-1">{{ __("dashboard.code.fields.for") }}</label>
                                             <select id="for" name="for" class="form-control mr-1">
-                                                <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.for") }}</option>
+                                                <option
+                                                    value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.for") }}</option>
                                                 @php
                                                     $forOptions = ['course', 'chapter', 'lesson'];
                                                 @endphp
                                                 @foreach($forOptions as $option)
-                                                    <option value="{{ $option }}" {{ isset($filters['for']) && $filters['for'] == $option ? 'selected' : '' }}>
+                                                    <option
+                                                        value="{{ $option }}" {{ isset($filters['for']) && $filters['for'] == $option ? 'selected' : '' }}>
                                                         {{ ucfirst($option) }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="created_at_from" class="mr-1">{{ __("dashboard.common.created_at_from") }}</label>
-                                            <input type="datetime-local" id="created_at_from" name="created_at_from" class="form-control mr-1" value="{{ $filters['created_at_from'] ?? '' }}">
+                                            <label for="created_at_from"
+                                                   class="mr-1">{{ __("dashboard.common.created_at_from") }}</label>
+                                            <input type="datetime-local" id="created_at_from" name="created_at_from"
+                                                   class="form-control mr-1"
+                                                   value="{{ $filters['created_at_from'] ?? '' }}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="created_at_to" class="mr-1">{{ __("dashboard.common.created_at_to") }}</label>
-                                            <input type="datetime-local" id="created_at_to" name="created_at_to" class="form-control mr-1" value="{{ $filters['created_at_to'] ?? '' }}">
+                                            <label for="created_at_to"
+                                                   class="mr-1">{{ __("dashboard.common.created_at_to") }}</label>
+                                            <input type="datetime-local" id="created_at_to" name="created_at_to"
+                                                   class="form-control mr-1"
+                                                   value="{{ $filters['created_at_to'] ?? '' }}">
                                         </div>
-                                        <button type="submit" class="btn btn-primary mr-1">{{ __("dashboard.common.search") }}</button>
-                                        <a href="{{ route('codes.index') }}" class="btn btn-secondary mr-1">{{ __("dashboard.common.clear") }}</a>
+                                        <div class="form-group">
+                                            <label for="code"
+                                                   class="mr-1">{{ __("dashboard.code.fields.code") }}</label>
+                                            <input type="text" id="code" name="code"
+                                                   class="form-control mr-1" value="{{ $filters['code'] ?? '' }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="code_classification"
+                                                   class="mr-1">{{ __("dashboard.code.fields.code_classification") }}</label>
+                                            <select id="code_classification" name="code_classification"
+                                                    class="form-control mr-1">
+                                                <option
+                                                    value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.code_classification") }}</option>
+                                                @foreach($codeClassifications as $classification)
+                                                    <option
+                                                        value="{{ $classification }}" {{ isset($filters['code_classification']) && $filters['code_classification'] == $classification ? 'selected' : '' }}>
+                                                        {{ $classification }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit"
+                                                class="btn btn-primary mr-1">{{ __("dashboard.common.search") }}</button>
+                                        <a href="{{ route('codes.index') }}"
+                                           class="btn btn-secondary mr-1">{{ __("dashboard.common.clear") }}</a>
                                     </form>
                                     @can('create_code')
                                         <a href="{{ route('codes.create') }}" class="btn btn-primary mb-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.code.add_new') }}
                                         </a>
                                     @endcan
-                                    <a href="{{ route('codes.export', request()->query()) }}" class="btn btn-success mb-1">
+                                    <a href="{{ route('codes.export', request()->query()) }}"
+                                       class="btn btn-success mb-1">
                                         <i class="icon-file-excel"></i> {{ __("dashboard.common.export") }}
                                     </a>
                                 </div>
@@ -91,11 +129,12 @@
                                         <tr>
                                             <th>{{ __('dashboard.common.number') }}</th>
                                             <th>{{ __("dashboard.code.fields.code") }}</th>
-                <th>{{ __("dashboard.code.fields.for") }}</th>
-                <th>{{ __("dashboard.code.fields.number_of_uses") }}</th>
-                <th>{{ __("dashboard.code.fields.expires_at") }}</th>
-                <th>{{ __("dashboard.code.fields.teacher") }}</th>
-                <th>{{ __("dashboard.common.created_at") }}</th>
+                                            <th>{{ __("dashboard.code.fields.for") }}</th>
+                                            <th>{{ __("dashboard.code.fields.number_of_uses") }}</th>
+                                            <th>{{ __("dashboard.code.fields.expires_at") }}</th>
+                                            <th>{{ __("dashboard.code.fields.code_classification") }}</th>
+                                            <th>{{ __("dashboard.code.fields.teacher") }}</th>
+                                            <th>{{ __("dashboard.common.created_at") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -104,29 +143,34 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $code->code }}</td>
-                <td>{{ $code->for }}</td>
-                <td>{{ $code->number_of_uses }}</td>
-                <td>{{ $code->expires_at ? $code->expires_at->format('Y-m-d') : '' }}</td>
-                <td>{{ $code->teacher->name ?? '' }}</td>
-                <td>{{ $code->created_at->format('Y-m-d H:i:s') }}</td>
+                                                <td>{{ $code->for }}</td>
+                                                <td>{{ $code->number_of_uses }}</td>
+                                                <td>{{ $code->expires_at ? $code->expires_at->format('Y-m-d') : '' }}</td>
+                                                <td>{{ $code->code_classification ?? 'N/A' }}</td>
+                                                <td>{{ $code->teacher->name ?? '' }}</td>
+                                                <td>{{ $code->created_at->format('Y-m-d H:i:s') }}</td>
                                                 <td>
                                                     @can('view_code')
-                                                        <a href="{{ route('codes.show', $code->id) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ route('codes.show', $code->id) }}"
+                                                           class="btn btn-info btn-sm">
                                                             <i class="icon-eye6"></i> {{ __('dashboard.common.view') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('edit_code')
-                                                        <a href="{{ route('codes.edit', $code->id) }}" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('codes.edit', $code->id) }}"
+                                                           class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
                                                         </a>
                                                     @endcan
 
                                                     @can('delete_code')
-                                                        <form action="{{ route('codes.destroy', $code->id) }}" method="POST" style="display: inline-block;">
+                                                        <form action="{{ route('codes.destroy', $code->id) }}"
+                                                              method="POST" style="display: inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('dashboard.code.delete_confirm') }}');">
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('{{ __('dashboard.code.delete_confirm') }}');">
                                                                 <i class="icon-trash4"></i> {{ __('dashboard.common.delete') }}
                                                             </button>
                                                         </form>
@@ -135,7 +179,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="{{ 2 + count(Schema::getColumnListing('codes')) }}" class="text-center">{{ __('dashboard.code.no_records') }}</td>
+                                                <td colspan="{{ 2 + count(Schema::getColumnListing('codes')) }}"
+                                                    class="text-center">{{ __('dashboard.code.no_records') }}</td>
                                             </tr>
                                         @endforelse
                                         </tbody>

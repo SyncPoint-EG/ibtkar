@@ -33,9 +33,10 @@ class CodeController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to']);
+        $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to', 'price', 'code', 'code_classification']);
         $codes = $this->codeService->search($filters, $request->get('per_page', 15), ['teacher']);
         $teachers = $this->teacherService->getAll();
+        $codeClassifications = $this->codeService->getUniqueCodeClassifications();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -45,7 +46,7 @@ class CodeController extends Controller
             ]);
         }
 
-        return view('dashboard.codes.index', compact('codes', 'teachers', 'filters'));
+        return view('dashboard.codes.index', compact('codes', 'teachers', 'filters', 'codeClassifications'));
     }
 
     /**

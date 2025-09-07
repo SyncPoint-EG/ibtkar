@@ -41,6 +41,7 @@ class UpdateStudentProfileRequest extends FormRequest
             'governorate_id' => ['sometimes', 'exists:governorates,id'],
             'district_id' => ['nullable', 'exists:districts,id'],
             'guardian_number' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable'],
         ];
     }
 }

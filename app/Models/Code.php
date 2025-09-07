@@ -14,7 +14,7 @@ class Code extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'for', 'number_of_uses', 'expires_at', 'teacher_id'];
+    protected $fillable = ['code', 'for', 'number_of_uses', 'expires_at', 'teacher_id', 'code_classification', 'price'];
 
     /**
      * The attributes that should be cast.

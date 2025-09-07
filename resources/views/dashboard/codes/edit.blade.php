@@ -85,6 +85,24 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+        <div class="form-group">
+            <label for="code_classification">{{ __("dashboard.code.fields.code_classification") }}</label>
+            <input type="text" id="code_classification" class="form-control @error('code_classification') is-invalid @enderror"
+                   name="code_classification" value="{{ isset($code) ? $code->code_classification : old('code_classification') }}"
+                   placeholder="{{ __("dashboard.code.fields.code_classification") }}">
+            @error('code_classification')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+                <div class="form-group">
+            <label for="price">{{ __("dashboard.code.fields.price") }}</label>
+            <input type="number" id="price" class="form-control @error('price') is-invalid @enderror"
+                   name="price" value="{{ isset($code) ? $code->price : old('price') }}"
+                   placeholder="{{ __("dashboard.code.fields.price") }}" step="0.01">
+            @error('price')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
                 
                 <div class="form-group">
             <label for="expires_at">{{ __("dashboard.code.fields.expires_at") }}</label>

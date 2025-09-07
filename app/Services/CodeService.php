@@ -178,12 +178,30 @@ class CodeService
             $query->where('created_at', '<=', $criteria['created_at_to']);
         }
 
+        if (isset($criteria['code']) && !empty($criteria['code'])) {
+            $query->where('code', 'like', '%' . $criteria['code'] . '%');
+        }
+
+        if (isset($criteria['code_classification']) && !empty($criteria['code_classification'])) {
+            $query->where('code_classification', $criteria['code_classification']);
+        }
+
         // Add sorting
         $sortBy = $criteria['sort_by'] ?? 'created_at';
         $sortOrder = $criteria['sort_order'] ?? 'desc';
         $query->orderBy($sortBy, $sortOrder);
 
         return $query->paginate($perPage);
+    }
+
+    /**
+     * Get unique code classifications
+     *
+     * @return Collection
+     */
+    public function getUniqueCodeClassifications(): \Illuminate\Support\Collection
+    {
+        return $this->model->distinct()->pluck('code_classification')->filter()->values();
     }
 
     /**

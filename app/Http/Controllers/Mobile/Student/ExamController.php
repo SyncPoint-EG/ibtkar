@@ -59,7 +59,7 @@ class ExamController extends Controller
             ->where('is_submitted', true)
             ->first();
 
-        if ($previousAttempt) {
+        if ($previousAttempt && $previousAttempt->is_passed) {
             return response()->json(['message' => 'You have already submitted this exam.'], 400);
         }
 
