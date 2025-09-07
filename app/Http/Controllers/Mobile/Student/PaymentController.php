@@ -61,8 +61,6 @@ class PaymentController extends Controller
             $student->save();
 
         }
-        $payment = Payment::create($validated);
-
         if($request->course_id){
             $course = Course::find($request->course_id);
             if($request->payment_method == 'code'){
@@ -80,12 +78,35 @@ class PaymentController extends Controller
         }
         if($request->chapter_id){
             $lessonIds = Lesson::where('chapter_id', $request->chapter_id)->pluck('id')->toArray();
+            $chapter = Chapter::find($request->chapter_id);
+            if($request->payment_method == 'code'){
+                $code = Code::where('code',$request->payment_code)->first();
+                if($code->price != $chapter->price){
+                    return response()->json([
+                        'status' => false,
+                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                    ]);
+                }
+            }
             Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
 
         }
         if($request->lesson_id){
+            $lesson = Lesson::find($request->lesson_id);
+            if($request->payment_method == 'code'){
+                $code = Code::where('code',$request->payment_code)->first();
+                if($code->price != $lesson->price){
+                    return response()->json([
+                        'status' => false,
+                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                    ]);
+                }
+            }
             Watch::where('student_id', $student_id)->where('lesson_id', $request->lesson_id)->update(['count'=>3]);
         }
+        $payment = Payment::create($validated);
+
+
         return response()->json([
             'status' => true,
             'message'  => 'تمت عملية الشراء بنجاح'
