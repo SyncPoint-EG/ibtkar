@@ -35,8 +35,9 @@ class ExamController extends Controller
         return ExamResource::collection($exams);
     }
 
-    public function show(Exam $exam)
+    public function show($examId)
     {
+        $exam = Exam::findOrFail($examId);
         $exam->load('questions.options');
         return new ExamResource($exam);
     }
