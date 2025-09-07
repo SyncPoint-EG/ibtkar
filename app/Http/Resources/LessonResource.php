@@ -40,7 +40,7 @@ class LessonResource extends JsonResource
             'date' => $this->date,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            'has_passed_exam' => $user ? $this->exams->isNotEmpty() && $user->examAttempts()->whereIn('exam_id', $this->exams->pluck('id'))->where('is_passed', true)->exists() : false,
+            'is_passed_exam' => $this->exams->isEmpty() ? true : ($user ? $user->examAttempts()->whereIn('exam_id', $this->exams->pluck('id'))->where('is_passed', true)->exists() : false),
 
         ];
     }
