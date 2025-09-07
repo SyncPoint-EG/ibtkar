@@ -168,6 +168,9 @@ class Student extends Authenticatable
             return false;
         }
 
+        if($lesson->price ==0 || $lesson->chapter->price ==0 || $lesson->chapter->course->price ==0){
+            return true;
+        }
         // Check for lesson purchase
         $isPurchased = Payment::where('student_id', $this->id)
             ->where('lesson_id', $lessonId)->where('payment_status',\App\Models\Payment::PAYMENT_STATUS['approved'])
