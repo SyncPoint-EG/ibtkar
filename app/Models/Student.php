@@ -232,6 +232,11 @@ class Student extends Authenticatable
         return $this->belongsToMany(Lesson::class, 'favorites', 'student_id', 'lesson_id');
     }
 
+    public function examAttempts()
+    {
+        return $this->hasMany(ExamAttempt::class);
+    }
+
     public function getSubjectExamAverages()
     {
         $subjectAverages = [];
