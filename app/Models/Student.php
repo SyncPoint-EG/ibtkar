@@ -339,12 +339,12 @@ class Student extends Authenticatable
             ->where('division_id', $this->division_id)
             ->pluck('id');
 
-        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
+        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->unique()->get();
 
         foreach ($subjects as $subject) {
             // Get all lessons for the subject
-            $lessonIds = Lesson::whereHas('chapter.course', function ($query) use ($subject) {
-                $query->where('subject_id', $subject->id);
+            $lessonIds = Lesson::whereHas('chapter.course', function ($query) use ($subject ,$courseIds) {
+                $query->where('subject_id', $subject->id)->whereIn('id', $courseIds);
             })->pluck('id');
 
             if ($lessonIds->isEmpty()) {
