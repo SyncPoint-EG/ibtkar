@@ -134,7 +134,7 @@ class Teacher extends Authenticatable
     // Get stages through courses
     public function stages()
     {
-        return $this->hasManyThrough(Stage::class, Course::class, 'teacher_id', 'id', 'id', 'stage_id');
+        return $this->hasManyThrough(Stage::class, SubjectTeacher::class, 'teacher_id', 'id', 'id', 'stage_id');
     }
 
     // Get grades through courses
