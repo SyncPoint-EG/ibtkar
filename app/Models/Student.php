@@ -43,6 +43,10 @@ class Student extends Authenticatable
     }
 
 
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
     public function getImageAttribute()
     {
         if ($this->attributes['image']) {

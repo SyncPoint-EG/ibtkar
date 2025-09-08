@@ -38,7 +38,7 @@
                                         <tbody>
                                         @foreach($exam->attempts as $attempt)
                                             <tr>
-                                                <td>{{ $attempt->student }}</td>
+                                                <td>{{ $attempt->student->name }}</td>
                                                 <td>{{ $attempt->score }} / {{ $exam->questions->sum('degree') }}</td>
                                                 <td>{{ $attempt->created_at->format('d-m-Y H:i') }}</td>
                                                 <td>
