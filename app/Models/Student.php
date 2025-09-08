@@ -338,7 +338,7 @@ class Student extends Authenticatable
             ->where('grade_id', $this->grade_id)
 //            ->where('division_id', $this->division_id)
             ->pluck('id');
-        dd(Course::pluck(['stage_id','grade_id','division_id'])->toArray());
+        dd(Course::pluck(['stage_id','grade_id','division_id']));
         dd($this->stage_id . '    ' . $this->grade_id . '         ' . $this->division_id );
         $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
 
