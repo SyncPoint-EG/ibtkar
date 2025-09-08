@@ -339,7 +339,7 @@ class Student extends Authenticatable
             ->where('division_id', $this->division_id)
             ->pluck('id');
 
-        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->unique()->get();
+        $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
 
         foreach ($subjects as $subject) {
             // Get all lessons for the subject
