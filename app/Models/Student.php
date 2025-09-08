@@ -302,8 +302,9 @@ class Student extends Authenticatable
 
         foreach ($subjects as $subject) {
             // Get all exams for the courses of this subject
-            $examIds = Exam::whereIn('course_id', $courseIds)->whereHas('course', function ($query) use ($subject) {
-                $query->where('subject_id', $subject->id);
+
+            $examIds = Exam::whereHas('lesson.chapter.course', function ($query) use ($subject ,$courseIds) {
+                $query->where('subject_id', $subject->id)->whereIn('id', $courseIds);
             })->pluck('id');
 
             // Get all exam attempts for the student for these exams
