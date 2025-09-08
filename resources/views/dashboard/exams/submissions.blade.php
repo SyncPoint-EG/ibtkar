@@ -79,7 +79,7 @@
                                         <p class="card-text">Your answer: {{ $answer->essay_answer ?? 'Not answered' }}</p>
                                         <p class="card-text">Correct answer: {{ $answer->question->correct_essay_answer }}</p>
                                     @endif
-                                    <p class="card-text">Status: @if($answer->is_correct) <span class="badge badge-success">Correct</span> @else <span class="badge badge-danger">Incorrect</span> @endif</p>
+                                    <p class="card-text">Status: @if($answer->marks_awarded == $answer->question->marks) <span class="badge badge-success">Correct</span> @else <span class="badge badge-danger">Incorrect</span> @endif</p>
                                 </div>
                             </div>
                         @endforeach
