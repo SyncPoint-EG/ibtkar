@@ -72,7 +72,7 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h5 class="card-title">Q: {{ $answer->question->question_text }}</h5>
-                                    @if($answer->question->type == 'mcq' || $answer->question->type == 'true_false')
+                                    @if($answer->question->type == 'multiple_choice' || $answer->question->type == 'true_false')
                                         <p class="card-text">Your answer: {{ $answer->option->option_text ?? 'Not answered' }}</p>
                                         <p class="card-text">Correct answer: {{ $answer->question->options->where('is_correct', true)->first()->option_text }}</p>
                                     @else
