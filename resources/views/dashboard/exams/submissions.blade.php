@@ -39,7 +39,7 @@
                                         @foreach($exam->attempts as $attempt)
                                             <tr>
                                                 <td>{{ $attempt->student->name }}</td>
-                                                <td>{{ $attempt->score }} / {{ $exam->questions->sum('total_marks') }}</td>
+                                                <td>{{ $attempt->score }} / {{ $exam->questions->sum('marks') }}</td>
                                                 <td>{{ $attempt->created_at->format('d-m-Y H:i') }}</td>
                                                 <td>
                                                     <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#answersModal{{ $attempt->id }}">View Answers</a>
