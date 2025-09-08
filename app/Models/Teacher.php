@@ -140,13 +140,13 @@ class Teacher extends Authenticatable
     // Get grades through courses
     public function grades()
     {
-        return $this->hasManyThrough(Grade::class, Course::class, 'teacher_id', 'id', 'id', 'grade_id');
+        return $this->hasManyThrough(Grade::class, SubjectTeacher::class, 'teacher_id', 'id', 'id', 'grade_id');
     }
 
     // Get divisions through courses
     public function divisions()
     {
-        return $this->hasManyThrough(Division::class, Course::class, 'teacher_id', 'id', 'id', 'division_id');
+        return $this->hasManyThrough(Division::class, SubjectTeacher::class, 'teacher_id', 'id', 'id', 'division_id');
     }
 //    public function subjects()
 //    {
