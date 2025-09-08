@@ -336,7 +336,7 @@ class Student extends Authenticatable
         // Get all subjects for the student's stage, grade , and division
         $courseIds = Course::where('stage_id', $this->stage_id)
             ->where('grade_id', $this->grade_id)
-//            ->where('division_id', $this->division_id)
+            ->where('division_id', $this->division_id)
             ->pluck('id');
         $subjects = Subject::whereIn('id', Course::whereIn('id', $courseIds)->pluck('subject_id'))->get();
 

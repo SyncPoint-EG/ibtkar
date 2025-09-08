@@ -18,7 +18,11 @@ class CourseController extends Controller
     }
     public function index()
     {
-        $courses = $this->courseService->getAllPaginated();
+        $student = auth('student')->user();
+        $courses = Course::where('stage_id', $student->stage_id)
+            ->where('grade_id', $student->grade_id)
+            ->where('division_id', $student->division_id)
+            ->get();;
         return CourseResource::collection($courses);
     }
 

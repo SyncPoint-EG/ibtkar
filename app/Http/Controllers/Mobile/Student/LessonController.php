@@ -14,7 +14,12 @@ class LessonController extends Controller
     public function getLessons()
     {
         $perPage = \request()->query('perPage',10);
-        $lessons = Lesson::where('is_featured',1)->paginate($perPage);
+        $student = auth('student')->user();
+        $lessons = Lesson::where('is_featured',1)->whereHas('chapter.course',function ($q) use ($student){
+            $q->where('stage_id',$student->stage_id)
+                ->where('grade_id',$student->grade_id)
+                ->where('division_id',$student->division_id);
+        })->paginate($perPage);
         return LessonResource::collection($lessons);
     }
     public function getLesson(Lesson $lesson)

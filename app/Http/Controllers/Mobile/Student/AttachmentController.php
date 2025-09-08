@@ -15,7 +15,12 @@ class AttachmentController extends Controller
     public function allAttachments()
     {
         $perPage = \request()->query('perPage',10);
-        $attachments = LessonAttachment::paginate($perPage);
+        $student = auth('student')->user();
+        $attachments = LessonAttachment::whereHas('lesson.chapter.course',function ($q) use($student){
+            $q->where('stage_id',$student->stage_id)
+                ->where('grade_id',$student->grade_id)
+                ->where('division_id',$student->division_id);
+        })->paginate($perPage);
         return LessonAttachmentResource::collection($attachments);
     }
     public function getLesson(Lesson $lesson)

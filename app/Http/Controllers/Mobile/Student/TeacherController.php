@@ -40,13 +40,18 @@ class TeacherController extends Controller
         $sort_by       = $request->get('sort_by', 'id');
         $sort_direction= $request->get('sort_direction', 'asc');
         $per_page      = $request->get('per_page', 10);
+        $student = auth('student')->user();
         // Build query with eager loading of assignments and related models
         $query = Teacher::with([
             'courses.subject',
             'courses.grade',
             'courses.stage',
             'courses.division'
-        ]);
+        ])->whereHas('subjectTeacherAssignments',function ($query) use($student) {
+            $query->where('stage_id',$student->stage_id)
+                ->where('grade_id',$student->grade_id)
+                ->where('division_id',$student->division_id);
+        });
 
 //            ->withCount(['students', 'lectures', 'courses']);
 
