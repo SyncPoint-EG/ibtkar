@@ -51,7 +51,10 @@ class TeacherController extends Controller
                 $query->where('stage_id',$student->stage_id);
                 $query->where('grade_id',$student->grade_id);
                 if($student->division_id){
-                   $query->where('division_id',$student->division_id);
+                   $query->where(function ($q) use ($student) {
+                          $q->where('division_id', $student->division_id)
+                             ->orWhereNull('division_id');
+                   });
                 }
         });
 
