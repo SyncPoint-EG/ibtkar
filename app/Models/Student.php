@@ -333,7 +333,7 @@ class Student extends Authenticatable
             // Add to the list
             $subjectAverages[$subject->name] = [
                 'average' => round($average, 2),
-                'exams_count' => $attempts->count()
+                'exams_count' => $examIdsQuery->count()
             ];
         }
 
