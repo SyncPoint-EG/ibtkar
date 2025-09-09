@@ -288,7 +288,7 @@ class Student extends Authenticatable
         return $this->hasMany(ExamAttempt::class);
     }
 
-    public function getSubjectExamAverages()
+    public function getSubjectExamAverages($month = null)
     {
         $subjectAverages = [];
 
@@ -302,10 +302,15 @@ class Student extends Authenticatable
 
         foreach ($subjects as $subject) {
             // Get all exams for the courses of this subject
-
-            $examIds = Exam::whereHas('lesson.chapter.course', function ($query) use ($subject ,$courseIds) {
+            $examIdsQuery = Exam::whereHas('lesson.chapter.course', function ($query) use ($subject, $courseIds) {
                 $query->where('subject_id', $subject->id)->whereIn('id', $courseIds);
-            })->pluck('id');
+            });
+
+            if ($month) {
+                $examIdsQuery->whereMonth('created_at', $month);
+            }
+
+            $examIds = $examIdsQuery->pluck('id');
 
             // Get all exam attempts for the student for these exams
             $attempts = ExamAttempt::where('student_id', $this->id)
@@ -313,7 +318,10 @@ class Student extends Authenticatable
                 ->get();
 
             if ($attempts->isEmpty()) {
-                $subjectAverages[$subject->name] = 0;
+                $subjectAverages[$subject->name] = [
+                    'average' => 0,
+                    'exams_count' => 0
+                ];
                 continue;
             }
 
@@ -323,7 +331,10 @@ class Student extends Authenticatable
             $average = $totalMarks > 0 ? ($totalScore / $totalMarks) * 100 : 0;
 
             // Add to the list
-            $subjectAverages[$subject->name] = round($average, 2);
+            $subjectAverages[$subject->name] = [
+                'average' => round($average, 2),
+                'exams_count' => $attempts->count()
+            ];
         }
 
         return $subjectAverages;

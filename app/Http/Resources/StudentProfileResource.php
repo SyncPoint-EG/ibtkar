@@ -31,7 +31,7 @@ class StudentProfileResource extends JsonResource
             'status'       => $this->status ,
             'points'       => $this->points,
             'referral_code'       => $this->referral_code,
-            'subject_exam_averages' => $this->getSubjectExamAverages(),
+            'subject_exam_averages' => $this->getSubjectExamAverages($request->month),
             'lesson_attendance' => $this->getLessonAttendancePercentage(),
         ];
     }
