@@ -340,7 +340,7 @@ class Student extends Authenticatable
         return $subjectAverages;
     }
 
-    public function getLessonAttendancePercentage()
+    public function getLessonAttendancePercentage($month = null)
     {
         $lessonAttendance = [];
 
@@ -353,9 +353,15 @@ class Student extends Authenticatable
 
         foreach ($subjects as $subject) {
             // Get all lessons for the subject
-            $lessonIds = Lesson::whereHas('chapter.course', function ($query) use ($subject ,$courseIds) {
+            $lessonsQuery = Lesson::whereHas('chapter.course', function ($query) use ($subject, $courseIds) {
                 $query->where('subject_id', $subject->id)->whereIn('id', $courseIds);
-            })->pluck('id');
+            });
+
+            if ($month) {
+                $lessonsQuery->whereMonth('created_at', $month);
+            }
+
+            $lessonIds = $lessonsQuery->pluck('id');
 
             if ($lessonIds->isEmpty()) {
                 $lessonAttendance[$subject->name] = 0;
