@@ -49,8 +49,8 @@ class TeacherController extends Controller
             'courses.division'
         ])->whereHas('subjectTeacherAssignments',function ($query) use($student) {
             $query->where('stage_id',$student->stage_id)
-                ->where('grade_id',$student->grade_id)
-                ->where('division_id',$student->division_id);
+                ->where('grade_id',$student->grade_id);
+//                ->where('division_id',$student->division_id);
         });
 
 //            ->withCount(['students', 'lectures', 'courses']);
