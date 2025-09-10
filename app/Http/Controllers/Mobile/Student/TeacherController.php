@@ -8,11 +8,13 @@ use App\Http\Requests\TeacherRequest;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\SingleTeacherResource;
+use App\Http\Resources\StoryResource;
 use App\Http\Resources\TeacherResource;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Lesson;
 use App\Models\Stage;
+use App\Models\Story;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Services\TeacherService;
@@ -185,6 +187,27 @@ class TeacherController extends Controller
             });
         }
         return $query ;
+    }
+
+    public function teacherStories()
+    {
+        $student = auth('student')->user();
+        $teacherIds = Teacher::whereHas('subjectTeacherAssignments', function ($query) use ($student) {
+            $query->where('stage_id', $student->stage_id)
+                ->where('grade_id', $student->grade_id)
+                ->where(function ($q) use ($student) {
+                    $q->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+        })->pluck('id');
+
+        $stories = Story::whereIn('teacher_id', $teacherIds)
+            ->where('created_at', '>=', now()->subDay())
+            ->with('teacher')
+            ->get()
+            ->groupBy('teacher_id');
+
+        return response()->json($stories);
     }
 
 }
