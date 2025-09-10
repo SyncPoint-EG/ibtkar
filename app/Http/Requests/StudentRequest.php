@@ -23,13 +23,14 @@ class StudentRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $studentId = $this->route('student') ? $this->route('student')->id : null;
 
+        return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255','unique:students,phone'],
-            'password' => ['required', 'string', 'min:8'],
-            'gender' => ['required','in:Male,Female'],
+            'phone' => ['required', 'string', 'max:255', 'unique:students,phone,' . $studentId],
+            'password' => [$studentId ? 'nullable' : 'required', 'string', 'min:8'],
+            'gender' => ['required', 'in:Male,Female'],
             'birth_date' => ['nullable', 'date'],
             'stage_id' => ['required', 'exists:stages,id'],
             'grade_id' => ['required', 'exists:grades,id'],

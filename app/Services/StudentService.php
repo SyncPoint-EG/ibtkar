@@ -145,6 +145,10 @@ class StudentService
         try {
             DB::beginTransaction();
 
+            if (!isset($data['password']) || !$data['password']) {
+                unset($data['password']);
+            }
+
             $student->update($data);
             $student->refresh();
 

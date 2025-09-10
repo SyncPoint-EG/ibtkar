@@ -77,7 +77,7 @@
                 <div class="form-group">
             <label for="password">{{ __("dashboard.student.fields.password") }}</label>
             <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
-                   name="password" value="{{ isset($student) ? $student->password : old('password') }}"
+                   name="password" value=""
                    placeholder="{{ __("dashboard.student.fields.password") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.student.fields.password") }}">
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
