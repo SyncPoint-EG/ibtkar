@@ -229,6 +229,8 @@ class TeacherController extends Controller
 //        try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
+            $data['day_of_week'] = $request->day_of_week;
+            $data['time'] = $request->time;
 
             $teacher = $this->teacherService->create($data);
 
@@ -299,6 +301,8 @@ class TeacherController extends Controller
         try {
             $data = $request->except('password');
             $data['is_featured'] = $request->has('is_featured');
+            $data['day_of_week'] = $request->day_of_week;
+            $data['time'] = $request->time;
 
             $this->teacherService->update($teacher, $data);
 
