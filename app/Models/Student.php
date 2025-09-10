@@ -320,7 +320,8 @@ class Student extends Authenticatable
             if ($attempts->isEmpty()) {
                 $subjectAverages[$subject->name] = [
                     'average' => 0,
-                    'exams_count' => 0
+                    'exams_count' => 0,
+                    'exams_degrees' => []
                 ];
                 continue;
             }
@@ -330,10 +331,24 @@ class Student extends Authenticatable
             $totalMarks = $attempts->sum('total_marks');
             $average = $totalMarks > 0 ? ($totalScore / $totalMarks) * 100 : 0;
 
+            $examsDegrees = [];
+            $exams = $examIdsQuery->get();
+            foreach ($exams as $exam) {
+                $latestAttempt = $this->examAttempts()->where('exam_id', $exam->id)->latest()->first();
+                if ($latestAttempt) {
+                    $examsDegrees[] = [
+                        'exam_name' => $exam->title,
+                        'degree' => $latestAttempt->score,
+                        'total_marks' => $latestAttempt->total_marks
+                    ];
+                }
+            }
+
             // Add to the list
             $subjectAverages[$subject->name] = [
                 'average' => round($average, 2),
-                'exams_count' => $examIdsQuery->count()
+                'exams_count' => $examIdsQuery->count(),
+                'exams_degrees' => $examsDegrees
             ];
         }
 
