@@ -204,8 +204,8 @@ class TeacherController extends Controller
         $stories = Story::whereIn('teacher_id', $teacherIds)
             ->where('created_at', '>=', now()->subDay())
             ->with('teacher')
-            ->get()
-            ->groupBy('teacher_id');
+            ->get();
+//            ->groupBy('teacher_id');
 
         return response()->json($stories);
     }
