@@ -21,3 +21,4 @@ Route::get('districts/{governorate}',[HomeController::class, 'getDistricts']);
 Route::get('courses',[HomeController::class, 'getCourses']);
 Route::get('teachers',[HomeController::class, 'getTeachers']);
 Route::get('attachments',[HomeController::class, 'getAttachments']);
+Route::get('student/tables', [App\Http\Controllers\Mobile\Student\TableController::class, 'getTeacherTables'])->middleware('auth:sanctum');

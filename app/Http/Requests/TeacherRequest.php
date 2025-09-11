@@ -35,6 +35,8 @@ class TeacherRequest extends FormRequest
             'rate'         => 'nullable|numeric',
             'password'     => $passwordRules,
             'is_featured' => 'nullable|boolean',
+            'day_of_week'  => 'nullable|integer|between:1,7',
+            'time'         => 'nullable|date_format:H:i',
 
             // Validate assignments (new way)
 //            'assignments' => 'required|array|min:1',

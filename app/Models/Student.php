@@ -331,18 +331,18 @@ class Student extends Authenticatable
             $totalMarks = $attempts->sum('total_marks');
             $average = $totalMarks > 0 ? ($totalScore / $totalMarks) * 100 : 0;
 
-            $examsDegrees = [];
-            $exams = $examIdsQuery->get();
-            foreach ($exams as $exam) {
-                $latestAttempt = $this->examAttempts()->where('exam_id', $exam->id)->latest()->first();
-                if ($latestAttempt) {
-                    $examsDegrees[] = [
-                        'exam_name' => $exam->title,
-                        'degree' => $latestAttempt->score,
-                        'total_marks' => $latestAttempt->total_marks
-                    ];
-                }
-            }
+//            $examsDegrees = [];
+//            $exams = $examIdsQuery->get();
+//            foreach ($exams as $exam) {
+//                $latestAttempt = $this->examAttempts()->where('exam_id', $exam->id)->latest()->first();
+//                if ($latestAttempt) {
+//                    $examsDegrees[] = [
+//                        'exam_name' => $exam->title,
+//                        'degree' => $latestAttempt->score,
+//                        'total_marks' => $latestAttempt->total_marks
+//                    ];
+//                }
+//            }
 
             // Add to the list
             $subjectAverages[$subject->name] = [

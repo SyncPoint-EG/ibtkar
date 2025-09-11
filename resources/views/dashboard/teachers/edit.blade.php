@@ -102,6 +102,28 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+
+                                                <div class="form-group">
+                                                    <label for="day_of_week">{{ __('dashboard.teacher.fields.day_of_week') }}</label>
+                                                    <select id="day_of_week" name="day_of_week" class="form-control @error('day_of_week') is-invalid @enderror">
+                                                        <option value="">{{ __('dashboard.common.select') }}</option>
+                                                        <option value="1" {{ ($teacher->day_of_week ?? old('day_of_week')) == 1 ? 'selected' : '' }}>{{ __('dashboard.days.saturday') }}</option>
+                                                        <option value="2" {{ ($teacher->day_of_week ?? old('day_of_week')) == 2 ? 'selected' : '' }}>{{ __('dashboard.days.sunday') }}</option>
+                                                        <option value="3" {{ ($teacher->day_of_week ?? old('day_of_week')) == 3 ? 'selected' : '' }}>{{ __('dashboard.days.monday') }}</option>
+                                                        <option value="4" {{ ($teacher->day_of_week ?? old('day_of_week')) == 4 ? 'selected' : '' }}>{{ __('dashboard.days.tuesday') }}</option>
+                                                        <option value="5" {{ ($teacher->day_of_week ?? old('day_of_week')) == 5 ? 'selected' : '' }}>{{ __('dashboard.days.wednesday') }}</option>
+                                                        <option value="6" {{ ($teacher->day_of_week ?? old('day_of_week')) == 6 ? 'selected' : '' }}>{{ __('dashboard.days.thursday') }}</option>
+                                                        <option value="7" {{ ($teacher->day_of_week ?? old('day_of_week')) == 7 ? 'selected' : '' }}>{{ __('dashboard.days.friday') }}</option>
+                                                    </select>
+                                                    @error('day_of_week') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="time">{{ __('dashboard.teacher.fields.time') }}</label>
+                                                    <input type="time" id="time" class="form-control @error('time') is-invalid @enderror"
+                                                           name="time" value="{{ $teacher->time ?? old('time') }}">
+                                                    @error('time') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                </div>
                                                 <div class="form-group">
                                                     <label for="password">{{ __("dashboard.student.fields.password") }}</label>
                                                     <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
