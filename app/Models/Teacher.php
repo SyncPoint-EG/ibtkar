@@ -13,6 +13,16 @@ class Teacher extends Authenticatable
 {
     use HasFactory ,HasApiTokens;
 
+    const DAYS_OF_WEEK = [
+        1 => 'saturday',
+        2 => 'sunday',
+        3 => 'monday',
+        4 => 'tuesday',
+        5 => 'wednesday',
+        6 => 'thursday',
+        7 => 'friday',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

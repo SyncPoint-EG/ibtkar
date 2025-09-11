@@ -392,6 +392,8 @@ return [
             'total_courses' => 'Total Courses',
             'total_lessons' => 'Total Lessons',
             'uuid' => 'Unique ID',
+            'day_of_week' => 'Day of Week',
+            'time' => 'Time',
 //            'uuid' => 'Uuid',
         ],
         'stats' => [
@@ -842,5 +844,14 @@ return [
             'status' => 'Status',
             'date' => 'Date',
         ],
+    ],
+    'days' => [
+        'saturday' => 'Saturday',
+        'sunday' => 'Sunday',
+        'monday' => 'Monday',
+        'tuesday' => 'Tuesday',
+        'wednesday' => 'Wednesday',
+        'thursday' => 'Thursday',
+        'friday' => 'Friday',
     ],
 ];
