@@ -16,9 +16,14 @@ class TableController extends Controller
         $student = auth()->guard('student')->user();
 
         $query = Teacher::whereHas('courses', function ($q) use ($student) {
-            $q->where('stage_id', $student->stage_id)
-              ->where('grade_id', $student->grade_id)
-              ->where('division_id', $student->division_id);
+            $q->where('stage_id', $student->stage_id);
+              $q->where('grade_id', $student->grade_id);
+            if($student->division_id){
+                $q->where(function ($qq) use ($student) {
+                    $qq->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+            }
         });
 
         if ($request->has('day_of_week')) {
