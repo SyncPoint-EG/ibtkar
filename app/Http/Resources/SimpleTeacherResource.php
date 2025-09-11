@@ -20,8 +20,8 @@ class SimpleTeacherResource extends JsonResource
             'name' => $this->name,
             'bio' => $this->bio,
             'image' => $this->image,
-            'day_of_week' => Teacher::DAYS_OF_WEEK[$this->day] ?? null,
-            'hour'        => $this->hour
+            'day_of_week' => Teacher::DAYS_OF_WEEK[$this->day_of_week] ?? null,
+            'hour'        => $this->time
 
         ];
     }
