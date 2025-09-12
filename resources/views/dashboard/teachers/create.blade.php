@@ -95,23 +95,6 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="day_of_week">{{ __('dashboard.teacher.fields.day_of_week') }}</label>
-                                                    <select id="day_of_week" name="day_of_week" class="form-control @error('day_of_week') is-invalid @enderror">
-                                                        <option value="">{{ __('dashboard.common.select') }}</option>
-                                                        @foreach(\App\Models\Teacher::DAYS_OF_WEEK as $key => $day)
-                                                            <option value="{{ $key }}" {{ old('day_of_week') == $key ? 'selected' : '' }}>{{ __('dashboard.days.' . $day) }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('day_of_week') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="time">{{ __('dashboard.teacher.fields.time') }}</label>
-                                                    <input type="time" id="time" class="form-control @error('time') is-invalid @enderror"
-                                                           name="time" value="{{ old('time') }}">
-                                                    @error('time') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                </div>
-                                                <div class="form-group">
                                                     <label for="password">{{ __("dashboard.student.fields.password") }}</label>
                                                     <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
                                                            name="password" value="{{ old('password') }}"
@@ -133,12 +116,12 @@
                                                         {{-- Assignment rows will be inserted here --}}
                                                         @if(old('assignments'))
                                                             @foreach(old('assignments') as $idx => $assignment)
-                                                                <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">
+                                                                <div class="assignment-row mb-3 border rounded p-2 bg-light position-relative">
                                                                     <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">
                                                                         <i class="icon-trash"></i>
                                                                     </button>
                                                                     <div class="row">
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-2">
                                                                             <select name="assignments[{{ $idx }}][subject_id]" class="form-control" required>
                                                                                 <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>
                                                                                 @foreach($subjects as $subject)
@@ -146,7 +129,7 @@
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-2">
                                                                             <select name="assignments[{{ $idx }}][stage_id]" class="form-control" required>
                                                                                 <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>
                                                                                 @foreach($stages as $stage)
@@ -154,7 +137,7 @@
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-2">
                                                                             <select name="assignments[{{ $idx }}][grade_id]" class="form-control" required>
                                                                                 <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>
                                                                                 @foreach($grades as $grade)
@@ -162,13 +145,24 @@
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
-                                                                        <div class="col-md-3">
+                                                                        <div class="col-md-2">
                                                                             <select name="assignments[{{ $idx }}][division_id]" class="form-control">
                                                                                 <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>
                                                                                 @foreach($divisions as $division)
                                                                                     <option value="{{ $division->id }}" {{ (isset($assignment['division_id']) && $assignment['division_id'] == $division->id) ? 'selected' : '' }}>{{ $division->name }}</option>
                                                                                 @endforeach
                                                                             </select>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <select name="assignments[{{ $idx }}][day_of_week]" class="form-control">
+                                                                                <option value="">{{ __('dashboard.teacher.fields.day_of_week') }}</option>
+                                                                                @foreach(\App\Models\Teacher::DAYS_OF_WEEK as $key => $day)
+                                                                                    <option value="{{ $key }}" {{ (isset($assignment['day_of_week']) && $assignment['day_of_week'] == $key) ? 'selected' : '' }}>{{ __('dashboard.days.' . $day) }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <input type="time" name="assignments[{{ $idx }}][time]" class="form-control" value="{{ $assignment['time'] ?? '' }}">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -206,12 +200,12 @@
 
                                         {{-- Hidden template for assignment row --}}
                                         <div id="assignment-template" style="display:none;">
-                                            <div class="assignment-row mb-2 border rounded p-2 bg-light position-relative">
+                                            <div class="assignment-row mb-3 border rounded p-2 bg-light position-relative">
                                                 <button type="button" class="btn btn-danger btn-sm remove-assignment position-absolute" style="top:5px;right:5px;">
                                                     <i class="icon-trash"></i>
                                                 </button>
                                                 <div class="row">
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="assignments[__INDEX__][subject_id]" class="form-control" required>
                                                             <option value="">{{ __("dashboard.teacher.fields.subjects") }}</option>
                                                             @foreach($subjects as $subject)
@@ -219,7 +213,7 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="assignments[__INDEX__][stage_id]" class="form-control" required>
                                                             <option value="">{{ __("dashboard.teacher.fields.stages") }}</option>
                                                             @foreach($stages as $stage)
@@ -227,7 +221,7 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="assignments[__INDEX__][grade_id]" class="form-control" required>
                                                             <option value="">{{ __("dashboard.teacher.fields.grades") }}</option>
                                                             @foreach($grades as $grade)
@@ -235,13 +229,24 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <select name="assignments[__INDEX__][division_id]" class="form-control">
                                                             <option value="">{{ __("dashboard.teacher.fields.divisions") }} ({{ __('dashboard.common.optional') }})</option>
                                                             @foreach($divisions as $division)
                                                                 <option value="{{ $division->id }}">{{ $division->name }}</option>
                                                             @endforeach
                                                         </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <select name="assignments[__INDEX__][day_of_week]" class="form-control">
+                                                            <option value="">{{ __('dashboard.teacher.fields.day_of_week') }}</option>
+                                                            @foreach(\App\Models\Teacher::DAYS_OF_WEEK as $key => $day)
+                                                                <option value="{{ $key }}">{{ __('dashboard.days.' . $day) }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="time" name="assignments[__INDEX__][time]" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>

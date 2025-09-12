@@ -229,8 +229,6 @@ class TeacherController extends Controller
 //        try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
-            $data['day_of_week'] = $request->day_of_week;
-            $data['time'] = $request->time;
 
             $teacher = $this->teacherService->create($data);
 
@@ -243,11 +241,13 @@ class TeacherController extends Controller
                         'stage_id'    => $assignment['stage_id'],
                         'grade_id'    => $assignment['grade_id'],
                         'division_id' => $assignment['division_id'] ?? null,
+                        'day_of_week' => $assignment['day_of_week'] ?? null,
+                        'time' => $assignment['time'] ?? null,
                     ];
                 }
             }
             if (!empty($syncData)) {
-                $teacher->subjects()->sync($syncData);
+                $teacher->subjects()->attach($syncData);
             }
 
             return redirect()->route('teachers.index')
@@ -301,8 +301,6 @@ class TeacherController extends Controller
         try {
             $data = $request->except('password');
             $data['is_featured'] = $request->has('is_featured');
-            $data['day_of_week'] = $request->day_of_week;
-            $data['time'] = $request->time;
 
             $this->teacherService->update($teacher, $data);
 
@@ -319,6 +317,8 @@ class TeacherController extends Controller
                         'stage_id'    => $assignment['stage_id'],
                         'grade_id'    => $assignment['grade_id'],
                         'division_id' => $assignment['division_id'] ?? null,
+                        'day_of_week' => $assignment['day_of_week'] ?? null,
+                        'time' => $assignment['time'] ?? null,
                     ]);
                 }
             }

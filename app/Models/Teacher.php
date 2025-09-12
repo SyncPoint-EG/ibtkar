@@ -29,7 +29,7 @@ class Teacher extends Authenticatable
      * @var array
      */
 
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid', 'day_of_week', 'time'];
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid'];
 
     protected function casts(): array
     {
@@ -67,7 +67,7 @@ class Teacher extends Authenticatable
     public function subjects()
     {
         return $this->belongsToMany(Subject::class)
-            ->withPivot(['stage_id','grade_id','division_id'])
+            ->withPivot(['stage_id','grade_id','division_id','day_of_week','time'])
             ;
     }
     public function subjectTeacherAssignments()

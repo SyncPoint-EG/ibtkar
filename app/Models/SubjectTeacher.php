@@ -14,6 +14,8 @@ class SubjectTeacher extends Pivot  // or extends Model if you prefer
         'stage_id',
         'grade_id',
         'division_id',
+        'day_of_week',
+        'time',
     ];
 
     // Define relationships
