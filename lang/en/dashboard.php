@@ -609,6 +609,7 @@ return [
             'explanation' => 'Explanation',
             'revision' => 'Revision',
             'solve_homework' => 'Solve Homework',
+            'center' => 'Center',
         ],
         'attachments' => 'Attachments',
         'add_attachment' => 'Add Attachment',

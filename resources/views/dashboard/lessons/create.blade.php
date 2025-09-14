@@ -151,6 +151,7 @@
                                                         <option value="explanation" {{ old('type') == 'explanation' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.explanation') }}</option>
                                                         <option value="revision" {{ old('type') == 'revision' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.revision') }}</option>
                                                         <option value="solve_homework" {{ old('type') == 'solve_homework' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.solve_homework') }}</option>
+                                                        <option value="center" {{ old('type') == 'center' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.center') }}</option>
                                                     </select>
                                         @error('type')
                                         <div class="invalid-feedback">{{ $message }}</div>

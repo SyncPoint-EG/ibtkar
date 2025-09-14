@@ -550,6 +550,7 @@ return [
             'explanation' => 'شرح',
             'revision' => 'مراجعة',
             'solve_homework' => 'حل الواجب',
+            'center' => 'سنتر',
         ],
         'attachments' => 'المرفقات',
         'add_attachment' => 'إضافة مرفق',
