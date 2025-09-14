@@ -27,12 +27,19 @@ class PaymentController extends Controller
         $validated['total_amount'] = $amount;
         if($request->payment_method == 'code'){
             $code = Code::where('code',$request->payment_code)->first();
+
             if(!$code){
                 return response()->json([
                     'success' => false,
                     'message' => 'Code not found'
                 ]);
             }else{
+                if(($code->for == 'lesson' && !$request->lesson_id) || ($code->for == 'chapter' && !$request->chapter_id) || ($code->for == 'course' && !$request->course_id)){
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Code is not applicable'
+                    ]);
+                }
                 if($code->number_of_uses > 0 || now() > $code->expires_at){
                     return response()->json([
                         'status' => false,

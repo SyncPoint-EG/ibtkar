@@ -131,6 +131,7 @@ class TeacherService
         try {
             DB::beginTransaction();
 
+            $teacher->subjects()->detach();
             $deleted = $teacher->delete();
 
             DB::commit();
