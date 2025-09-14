@@ -75,6 +75,15 @@
             @enderror
         </div>
                 <div class="form-group">
+            <label for="mac_address">{{ __("dashboard.student.fields.mac_address") }}</label>
+            <input type="text" id="mac_address" class="form-control @error('mac_address') is-invalid @enderror"
+                   name="mac_address" value="{{ isset($student) ? $student->mac_address : old('mac_address') }}"
+                   placeholder="{{ __("dashboard.student.fields.mac_address") }}" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.student.fields.mac_address") }}">
+            @error('mac_address')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+                <div class="form-group">
             <label for="password">{{ __("dashboard.student.fields.password") }}</label>
             <input type="text" id="password" class="form-control @error('password') is-invalid @enderror"
                    name="password" value=""

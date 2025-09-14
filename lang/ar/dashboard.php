@@ -251,6 +251,7 @@ return [
             'name' => 'الاسم',
             'last_name' => 'الاسم الأخير',
             'phone' => 'الهاتف',
+            'mac_address' => 'عنوان MAC',
             'password' => 'كلمة المرور',
             'governorate_id' => 'معرف المحافظة',
             'district_id' => 'معرف المنطقة',

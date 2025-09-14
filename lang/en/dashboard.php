@@ -252,6 +252,7 @@ return [
             'name' => 'Name',
             'last_name' => 'Last Name',
             'phone' => 'Phone',
+            'mac_address' => 'MAC Address',
             'password' => 'Password',
             'governorate_id' => 'Governorate Id',
             'district_id' => 'District Id',
