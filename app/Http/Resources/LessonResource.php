@@ -22,7 +22,6 @@ class LessonResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'grade_id' => $this->chapter?->course?->grade_id,
             'desc' => $this->desc,
             'video_link' => $this->video_link,
             'video_image' => $this->video_image,
