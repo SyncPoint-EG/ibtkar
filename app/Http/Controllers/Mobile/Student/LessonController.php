@@ -18,7 +18,7 @@ class LessonController extends Controller
 //        return Lesson::whereHas('chapter.course')->get() ;
         $lessons = Lesson::where('is_featured',1)->whereHas('chapter.course',function ($q) use ($student){
 //                $q->where('stage_id',$student->stage_id);
-                $q->where('grade_id',$student->grade_id);
+//                $q->where('grade_id',$student->grade_id);
             if($student->division_id){
                 $q->where(function ($qq) use ($student) {
                     $qq->where('division_id', $student->division_id)
