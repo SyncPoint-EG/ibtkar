@@ -15,7 +15,7 @@ class LessonController extends Controller
     {
         $perPage = \request()->query('perPage',10);
         $student = auth('student')->user();
-        $lessons = Lesson::where('is_featured',1)->whereHas('chapter.course',function ($q) use ($student){
+        $lessons = Lesson::whereHas('chapter.course',function ($q) use ($student){
             $q->where('stage_id',$student->stage_id);
                 $q->where('grade_id',$student->grade_id);
             if($student->division_id){
