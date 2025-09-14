@@ -48,7 +48,18 @@ class HomeController extends Controller
     }
     public function getSubjects()
     {
-        $subjects = $this->subjectService->getAll();
+        $student = auth('student')->user();
+
+        $subjects = Subject::whereHas('courses',function ($q) use ($student){
+            $q->where('stage_id',$student->stage_id);
+            $q->where('grade_id',$student->grade_id);
+            if($student->division_id){
+                $q->where(function ($qq) use ($student) {
+                    $qq->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+            }
+        })->get();
         return SubjectResource::collection($subjects);
     }
     public function getSubject(Subject $subject)
