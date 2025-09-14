@@ -27,7 +27,7 @@ class HomeController extends Controller
             $query->whereHas('lesson.chapter.course', function ($query) use ($teacher) {
                 $query->where('teacher_id', $teacher->id);
             })->orWhere('teacher_id', $teacher->id);
-        })->where('status', 1)->whereDate('start_date','>',now())->get();
+        })->where('is_active', 1)->whereDate('start_date','>',now())->get();
 
         return ExamResource::collection($exams);
     }
@@ -37,7 +37,7 @@ class HomeController extends Controller
         $teacher = auth()->guard('teacher')->user();
         $homework = Homework::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
-        })->where('status', 1)->whereDate('due_date','>',now())->get();
+        })->where('is_active', 1)->whereDate('due_date','>',now())->get();
         return HomeworkResource::collection($homework);
     }
 
