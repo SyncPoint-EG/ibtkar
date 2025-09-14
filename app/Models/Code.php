@@ -45,4 +45,9 @@ class Code extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'payment_code', 'code');
+    }
 }

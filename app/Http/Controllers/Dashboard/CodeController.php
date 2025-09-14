@@ -34,7 +34,7 @@ class CodeController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to', 'price', 'code', 'code_classification']);
-        $codes = $this->codeService->search($filters, $request->get('per_page', 15), ['teacher']);
+        $codes = $this->codeService->search($filters, $request->get('per_page', 15), ['teacher', 'payment.student']);
         $teachers = $this->teacherService->getAll();
         $codeClassifications = $this->codeService->getUniqueCodeClassifications();
 
