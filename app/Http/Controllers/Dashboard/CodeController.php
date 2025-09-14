@@ -279,7 +279,7 @@ class CodeController extends Controller
 
     public function export(Request $request)
     {
-        $filters = $request->only(['teacher_id', 'expires_at', 'for']);
+        $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to', 'code', 'code_classification']);
         return Excel::download(new CodesExport($filters), 'codes.xlsx');
     }
 }
