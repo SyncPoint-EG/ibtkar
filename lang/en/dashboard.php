@@ -393,6 +393,7 @@ return [
             'total_courses' => 'Total Courses',
             'total_lessons' => 'Total Lessons',
             'uuid' => 'Unique ID',
+            'website_image' => 'Website Image',
             'day_of_week' => 'Day of Week',
             'time' => 'Time',
 //            'uuid' => 'Uuid',
@@ -472,6 +473,7 @@ return [
                 'semister_id' => 'Semister Id',
                 'subject_id' => 'Subject Id',
                 'price' => 'Price',
+                'is_featured' => 'Is Featured',
             ],
         ],
 //    'course' => [
@@ -619,6 +621,12 @@ return [
         'no_attachments' => 'No attachments found.',
         'delete_attachment_confirm' => 'Are you sure you want to delete this attachment?',
         'upload_attachment' => 'Upload Attachment',
+    ],
+    'lesson_attachment' => [
+        'fields' => [
+            'is_featured' => 'Is Featured',
+        ],
+        'featured_status_updated' => 'Lesson attachment featured status updated successfully',
     ],
     'exam' => [
         'title' => 'Exam',

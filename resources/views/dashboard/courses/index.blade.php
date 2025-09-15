@@ -59,6 +59,7 @@
                                             <th>{{ __("dashboard.semister.title") }}</th>
                                             <th>{{ __("dashboard.subject.title") }}</th>
                                             <th>{{ __("dashboard.course.fields.price") }}</th>
+                                            <th>{{ __("dashboard.course.fields.is_featured") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
                                         </thead>
@@ -76,6 +77,9 @@
                                                 <td>{{ $course->semister?->name }}</td>
                                                 <td>{{ $course->subject?->name }}</td>
                                                 <td>{{ $course->price }}</td>
+                                                <td>
+                                                    <input type="checkbox" class="toggle-featured" data-id="{{ $course->id }}" {{ $course->is_featured ? 'checked' : '' }}>
+                                                </td>
                                                 <td>
                                                     @can('view_course')
                                                         <a href="{{ route('courses.show', $course->id) }}"
