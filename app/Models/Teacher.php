@@ -112,7 +112,7 @@ class Teacher extends Authenticatable
      * Set the user's image.
      * This is a setter that handles image upload
      */
-    """    public function setImageAttribute($value)
+        public function setImageAttribute($value)
     {
         // If value is null or empty, keep existing image
         if (empty($value)) {
@@ -180,7 +180,7 @@ class Teacher extends Authenticatable
         else if (is_string($value)) {
             $this->attributes['website_image'] = $value;
         }
-    }""
+    }
 
     public function courses()
     {
