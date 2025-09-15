@@ -9,8 +9,10 @@ use App\Models\EducationType;
 use App\Models\Grade;
 use App\Models\Semister;
 use App\Models\Stage;
+use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Watch;
 use App\Services\CourseService;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -121,7 +123,9 @@ class CourseController extends Controller
     public function update(CourseRequest $request, Course $course): RedirectResponse
     {
         try {
-            $this->courseService->update($course, $request->validated());
+            $data = $request->validated();
+            $data['is_featured'] = $request->has('is_featured');
+            $this->courseService->update($course, $data);
 
             return redirect()->route('courses.index')
                 ->with('success', 'Course updated successfully.');
@@ -151,25 +155,26 @@ class CourseController extends Controller
         }
     }
 
-    public function updateWatches(Request $request, Course $course, Student $student)
+    public function toggleFeatured(Course $course): \Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'watches' => 'required|integer|min=0',
-        ]);
+        try {
+            $course->is_featured = !$course->is_featured;
+            $course->save();
 
-        foreach ($course->chapters as $chapter) {
-            foreach ($chapter->lessons as $lesson) {
-                Watch::updateOrCreate(
-                    ['student_id' => $student->id, 'lesson_id' => $lesson->id],
-                    ['watches' => $request->watches]
-                );
-            }
+            return response()->json([
+                'success' => true,
+                'message' => __('dashboard.course.featured_status_updated'),
+                'is_featured' => $course->is_featured
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+            ], 500);
         }
-
-        return redirect()->back()->with('success', 'Watches updated successfully.');
     }
-}
-rse $course, Student $student)
+
+    public function updateWatches(Request $request, Course $course, Student $student)
     {
         $request->validate([
             'watches' => 'required|integer|min=0',
