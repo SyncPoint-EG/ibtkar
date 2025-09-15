@@ -21,6 +21,17 @@
                     @enderror
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="is_featured">{{ __("dashboard.lesson_attachment.fields.is_featured") }}</label>
+                    <input type="checkbox" id="is_featured"
+                           name="is_featured" value="1"
+                        {{ old('is_featured') ? 'checked' : '' }}>
+                    @error('is_featured')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
         </div>
     </div>
 

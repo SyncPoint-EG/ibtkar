@@ -32,4 +32,23 @@ class LessonAttachmentController extends Controller
 
         return back()->with('success', 'Attachment deleted successfully.');
     }
+
+    public function toggleFeatured(LessonAttachment $attachment): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $attachment->is_featured = !$attachment->is_featured;
+            $attachment->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('dashboard.lesson_attachment.featured_status_updated'),
+                'is_featured' => $attachment->is_featured
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

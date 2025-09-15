@@ -32,6 +32,7 @@ class TeacherRequest extends FormRequest
             'other_phone'  => 'nullable|string|max:20',
             'bio'          => 'nullable|string',
             'image'        => 'nullable|image',
+            'website_image' => 'nullable|image',
             'rate'         => 'nullable|numeric',
             'password'     => $passwordRules,
             'is_featured' => 'nullable|boolean',

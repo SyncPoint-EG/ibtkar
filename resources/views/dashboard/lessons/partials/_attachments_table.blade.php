@@ -45,6 +45,29 @@
                     $(this).closest('form').submit();
                 }
             });
+
+            $('.toggle-featured-attachment').on('change', function() {
+                var attachmentId = $(this).data('id');
+                var url = "{{ route('lesson-attachments.toggle-featured', ':id') }}".replace(':id', attachmentId);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // alert(response.message);
+                        } else {
+                            // alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        // alert('Something went wrong.');
+                    }
+                });
+            });
         });
     </script>
 @endsection

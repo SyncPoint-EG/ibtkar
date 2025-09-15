@@ -68,7 +68,9 @@ class CourseController extends Controller
     public function store(CourseRequest $request): RedirectResponse
     {
         try {
-            $course = $this->courseService->create($request->all());
+            $data = $request->validated();
+            $data['is_featured'] = $request->has('is_featured');
+            $course = $this->courseService->create($data);
 
             return redirect()->route('courses.show',$course->id)
                 ->with('success', 'Course created successfully.');
@@ -150,6 +152,24 @@ class CourseController extends Controller
     }
 
     public function updateWatches(Request $request, Course $course, Student $student)
+    {
+        $request->validate([
+            'watches' => 'required|integer|min=0',
+        ]);
+
+        foreach ($course->chapters as $chapter) {
+            foreach ($chapter->lessons as $lesson) {
+                Watch::updateOrCreate(
+                    ['student_id' => $student->id, 'lesson_id' => $lesson->id],
+                    ['watches' => $request->watches]
+                );
+            }
+        }
+
+        return redirect()->back()->with('success', 'Watches updated successfully.');
+    }
+}
+rse $course, Student $student)
     {
         $request->validate([
             'watches' => 'required|integer|min=0',

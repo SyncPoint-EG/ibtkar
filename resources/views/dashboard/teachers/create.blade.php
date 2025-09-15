@@ -79,6 +79,12 @@
                                                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="website_image">{{ __("dashboard.teacher.fields.website_image") }}</label>
+                                                    <input type="file" id="website_image" class="form-control @error('website_image') is-invalid @enderror"
+                                                           name="website_image">
+                                                    @error('website_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="rate">{{ __("dashboard.teacher.fields.rate") }}</label>
                                                     <input type="number" step="0.01" id="rate" class="form-control @error('rate') is-invalid @enderror"
                                                            name="rate" value="{{ old('rate') }}">

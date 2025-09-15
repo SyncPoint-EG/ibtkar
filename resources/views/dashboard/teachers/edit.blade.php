@@ -86,6 +86,18 @@
                                                     <input type="file" id="image" class="form-control @error('image') is-invalid @enderror"
                                                            name="image">
                                                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                    @if($teacher->image)
+                                                        <img src="{{ $teacher->image }}" alt="Image" class="img-thumbnail mt-1" width="100">
+                                                    @endif
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="website_image">{{ __("dashboard.teacher.fields.website_image") }}</label>
+                                                    <input type="file" id="website_image" class="form-control @error('website_image') is-invalid @enderror"
+                                                           name="website_image">
+                                                    @error('website_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                    @if($teacher->website_image)
+                                                        <img src="{{ $teacher->website_image }}" alt="Website Image" class="img-thumbnail mt-1" width="100">
+                                                    @endif
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="rate">{{ __("dashboard.teacher.fields.rate") }}</label>

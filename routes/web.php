@@ -903,6 +903,9 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('courses/{course}', [CourseController::class, 'destroy'])
         ->name('courses.destroy')
         ->middleware('can:delete_course');
+    Route::post('courses/{course}/toggle-featured', [CourseController::class, 'toggleFeatured'])
+        ->name('courses.toggle-featured')
+        ->middleware('can:edit_course');
     Route::post('courses/{course}/students/{student}/watches', [CourseController::class, 'updateWatches'])
         ->name('courses.students.watches.update');
 });
@@ -978,6 +981,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::post('lessons/{lesson}/attachments', [LessonAttachmentController::class, 'store'])->name('lessons.attachments.store')->middleware('can:create_lesson');
     Route::delete('lesson-attachments/{attachment}', [LessonAttachmentController::class, 'destroy'])->name('lessons.attachments.destroy')->middleware('can:delete_lesson');
+    Route::post('lesson-attachments/{attachment}/toggle-featured', [LessonAttachmentController::class, 'toggleFeatured'])->name('lesson-attachments.toggle-featured')->middleware('can:edit_lesson');
     Route::post('lessons/{lesson}/students/{student}/watches', [LessonController::class, 'updateWatches'])
         ->name('lessons.students.watches.update');
 });

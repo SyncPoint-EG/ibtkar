@@ -15,6 +15,7 @@ class LessonAttachment extends Model
         'name',
         'path',
         'type',
+        'is_featured',
     ];
 
     public function lesson()

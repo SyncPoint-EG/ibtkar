@@ -220,6 +220,15 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="is_featured">{{ __("dashboard.course.fields.is_featured") }}</label>
+                                                    <input type="checkbox" id="is_featured"
+                                                           name="is_featured" value="1"
+                                                        {{ old('is_featured') ? 'checked' : '' }}>
+                                                    @error('is_featured')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="price">{{ __("dashboard.course.fields.price") }}</label>
                                                     <input type="number" id="price"
                                                            class="form-control @error('price') is-invalid @enderror"

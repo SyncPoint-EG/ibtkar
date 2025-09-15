@@ -35,6 +35,7 @@ class CourseRequest extends FormRequest
             'semister_id' => 'required|exists:semisters,id',
             'subject_id' => 'required|exists:subjects,id',
             'price' => 'nullable|numeric',
+            'is_featured' => 'nullable|boolean',
         ];
     }
 }

@@ -124,3 +124,32 @@
         </div>
     </div>
 @endsection
+
+@section('page_scripts')
+    <script>
+        $(function() {
+            $('.toggle-featured').on('change', function() {
+                var courseId = $(this).data('id');
+                var url = "{{ route('courses.toggle-featured', ':id') }}".replace(':id', courseId);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // alert(response.message);
+                        } else {
+                            // alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        // alert('Something went wrong.');
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
