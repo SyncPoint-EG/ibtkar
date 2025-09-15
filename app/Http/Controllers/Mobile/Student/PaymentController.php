@@ -34,7 +34,7 @@ class PaymentController extends Controller
                     'message' => 'Code not found'
                 ]);
             }else{
-                if(($code->for == 'lesson' && !$request->lesson_id) || ($code->for == 'chapter' && !$request->chapter_id) || ($code->for == 'course' && !$request->course_id)){
+                if(($code->for == 'lesson' && !$request->lesson_id) || ($code->for == 'chapter' && !$request->chapter_id) || ($code->for == 'course' && !$request->course_id) || $code->for == 'charge'){
                     return response()->json([
                         'success' => false,
                         'message' => 'Code is not applicable'
@@ -137,7 +137,27 @@ class PaymentController extends Controller
         $validated = $request->validated();
         $student = auth('student')->user();
         $amount = $request->amount;
-        $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+        if($request->payment_method == 'code'){
+            $code = Code::where('code',$request->payment_code)->first();
+            if(!$code){
+                return response()->json([
+                    'status' => false,
+                    'message'  => 'Code not found'
+                ]);
+            }
+            if($code->price != $amount || $code->number_of_uses > 1){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You cant use this code'
+                ]);
+            }
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['approved'];
+            $code->increment('number_of_uses'); ;
+            $code->save();
+
+        }else{
+            $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+        }
         $validated['student_id'] = $student->id;
         $validated['amount'] = $amount;
         Charge::create($validated);

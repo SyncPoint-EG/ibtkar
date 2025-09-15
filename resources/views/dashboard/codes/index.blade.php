@@ -63,7 +63,7 @@
                                                 <option
                                                     value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.for") }}</option>
                                                 @php
-                                                    $forOptions = ['course', 'chapter', 'lesson'];
+                                                    $forOptions = ['course', 'chapter', 'lesson', 'charge'];
                                                 @endphp
                                                 @foreach($forOptions as $option)
                                                     <option
