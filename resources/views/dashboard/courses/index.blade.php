@@ -52,7 +52,7 @@
                                             <th>{{ __("dashboard.course.fields.name") }}</th>
                                             <th>{{ __("dashboard.course.fields.year") }}</th>
                                             <th>{{ __("dashboard.course.fields.teacher_id") }}</th>
-                                            <th>{{ __("dashboard.educationtype.title") }}</th>
+                                            <th>{{ __("dashboard.education_type.title") }}</th>
                                             <th>{{ __("dashboard.stage.title") }}</th>
                                             <th>{{ __("dashboard.grade.title") }}</th>
                                             <th>{{ __("dashboard.division.title") }}</th>
