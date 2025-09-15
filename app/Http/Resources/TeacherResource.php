@@ -18,8 +18,14 @@ class TeacherResource extends JsonResource
         $coursesQuery = $this->courses();
         if ($student) {
             $coursesQuery->where('stage_id', $student->stage_id)
-                ->where('grade_id', $student->grade_id)
-                ->where('division_id', $student->division_id);
+                ->where('grade_id', $student->grade_id);
+
+            if ($student->division_id) {
+                $coursesQuery->where(function ($query) use ($student) {
+                    $query->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+            }
         }
         $courses = $coursesQuery->get()->unique('id');
         $courseIds = $courses->pluck('id');
