@@ -68,13 +68,13 @@
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $course->name }}</td>
                                                 <td>{{ $course->year  }}</td>
-                                                <td>{{ $course->teacher->name }}</td>
-                                                <td>{{ $course->educationType->name }}</td>
-                                                <td>{{ $course->stage->name }}</td>
-                                                <td>{{ $course->grade->name }}</td>
-                                                <td>{{ $course->division->name }}</td>
-                                                <td>{{ $course->semister->name }}</td>
-                                                <td>{{ $course->subject->name }}</td>
+                                                <td>{{ $course->teacher?->name }}</td>
+                                                <td>{{ $course->educationType?->name }}</td>
+                                                <td>{{ $course->stage?->name }}</td>
+                                                <td>{{ $course->grade?->name }}</td>
+                                                <td>{{ $course->division?->name }}</td>
+                                                <td>{{ $course->semister?->name }}</td>
+                                                <td>{{ $course->subject?->name }}</td>
                                                 <td>{{ $course->price }}</td>
                                                 <td>
                                                     @can('view_course')
