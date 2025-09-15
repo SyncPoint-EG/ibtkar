@@ -8,6 +8,7 @@ use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PurchasedLessonsController extends Controller
@@ -25,16 +26,29 @@ class PurchasedLessonsController extends Controller
         $chapterIds = $payments->whereNotNull('chapter_id')->pluck('chapter_id');
         $courseIds = $payments->whereNotNull('course_id')->pluck('course_id');
 
-        $chapterIds = $chapterIds->merge(Chapter::where('price',0)->pluck('id'));
-        $courseIds = $courseIds->merge(Course::where('price',0)->pluck('id'));
+        $chapterIds = $chapterIds->merge(Chapter::where('price', 0)->pluck('id'));
+        $courseIds = $courseIds->merge(Course::where('price', 0)->pluck('id'));
 
         $lessons = Lesson::query()
-            ->whereIn('id', $lessonIds)
-            ->orWhereIn('chapter_id', $chapterIds)
-            ->orWhereHas('chapter', function ($q) use ($courseIds) {
-                $q->whereIn('course_id', $courseIds);
+            ->where(function (Builder $query) use($lessonIds,$chapterIds,$courseIds ,$subjectId){
+                $query->whereIn('id', $lessonIds)
+                    ->orWhereIn('chapter_id', $chapterIds)
+                    ->orWhereHas('chapter', function ($q) use ($courseIds) {
+                        $q->whereIn('course_id', $courseIds);
+                    })
+                    ->orWhere('price', 0);
             })
-            ->orWhere('price',0)
+
+            ->whereHas('chapter.course', function ($q) use ($student) {
+                $q->where('stage_id',$student->stage_id);
+                $q->where('grade_id',$student->grade_id);
+                if($student->division_id){
+                    $q->where(function ($qq) use ($student) {
+                        $qq->where('division_id', $student->division_id)
+                            ->orWhereNull('division_id');
+                    });
+                }
+            })
             ->when($subjectId, function ($query) use ($subjectId) {
                 $query->whereHas('chapter.course', function ($q) use ($subjectId) {
                     $q->where('subject_id', $subjectId);
