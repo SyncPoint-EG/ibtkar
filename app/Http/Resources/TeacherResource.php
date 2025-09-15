@@ -14,6 +14,17 @@ class TeacherResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $student = auth('student')->user();
+        $coursesQuery = $this->courses();
+        if ($student) {
+            $coursesQuery->where('stage_id', $student->stage_id)
+                ->where('grade_id', $student->grade_id)
+                ->where('division_id', $student->division_id);
+        }
+        $courses = $coursesQuery->get()->unique('id');
+        $courseIds = $courses->pluck('id');
+        $chapters = \App\Models\Chapter::whereIn('course_id', $courseIds)->get()->unique('id');
+        $lessons = \App\Models\Lesson::whereIn('chapter_id', $chapters->pluck('id'))->with('attachments')->get()->unique('id');
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -23,9 +34,9 @@ class TeacherResource extends JsonResource
             'grades' => $this->grades->unique('id')->pluck('name')->values(),
             'divisions' => $this->divisions->unique('id')->pluck('name')->values(),
             'subjects' => SubjectResource::collection($this->subjects->unique('id')),
-            'courses' => CourseResource::collection($this->courses->unique('id')),
-            'chapters' => ChapterResource::collection($this->chapters()->get()->unique('id')),
-            'lessons' => LessonResource::collection($this->lessons()->with('attachments')->get()->unique('id')),
+            'courses' => CourseResource::collection($courses),
+            'chapters' => ChapterResource::collection($chapters),
+            'lessons' => LessonResource::collection($lessons),
         ];
     }
 }
