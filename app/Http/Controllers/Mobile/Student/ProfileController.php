@@ -22,4 +22,14 @@ class ProfileController extends Controller
 
         return new StudentResource($student);
     }
+    public function updateImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|max:2048',
+        ]);
+        $student = auth('student')->user();
+        $student->image = $request->image;
+        $student->save();
+        return new StudentResource($student);
+    }
 }

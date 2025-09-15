@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     // profile routes
     Route::get('profile', [ProfileController::class, 'show']);
     Route::post('profile', [ProfileController::class, 'update']);
+    Route::post('update-image', [ProfileController::class, 'updateImage']);
 
     Route::get('banners', [HomeController::class, 'getBanners']);
 
