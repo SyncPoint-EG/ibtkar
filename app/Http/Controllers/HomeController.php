@@ -84,7 +84,7 @@ class HomeController extends Controller
 
     public function getCourses()
     {
-        $courses = Course::query();
+        $courses = Course::query()->where('is_featured',1);
         if(request()->stage_id){
             $courses = $courses->where('stage_id', request()->stage_id);
         }
@@ -97,7 +97,7 @@ class HomeController extends Controller
         if(request()->subject_id){
             $courses = $courses->where('subject_id', request()->subject_id);
         }
-        $courses = $courses->latest()->limit(10)->get();
+        $courses = $courses->latest()->get();
         return CourseResource::collection($courses);
     }
 
@@ -110,7 +110,7 @@ class HomeController extends Controller
 
     public function getAttachments()
     {
-        $attachments = LessonAttachment::query()
+        $attachments = LessonAttachment::query()->where('is_featured',1)
             ->whereHas('lesson.chapter.course', function ($query) {
                 $query->when(request('stage_id'), function ($q, $stageId) {
                     $q->where('stage_id', $stageId);
