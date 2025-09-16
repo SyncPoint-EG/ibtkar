@@ -564,6 +564,13 @@ return [
         'delete_attachment_confirm' => 'هل أنت متأكد أنك تريد حذف هذا المرفق؟',
         'upload_attachment' => 'تحميل مرفق',
     ],
+    'lesson_attachment' => [
+        'fields' => [
+            'is_featured' => 'مميز',
+            'bio' => 'نبذة',
+        ],
+        'featured_status_updated' => 'تم تحديث حالة المرفق المميز بنجاح',
+    ],
     'exam' => [
         'title' => 'الاختبار',
         'title_plural' => 'الاختبارات',

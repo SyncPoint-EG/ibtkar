@@ -14,11 +14,14 @@ class LessonAttachmentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,ppt,pptx,xls,xlsx|max:20480',
+            'bio' => 'nullable|string',
         ]);
 
         $lesson->attachments()->create([
             'name' => $request->name,
             'file' => $request->file('file'),
+            'bio' => $request->bio,
+            'is_featured' => $request->has('is_featured'),
         ]);
 
         return back()->with('success', 'Attachment uploaded successfully.');

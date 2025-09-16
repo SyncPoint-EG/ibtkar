@@ -627,6 +627,7 @@ return [
     'lesson_attachment' => [
         'fields' => [
             'is_featured' => 'Is Featured',
+            'bio' => 'Bio',
         ],
         'featured_status_updated' => 'Lesson attachment featured status updated successfully',
     ],
