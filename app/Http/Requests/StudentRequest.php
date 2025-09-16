@@ -28,7 +28,7 @@ class StudentRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255', 'unique:students,phone,' . $studentId],
+            'phone' => ['required', 'unique:students,phone,' . $studentId],
             'password' => [$studentId ? 'nullable' : 'required', 'string', 'min:8'],
             'gender' => ['required', 'in:Male,Female'],
             'birth_date' => ['nullable', 'date'],
