@@ -18,6 +18,7 @@ class CourseResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->price,
+            'webite_image' => $this->webite_image,
             'teacher' => new TeacherResource($this->whenLoaded('teacher')),
             'subject' => new SubjectResource($this->whenLoaded('subject')),
             'chapters' => ChapterResource::collection($this->chapters),

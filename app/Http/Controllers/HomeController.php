@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AttachmentWebsiteResource;
 use App\Http\Resources\CentersResource;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\DivisionsResource;
@@ -127,7 +128,7 @@ class HomeController extends Controller
             })
             ->paginate(request('perpage', 6));
 
-        return LessonAttachmentResource::collection($attachments);
+        return AttachmentWebsiteResource::collection($attachments);
     }
 
 }

@@ -32,6 +32,15 @@
                     @enderror
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="bio">{{ __('dashboard.lesson_attachment.fields.bio') }}</label>
+                    <textarea id="bio" class="form-control" name="bio">{{ old('bio') }}</textarea>
+                    @error('bio')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
         </div>
     </div>
 

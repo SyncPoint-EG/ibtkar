@@ -4,6 +4,7 @@
         <tr>
             <th>{{ __('dashboard.common.id') }}</th>
             <th>{{ __('dashboard.lesson.attachment_name') }}</th>
+            <th>{{ __('dashboard.lesson_attachment.fields.bio') }}</th>
             <th>{{ __('dashboard.lesson.attachment_type') }}</th>
             <th>{{ __('dashboard.common.actions') }}</th>
         </tr>
@@ -13,6 +14,7 @@
             <tr>
                 <td>{{ $attachment->id }}</td>
                 <td><a href="{{ asset('storage/' . $attachment->path) }}" target="_blank">{{ $attachment->name }}</a></td>
+                <td>{{ $attachment->bio }}</td>
                 <td>{{ $attachment->type }}</td>
                 <td>
                     <form action="{{ route('lessons.attachments.destroy', $attachment->id) }}" method="POST"
