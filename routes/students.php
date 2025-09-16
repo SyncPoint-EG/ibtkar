@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::post('profile', [ProfileController::class, 'update']);
     Route::post('update-image', [ProfileController::class, 'updateImage']);
 
+    Route::post('delete-account',[ProfileController::class,'deleteAccount']);
     Route::get('banners', [HomeController::class, 'getBanners']);
 
     Route::get('subjects',[HomeController::class,'getSubjects']);

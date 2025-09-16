@@ -32,4 +32,12 @@ class ProfileController extends Controller
         $student->save();
         return new StudentResource($student);
     }
+    public function deleteAccount(Request $request){
+        $student = auth('student')->user();
+        $student->delete();
+        return response()->json([
+            'message' => 'Successfully deleted account!',
+            'success' => true
+        ]);
+    }
 }
