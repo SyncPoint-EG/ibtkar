@@ -72,6 +72,9 @@ class CourseController extends Controller
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
+            if($request->hasFile('website_image')){
+                $data['website_image'] = $request->file('website_image');
+            }
             $course = $this->courseService->create($data);
 
             return redirect()->route('courses.show',$course->id)
@@ -125,6 +128,9 @@ class CourseController extends Controller
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
+            if($request->hasFile('website_image')){
+                $data['website_image'] = $request->file('website_image');
+            }
             $this->courseService->update($course, $data);
 
             return redirect()->route('courses.index')

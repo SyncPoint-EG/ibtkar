@@ -468,6 +468,9 @@ return [
             'semister_id' => 'معرف الفصل الدراسي',
             'subject_id' => 'معرف المادة',
             'price' => 'السعر',
+            'is_featured' => 'مميز',
+            'bio' => 'نبذة',
+            'website_image' => 'صورة الموقع',
         ],
     ],
     'education_type' => [

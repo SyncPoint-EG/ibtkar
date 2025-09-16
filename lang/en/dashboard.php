@@ -474,6 +474,8 @@ return [
                 'subject_id' => 'Subject Id',
                 'price' => 'Price',
                 'is_featured' => 'Is Featured',
+                'bio' => 'Bio',
+                'website_image' => 'Website Image',
             ],
         ],
 //    'course' => [

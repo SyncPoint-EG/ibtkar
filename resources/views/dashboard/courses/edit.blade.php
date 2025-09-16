@@ -169,6 +169,34 @@
             @enderror
         </div>
                 <div class="form-group">
+                    <label for="bio">{{ __("dashboard.course.fields.bio") }}</label>
+                    <textarea id="bio"
+                              class="form-control @error('bio') is-invalid @enderror"
+                              name="bio"
+                              placeholder="{{ __("dashboard.course.fields.bio") }}"
+                              data-toggle="tooltip" data-trigger="hover"
+                              data-placement="top"
+                              data-title="{{ __("dashboard.course.fields.bio") }}">{{ isset($course) ? $course->bio : old('bio') }}</textarea>
+                    @error('bio')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="website_image">{{ __("dashboard.course.fields.website_image") }}</label>
+                    <input type="file" id="website_image"
+                           class="form-control @error('website_image') is-invalid @enderror"
+                           name="website_image"
+                           data-toggle="tooltip" data-trigger="hover"
+                           data-placement="top"
+                           data-title="{{ __("dashboard.course.fields.website_image") }}">
+                    @error('website_image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    @if($course->website_image)
+                        <img src="{{ $course->website_image }}" alt="course image" class="img-thumbnail mt-1" width="100">
+                    @endif
+                </div>
+                <div class="form-group">
             <label for="subject_id">{{ __("dashboard.course.fields.subject_id") }}</label>
             <select id="subject_id" name="subject_id" class="form-control @error('subject_id') is-invalid @enderror" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.course.fields.subject_id") }}">
                 <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.course.fields.subject_id") }}</option>

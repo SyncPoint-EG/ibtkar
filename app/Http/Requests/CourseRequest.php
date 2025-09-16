@@ -36,6 +36,8 @@ class CourseRequest extends FormRequest
             'subject_id' => 'required|exists:subjects,id',
             'price' => 'nullable|numeric',
             'is_featured' => 'nullable|boolean',
+            'bio' => 'nullable|string',
+            'website_image' => 'nullable|image',
         ];
     }
 }
