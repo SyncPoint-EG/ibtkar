@@ -11,7 +11,7 @@ class StoryController extends Controller
 {
     public function index()
     {
-        $stories = Story::with('teacher:id,name,photo')->get();
+        $stories = Story::with('teacher')->get();
         return response()->json($stories);
     }
 
