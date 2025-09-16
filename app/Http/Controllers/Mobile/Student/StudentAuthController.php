@@ -9,6 +9,7 @@ use App\Models\Guardian;
 use App\Models\Setting;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class StudentAuthController
@@ -16,7 +17,11 @@ class StudentAuthController
 
     public function register(StudentRequest $request)
     {
+        DB::beginTransaction();
         $validated = $request->validated();
+        if(!$request->image){
+            $validated->unset('image');
+        }
 //        $validated['verification_code'] = rand(1000, 9999);
         $student = Student::create($request->validated());
         $student->generateVerificationCode();
@@ -32,6 +37,7 @@ class StudentAuthController
             $student->save();
         }
 
+        DB::commit();
 
         // sending code must be here
 
