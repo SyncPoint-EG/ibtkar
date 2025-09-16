@@ -30,7 +30,7 @@ class StudentRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'unique:students,phone,' . $studentId],
             'password' => [$studentId ? 'nullable' : 'required', 'string', 'min:8'],
-            'gender' => ['required', 'in:Male,Female'],
+            'gender' => ['nullable', 'in:Male,Female'],
             'birth_date' => ['nullable', 'date'],
             'stage_id' => ['required', 'exists:stages,id'],
             'grade_id' => ['required', 'exists:grades,id'],
