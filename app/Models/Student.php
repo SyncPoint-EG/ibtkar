@@ -49,7 +49,7 @@ class Student extends Authenticatable
     }
     public function getImageAttribute()
     {
-        if ($this->attributes['image']) {
+        if (isset($this->attributes['image']) && $this->attributes['image']) {
             // Check if it's a full URL (for external images)
             if (filter_var($this->attributes['image'], FILTER_VALIDATE_URL)) {
                 return $this->attributes['image'];
