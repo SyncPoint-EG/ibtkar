@@ -20,7 +20,7 @@ class StudentAuthController
         DB::beginTransaction();
         $validated = $request->validated();
         if(!$request->image){
-            $validated->unset('image');
+            unset($validated['image']);
         }
 //        $validated['verification_code'] = rand(1000, 9999);
         $student = Student::create($request->validated());
