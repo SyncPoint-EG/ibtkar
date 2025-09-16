@@ -201,7 +201,17 @@ class TeacherController extends Controller
                         ->orWhereNull('division_id');
                 });
             }
-        })->pluck('id');
+        })
+            ->orWhereHas('courses',function ($q) use ($student){
+                $q->where('stage_id',$student->stage_id);
+                $q->where('grade_id',$student->grade_id);
+                if($student->division_id) {
+                    $q->where(function ($qq) use ($student) {
+                        $qq->where('division_id', $student->division_id)
+                            ->orWhereNull('division_id');
+                    });
+                }
+            })->pluck('id');
 
         $stories = Story::whereIn('teacher_id', $teacherIds)
             ->where('created_at', '>=', now()->subDay())
