@@ -85,7 +85,7 @@ class HomeController extends Controller
 
     public function getCourses()
     {
-        $courses = Course::query()->where('is_featured',1);
+        $courses = Course::query()->with('teacher')->where('is_featured',1);
         if(request()->stage_id){
             $courses = $courses->where('stage_id', request()->stage_id);
         }
