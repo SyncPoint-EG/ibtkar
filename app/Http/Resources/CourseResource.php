@@ -23,6 +23,7 @@ class CourseResource extends JsonResource
             'teacher' => new TeacherWebsiteResource($this->whenLoaded('teacher')),
             'subject' => new SubjectResource($this->whenLoaded('subject')),
             'chapters' => ChapterResource::collection($this->chapters),
+            'grade'   => new GradesResource($this->grade)
         ];
     }
 }
