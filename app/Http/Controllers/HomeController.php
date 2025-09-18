@@ -111,7 +111,7 @@ class HomeController extends Controller
 
     public function getAttachments()
     {
-        $attachments = LessonAttachment::query()->where('is_featured',1)
+        $attachments = LessonAttachment::query()->with('lesson.chapter.course.grade','lesson.chapter.course.subject','lesson.chapter.course.teacher')->where('is_featured',1)
             ->whereHas('lesson.chapter.course', function ($query) {
                 $query->when(request('stage_id'), function ($q, $stageId) {
                     $q->where('stage_id', $stageId);
