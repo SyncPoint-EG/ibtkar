@@ -126,7 +126,7 @@ class HomeController extends Controller
                         $q->where('subject_id', $subjectId);
                     });
             })
-            ->paginate(request('perpage', 6));
+            ->paginate(request('perpage', 10));
 
         return AttachmentWebsiteResource::collection($attachments);
     }
