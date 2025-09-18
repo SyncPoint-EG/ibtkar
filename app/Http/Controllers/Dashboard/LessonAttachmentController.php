@@ -19,7 +19,7 @@ class LessonAttachmentController extends Controller
 
         $lesson->attachments()->create([
             'name' => $request->name,
-            'file' => $request->file('file'),
+            'path' => $request->file('file'),
             'bio' => $request->bio,
             'is_featured' => $request->has('is_featured'),
         ]);

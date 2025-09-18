@@ -42,7 +42,7 @@ class LessonAttachment extends Model
         return null;
     }
 
-    public function setFileAttribute($value)
+    public function setPathAttribute($value)
     {
         // If value is null or empty, keep existing image
         if (empty($value)) {
