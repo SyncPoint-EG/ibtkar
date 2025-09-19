@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Teacher extends Authenticatable
 {
-    use HasFactory ,HasApiTokens;
+    use HasFactory ,HasApiTokens, Notifiable;
 
     const DAYS_OF_WEEK = [
         1 => 'saturday',
@@ -36,6 +36,16 @@ class Teacher extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function devices()
+    {
+        return $this->morphMany(UserDevice::class, 'user');
+    }
+
+    public function routeNotificationForFcm($notification = null)
+    {
+        return $this->devices()->pluck('fcm_token')->toArray();
     }
 
     /**

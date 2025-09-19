@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Guardian extends Authenticatable
 {
-    use HasApiTokens;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +30,16 @@ class Guardian extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    public function devices()
+    {
+        return $this->morphMany(UserDevice::class, 'user');
+    }
+
+    public function routeNotificationForFcm($notification = null)
+    {
+        return $this->devices()->pluck('fcm_token')->toArray();
     }
      public function getNameAttribute()
      {

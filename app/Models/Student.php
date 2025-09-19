@@ -7,6 +7,7 @@ use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,7 +15,7 @@ use App\Models\Chapter;
 
 class Student extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory ,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -393,5 +394,15 @@ class Student extends Authenticatable
         }
 
         return $lessonAttendance;
+    }
+
+    public function devices()
+    {
+        return $this->morphMany(UserDevice::class, 'user');
+    }
+
+    public function routeNotificationForFcm($notification = null)
+    {
+        return $this->devices()->pluck('fcm_token')->toArray();
     }
 }

@@ -18,11 +18,22 @@ class TeacherAuthController extends Controller
         $teacher = Teacher::where('phone', $request->get('phone'))->first();
         if ($teacher && Hash::check($request->get('password'), $teacher->password)) {
 
-            $token = $teacher->createToken('GuardianToken')->plainTextToken;
+            if ($request->fcm_token) {
+                $teacher->devices()->updateOrCreate(
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ],
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ]
+                );
+            }
+
+            $token = $teacher->createToken('TeacherToken')->plainTextToken;
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully',
-                'student' => new TeacherResource($teacher),
+                'teacher' => new TeacherResource($teacher),
                 'token' => $token
             ], 200);
         }else{
@@ -34,6 +45,12 @@ class TeacherAuthController extends Controller
     }
     public function logout(Request $request)
     {
+        $user = auth('teacher')->user(); // get the authenticated user
+
+        if ($request->fcm_token) {
+            $user->devices()->where('fcm_token', $request->fcm_token)->delete();
+        }
+
         // Delete current access token
         $request->user()->currentAccessToken()->delete();
 

@@ -54,11 +54,22 @@ class GuardianAuthController
         $guardian = Guardian::where('phone', $request->get('phone'))->first();
         if ($guardian && Hash::check($request->get('password'), $guardian->password)) {
 
+            if ($request->fcm_token) {
+                $guardian->devices()->updateOrCreate(
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ],
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ]
+                );
+            }
+
             $token = $guardian->createToken('GuardianToken')->plainTextToken;
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully',
-                'student' => new GuardianResource($guardian),
+                'guardian' => new GuardianResource($guardian),
                 'token' => $token
             ], 200);
         }else{
@@ -87,6 +98,12 @@ class GuardianAuthController
 
     public function logout(Request $request)
     {
+        $user = auth('guardian')->user(); // get the authenticated user
+
+        if ($request->fcm_token) {
+            $user->devices()->where('fcm_token', $request->fcm_token)->delete();
+        }
+
         // Delete current access token
         $request->user()->currentAccessToken()->delete();
 
