@@ -41,7 +41,7 @@ use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 
  Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class,'index'])->name('dashboard')->middleware('auth');
 
-Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
+//Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 
 
 // Authentication Routes
