@@ -18,7 +18,7 @@ class TeacherAuthController extends Controller
         $teacher = Teacher::where('phone', $request->get('phone'))->first();
         if ($teacher && Hash::check($request->get('password'), $teacher->password)) {
 
-            $token = $teacher->createToken('GuardianToken')->plainTextToken;
+            $token = $teacher->createToken('TeacherToken')->plainTextToken;
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully',
