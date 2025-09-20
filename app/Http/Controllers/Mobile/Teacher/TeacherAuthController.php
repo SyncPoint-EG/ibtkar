@@ -16,6 +16,12 @@ class TeacherAuthController extends Controller
     {
 
         $teacher = Teacher::where('phone', $request->get('phone'))->first();
+        if(!$teacher){
+            return response()->json([
+                'success' => false,
+                'message' => 'invalid credentials'
+            ]);
+        }
         if ($teacher && Hash::check($request->get('password'), $teacher->password)) {
 
             if ($request->fcm_token) {
