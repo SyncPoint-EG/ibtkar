@@ -15,7 +15,7 @@ class TeacherAuthController extends Controller
     public function login(Request $request)
     {
 
-        $teacher = Teacher::where('phone', $request->get('phone'))->first();
+        $teacher = Teacher::where('phone', $request->get('email'))->first();
         if(!$teacher){
             return response()->json([
                 'success' => false,
