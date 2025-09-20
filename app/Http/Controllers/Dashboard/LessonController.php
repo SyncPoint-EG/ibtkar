@@ -9,6 +9,7 @@ use App\Services\LessonService;
 use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\Watch;
+use App\Traits\FirebaseNotify;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -16,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 
 class LessonController extends Controller
 {
+    use FirebaseNotify;
     protected LessonService $lessonService;
 
     public function __construct(LessonService $lessonService)
@@ -72,7 +74,16 @@ class LessonController extends Controller
             $data['is_featured'] = $request->has('is_featured');
             $data['date'] = $request->date;
 
-            $this->lessonService->create($data);
+            $lesson = $this->lessonService->create($data);
+
+//            $students = Student::all();
+//            $title = 'New Lesson Added';
+//            $body = 'A new lesson \'' . $lesson->name . '\' has been added.';
+//            $data = [
+//                'lesson_id' => $lesson->id,
+//            ];
+//
+//            $this->sendAndStoreFirebaseNotification($students, $title, $body, $data);
 
             return redirect()->route('lessons.index')
                 ->with('success', 'Lesson created successfully.');

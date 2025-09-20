@@ -85,7 +85,7 @@ class HomeController extends Controller
 
     public function getCourses()
     {
-        $courses = Course::query()->where('is_featured',1);
+        $courses = Course::query()->with('teacher')->where('is_featured',1);
         if(request()->stage_id){
             $courses = $courses->where('stage_id', request()->stage_id);
         }
@@ -111,7 +111,7 @@ class HomeController extends Controller
 
     public function getAttachments()
     {
-        $attachments = LessonAttachment::query()->where('is_featured',1)
+        $attachments = LessonAttachment::query()->with('lesson.chapter.course.grade','lesson.chapter.course.subject','lesson.chapter.course.teacher')->where('is_featured',1)
             ->whereHas('lesson.chapter.course', function ($query) {
                 $query->when(request('stage_id'), function ($q, $stageId) {
                     $q->where('stage_id', $stageId);
@@ -126,7 +126,7 @@ class HomeController extends Controller
                         $q->where('subject_id', $subjectId);
                     });
             })
-            ->paginate(request('perpage', 6));
+            ->paginate(request('perpage', 10));
 
         return AttachmentWebsiteResource::collection($attachments);
     }

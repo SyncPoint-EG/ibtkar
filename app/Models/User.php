@@ -132,4 +132,14 @@ class User extends Authenticatable
         return $query->where('is_active', 1);
     }
 
+    public function devices()
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+
+    public function routeNotificationForFcm($notification = null)
+    {
+        return $this->devices()->pluck('fcm_token')->toArray();
+    }
+
 }

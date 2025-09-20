@@ -87,6 +87,17 @@ class StudentAuthController
         }
         if ($student && Hash::check($request->get('password'), $student->password)) {
 
+            if($request->fcm_token){
+                $student->devices()->updateOrCreate(
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ],
+                    [
+                        'fcm_token' => $request->fcm_token,
+                    ]
+                );
+            }
+
             if($student->mac_address == null ){
                 $student->mac_address = $request->mac_address;
             }
@@ -123,8 +134,12 @@ class StudentAuthController
 
     public function logout(Request $request)
     {
-        // Delete current access token
         $user = auth('student')->user(); // get the authenticated user
+
+        if ($request->fcm_token) {
+            $user->devices()->where('fcm_token', $request->fcm_token)->delete();
+        }
+
         $user->mac_address = null ;
         $user->save();
         // delete all tokens for this user

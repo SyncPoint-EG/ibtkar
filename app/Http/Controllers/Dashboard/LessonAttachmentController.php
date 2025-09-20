@@ -17,12 +17,13 @@ class LessonAttachmentController extends Controller
             'bio' => 'nullable|string',
         ]);
 
-        $lesson->attachments()->create([
-            'name' => $request->name,
-            'file' => $request->file('file'),
-            'bio' => $request->bio,
-            'is_featured' => $request->has('is_featured'),
-        ]);
+        $attachment = new LessonAttachment();
+        $attachment->name = $request->name;
+        $attachment->file = $request->file('file'); // This will trigger the mutator
+        $attachment->bio = $request->bio;
+        $attachment->is_featured = $request->has('is_featured');
+
+        $lesson->attachments()->save($attachment);
 
         return back()->with('success', 'Attachment uploaded successfully.');
     }
