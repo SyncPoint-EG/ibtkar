@@ -11,7 +11,8 @@ class StoryController extends Controller
 {
     public function index()
     {
-        $stories = Story::with('teacher')->where('created_at', '>=', now()->subDay())->get();
+        $teacher = auth()->guard('teacher')->user();
+        $stories = Story::with('teacher')->where('teacher_id',$teacher->id)->where('created_at', '>=', now()->subDay())->get();
         return response()->json($stories);
     }
 
