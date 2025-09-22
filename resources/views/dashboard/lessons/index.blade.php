@@ -39,7 +39,7 @@
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
                                     <form method="GET" action="{{ route('lessons.index') }}">
-                                        <div class="form-row">
+                                        <div class="row">
                                             <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="name">{{ __('dashboard.lesson.fields.name') }}</label>
@@ -68,7 +68,10 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 mb-2">
+                                        </div>
+                                        <div class="row">
+
+                                        <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="chapter_id">{{ __('dashboard.chapter.title') }}</label>
                                                     <select name="chapter_id" id="chapter_id" class="form-control">
@@ -86,12 +89,16 @@
                                                     <input type="date" name="created_at" id="created_at" class="form-control" value="{{ request('created_at') }}">
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 mb-2">
+                                                <div class="form-group">
+                                                    <label for="date">{{ __('dashboard.lesson.fields.date') }}</label>
+                                                    <input type="date" name="date" id="date" class="form-control" value="{{ request('date') }}">
+                                                </div>
+                                            </div>
                                             <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
                                             <a href="{{ route('lessons.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
 
-{{--                                            <div class="col-md-3 ">--}}
 
-{{--                                            </div>--}}
                                         </div>
 
                                     </form>

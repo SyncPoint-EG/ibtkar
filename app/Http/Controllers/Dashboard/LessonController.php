@@ -32,7 +32,7 @@ class LessonController extends Controller
      */
     public function index(Request $request): View
     {
-        $filters = $request->only(['teacher_id', 'course_id', 'chapter_id', 'name', 'created_at']);
+        $filters = $request->only(['teacher_id', 'course_id', 'chapter_id', 'name', 'created_at','date']);
         $lessons = $this->lessonService->getAllPaginated(15, $filters);
         $teachers = \App\Models\Teacher::all();
         $courses = \App\Models\Course::all();

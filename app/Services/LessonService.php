@@ -45,6 +45,9 @@ class LessonService
             ->when($filters['created_at'] ?? null, function ($query, $created_at) {
                 $query->whereDate('created_at', $created_at);
             })
+            ->when($filters['date'] ?? null, function ($query, $date) {
+                $query->whereDate('date', $date);
+            })
             ->with($with)
             ->latest()
             ->paginate($perPage);
