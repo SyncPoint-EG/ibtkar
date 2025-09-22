@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AttachmentResource;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\HomeworkResource;
+use App\Http\Resources\LessonResource;
 use App\Http\Resources\StudentProfileResource;
 use App\Http\Resources\TeacherStudentResource;
 use App\Http\Resources\StudentResource;
@@ -70,5 +71,14 @@ class HomeController extends Controller
     {
         $student = Student::query()->findOrFail($studentId);
         return new TeacherStudentResource($student);
+    }
+
+    public function getLessons()
+    {
+        $teacher = auth()->guard('teacher')->user();
+        $lessons = Lesson::whereHas('chapter.course', function ($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })->get();
+        return LessonResource::collection($lessons);
     }
 }
