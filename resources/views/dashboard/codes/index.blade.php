@@ -136,7 +136,7 @@
                                             <th>{{ __("dashboard.code.fields.teacher") }}</th>
                                             <th>{{ __("dashboard.student.fields.name") }}</th>
                                             <th>{{ __("dashboard.student.fields.phone") }}</th>
-                                            <th>{{ __("dashboard.student.fields.used_in") }}</th>
+                                            <th>{{ __("dashboard.code.fields.used_in") }}</th>
                                             <th>{{ __("dashboard.common.created_at") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>

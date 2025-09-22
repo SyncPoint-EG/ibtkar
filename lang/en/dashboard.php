@@ -765,6 +765,7 @@ return [
             'teacher' => 'Teacher',
             'code_classification' => 'Code Classification',
             'price' => 'Price',
+            'used_in' => 'Used In',
         ],
     ],
     'center_exam' => [
