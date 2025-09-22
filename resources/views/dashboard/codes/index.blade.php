@@ -136,6 +136,7 @@
                                             <th>{{ __("dashboard.code.fields.teacher") }}</th>
                                             <th>{{ __("dashboard.student.fields.name") }}</th>
                                             <th>{{ __("dashboard.student.fields.phone") }}</th>
+                                            <th>{{ __("dashboard.student.fields.used_in") }}</th>
                                             <th>{{ __("dashboard.common.created_at") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
@@ -143,6 +144,9 @@
                                         <tbody>
                                         @forelse($codes as $code)
                                             <tr>
+                                                @php
+                                                    $for = $code->for ;
+                                                @endphp
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $code->code }}</td>
                                                 <td>{{ $code->for }}</td>
@@ -152,6 +156,7 @@
                                                 <td>{{ $code->teacher->name ?? '' }}</td>
                                                 <td>{{ $code->payment->student->name ?? '' }}</td>
                                                 <td>{{ $code->payment->student->phone ?? '' }}</td>
+                                                <td>{{ $code->payment->$for->name ?? '' }}</td>
                                                 <td>{{ $code->created_at->format('Y-m-d H:i:s') }}</td>
                                                 <td>
                                                     @can('view_code')
