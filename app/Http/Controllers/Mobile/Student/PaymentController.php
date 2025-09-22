@@ -40,12 +40,14 @@ class PaymentController extends Controller
                         'message' => 'Code is not applicable'
                     ]);
                 }
-                if($code->number_of_uses > 0 || now() > $code->expires_at){
+//                return $code->expires_at->format('Y-m-d');
+                if($code->number_of_uses >= 1 || ($code->expires_at != null && $code->expires_at < now())){
                     return response()->json([
                         'status' => false,
                         'message'  => 'الكود مستخدم من قبل'
                     ]);
                 }else{
+//                    return 'noooooo';
                     $code->increment('number_of_uses'); ;
                     $code->save();
                 }
