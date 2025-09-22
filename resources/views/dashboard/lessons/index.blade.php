@@ -38,15 +38,53 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
-                                    <form method="GET" action="{{ route('lessons.index') }}" class="form-inline">
-                                        <div class="form-group">
-                                            <label for="teacher_id">{{ __('dashboard.teacher.title') }}</label>
-                                            <select name="teacher_id" id="teacher_id" class="form-control">
-                                                <option value="">{{ __('dashboard.common.all') }}</option>
-                                                @foreach($teachers as $teacher)
-                                                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
-                                                @endforeach
-                                            </select>
+                                    <form method="GET" action="{{ route('lessons.index') }}">
+                                        <div class="form-row">
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="teacher_id">{{ __('dashboard.teacher.title') }}</label>
+                                                    <select name="teacher_id" id="teacher_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($teachers as $teacher)
+                                                            <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="course_id">{{ __('dashboard.course.title') }}</label>
+                                                    <select name="course_id" id="course_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($courses as $course)
+                                                            <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="chapter_id">{{ __('dashboard.chapter.title') }}</label>
+                                                    <select name="chapter_id" id="chapter_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($chapters as $chapter)
+                                                            <option value="{{ $chapter->id }}" {{ request('chapter_id') == $chapter->id ? 'selected' : '' }}>{{ $chapter->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="name">{{ __('dashboard.lesson.fields.name') }}</label>
+                                                    <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="created_at">{{ __('dashboard.common.created_at') }}</label>
+                                                    <input type="date" name="created_at" id="created_at" class="form-control" value="{{ request('created_at') }}">
+                                                </div>
+                                            </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
                                     </form>

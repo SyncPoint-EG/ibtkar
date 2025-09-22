@@ -32,11 +32,13 @@ class LessonController extends Controller
      */
     public function index(Request $request): View
     {
-        $filters = $request->only(['teacher_id']);
+        $filters = $request->only(['teacher_id', 'course_id', 'chapter_id', 'name', 'created_at']);
         $lessons = $this->lessonService->getAllPaginated(15, $filters);
         $teachers = \App\Models\Teacher::all();
+        $courses = \App\Models\Course::all();
+        $chapters = \App\Models\Chapter::all();
 
-        return view('dashboard.lessons.index', compact('lessons', 'teachers'));
+        return view('dashboard.lessons.index', compact('lessons', 'teachers', 'courses', 'chapters'));
     }
 
     /**
