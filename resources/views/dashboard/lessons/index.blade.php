@@ -40,7 +40,13 @@
                                 <div class="card-block card-dashboard">
                                     <form method="GET" action="{{ route('lessons.index') }}">
                                         <div class="form-row">
-                                            <div class="col-md-3 mb-2">
+                                            <div class="col-md-4 mb-2">
+                                                <div class="form-group">
+                                                    <label for="name">{{ __('dashboard.lesson.fields.name') }}</label>
+                                                    <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="teacher_id">{{ __('dashboard.teacher.title') }}</label>
                                                     <select name="teacher_id" id="teacher_id" class="form-control">
@@ -51,7 +57,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 mb-2">
+                                            <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="course_id">{{ __('dashboard.course.title') }}</label>
                                                     <select name="course_id" id="course_id" class="form-control">
@@ -62,7 +68,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 mb-2">
+                                            <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="chapter_id">{{ __('dashboard.chapter.title') }}</label>
                                                     <select name="chapter_id" id="chapter_id" class="form-control">
@@ -73,20 +79,21 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 mb-2">
-                                                <div class="form-group">
-                                                    <label for="name">{{ __('dashboard.lesson.fields.name') }}</label>
-                                                    <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 mb-2">
+
+                                            <div class="col-md-4 mb-2">
                                                 <div class="form-group">
                                                     <label for="created_at">{{ __('dashboard.common.created_at') }}</label>
                                                     <input type="date" name="created_at" id="created_at" class="form-control" value="{{ request('created_at') }}">
                                                 </div>
                                             </div>
+                                            <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                            <a href="{{ route('lessons.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
+
+{{--                                            <div class="col-md-3 ">--}}
+
+{{--                                            </div>--}}
                                         </div>
-                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+
                                     </form>
 
                                 </div>
