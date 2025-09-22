@@ -38,6 +38,18 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
+                                    <form method="GET" action="{{ route('lessons.index') }}" class="form-inline">
+                                        <div class="form-group">
+                                            <label for="teacher_id">{{ __('dashboard.teacher.title') }}</label>
+                                            <select name="teacher_id" id="teacher_id" class="form-control">
+                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                @foreach($teachers as $teacher)
+                                                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                    </form>
                                     @can('create_lesson')
                                         <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.lesson.add_new') }}

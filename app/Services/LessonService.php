@@ -23,9 +23,17 @@ class LessonService
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
-        return $this->model->with($with)->latest()->paginate($perPage);
+        return $this->model
+            ->when($filters['teacher_id'] ?? null, function ($query, $teacher_id) {
+                return $query->whereHas('chapter.course', function ($query) use ($teacher_id) {
+                    $query->where('teacher_id', $teacher_id);
+                });
+            })
+            ->with($with)
+            ->latest()
+            ->paginate($perPage);
     }
 
     /**

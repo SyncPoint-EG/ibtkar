@@ -30,11 +30,13 @@ class LessonController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $lessons = $this->lessonService->getAllPaginated();
+        $filters = $request->only(['teacher_id']);
+        $lessons = $this->lessonService->getAllPaginated(15, $filters);
+        $teachers = \App\Models\Teacher::all();
 
-        return view('dashboard.lessons.index', compact('lessons'));
+        return view('dashboard.lessons.index', compact('lessons', 'teachers'));
     }
 
     /**
