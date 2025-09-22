@@ -137,6 +137,8 @@
                                             <th>{{ __("dashboard.student.fields.name") }}</th>
                                             <th>{{ __("dashboard.student.fields.phone") }}</th>
                                             <th>{{ __("dashboard.code.fields.used_in") }}</th>
+                                            <th>{{ __("dashboard.code.fields.used_at") }}</th>
+                                            <th>{{ __("dashboard.code.fields.price") }}</th>
                                             <th>{{ __("dashboard.common.created_at") }}</th>
                                             <th>{{ __('dashboard.common.actions') }}</th>
                                         </tr>
@@ -156,7 +158,9 @@
                                                 <td>{{ $code->teacher->name ?? '' }}</td>
                                                 <td>{{ $code->payment->student->name ?? '' }}</td>
                                                 <td>{{ $code->payment->student->phone ?? '' }}</td>
-                                                <td>{{ $code->payment->$for->name ?? '' }}</td>
+                                                <td>{{ $code->payment->$for->name ?? 'N/A' }}</td>
+                                                <td>{{ $code->payment->created_at ?? 'N/A' }}</td>
+                                                <td>{{ $code->price ?? 'N/A' }}</td>
                                                 <td>{{ $code->created_at->format('Y-m-d H:i:s') }}</td>
                                                 <td>
                                                     @can('view_code')

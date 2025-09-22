@@ -766,6 +766,7 @@ return [
             'code_classification' => 'Code Classification',
             'price' => 'Price',
             'used_in' => 'Used In',
+            'used_at' => 'Used At',
         ],
     ],
     'center_exam' => [
