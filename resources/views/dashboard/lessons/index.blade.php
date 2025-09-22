@@ -90,7 +90,7 @@
                                     </form>
 
                                 </div>
-                                <div class="row">
+                                <div class="col-lg-6">
                                     @can('create_lesson')
                                         <a href="{{ route('lessons.create') }}" class="btn btn-primary mb-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.lesson.add_new') }}
