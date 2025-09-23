@@ -28,7 +28,8 @@ class HomeController extends Controller
             $query->whereHas('lesson.chapter.course', function ($query) use ($teacher) {
                 $query->where('teacher_id', $teacher->id);
             })->orWhere('teacher_id', $teacher->id);
-        })->where('is_active', 1)->whereDate('start_date','>',now())->get();
+        })->where('is_active', 1)->get();
+//        })->where('is_active', 1)->whereDate('start_date','>',now())->get();
 
         return ExamResource::collection($exams);
     }
