@@ -44,6 +44,8 @@ class TeacherResource extends JsonResource
             'courses' => CourseResource::collection($courses),
             'chapters' => ChapterResource::collection($chapters),
             'lessons' => LessonResource::collection($lessons),
+            'stories'  => StoryResource::collection($this->stories()->where('created_at', '>=', now()->subDay())->get()),
+
         ];
     }
 }

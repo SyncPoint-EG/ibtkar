@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\LessonAttachment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\StoryResource;
 
 class SingleTeacherResource extends JsonResource
 {
@@ -35,6 +36,7 @@ class SingleTeacherResource extends JsonResource
                 $query->whereIn('teacher_id', [$this->id]);
             })->where('start_date','>',now())->take(5)->get(),
             'attachments' => LessonAttachmentResource::collection($this->attachments()->take(5)->get()),
+            'stories'  => StoryResource::collection($this->stories()->where('created_at', '>=', now()->subDay())->get()),
 
 
         ];

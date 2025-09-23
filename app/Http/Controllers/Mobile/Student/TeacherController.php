@@ -192,33 +192,7 @@ class TeacherController extends Controller
     public function teacherStories()
     {
         $student = auth('student')->user();
-        $teacherIds = Teacher::whereHas('subjectTeacherAssignments', function ($q) use ($student) {
-            $q->where('stage_id',$student->stage_id);
-            $q->where('grade_id',$student->grade_id);
-            if($student->division_id) {
-                $q->where(function ($qq) use ($student) {
-                    $qq->where('division_id', $student->division_id)
-                        ->orWhereNull('division_id');
-                });
-            }
-        })
-            ->orWhereHas('courses',function ($q) use ($student){
-                $q->where('stage_id',$student->stage_id);
-                $q->where('grade_id',$student->grade_id);
-                if($student->division_id) {
-                    $q->where(function ($qq) use ($student) {
-                        $qq->where('division_id', $student->division_id)
-                            ->orWhereNull('division_id');
-                    });
-                }
-            })->pluck('id');
-
-        $stories = Story::whereIn('teacher_id', $teacherIds)
-            ->where('created_at', '>=', now()->subDay())
-            ->with('teacher')
-            ->get();
-//            ->groupBy('teacher_id');
-
+        $stories = Teacher::getStoriesForStudent($student);
         return response()->json($stories);
     }
 

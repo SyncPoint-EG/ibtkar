@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Student;
+use App\Models\Story;
 
 class Teacher extends Authenticatable
 {
@@ -73,6 +75,30 @@ class Teacher extends Authenticatable
      {
          return $query->where('is_active', 1);
      }
+
+    public function scopeForStudent($query, Student $student)
+    {
+        return $query->whereHas('subjectTeacherAssignments', function ($q) use ($student) {
+            $q->where('stage_id', $student->stage_id);
+            $q->where('grade_id', $student->grade_id);
+            if ($student->division_id) {
+                $q->where(function ($qq) use ($student) {
+                    $qq->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+            }
+        })
+        ->orWhereHas('courses', function ($q) use ($student) {
+            $q->where('stage_id', $student->stage_id);
+            $q->where('grade_id', $student->grade_id);
+            if ($student->division_id) {
+                $q->where(function ($qq) use ($student) {
+                    $qq->where('division_id', $student->division_id)
+                        ->orWhereNull('division_id');
+                });
+            }
+        });
+    }
 
 
     public function subjects()
@@ -268,5 +294,20 @@ class Teacher extends Authenticatable
             $query->whereIn('teacher_id', [$this->id]);
         })->latest();
         return $attachments ;
+    }
+
+    public function stories()
+    {
+        return $this->hasMany(Story::class);
+    }
+
+    public static function getStoriesForStudent(Student $student)
+    {
+        $teacherIds = self::forStudent($student)->pluck('id');
+
+        return Story::whereIn('teacher_id', $teacherIds)
+            ->where('created_at', '>=', now()->subDay())
+            ->with('teacher')
+            ->get();
     }
 }
