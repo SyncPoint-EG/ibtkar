@@ -8,6 +8,7 @@ use App\Models\ActionPoint;
 use App\Models\Guardian;
 use App\Models\Setting;
 use App\Models\Student;
+use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 class StudentAuthController
 {
 
+    use GamificationTrait ;
     public function register(StudentRequest $request)
     {
         DB::beginTransaction();
@@ -25,8 +27,9 @@ class StudentAuthController
 //        $validated['verification_code'] = rand(1000, 9999);
         $student = Student::create($request->validated());
         $student->generateVerificationCode();
+        $points = null ;
         if($request->referral_code){
-            $this->handleReferralCode($request , $student);
+            $points = $this->handleReferralCode($request , $student);
         }
         if($request->guardian_number && !Guardian::query()->where('phone', $request->guardian_number)->exists()){
             $guardian = Guardian::create([
@@ -46,6 +49,7 @@ class StudentAuthController
             'message' => 'Student registered successfully',
             'student' => new StudentResource($student),
             'code' => $student->verification_code,
+            'rewarded_points' => $points
         ]);
     }
     public function handleReferralCode(Request $request , Student $student)
@@ -53,8 +57,10 @@ class StudentAuthController
         $referrer = Student::where('referral_code', $request->input('referral_code'))->first();
         $data['referred_by'] = $referrer ? $referrer->id : null;
         $student->update($data);
-        $referral_points = ActionPoint::where('action_name', 'successful_referral')->value('points');
-        $referrer->increment('points', $referral_points);
+//        $referral_points = ActionPoint::where('action_name', 'successful_referral')->value('points');
+        $referral_points = $this->givePoints($referrer ,'successful_referral');
+//        $referrer->increment('points', $referral_points);
+        return $referral_points;
     }
 
     public function verifyPhone(Request $request,  $studentId)

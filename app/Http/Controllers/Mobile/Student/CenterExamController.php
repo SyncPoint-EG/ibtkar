@@ -7,11 +7,13 @@ use App\Http\Resources\CenterExamResource;
 use App\Models\CenterExam;
 use App\Models\CenterExamAnswer;
 use App\Models\CenterExamAttempt;
+use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CenterExamController extends Controller
 {
+    use GamificationTrait ;
     public function index()
     {
         $student = auth('student')->user();
@@ -101,12 +103,15 @@ class CenterExamController extends Controller
         CenterExamAnswer::insert($answers);
 
         $centerExamAttempt->update(['score' => $total_score]);
+        $points =$this->givePoints($student , 'solve_exam');
 
         return response()->json([
             'message' => 'Center exam submitted successfully.',
             'score' => $total_score,
             'total_degree' => $questions->sum('marks'),
-            'center_exam_attempt' => $centerExamAttempt
+            'center_exam_attempt' => $centerExamAttempt,
+            'rewarded_points' => $points
+
         ]);
     }
 }

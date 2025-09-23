@@ -7,11 +7,13 @@ use App\Http\Resources\HomeworkResource;
 use App\Models\Homework;
 use App\Models\HomeworkAnswer;
 use App\Models\HomeworkAttempt;
+use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeworkController extends Controller
 {
+    use GamificationTrait ;
     public function index()
     {
         $student = auth('student')->user();
@@ -98,12 +100,15 @@ class HomeworkController extends Controller
         // HomeworkAnswer::insert($answers);
 
         $homeworkAttempt->update(['score' => $total_score]);
+        $points =$this->givePoints($student , 'solve_exam');
 
         return response()->json([
             'message' => 'Homework submitted successfully.',
             'score' => $total_score,
             'total_degree' => $questions->sum('marks'),
-            'homework_attempt' => $homeworkAttempt
+            'homework_attempt' => $homeworkAttempt,
+            'rewarded_points' => $points
+
         ]);
     }
 }

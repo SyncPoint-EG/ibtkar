@@ -8,11 +8,13 @@ use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
 use App\Services\ExamAttemptService;
+use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
+    use GamificationTrait ;
     protected ExamAttemptService $examAttemptService;
 
     public function __construct(ExamAttemptService $examAttemptService)
@@ -128,12 +130,15 @@ class ExamController extends Controller
         ]);
 
         $this->examAttemptService->checkIfPassed($examAttempt);
+        $points =$this->givePoints($student , 'solve_exam');
 
         return response()->json([
             'message' => 'Exam submitted successfully.',
             'score' => $total_score,
             'total_degree' => $examAttempt->total_marks,
-            'exam_attempt' => $examAttempt
+            'exam_attempt' => $examAttempt,
+            'rewarded_points' => $points
+
         ]);
     }
 }

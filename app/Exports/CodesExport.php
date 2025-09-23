@@ -21,7 +21,7 @@ class CodesExport implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        $query = Code::with('teacher');
+        $query = Code::with(['teacher', 'payment.student', 'payment.course', 'payment.chapter', 'payment.lesson']);
 
         if (isset($this->filters['teacher_id']) && !empty($this->filters['teacher_id'])) {
             $query->where('teacher_id', $this->filters['teacher_id']);
@@ -63,12 +63,18 @@ class CodesExport implements FromCollection, WithHeadings, WithMapping
             'Expires At',
             'Code Classification',
             'Teacher',
+            'Student Name',
+            'Student Phone',
+            'Used In',
+            'Used At',
+            'Price',
             'Created At',
         ];
     }
 
     public function map($code): array
     {
+        $for = $code->for;
         return [
             $code->code,
             $code->for,
@@ -76,6 +82,11 @@ class CodesExport implements FromCollection, WithHeadings, WithMapping
             $code->expires_at ? $code->expires_at->format('Y-m-d') : '',
             $code->code_classification ?? 'N/A',
             $code->teacher->name ?? '',
+            $code->payment->student->name ?? '',
+            $code->payment->student->phone ?? '',
+            $code->payment && $code->payment->$for ? $code->payment->$for->name : 'N/A',
+            $code->payment->created_at ?? 'N/A',
+            $code->price ?? 'N/A',
             $code->created_at->format('Y-m-d H:i:s'),
         ];
     }

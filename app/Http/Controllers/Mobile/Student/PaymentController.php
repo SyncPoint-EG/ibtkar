@@ -12,16 +12,19 @@ use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Watch;
+use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
+    use GamificationTrait ;
     public function store(PaymentRequest $request)
     {
         try {
             DB::beginTransaction();
             $student = auth('student')->user();
+            $points = null ;
             $student_id = $student->id;
             $amount = $this->getAmount($request);
             $validated = $request->validated();
@@ -39,6 +42,7 @@ class PaymentController extends Controller
                         ]);
                     }
                 }
+                $points =$this->givePoints($student , 'purchase_course');
                 $chapterIds = $course->chapters->pluck('id')->toArray();
                 $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id')->toArray();
                 Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
@@ -55,6 +59,7 @@ class PaymentController extends Controller
                         ]);
                     }
                 }
+                $points =$this->givePoints($student , 'purchase_chapter');
                 Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
 
             }
@@ -69,6 +74,8 @@ class PaymentController extends Controller
                         ]);
                     }
                 }
+                $points =$this->givePoints($student , 'purchase_lesson');
+
                 Watch::where('student_id', $student_id)->where('lesson_id', $request->lesson_id)->update(['count'=>3]);
             }
             if($request->payment_method == 'code'){
@@ -121,7 +128,8 @@ class PaymentController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message'  => 'تمت عملية الشراء بنجاح'
+                'message'  => 'تمت عملية الشراء بنجاح',
+                'rewarded_points' => $points
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
