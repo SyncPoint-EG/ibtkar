@@ -68,7 +68,7 @@
                                                 <td>{{ $lesson->desc }}</td>
                                                 <td><a href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a></td>
                                                 <td><img src="{{ $lesson->video_image }}" width="100px"></td>
-                                                <td>{{ $lesson->chapter->name }}</td>
+                                                <td>{{ $lesson->chapter?->name }}</td>
                                                 <td>{{ $lesson->price }}</td>
                                                 <td>
                                                     <input type="checkbox" class="featured-toggle" data-lesson-id="{{ $lesson->id }}" {{ $lesson->is_featured ? 'checked' : '' }} />
