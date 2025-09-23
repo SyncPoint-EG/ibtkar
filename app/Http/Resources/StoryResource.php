@@ -14,23 +14,14 @@ class StoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $stories = $this->resource;
-        $teacher = $stories->first()->teacher;
-
         return [
-            'teacher' => [
-                'id' => $teacher->id,
-                'name' => $teacher->name,
-                'image' => $teacher->image,
-            ],
-            'stories' => $stories->map(function ($story) {
-                return [
-                    'id' => $story->id,
-                    'file' => $story->file,
-                    'type' => $story->type,
-                    'created_at' => $story->created_at->toDateTimeString(),
-                ];
-            }),
+            'id' => $this->id,
+            'content' => $this->content,
+            'description' => $this->description,
+            'type' => $this->type,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'teacher_id' => $this->teacher_id,
+            'teacher_name' => $this->teacher?->name,
         ];
     }
 }
