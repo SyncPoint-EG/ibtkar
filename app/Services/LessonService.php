@@ -23,9 +23,34 @@ class LessonService
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
-        return $this->model->with($with)->latest()->paginate($perPage);
+        return $this->model
+            ->when($filters['teacher_id'] ?? null, function ($query, $teacher_id) {
+                return $query->whereHas('chapter.course', function ($query) use ($teacher_id) {
+                    $query->where('teacher_id', $teacher_id);
+                });
+            })
+            ->when($filters['course_id'] ?? null, function ($query, $course_id) {
+                return $query->whereHas('chapter', function ($query) use ($course_id) {
+                    $query->where('course_id', $course_id);
+                });
+            })
+            ->when($filters['chapter_id'] ?? null, function ($query, $chapter_id) {
+                $query->where('chapter_id', $chapter_id);
+            })
+            ->when($filters['name'] ?? null, function ($query, $name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            })
+            ->when($filters['created_at'] ?? null, function ($query, $created_at) {
+                $query->whereDate('created_at', $created_at);
+            })
+            ->when($filters['date'] ?? null, function ($query, $date) {
+                $query->whereDate('date', $date);
+            })
+            ->with($with)
+            ->latest()
+            ->paginate($perPage);
     }
 
     /**

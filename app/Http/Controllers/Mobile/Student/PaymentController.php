@@ -13,111 +13,121 @@ use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Watch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
     public function store(PaymentRequest $request)
     {
-        $student = auth('student')->user();
-        $student_id = $student->id;
-        $amount = $this->getAmount($request);
-        $validated = $request->validated();
-        $validated['student_id'] = $student_id;
-        $validated['amount'] = $amount;
-        $validated['total_amount'] = $amount;
-        if($request->payment_method == 'code'){
-            $code = Code::where('code',$request->payment_code)->first();
+        try {
+            DB::beginTransaction();
+            $student = auth('student')->user();
+            $student_id = $student->id;
+            $amount = $this->getAmount($request);
+            $validated = $request->validated();
+            $validated['student_id'] = $student_id;
+            $validated['amount'] = $amount;
+            $validated['total_amount'] = $amount;
+            if($request->course_id){
+                $course = Course::find($request->course_id);
+                if($request->payment_method == 'code'){
+                    $code = Code::where('code',$request->payment_code)->first();
+                    if($code->price != $course->price){
+                        return response()->json([
+                            'status' => false,
+                            'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                        ]);
+                    }
+                }
+                $chapterIds = $course->chapters->pluck('id')->toArray();
+                $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id')->toArray();
+                Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
+            }
+            if($request->chapter_id){
+                $lessonIds = Lesson::where('chapter_id', $request->chapter_id)->pluck('id')->toArray();
+                $chapter = Chapter::find($request->chapter_id);
+                if($request->payment_method == 'code'){
+                    $code = Code::where('code',$request->payment_code)->first();
+                    if($code->price != $chapter->price){
+                        return response()->json([
+                            'status' => false,
+                            'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                        ]);
+                    }
+                }
+                Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
 
-            if(!$code){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Code not found'
-                ]);
-            }else{
-                if(($code->for == 'lesson' && !$request->lesson_id) || ($code->for == 'chapter' && !$request->chapter_id) || ($code->for == 'course' && !$request->course_id) || $code->for == 'charge'){
+            }
+            if($request->lesson_id){
+                $lesson = Lesson::find($request->lesson_id);
+                if($request->payment_method == 'code'){
+                    $code = Code::where('code',$request->payment_code)->first();
+                    if($code->price != $lesson->price){
+                        return response()->json([
+                            'status' => false,
+                            'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                        ]);
+                    }
+                }
+                Watch::where('student_id', $student_id)->where('lesson_id', $request->lesson_id)->update(['count'=>3]);
+            }
+            if($request->payment_method == 'code'){
+                $code = Code::where('code',$request->payment_code)->first();
+
+                if(!$code){
                     return response()->json([
                         'success' => false,
-                        'message' => 'Code is not applicable'
-                    ]);
-                }
-                if($code->number_of_uses > 0 || now() > $code->expires_at){
-                    return response()->json([
-                        'status' => false,
-                        'message'  => 'الكود مستخدم من قبل'
+                        'message' => 'Code not found'
                     ]);
                 }else{
-                    $code->increment('number_of_uses'); ;
-                    $code->save();
+                    if(($code->for == 'lesson' && !$request->lesson_id) || ($code->for == 'chapter' && !$request->chapter_id) || ($code->for == 'course' && !$request->course_id) || $code->for == 'charge'){
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Code is not applicable'
+                        ]);
+                    }
+//                return $code->expires_at->format('Y-m-d');
+                    if($code->number_of_uses >= 1 || ($code->expires_at != null && $code->expires_at < now())){
+                        return response()->json([
+                            'status' => false,
+                            'message'  => 'الكود مستخدم من قبل'
+                        ]);
+                    }else{
+//                    return 'noooooo';
+                        $code->increment('number_of_uses'); ;
+                        $code->save();
+                    }
                 }
-            }
 
-        }
-        if(in_array($request->payment_method , ['instapay', 'wallet'])){
-            $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
-        }else{
-            $validated['payment_status'] = Payment::PAYMENT_STATUS['approved'];
-        }
-        if($request->payment_method == 'ibtkar_wallet'){
-            if($student->wallet < $amount){
-                return response()->json([
-                    'status' => false,
-                    'message'  => 'لا يوجد لديك رصيد كافي في المحفظة للشراء'
-                ]);
             }
-            $student->wallet -= $amount;
-            $student->save();
-
-        }
-        if($request->course_id){
-            $course = Course::find($request->course_id);
-            if($request->payment_method == 'code'){
-                $code = Code::where('code',$request->payment_code)->first();
-                if($code->price != $course->price){
+            if(in_array($request->payment_method , ['instapay', 'wallet'])){
+                $validated['payment_status'] = Payment::PAYMENT_STATUS['pending'];
+            }else{
+                $validated['payment_status'] = Payment::PAYMENT_STATUS['approved'];
+            }
+            if($request->payment_method == 'ibtkar_wallet'){
+                if($student->wallet < $amount){
                     return response()->json([
                         'status' => false,
-                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
+                        'message'  => 'لا يوجد لديك رصيد كافي في المحفظة للشراء'
                     ]);
                 }
-            }
-            $chapterIds = $course->chapters->pluck('id')->toArray();
-            $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id')->toArray();
-            Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
-        }
-        if($request->chapter_id){
-            $lessonIds = Lesson::where('chapter_id', $request->chapter_id)->pluck('id')->toArray();
-            $chapter = Chapter::find($request->chapter_id);
-            if($request->payment_method == 'code'){
-                $code = Code::where('code',$request->payment_code)->first();
-                if($code->price != $chapter->price){
-                    return response()->json([
-                        'status' => false,
-                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
-                    ]);
-                }
-            }
-            Watch::where('student_id', $student_id)->whereIn('lesson_id', $lessonIds)->update(['count'=>3]);
+                $student->wallet -= $amount;
+                $student->save();
 
-        }
-        if($request->lesson_id){
-            $lesson = Lesson::find($request->lesson_id);
-            if($request->payment_method == 'code'){
-                $code = Code::where('code',$request->payment_code)->first();
-                if($code->price != $lesson->price){
-                    return response()->json([
-                        'status' => false,
-                        'message'  => 'قيمة الكود لا تتناسب مع سعر الكورس'
-                    ]);
-                }
             }
-            Watch::where('student_id', $student_id)->where('lesson_id', $request->lesson_id)->update(['count'=>3]);
+            $payment = Payment::create($validated);
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message'  => 'تمت عملية الشراء بنجاح'
+            ]);
+        }catch (\Exception $exception){
+            DB::rollBack();
+            return response()->json(['status' => false, 'message' => $exception->getMessage()]);
         }
-        $payment = Payment::create($validated);
 
-
-        return response()->json([
-            'status' => true,
-            'message'  => 'تمت عملية الشراء بنجاح'
-        ]);
     }
     private function getAmount(Request $request)
     {
