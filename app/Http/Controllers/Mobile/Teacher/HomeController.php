@@ -47,7 +47,7 @@ class HomeController extends Controller
         $teacher = auth()->guard('teacher')->user();
         $attachments = LessonAttachment::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
-        })->whereDate('due_date','>',now())->paginate(15);
+        })->paginate(15);
         return AttachmentResource::collection($attachments);
     }
 
