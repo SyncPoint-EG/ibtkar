@@ -73,11 +73,11 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.chapter.title") }}
-                                                                :</strong> <a href="{{route('chapters.show',$lesson->chapter_id)}}">{{ $lesson->chapter->name }}</a>
+                                                                :</strong> <a href="{{route('chapters.show',$lesson->chapter_id)}}">{{ $lesson->chapter?->name }}</a>
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.course.title") }}
-                                                                :</strong> <a href="{{route('courses.show',$lesson->chapter->course_id)}}">{{ $lesson->chapter->course->name }}</a>
+                                                                :</strong> <a href="{{route('courses.show',$lesson->chapter?->course_id)}}">{{ $lesson->chapter?->course?->name }}</a>
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.lesson.fields.type") }}:</strong> {{ __('dashboard.lesson.types.' . $lesson->type) }}
