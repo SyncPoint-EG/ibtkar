@@ -33,11 +33,14 @@ class SingleTeacherResource extends JsonResource
         $courses = $coursesQuery->get()->unique('id');
         $courseIds = $courses->pluck('id');
         $chapters = \App\Models\Chapter::whereIn('course_id', $courseIds)->get()->unique('id');
-        $lessons = \App\Models\Lesson::whereIn('chapter_id', $chapters->pluck('id'))->with('attachments')->latest()->get()->unique('id');
+        $lessons_query = \App\Models\Lesson::whereIn('chapter_id', $chapters->pluck('id'))->with('attachments');
+        $lessons = $lessons_query->latest()->get()->unique('id');
+        $lessonsIds = $lessons->pluck('id'); ;
 //        $attachments = LessonAttachment::query()->whereHas('lesson.chapter.course', function ($query) {
 //            $query->whereIn('teacher_id', [$this->id]);
 //
 //        })->take(5)->get();
+        $attachments = LessonAttachment::whereIn('lesson_id', $lessonsIds)->get()->unique('id');
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -57,7 +60,7 @@ class SingleTeacherResource extends JsonResource
             'exams'   => Exam::whereHas('lesson.chapter.course', function ($query) {
                 $query->whereIn('teacher_id', [$this->id]);
             })->where('start_date','>',now())->take(5)->get(),
-            'attachments' => LessonAttachmentResource::collection($lessons->attachments()->take(5)->get()),
+            'attachments' => LessonAttachmentResource::collection($attachments),
             'stories'  => StoryResource::collection($this->stories()->where('created_at', '>=', now()->subDay())->get()),
 
 
