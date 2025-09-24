@@ -32,7 +32,7 @@ class Teacher extends Authenticatable
      * @var array
      */
 
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid'];
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid','website_image'];
 
     protected function casts(): array
     {
