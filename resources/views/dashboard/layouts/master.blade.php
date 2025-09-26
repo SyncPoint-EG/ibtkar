@@ -17,8 +17,8 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('dashboard/app-assets/images/ico/apple-icon-152.png') }}">
 
     <!-- Favicons -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('dashboard/app-assets/images/ico/favicon.ico') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('dashboard/app-assets/images/ico/favicon-32.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('dashboard/app-assets/images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('dashboard/app-assets/images/logo.png') }}">
 
     <!-- Meta for Apple Web App -->
     <meta name="apple-mobile-web-app-capable" content="yes">
