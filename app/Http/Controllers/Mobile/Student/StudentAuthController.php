@@ -21,11 +21,12 @@ class StudentAuthController
     {
         DB::beginTransaction();
         $validated = $request->validated();
+        $validated['status'] = 1 ;
         if(!$request->image){
             unset($validated['image']);
         }
 //        $validated['verification_code'] = rand(1000, 9999);
-        $student = Student::create($request->validated());
+        $student = Student::create($validated);
         $student->generateVerificationCode();
         $points = null ;
         if($request->referral_code){
