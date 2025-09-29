@@ -308,23 +308,23 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="form-group">
-                                                    <label
-                                                        for="status">{{ __("dashboard.student.fields.status") }}</label>
-                                                    <select id="status" name="status"
-                                                            class="form-control @error('status') is-invalid @enderror"
-                                                            data-toggle="tooltip" data-trigger="hover"
-                                                            data-placement="top"
-                                                            data-title="{{ __("dashboard.student.fields.status") }}">
-                                                        <option
-                                                            value="0" {{ isset($student) && !$student->status ? 'selected' : '' }}>{{ __("dashboard.common.no") }}</option>
-                                                        <option
-                                                            value="1" {{ isset($student) && $student->status ? 'selected' : '' }}>{{ __("dashboard.common.yes") }}</option>
-                                                    </select>
-                                                    @error('status')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label--}}
+{{--                                                        for="status">{{ __("dashboard.student.fields.status") }}</label>--}}
+{{--                                                    <select id="status" name="status"--}}
+{{--                                                            class="form-control @error('status') is-invalid @enderror"--}}
+{{--                                                            data-toggle="tooltip" data-trigger="hover"--}}
+{{--                                                            data-placement="top"--}}
+{{--                                                            data-title="{{ __("dashboard.student.fields.status") }}">--}}
+{{--                                                        <option--}}
+{{--                                                            value="0" {{ isset($student) && !$student->status ? 'selected' : '' }}>{{ __("dashboard.common.no") }}</option>--}}
+{{--                                                        <option--}}
+{{--                                                            value="1" {{ isset($student) && $student->status ? 'selected' : '' }}>{{ __("dashboard.common.yes") }}</option>--}}
+{{--                                                    </select>--}}
+{{--                                                    @error('status')--}}
+{{--                                                    <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                                                    @enderror--}}
+{{--                                                </div>--}}
                                             </div>
 
                                             <div class="form-actions">
