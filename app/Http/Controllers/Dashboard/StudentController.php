@@ -36,7 +36,7 @@ class StudentController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->only([
-            'name', 'phone', 'governorate_id', 'center_id', 'stage_id', 
+            'name', 'phone', 'governorate_id', 'center_id', 'stage_id',
             'grade_id', 'division_id', 'education_type_id', 'status', 'gender'
         ]);
 
@@ -50,7 +50,7 @@ class StudentController extends Controller
         $educationTypes = \App\Models\EducationType::all();
 
         return view('dashboard.students.index', compact(
-            'students', 'filters', 'governorates', 'centers', 'stages', 
+            'students', 'filters', 'governorates', 'centers', 'stages',
             'grades', 'divisions', 'educationTypes'
         ));
     }
@@ -81,7 +81,9 @@ class StudentController extends Controller
     public function store(StudentRequest $request): RedirectResponse
     {
         try {
-            $this->studentService->create($request->validated());
+            $validated = $request->validated();
+            $validated['status'] = 1;
+            $this->studentService->create($validated);
 
             return redirect()->route('students.index')
                 ->with('success', 'Student created successfully.');
@@ -131,7 +133,9 @@ class StudentController extends Controller
     public function update(StudentRequest $request, Student $student): RedirectResponse
     {
         try {
-            $this->studentService->update($student, $request->validated());
+            $validated = $request->validated();
+            $validated['status'] = 1;
+            $this->studentService->update($student, $validated);
 
             return redirect()->route('students.index')
                 ->with('success', 'Student updated successfully.');
@@ -164,7 +168,7 @@ class StudentController extends Controller
     public function export(Request $request)
     {
         $filters = $request->only([
-            'name', 'phone', 'governorate_id', 'center_id', 'stage_id', 
+            'name', 'phone', 'governorate_id', 'center_id', 'stage_id',
             'grade_id', 'division_id', 'education_type_id', 'status', 'gender'
         ]);
 
