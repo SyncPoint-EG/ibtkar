@@ -179,7 +179,7 @@ return [
          *
          * @var string
          */
-        'default_font' => 'XBRiyaz',
+        'default_font' => 'XB RiyazBd',
 
         /**
          * Image DPI setting

@@ -5,7 +5,7 @@
     <title>Teacher Report</title>
     <style>
         body {
-            font-family: 'XBRiyaz', sans-serif;
+            font-family: 'XB RiyazBd', sans-serif;
         }
         table {
             width: 100%;
