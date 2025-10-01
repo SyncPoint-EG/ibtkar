@@ -20,6 +20,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TeachersExport;
 use App\Exports\TeacherStudentsExport;
 use App\Imports\TeachersImport;
+use App\Models\Chapter;
+use App\Models\Code;
+use App\Models\Exam;
+use App\Models\Lesson;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class TeacherController extends Controller
@@ -466,5 +471,72 @@ class TeacherController extends Controller
         return Excel::download(new TeacherStudentsExport($teacher), 'students.xlsx');
     }
 
+    public function generateReport(Request $request, Teacher $teacher)
+    {
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+
+        // 1. Number of codes used for a lecture "during a specific period"
+        $lectureCodesQuery = Payment::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })->whereNotNull('payment_code');
+
+        if ($startDate && $endDate) {
+            $lectureCodesQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        $lectureCodesCount = $lectureCodesQuery->count();
+
+        // 2. Number of codes used for a month "during a specific period"
+        $monthlyCodesQuery = Code::where('teacher_id', $teacher->id)
+            ->where('code_classification', 'monthly') // This is an assumption
+            ->whereHas('payment');
+
+        if ($startDate && $endDate) {
+            $monthlyCodesQuery->whereHas('payment', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            });
+        }
+        $monthlyCodesCount = $monthlyCodesQuery->count();
+
+
+        // 3. Number of students for the teacher
+        $studentIds = Payment::where('payment_status', 'approved')
+            ->where(function ($query) use ($teacher) {
+                $query->whereHas('course', function ($q) use ($teacher) {
+                    $q->where('teacher_id', $teacher->id);
+                })->orWhereHas('chapter.course', function ($q) use ($teacher) {
+                    $q->where('teacher_id', $teacher->id);
+                })->orWhereHas('lesson.chapter.course', function ($q) use ($teacher) {
+                    $q->where('teacher_id', $teacher->id);
+                });
+            })
+            ->pluck('student_id')->unique();
+        $studentsCount = $studentIds->count();
+
+
+        // 4. Number of lectures (lessons) for the teacher
+        $lessonsCount = \App\Models\Lesson::whereHas('chapter.course', function ($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })->count();
+
+        // 5. Number of exams for the teacher
+        $examsCount = \App\Models\Exam::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
+            $query->where('teacher_id', $teacher->id);
+        })->count();
+
+        $data = [
+            'teacher' => $teacher,
+            'lectureCodesCount' => $lectureCodesCount,
+            'monthlyCodesCount' => $monthlyCodesCount,
+            'studentsCount' => $studentsCount,
+            'lessonsCount' => $lessonsCount,
+            'examsCount' => $examsCount,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ];
+
+        $pdf = Pdf::loadView('dashboard.teachers.report', $data);
+        return $pdf->download('report.pdf');
+    }
 
 }

@@ -50,6 +50,10 @@ return [
         'filter' => 'Filter',
         'reset' => 'Reset',
         'watches' => 'Watches',
+        'start_date' => 'Start Date',
+        'end_date' => 'End Date',
+        'from' => 'From',
+        'to' => 'To',
     ],
     'settings' => [
         'title' => 'Settings',
@@ -420,6 +424,17 @@ return [
         'import_column_is_featured' => 'is_featured (Yes/No)',
         'students' => 'Students',
         'students_of' => 'Students of',
+        'generate_report' => 'Generate Report',
+        'report_for' => 'Report for',
+        'report' => [
+            'metric' => 'Metric',
+            'value' => 'Value',
+            'lecture_codes_count' => 'Number of codes used for lectures',
+            'monthly_codes_count' => 'Number of codes used for monthly subscriptions',
+            'students_count' => 'Number of students',
+            'lessons_count' => 'Number of lessons',
+            'exams_count' => 'Number of exams',
+        ],
     ],
     'semister' => [
         'title' => 'Semister',

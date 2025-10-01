@@ -31,6 +31,11 @@
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
+                                            <li>
+                                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#reportModal">
+                                                    <i class="icon-file-pdf"></i> {{ __('dashboard.teacher.generate_report') }}
+                                                </button>
+                                            </li>
                                             <li><a href="{{ route('teachers.edit', $teacher->id) }}"
                                                    class="btn btn-sm btn-primary"><i
                                                         class="icon-pencil"></i> {{ __('dashboard.common.edit') }}</a>
@@ -214,6 +219,36 @@
                     </div>
                 </section>
                 <!-- Courses section end -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">{{ __('dashboard.teacher.generate_report') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('teachers.report', $teacher->id) }}" method="GET" target="_blank">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="start_date">{{ __('dashboard.common.start_date') }}</label>
+                            <input type="date" name="start_date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">{{ __('dashboard.common.end_date') }}</label>
+                            <input type="date" name="end_date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('dashboard.common.close') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('dashboard.teacher.generate_report') }}</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

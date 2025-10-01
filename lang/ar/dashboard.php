@@ -49,6 +49,10 @@ return [
         'filter' => 'تصفية',
         'reset' => 'إعادة تعيين',
         'watches' => 'المشاهدات',
+        'start_date' => 'تاريخ البدء',
+        'end_date' => 'تاريخ الانتهاء',
+        'from' => 'من',
+        'to' => 'إلى',
     ],
     'settings' => [
         'title' => 'الإعدادات',
@@ -415,6 +419,17 @@ return [
         'import_column_is_featured' => 'مميز (نعم/لا)',
         'students' => 'الطلاب',
         'students_of' => 'طلاب المعلم',
+        'generate_report' => 'إنشاء تقرير',
+        'report_for' => 'تقرير للمعلم',
+        'report' => [
+            'metric' => 'المقياس',
+            'value' => 'القيمة',
+            'lecture_codes_count' => 'عدد الأكواد المستخدمة للمحاضرات',
+            'monthly_codes_count' => 'عدد الأكواد المستخدمة للاشتراكات الشهرية',
+            'students_count' => 'عدد الطلاب',
+            'lessons_count' => 'عدد الدروس',
+            'exams_count' => 'عدد الامتحانات',
+        ],
     ],
     'semister' => [
         'title' => 'الفصل الدراسي',

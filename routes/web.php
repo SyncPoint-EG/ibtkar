@@ -820,6 +820,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('teachers/{teacher}/students/export', [TeacherController::class, 'exportStudents'])
         ->name('teachers.students.export')
         ->middleware('can:view_teacher');
+
+    Route::get('teachers/{teacher}/report', [TeacherController::class, 'generateReport'])
+        ->name('teachers.report')
+        ->middleware('can:view_teacher');
 });
 
 // Routes for EducationType
