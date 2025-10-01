@@ -98,6 +98,13 @@
                         </a>
                     @endcan
 
+                    @can('view_teacher')
+                        <a href="{{ route('teachers.students', $teacher->id) }}"
+                           class="btn btn-success btn-sm" title="view students">
+                            <i class="icon-users"></i>
+                        </a>
+                    @endcan
+
                     @can('delete_teacher')
                         <button type="button" class="btn btn-danger btn-sm delete-teacher"
                                 data-teacher-id="{{ $teacher->id }}"

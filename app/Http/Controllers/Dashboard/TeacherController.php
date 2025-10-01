@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Models\Division;
 use App\Models\Grade;
+use App\Models\Payment;
 use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Subject;
@@ -17,6 +18,7 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TeachersExport;
+use App\Exports\TeacherStudentsExport;
 use App\Imports\TeachersImport;
 
 
@@ -429,6 +431,39 @@ class TeacherController extends Controller
     public function getCourses(Teacher $teacher)
     {
         return response()->json($teacher->courses->pluck('name', 'id'));
+    }
+
+    public function students(Request $request, Teacher $teacher)
+    {
+        $courseIds = $teacher->courses()->pluck('id');
+
+        $chapterIds = \App\Models\Chapter::whereIn('course_id', $courseIds)->pluck('id');
+
+        $lessonIds = \App\Models\Lesson::whereIn('chapter_id', $chapterIds)->pluck('id');
+
+        $studentIds = \App\Models\Payment::where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->where(function ($query) use ($courseIds, $chapterIds, $lessonIds) {
+                $query->whereIn('course_id', $courseIds)
+                    ->orWhereIn('chapter_id', $chapterIds)
+                    ->orWhereIn('lesson_id', $lessonIds);
+            })
+            ->pluck('student_id')->unique();
+
+        $studentsQuery = Student::whereIn('id', $studentIds);
+
+        // Filtering
+        if ($request->has('search')) {
+            $studentsQuery->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $students = $studentsQuery->paginate(10);
+
+        return view('dashboard.teachers.students', compact('teacher', 'students'));
+    }
+
+    public function exportStudents(Teacher $teacher)
+    {
+        return Excel::download(new TeacherStudentsExport($teacher), 'students.xlsx');
     }
 
 

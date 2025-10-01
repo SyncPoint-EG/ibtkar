@@ -808,6 +808,14 @@ Route::middleware(['auth'])->group(function() {
     Route::get('teachers/{teacher}/courses', [TeacherController::class, 'getCourses'])
         ->name('teachers.courses')
         ->middleware('can:view_teacher');
+
+    Route::get('teachers/{teacher}/students', [TeacherController::class, 'students'])
+        ->name('teachers.students')
+        ->middleware('can:view_teacher');
+
+    Route::get('teachers/{teacher}/students/export', [TeacherController::class, 'exportStudents'])
+        ->name('teachers.students.export')
+        ->middleware('can:view_teacher');
 });
 
 // Routes for EducationType

@@ -246,6 +246,7 @@ return [
         'fill_required' => 'يرجى ملء جميع الحقول المطلوبة لإنشاء طالب جديد.',
         'update_info' => 'تحديث معلومات هذا الطالب.',
         'delete_confirm' => 'هل أنت متأكد أنك تريد حذف هذا الطالب؟',
+        'search_placeholder' => 'البحث بالاسم أو الهاتف أو المعرف...',
         'fields' => [
             'first_name' => 'الاسم الأول',
             'name' => 'الاسم',
@@ -259,6 +260,7 @@ return [
             'stage_id' => 'معرف المرحلة',
             'grade_id' => 'معرف الصف',
             'division_id' => 'معرف الشعبة',
+            'grade' => 'الصف',
             'gender' => 'الجنس',
             'birth_date' => 'تاريخ الميلاد',
             'status' => 'الحالة',
@@ -410,6 +412,8 @@ return [
         'import_column_phone' => 'الهاتف',
         'import_column_status' => 'الحالة (نشط/غير نشط)',
         'import_column_is_featured' => 'مميز (نعم/لا)',
+        'students' => 'الطلاب',
+        'students_of' => 'طلاب المعلم',
     ],
     'semister' => [
         'title' => 'الفصل الدراسي',

@@ -247,6 +247,7 @@ return [
         'fill_required' => 'Please fill in all required fields to create a new Student.',
         'update_info' => 'Update the information for this Student.',
         'delete_confirm' => 'Are you sure you want to delete this Student?',
+        'search_placeholder' => 'Search by name, phone, or ID...',
         'fields' => [
             'first_name' => 'First Name',
             'name' => 'Name',
@@ -260,6 +261,7 @@ return [
             'stage_id' => 'Stage Id',
             'grade_id' => 'Grade Id',
             'division_id' => 'Division Id',
+            'grade' => 'Grade',
             'gender' => 'Gender',
             'birth_date' => 'Birth Date',
             'status' => 'Status',
@@ -415,6 +417,8 @@ return [
         'import_column_phone' => 'phone',
         'import_column_status' => 'status (Active/Inactive)',
         'import_column_is_featured' => 'is_featured (Yes/No)',
+        'students' => 'Students',
+        'students_of' => 'Students of',
     ],
     'semister' => [
         'title' => 'Semister',
