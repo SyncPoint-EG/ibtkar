@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterRequest;
 use App\Models\Course;
+use App\Models\Division;
+use App\Models\Grade;
+use App\Models\Stage;
+use App\Models\Teacher;
 use App\Services\ChapterService;
 use App\Models\Chapter;
 use App\Models\Student;
@@ -27,11 +31,63 @@ class ChapterController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $chapters = $this->chapterService->getAllPaginated(15 ,['course.teacher','course']);
+        $query = Chapter::with([
+            'course.teacher',
+            'course.stage',
+            'course.grade',
+            'course.division'
+        ]);
 
-        return view('dashboard.chapters.index', compact('chapters'));
+        // Name filter
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Course filter
+        if ($request->filled('course_id')) {
+            $query->where('course_id', $request->course_id);
+        }
+
+        // Teacher filter
+        if ($request->filled('teacher_id')) {
+            $query->whereHas('course', function ($q) use ($request) {
+                $q->where('teacher_id', $request->teacher_id);
+            });
+        }
+
+        // Stage filter
+        if ($request->filled('stage_id')) {
+            $query->whereHas('course', function ($q) use ($request) {
+                $q->where('stage_id', $request->stage_id);
+            });
+        }
+
+        // Grade filter
+        if ($request->filled('grade_id')) {
+            $query->whereHas('course', function ($q) use ($request) {
+                $q->where('grade_id', $request->grade_id);
+            });
+        }
+
+        // Division filter
+        if ($request->filled('division_id')) {
+            $query->whereHas('course', function ($q) use ($request) {
+                $q->where('division_id', $request->division_id);
+            });
+        }
+
+        $chapters = $query->paginate(15);
+
+        $courses = Course::all();
+        $teachers = Teacher::all();
+        $stages = Stage::all();
+        $grades = Grade::all();
+        $divisions = Division::all();
+        $filters = $request->all();
+
+        return view('dashboard.chapters.index', compact('chapters', 'courses', 'teachers', 'stages', 'grades', 'divisions', 'filters'));
     }
 
     /**

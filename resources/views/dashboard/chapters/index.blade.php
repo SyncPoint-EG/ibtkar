@@ -37,12 +37,69 @@
                                 </div>
                             </div>
                             <div class="card-body collapse in">
-                                <div class="card-block card-dashboard">
+                                <div class="card-block">
                                     @can('create_chapter')
-                                        <a href="{{ route('chapters.create') }}" class="btn btn-primary mb-1">
+                                        <a href="{{ route('chapters.create') }}" class="btn btn-primary m-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.chapter.add_new') }}
                                         </a>
                                     @endcan
+
+                                    <form method="GET" action="{{ route('chapters.index') }}" class="form">
+                                        <div class="row m-1">
+                                            <div class="col-md-4">
+                                                <input type="text" name="name" class="form-control" placeholder="{{ __('dashboard.chapter.fields.name') }}" value="{{ $filters['name'] ?? '' }}">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="course_id" class="form-control">
+                                                    <option value="">{{ __('dashboard.course.title') }}</option>
+                                                    @foreach($courses as $course)
+                                                        <option value="{{ $course->id }}" {{ isset($filters['course_id']) && $filters['course_id'] == $course->id ? 'selected' : '' }}>{{ $course->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="teacher_id" class="form-control">
+                                                    <option value="">{{ __('dashboard.teacher.title') }}</option>
+                                                    @foreach($teachers as $teacher)
+                                                        <option value="{{ $teacher->id }}" {{ isset($filters['teacher_id']) && $filters['teacher_id'] == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="row m-1">
+
+                                            <div class="col-md-4">
+                                                <select name="stage_id" class="form-control">
+                                                    <option value="">{{ __('dashboard.stage.title') }}</option>
+                                                    @foreach($stages as $stage)
+                                                        <option value="{{ $stage->id }}" {{ isset($filters['stage_id']) && $filters['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="grade_id" class="form-control">
+                                                    <option value="">{{ __('dashboard.grade.title') }}</option>
+                                                    @foreach($grades as $grade)
+                                                        <option value="{{ $grade->id }}" {{ isset($filters['grade_id']) && $filters['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select name="division_id" class="form-control">
+                                                    <option value="">{{ __('dashboard.division.title') }}</option>
+                                                    @foreach($divisions as $division)
+                                                        <option value="{{ $division->id }}" {{ isset($filters['division_id']) && $filters['division_id'] == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary m-1">{{ __('dashboard.common.filter') }}</button>
+                                        <a href="{{ route('chapters.index') }}" class="btn btn-secondary m-1">{{ __('dashboard.common.reset') }}</a>
+                                    </form>
+                                </div>
+
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table">
