@@ -29,7 +29,7 @@ class ChapterController extends Controller
      */
     public function index(): View
     {
-        $chapters = $this->chapterService->getAllPaginated();
+        $chapters = $this->chapterService->getAllPaginated(15 ,['course.teacher','course']);
 
         return view('dashboard.chapters.index', compact('chapters'));
     }

@@ -284,6 +284,7 @@ return [
         'import_column_gender' => 'الجنس',
         'import_column_birth_date' => 'تاريخ الميلاد (YYYY-MM-DD)',
         'import_column_status' => 'الحالة (نشط/غير نشط)',
+        'purchased_lessons' => 'الدروس المشتراة',
     ],
     'guardian' => [
         'title' => 'ولي الأمر',
@@ -541,6 +542,7 @@ return [
         'fill_required' => 'يرجى ملء جميع الحقول المطلوبة لإنشاء درس جديد.',
         'update_info' => 'تحديث معلومات هذا الدرس.',
         'delete_confirm' => 'هل أنت متأكد أنك تريد حذف هذا الدرس؟',
+        'search_placeholder' => 'البحث باسم الدرس...',
         'featured_status_updated' => 'تم تحديث حالة الدرس المميز بنجاح',
         'fields' => [
             'name' => 'الاسم',

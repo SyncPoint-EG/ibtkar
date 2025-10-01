@@ -121,6 +121,69 @@
                     </div>
                 </section>
                 <!-- Basic example section end -->
+
+                <!-- Purchased Lessons Section -->
+                <section id="purchased-lessons">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">{{ __('dashboard.student.purchased_lessons') }}</h4>
+                                    <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a href="{{ route('students.export.lessons', $student->id) }}" class="btn btn-sm btn-success"><i class="icon-download"></i> {{ __('dashboard.common.export') }}</a></li>
+                                            <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+                                            <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body collapse in">
+                                    <div class="card-block">
+                                        <div class="row mb-2">
+                                            <div class="col-md-12">
+                                                <form method="GET" action="{{ route('students.show', $student->id) }}">
+                                                    <input type="text" name="search" class="form-control" style="width: auto; display: inline-block;" placeholder="{{ __('dashboard.lesson.search_placeholder') }}" value="{{ request('search') }}">
+                                                    <button type="submit" class="btn btn-primary">{{ __('dashboard.common.search') }}</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>{{ __('dashboard.lesson.fields.name') }}</th>
+                                                    <th>{{ __('dashboard.teacher.title') }}</th>
+                                                    <th>{{ __('dashboard.course.title') }}</th>
+                                                    <th>{{ __('dashboard.lesson.fields.price') }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @forelse($purchasedLessons as $lesson)
+                                                    <tr>
+                                                        <td>{{ $lesson->name }}</td>
+                                                        <td>{{ $lesson->chapter->course->teacher->name ?? '' }}</td>
+                                                        <td>{{ $lesson->chapter->course->name ?? '' }}</td>
+                                                        <td>{{ $lesson->price }}</td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">{{ __('dashboard.lesson.no_records') }}</td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            {{ $purchasedLessons->links() }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Purchased Lessons Section end -->
             </div>
         </div>
     </div>

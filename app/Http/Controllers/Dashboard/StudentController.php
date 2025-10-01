@@ -9,10 +9,12 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Governorate;
 use App\Models\Grade;
+use App\Models\Payment;
 use App\Models\Stage;
 use App\Services\StudentService;
 use App\Models\Student;
 use App\Exports\StudentsExport;
+use App\Exports\PurchasedLessonsExport;
 use App\Imports\StudentsImport;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -100,9 +102,19 @@ class StudentController extends Controller
      * @param Student $student
      * @return View
      */
-    public function show(Student $student): View
+    public function show(Request $request, Student $student): View
     {
-        return view('dashboard.students.show', compact('student'));
+        $purchasedLessonsQuery = \App\Models\Lesson::whereHas('payments', function ($query) use ($student) {
+            $query->where('student_id', $student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+        });
+
+        if ($request->has('search')) {
+            $purchasedLessonsQuery->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
+        $purchasedLessons = $purchasedLessonsQuery->paginate(10);
+
+        return view('dashboard.students.show', compact('student', 'purchasedLessons'));
     }
 
     /**
@@ -199,5 +211,10 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')
             ->with('success', 'Students imported successfully.');
+    }
+
+    public function exportLessons(Student $student)
+    {
+        return Excel::download(new PurchasedLessonsExport($student), 'purchased-lessons.xlsx');
     }
 }

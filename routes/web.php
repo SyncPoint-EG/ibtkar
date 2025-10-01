@@ -690,6 +690,10 @@ Route::middleware(['auth'])->group(function() {
     Route::post('students/import', [StudentController::class, 'import'])
         ->name('students.import')
         ->middleware('can:create_student');
+
+    Route::get('students/{student}/export-lessons', [StudentController::class, 'exportLessons'])
+        ->name('students.export.lessons')
+        ->middleware('can:view_student');
 });
 
 // Routes for Guardian

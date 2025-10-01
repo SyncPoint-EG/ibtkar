@@ -26,7 +26,7 @@ class TeacherStudentsExport implements FromCollection, WithHeadings, WithMapping
         $chapterIds = Chapter::whereIn('course_id', $courseIds)->pluck('id');
         $lessonIds = Lesson::whereIn('chapter_id', $chapterIds)->pluck('id');
 
-        $studentIds = Payment::where('status', 'approved')
+        $studentIds = Payment::where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->where(function ($query) use ($courseIds, $chapterIds, $lessonIds) {
                 $query->whereIn('course_id', $courseIds)
                     ->orWhereIn('chapter_id', $chapterIds)

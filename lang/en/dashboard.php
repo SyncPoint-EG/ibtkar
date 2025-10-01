@@ -287,6 +287,7 @@ return [
         'import_column_gender' => 'gender',
         'import_column_birth_date' => 'birth_date (YYYY-MM-DD)',
         'import_column_status' => 'status (Active/Inactive)',
+        'purchased_lessons' => 'Purchased Lessons',
     ],
     'guardian' => [
         'title' => 'Guardian',
@@ -601,6 +602,7 @@ return [
         'fill_required' => 'Please fill in all required fields to create a new Lesson.',
         'update_info' => 'Update the information for this Lesson.',
         'delete_confirm' => 'Are you sure you want to delete this Lesson?',
+        'search_placeholder' => 'Search by lesson name...',
         'featured_status_updated' => 'Lesson featured status updated successfully',
         'fields' => [
             'name' => 'Name',
