@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::post('profile', [ProfileController::class, 'update']);
     Route::post('update-image', [ProfileController::class, 'updateImage']);
 
+    Route::get('students-by-points', [ProfileController::class, 'studentsByPoints']);
+
     Route::post('delete-account',[ProfileController::class,'deleteAccount']);
 
     Route::get('banners', [HomeController::class, 'getBanners']);

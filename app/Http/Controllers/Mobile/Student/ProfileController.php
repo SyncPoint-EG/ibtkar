@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateStudentProfileRequest;
 use App\Http\Resources\StudentProfileResource;
 use App\Http\Resources\StudentResource;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -39,5 +40,23 @@ class ProfileController extends Controller
             'message' => 'Successfully deleted account!',
             'success' => true
         ]);
+    }
+
+    public function studentsByPoints()
+    {
+        $student = auth('student')->user();
+
+        $students = Student::where('id', '!=', $student->id)
+            ->where('stage_id', $student->stage_id)
+            ->where('grade_id', $student->grade_id)
+            ->where('division_id', $student->division_id)
+            ->orderBy('points', 'desc')
+            ->select('id', 'name','image','points')
+            ->get();
+
+        return response()->json([
+            'students' => $students
+        ]);
+
     }
 }
