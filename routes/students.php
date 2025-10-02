@@ -14,6 +14,7 @@ use App\Http\Controllers\Mobile\Student\ProfileController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
 use App\Http\Controllers\Mobile\Student\TableController;
 use App\Http\Controllers\Mobile\Student\TeacherController;
+use App\Http\Controllers\Mobile\Student\RewardController;
 use App\Http\Controllers\Mobile\Student\PurchasedLessonsController;
 use Illuminate\Support\Facades\Route;
 
@@ -100,4 +101,8 @@ Route::group(['middleware' => 'auth:student'], function () {
     // tables routes
     Route::get('general-table',[TableController::class,'getGeneralTeacherTables']);
     Route::get('private-table',[TableController::class,'getPrivateTable']);
+
+    // rewards routes
+    Route::get('rewards', [RewardController::class, 'index']);
+    Route::post('rewards/{reward_point}/purchase', [RewardController::class, 'purchase']);
 });

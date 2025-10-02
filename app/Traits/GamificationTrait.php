@@ -15,4 +15,16 @@ trait GamificationTrait
         $student->save();
         return $points ;
     }
+
+    public function deductPoints($student, $points)
+    {
+        if ($student->points < $points) {
+            return false;
+        }
+
+        $student->points -= $points;
+        $student->save();
+
+        return true;
+    }
 }
