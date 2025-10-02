@@ -61,9 +61,9 @@ class ExamController extends Controller
             ->where('is_submitted', true)
             ->first();
 
-        if ($previousAttempt && $previousAttempt->is_passed) {
-            return response()->json(['message' => 'You have already submitted this exam.'], 400);
-        }
+//        if ($previousAttempt && $previousAttempt->is_passed) {
+//            return response()->json(['message' => 'You have already submitted this exam.'], 400);
+//        }
 
         $validated = $request->validate([
             'answers' => 'required|array',
