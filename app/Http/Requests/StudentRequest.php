@@ -36,7 +36,7 @@ class StudentRequest extends FormRequest
             'grade_id' => ['required', 'exists:grades,id'],
             'division_id' => ['nullable', 'exists:divisions,id'],
             'education_type_id' => ['required', 'exists:education_types,id'],
-            'center_id' => ['required', 'exists:centers,id'],
+            'center_id' => ['nullable', 'exists:centers,id'],
             'governorate_id' => ['required', 'exists:governorates,id'],
             'district_id' => ['nullable', 'exists:districts,id'],
             'referral_code' => 'nullable|exists:students,referral_code',
