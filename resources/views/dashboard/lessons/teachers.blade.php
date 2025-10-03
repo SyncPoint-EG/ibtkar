@@ -46,7 +46,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-4 d-flex align-items-center justify-content-center">
-                                            <img src="{{ $teacher->image_url ?? asset('dashboard/app-assets/images/portrait/small/avatar-s-1.png') }}" alt="teacher image" class="teacher-img">
+                                            <img src="{{ $teacher->image ?? asset('dashboard/app-assets/images/portrait/small/avatar-s-1.png') }}" alt="teacher image" class="teacher-img">
                                         </div>
                                         <div class="col-md-8">
                                             <h5 class="card-title">{{ $teacher->name }}</h5>
