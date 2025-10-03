@@ -53,6 +53,7 @@ return [
         'end_date' => 'تاريخ الانتهاء',
         'from' => 'من',
         'to' => 'إلى',
+        'view_lessons' => 'عرض الدروس',
     ],
     'settings' => [
         'title' => 'الإعدادات',
@@ -559,6 +560,8 @@ return [
         'delete_confirm' => 'هل أنت متأكد أنك تريد حذف هذا الدرس؟',
         'search_placeholder' => 'البحث باسم الدرس...',
         'featured_status_updated' => 'تم تحديث حالة الدرس المميز بنجاح',
+        'teachers_lessons' => 'دروس المعلمين',
+        'number_of_lessons' => 'عدد الدروس',
         'fields' => [
             'name' => 'الاسم',
             'desc' => 'الوصف',

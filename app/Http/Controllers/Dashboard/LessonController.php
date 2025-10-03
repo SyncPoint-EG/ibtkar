@@ -30,9 +30,12 @@ class LessonController extends Controller
      *
      * @return View
      */
-    public function index(Request $request): View
+    public function index(Request $request, $teacher_id = null): View
     {
-        $filters = $request->only(['teacher_id', 'course_id', 'chapter_id', 'name', 'created_at','date']);
+        $filters = $request->only(['course_id', 'chapter_id', 'name', 'created_at','date']);
+        if ($teacher_id) {
+            $filters['teacher_id'] = $teacher_id;
+        }
         $lessons = $this->lessonService->getAllPaginated(15, $filters);
         $teachers = \App\Models\Teacher::all();
         $courses = \App\Models\Course::all();
@@ -183,6 +186,21 @@ class LessonController extends Controller
                 'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function teachers()
+    {
+        $teachers = \App\Models\Teacher::all();
+        foreach ($teachers as $teacher) {
+            $lessonsCount = 0;
+            foreach ($teacher->courses as $course) {
+                foreach ($course->chapters as $chapter) {
+                    $lessonsCount += $chapter->lessons->count();
+                }
+            }
+            $teacher->lessons_count = $lessonsCount;
+        }
+        return view('dashboard.lessons.teachers', compact('teachers'));
     }
 
     public function updateWatches(Request $request, Lesson $lesson, Student $student)

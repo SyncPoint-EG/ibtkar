@@ -97,7 +97,7 @@
 @endcan
 
 @can('view_lesson')
-    <li class=" nav-item"><a href="{{ route('lessons.index') }}"><i class="icon-play-circle"></i><span data-i18n="nav.lessons.main" class="menu-title">{{__('dashboard.lesson.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('lessons.teachers') }}"><i class="icon-play-circle"></i><span data-i18n="nav.lessons.main" class="menu-title">{{__('dashboard.lesson.title_plural')}}</span></a>
     </li>
 @endcan
 

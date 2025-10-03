@@ -54,6 +54,7 @@ return [
         'end_date' => 'End Date',
         'from' => 'From',
         'to' => 'To',
+        'view_lessons' => 'View Lessons',
     ],
     'settings' => [
         'title' => 'Settings',
@@ -619,6 +620,8 @@ return [
         'delete_confirm' => 'Are you sure you want to delete this Lesson?',
         'search_placeholder' => 'Search by lesson name...',
         'featured_status_updated' => 'Lesson featured status updated successfully',
+        'teachers_lessons' => 'Teachers Lessons',
+        'number_of_lessons' => 'Number of lessons',
         'fields' => [
             'name' => 'Name',
             'desc' => 'Desc',
