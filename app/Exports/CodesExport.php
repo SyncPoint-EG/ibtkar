@@ -3,11 +3,14 @@
 namespace App\Exports;
 
 use App\Models\Code;
-use Maatwebsite\Excel\Concerns\FromCollection;
+
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class CodesExport implements FromCollection, WithHeadings, WithMapping
+class CodesExport implements FromQuery, WithHeadings, WithMapping, WithChunkReading, ShouldQueue
 {
     protected $filters;
 
@@ -17,9 +20,9 @@ class CodesExport implements FromCollection, WithHeadings, WithMapping
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Query\Builder
      */
-    public function collection()
+    public function query()
     {
         $query = Code::with(['teacher', 'payment.student', 'payment.course', 'payment.chapter', 'payment.lesson']);
 
@@ -51,7 +54,12 @@ class CodesExport implements FromCollection, WithHeadings, WithMapping
             $query->where('code_classification', $this->filters['code_classification']);
         }
 
-        return $query->get();
+        return $query;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array
