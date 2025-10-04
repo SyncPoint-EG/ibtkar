@@ -1200,4 +1200,11 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('codes/{code}', [CodeController::class, 'destroy'])
         ->name('codes.destroy')
         ->middleware('can:delete_code');
+
+    Route::prefix('reports')->name('reports.')->middleware('can:view_reports')->group(function () {
+        Route::get('students', [\App\Http\Controllers\Dashboard\ReportController::class, 'students'])->name('students');
+        Route::get('teachers', [\App\Http\Controllers\Dashboard\ReportController::class, 'teachers'])->name('teachers');
+        Route::get('payments', [\App\Http\Controllers\Dashboard\ReportController::class, 'payments'])->name('payments');
+        Route::get('codes', [\App\Http\Controllers\Dashboard\ReportController::class, 'codes'])->name('codes');
+    });
 });

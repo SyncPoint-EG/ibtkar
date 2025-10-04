@@ -9,6 +9,17 @@
 <li class=" nav-item"><a href="{{route('dashboard')}}"><i class="icon-home"></i><span data-i18n="nav.changelog.main" class="menu-title">Dashboard</span></a>
 </li>
 
+@can('view_reports')
+    <li class=" nav-item has-sub"><a href="#"><i class="icon-file-text"></i><span data-i18n="nav.reports.main" class="menu-title">{{__('dashboard.reports.title')}}</span></a>
+        <ul class="menu-content">
+            <li><a href="{{ route('reports.students') }}" class="menu-item">{{__('dashboard.reports.students_report')}}</a></li>
+            <li><a href="{{ route('reports.teachers') }}" class="menu-item">{{__('dashboard.reports.teachers_report')}}</a></li>
+            <li><a href="{{ route('reports.payments') }}" class="menu-item">{{__('dashboard.reports.payments_report')}}</a></li>
+            <li><a href="{{ route('reports.codes') }}" class="menu-item">{{__('dashboard.reports.codes_report')}}</a></li>
+        </ul>
+    </li>
+@endcan
+
 @can('view_role')
     <li class=" nav-item"><a href="{{ route('roles.index') }}"><i class="icon-shield"></i><span data-i18n="nav.roles.main" class="menu-title">Roles</span></a>
     </li>
@@ -151,3 +162,4 @@
 <li class=" nav-item"><a href="{{ route('charge_approvals.index') }}"><i class="icon-money"></i><span data-i18n="nav.charge_approvals.main" class="menu-title">{{__('dashboard.charge_approval.title_plural')}}</span></a>
 </li>
 @endcan
+

@@ -62,33 +62,26 @@ class HomeController extends Controller
         // Financial stats
         $financialStats = [];
         if (auth()->user()->can('view_financial_stats')) {
-            $paidLessonsQuery = Payment::where('paymentable_type', 'App\\Models\\Lesson')->where('status', 'paid')->where($dateFilter);
-            $paidCoursesQuery = Payment::where('paymentable_type', 'App\\Models\\Course')->where('status', 'paid')->where($dateFilter);
-            $paidSemistersQuery = Payment::where('paymentable_type', 'App\\Models\\Semister')->where('status', 'paid')->where($dateFilter);
-            // Assuming 'App\\Models\\Subscription' is a paymentable type for subscriptions.
-            $subscriptionsQuery = Payment::where('paymentable_type', 'App\\Models\\Subscription')->where('status', 'paid')->where($dateFilter);
-            $allPaymentsQuery = Payment::where('status', 'paid')->where($dateFilter);
+            $paidLessonsQuery = Payment::whereNotNull('lesson_id')->where('is_approved', 1)->where($dateFilter);
+            $paidCoursesQuery = Payment::whereNotNull('course_id')->where('is_approved', 1)->where($dateFilter);
+            $allPaymentsQuery = Payment::where('is_approved', 1)->where($dateFilter);
 
-            // Assuming 'type' column in charges table to distinguish between charge and transfer
-            $chargesQuery = Charge::where('type', 'charge')->where('status', 'completed')->where($dateFilter);
-            $transfersQuery = Charge::where('type', 'transfer')->where('status', 'completed')->where($dateFilter);
+            // The 'charges' table has a 'type' column with 'increase' or 'decrease' values.
+            // The HomeController was using 'charge' and 'transfer'.
+            // I will assume 'charge' corresponds to 'increase' and 'transfer' is not a valid type.
+            // I will also assume the status is in the 'payment_status' column with a value of 'completed'.
+            $chargesQuery = Charge::where('type', 'increase')->where('payment_status', 'completed')->where($dateFilter);
 
             $financialStats = [
                 'Paid Lessons Count' => (clone $paidLessonsQuery)->count(),
                 'Paid Lessons Total' => (clone $paidLessonsQuery)->sum('amount'),
-                'Subscriptions Count' => (clone $subscriptionsQuery)->count(),
-                'Subscriptions Total' => (clone $subscriptionsQuery)->sum('amount'),
                 'Paid Courses Count' => (clone $paidCoursesQuery)->count(),
                 'Paid Courses Total' => (clone $paidCoursesQuery)->sum('amount'),
-                'Paid Terms Count' => (clone $paidSemistersQuery)->count(),
-                'Paid Terms Total' => (clone $paidSemistersQuery)->sum('amount'),
                 'Total Payments Amount' => $allPaymentsQuery->sum('amount'),
                 'Coupons Count' => Code::where($dateFilter)->count(),
-                'Used Coupons Count' => Code::where('is_used', true)->where($dateFilter)->count(),
+                'Used Coupons Count' => Code::where('number_of_uses','>',0)->where($dateFilter)->count(),
                 'Charge Actions Count' => (clone $chargesQuery)->count(),
                 'Charge Actions Total' => (clone $chargesQuery)->sum('amount'),
-                'Transfer Actions Count' => (clone $transfersQuery)->count(),
-                'Transfer Actions Total' => (clone $transfersQuery)->sum('amount'),
             ];
         }
 
