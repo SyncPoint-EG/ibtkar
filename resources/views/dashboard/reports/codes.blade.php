@@ -42,7 +42,7 @@
                                             <th>{{ __('dashboard.reports.classification') }}</th>
                                             <th>{{ __('dashboard.teacher.fields.name') }}</th>
                                             <th>{{ __('dashboard.teacher.fields.id') }}</th>
-                                            <th>{{ __('dashboard.payment.fields.price') }}</th>
+                                            <th>{{ __('dashboard.reports.price') }}</th>
                                             <th>{{ __('dashboard.student.fields.name') }}</th>
                                             <th>{{ __('dashboard.student.fields.id') }}</th>
                                             <th>{{ __('dashboard.reports.code_status') }}</th>

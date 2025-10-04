@@ -916,5 +916,6 @@ return [
         'used' => 'Used',
         'unused' => 'Unused',
         'teacher_name' => 'Teacher Name',
+        'price' => 'Price',
     ],
 ];
