@@ -40,7 +40,7 @@
                                             <th>{{ __('dashboard.code.fields.code') }}</th>
                                             <th>{{ __('dashboard.reports.code_type') }}</th>
                                             <th>{{ __('dashboard.reports.classification') }}</th>
-                                            <th>{{ __('dashboard.teacher.fields.name') }}</th>
+                                            <th>{{ __('dashboard.reports.teacher_name') }}</th>
                                             <th>{{ __('dashboard.teacher.fields.id') }}</th>
                                             <th>{{ __('dashboard.reports.price') }}</th>
                                             <th>{{ __('dashboard.student.fields.name') }}</th>
