@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Lesson;
-use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Chapter;
 
 class Student extends Authenticatable
 {
@@ -22,14 +19,13 @@ class Student extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status','verification_code','mac_address','referral_code','image'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status', 'verification_code', 'mac_address', 'referral_code', 'image'];
 
     /**
      * Get the table associated with the model.
      *
      * @return string
      */
-
     public static function boot()
     {
         parent::boot();
@@ -43,11 +39,11 @@ class Student extends Authenticatable
         });
     }
 
-
     public function getNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
+
     public function getImageAttribute()
     {
         if (isset($this->attributes['image']) && $this->attributes['image']) {
@@ -89,14 +85,16 @@ class Student extends Authenticatable
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
+
     public function referrals()
     {
         return $this->hasMany(Student::class, 'referred_by');
     }
+
     protected function casts(): array
     {
         return [
@@ -105,16 +103,15 @@ class Student extends Authenticatable
         ];
     }
 
-//     public function getNameAttribute()
-//     {
-//         return $this->attributes['name_'.app()->getLocale()];
-//     }
+    //     public function getNameAttribute()
+    //     {
+    //         return $this->attributes['name_'.app()->getLocale()];
+    //     }
 
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
-
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function governorate()
     {
@@ -145,6 +142,7 @@ class Student extends Authenticatable
     {
         return $this->belongsTo(\App\Models\Division::class);
     }
+
     public function educationType()
     {
         return $this->belongsTo(\App\Models\EducationType::class);
@@ -156,7 +154,7 @@ class Student extends Authenticatable
 
         $this->update([
             'verification_code' => $code,
-//            'verification_code_expires_at' => now()->addMinutes(15), // Code expires in 15 minutes
+            //            'verification_code_expires_at' => now()->addMinutes(15), // Code expires in 15 minutes
         ]);
 
         return $code;
@@ -182,7 +180,7 @@ class Student extends Authenticatable
                 $payments = $this->payments()->with([
                     'course.chapters.lessons',
                     'chapter.lessons',
-                    'lesson'
+                    'lesson',
                 ])->get();
 
                 foreach ($payments as $payment) {
@@ -204,28 +202,31 @@ class Student extends Authenticatable
             }
         );
     }
+
     public function guardian()
     {
         return $this->belongsTo(Guardian::class);
     }
+
     public function watches()
     {
         return $this->hasMany(Watch::class);
     }
+
     public function isLessonPurchased($lessonId)
     {
         $lesson = Lesson::find($lessonId);
 
-        if (!$lesson) {
+        if (! $lesson) {
             return false;
         }
 
-        if($lesson->price ==0 || $lesson->chapter->price ==0 || $lesson->chapter->course->price ==0){
+        if ($lesson->price == 0 || $lesson->chapter->price == 0 || $lesson->chapter->course->price == 0) {
             return true;
         }
         // Check for lesson purchase
         $isPurchased = Payment::where('student_id', $this->id)
-            ->where('lesson_id', $lessonId)->where('payment_status',\App\Models\Payment::PAYMENT_STATUS['approved'])
+            ->where('lesson_id', $lessonId)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
             ->exists();
 
         if ($isPurchased) {
@@ -234,7 +235,7 @@ class Student extends Authenticatable
 
         // Check for chapter purchase
         $isPurchased = Payment::where('student_id', $this->id)
-            ->where('chapter_id', $lesson->chapter_id)->where('payment_status',\App\Models\Payment::PAYMENT_STATUS['approved'])
+            ->where('chapter_id', $lesson->chapter_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
             ->exists();
 
         if ($isPurchased) {
@@ -246,7 +247,7 @@ class Student extends Authenticatable
 
         if ($chapter) {
             $isPurchased = Payment::where('student_id', $this->id)
-                ->where('course_id', $chapter->course_id)->where('payment_status',\App\Models\Payment::PAYMENT_STATUS['approved'])
+                ->where('course_id', $chapter->course_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
                 ->exists();
         }
 
@@ -255,7 +256,7 @@ class Student extends Authenticatable
 
     public function isEnrolledInCourse($courseId)
     {
-        if (!$courseId) {
+        if (! $courseId) {
             return false;
         }
 
@@ -264,11 +265,13 @@ class Student extends Authenticatable
             ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->exists();
     }
+
     public function isEnrolledInLesson(Lesson $lesson)
     {
-        if (!$lesson) {
+        if (! $lesson) {
             return false;
         }
+
         return Payment::where('student_id', $this->id)
             ->where(function ($query) use ($lesson) {
                 $query->where('lesson_id', $lesson->id)
@@ -322,8 +325,9 @@ class Student extends Authenticatable
                 $subjectAverages[$subject->name] = [
                     'average' => 0,
                     'exams_count' => 0,
-                    'exams_degrees' => []
+                    'exams_degrees' => [],
                 ];
+
                 continue;
             }
 
@@ -340,7 +344,7 @@ class Student extends Authenticatable
                     $examsDegrees[] = [
                         'exam_name' => $exam->title,
                         'degree' => $latestAttempt->score,
-                        'total_marks' => $latestAttempt->total_marks
+                        'total_marks' => $latestAttempt->total_marks,
                     ];
                 }
             }
@@ -349,7 +353,7 @@ class Student extends Authenticatable
             $subjectAverages[$subject->name] = [
                 'average' => round($average, 2),
                 'exams_count' => $examIdsQuery->count(),
-                'exams_degrees' => $examsDegrees
+                'exams_degrees' => $examsDegrees,
             ];
         }
 
@@ -381,6 +385,7 @@ class Student extends Authenticatable
 
             if ($lessonIds->isEmpty()) {
                 $lessonAttendance[$subject->name] = 0;
+
                 continue;
             }
 

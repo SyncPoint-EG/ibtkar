@@ -13,18 +13,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CenterExamController extends Controller
 {
-    use GamificationTrait ;
+    use GamificationTrait;
+
     public function index()
     {
         $student = auth('student')->user();
         $centerExams = CenterExam::where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
-            ->where('start_time','>' ,now());
-        if(\request()->center_id){
-             $centerExams = $centerExams->where('center_id', \request()->center_id);
+            ->where('start_time', '>', now());
+        if (\request()->center_id) {
+            $centerExams = $centerExams->where('center_id', \request()->center_id);
         }
-        if(\request()->teacher_id){
+        if (\request()->teacher_id) {
             $centerExams = $centerExams->where('teacher_id', \request()->teacher_id);
         }
         $centerExams = $centerExams->get();
@@ -35,6 +36,7 @@ class CenterExamController extends Controller
     public function show(CenterExam $centerExam)
     {
         $centerExam->load('questions.options');
+
         return new CenterExamResource($centerExam);
     }
 
@@ -76,7 +78,7 @@ class CenterExamController extends Controller
 
         foreach ($validated['answers'] as $answerData) {
             $question = $questions->get($answerData['question_id']);
-            if (!$question) {
+            if (! $question) {
                 continue;
             }
 
@@ -103,14 +105,14 @@ class CenterExamController extends Controller
         CenterExamAnswer::insert($answers);
 
         $centerExamAttempt->update(['score' => $total_score]);
-        $points =$this->givePoints($student , 'solve_exam');
+        $points = $this->givePoints($student, 'solve_exam');
 
         return response()->json([
             'message' => 'Center exam submitted successfully.',
             'score' => $total_score,
             'total_degree' => $questions->sum('marks'),
             'center_exam_attempt' => $centerExamAttempt,
-            'rewarded_points' => $points
+            'rewarded_points' => $points,
 
         ]);
     }

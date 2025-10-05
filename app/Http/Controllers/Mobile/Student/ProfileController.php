@@ -23,6 +23,7 @@ class ProfileController extends Controller
 
         return new StudentResource($student);
     }
+
     public function updateImage(Request $request)
     {
         $request->validate([
@@ -31,14 +32,18 @@ class ProfileController extends Controller
         $student = auth('student')->user();
         $student->image = $request->image;
         $student->save();
+
         return new StudentResource($student);
     }
-    public function deleteAccount(Request $request){
+
+    public function deleteAccount(Request $request)
+    {
         $student = auth('student')->user();
         $student->delete();
+
         return response()->json([
             'message' => 'Successfully deleted account!',
-            'success' => true
+            'success' => true,
         ]);
     }
 
@@ -50,12 +55,12 @@ class ProfileController extends Controller
             ->where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
-            ->orderBy('points', 'desc')
-            ->select('id', 'first_name','last_name','image','points')
+            ->orderBy('points', 'DESC')
+            ->select('id', 'first_name', 'last_name', 'image', 'points')
             ->get();
 
         return response()->json([
-            'students' => $students
+            'students' => $students,
         ]);
 
     }

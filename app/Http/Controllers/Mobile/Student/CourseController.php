@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use App\Services\CourseService;
-use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -16,13 +15,15 @@ class CourseController extends Controller
     {
         $this->courseService = $courseService;
     }
+
     public function index()
     {
         $student = auth('student')->user();
         $courses = Course::where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
-            ->get();;
+            ->get();
+
         return CourseResource::collection($courses);
     }
 

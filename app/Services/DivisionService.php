@@ -19,19 +19,14 @@ class DivisionService
 
     /**
      * Get all divisions with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all divisions without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class DivisionService
 
     /**
      * Find division by ID
-     *
-     * @param int $id
-     * @return Division|null
      */
     public function findById(int $id): ?Division
     {
@@ -52,8 +44,6 @@ class DivisionService
     /**
      * Find division by ID or fail
      *
-     * @param int $id
-     * @return Division
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Division
@@ -64,8 +54,6 @@ class DivisionService
     /**
      * Create a new division
      *
-     * @param array $data
-     * @return Division
      * @throws \Exception
      */
     public function create(array $data): Division
@@ -90,9 +78,6 @@ class DivisionService
     /**
      * Update an existing division
      *
-     * @param Division $division
-     * @param array $data
-     * @return Division
      * @throws \Exception
      */
     public function update(Division $division, array $data): Division
@@ -113,7 +98,7 @@ class DivisionService
             Log::error('Error updating Division', [
                 'id' => $division->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class DivisionService
     /**
      * Delete a division
      *
-     * @param Division $division
-     * @return bool
      * @throws \Exception
      */
     public function delete(Division $division): bool
@@ -142,7 +125,7 @@ class DivisionService
             DB::rollBack();
             Log::error('Error deleting Division', [
                 'id' => $division->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class DivisionService
 
     /**
      * Search divisions based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class DivisionService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class DivisionService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class DivisionService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete divisions
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class DivisionService
 
             Log::info('Bulk delete divisions completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class DivisionService
             DB::rollBack();
             Log::error('Error in bulk delete divisions', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class DivisionService
     /**
      * Get divisions by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class DivisionService
 
     /**
      * Count total divisions
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class DivisionService
 
     /**
      * Check if division exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class DivisionService
 
     /**
      * Get latest divisions
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class DivisionService
     /**
      * Duplicate a division
      *
-     * @param Division $division
-     * @return Division
      * @throws \Exception
      */
     public function duplicate(Division $division): Division
@@ -284,7 +251,7 @@ class DivisionService
 
             Log::info('Division duplicated successfully', [
                 'original_id' => $division->id,
-                'new_id' => $newDivision->id
+                'new_id' => $newDivision->id,
             ]);
 
             return $newDivision;
@@ -292,7 +259,7 @@ class DivisionService
             DB::rollBack();
             Log::error('Error duplicating Division', [
                 'id' => $division->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

@@ -50,7 +50,7 @@ class Charge extends Model
             $this->attributes['payment_image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['payment_image'] = $value;
         }
     }

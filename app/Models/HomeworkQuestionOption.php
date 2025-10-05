@@ -13,11 +13,11 @@ class HomeworkQuestionOption extends Model
         'homework_question_id',
         'option_text',
         'is_correct',
-        'order'
+        'order',
     ];
 
     protected $casts = [
-        'is_correct' => 'boolean'
+        'is_correct' => 'boolean',
     ];
 
     public function question()

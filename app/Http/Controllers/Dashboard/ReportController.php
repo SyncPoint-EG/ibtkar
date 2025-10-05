@@ -7,7 +7,6 @@ use App\Models\Code;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Teacher;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -36,18 +35,18 @@ class ReportController extends Controller
                 $query->whereIn('course_id', function ($subQuery) {
                     $subQuery->select('id')->from('courses')->whereColumn('teacher_id', 'teachers.id');
                 })
-                ->orWhereIn('chapter_id', function ($subQuery) {
-                    $subQuery->select('id')->from('chapters')->whereIn('course_id', function ($subQuery2) {
-                        $subQuery2->select('id')->from('courses')->whereColumn('teacher_id', 'teachers.id');
-                    });
-                })
-                ->orWhereIn('lesson_id', function ($subQuery) {
-                    $subQuery->select('id')->from('lessons')->whereIn('chapter_id', function ($subQuery2) {
-                        $subQuery2->select('id')->from('chapters')->whereIn('course_id', function ($subQuery3) {
-                            $subQuery3->select('id')->from('courses')->whereColumn('teacher_id', 'teachers.id');
+                    ->orWhereIn('chapter_id', function ($subQuery) {
+                        $subQuery->select('id')->from('chapters')->whereIn('course_id', function ($subQuery2) {
+                            $subQuery2->select('id')->from('courses')->whereColumn('teacher_id', 'teachers.id');
+                        });
+                    })
+                    ->orWhereIn('lesson_id', function ($subQuery) {
+                        $subQuery->select('id')->from('lessons')->whereIn('chapter_id', function ($subQuery2) {
+                            $subQuery2->select('id')->from('chapters')->whereIn('course_id', function ($subQuery3) {
+                                $subQuery3->select('id')->from('courses')->whereColumn('teacher_id', 'teachers.id');
+                            });
                         });
                     });
-                });
             });
 
         $lessons_count = DB::table('lessons')->whereIn('chapter_id', function ($query) {

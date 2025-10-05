@@ -2,18 +2,17 @@
 
 namespace App\Imports;
 
-use App\Models\Student;
-use App\Models\Guardian;
-use App\Models\District;
 use App\Models\Center;
-use App\Models\Stage;
-use App\Models\Grade;
+use App\Models\District;
 use App\Models\Division;
+use App\Models\Grade;
+use App\Models\Guardian;
+use App\Models\Stage;
+use App\Models\Student;
+use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Validators\ValidationException;
-use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 
 class StudentsImport implements ToModel, WithHeadingRow, WithValidation
 {
@@ -30,39 +29,45 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
         $grade = Grade::where('name', $row['grade'])->first();
         $division = Division::where('name', $row['division'])->first();
 
-        if (!$guardian) {
-            $this->errors[] = 'Guardian with phone ' . $row['guardian_phone'] . ' not found at row ' . $this->getRowNumber();
+        if (! $guardian) {
+            $this->errors[] = 'Guardian with phone '.$row['guardian_phone'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
-        if (!$district) {
-            $this->errors[] = 'District with name ' . $row['district'] . ' not found at row ' . $this->getRowNumber();
+        if (! $district) {
+            $this->errors[] = 'District with name '.$row['district'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
-        if (!$center) {
-            $this->errors[] = 'Center with name ' . $row['center'] . ' not found at row ' . $this->getRowNumber();
+        if (! $center) {
+            $this->errors[] = 'Center with name '.$row['center'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
-        if (!$stage) {
-            $this->errors[] = 'Stage with name ' . $row['stage'] . ' not found at row ' . $this->getRowNumber();
+        if (! $stage) {
+            $this->errors[] = 'Stage with name '.$row['stage'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
-        if (!$grade) {
-            $this->errors[] = 'Grade with name ' . $row['grade'] . ' not found at row ' . $this->getRowNumber();
+        if (! $grade) {
+            $this->errors[] = 'Grade with name '.$row['grade'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
-        if (!$division) {
-            $this->errors[] = 'Division with name ' . $row['division'] . ' not found at row ' . $this->getRowNumber();
+        if (! $division) {
+            $this->errors[] = 'Division with name '.$row['division'].' not found at row '.$this->getRowNumber();
+
             return null;
         }
 
         $student = Student::where('phone', $row['phone'])->orWhere(function ($query) use ($row) {
             $query->where('first_name', $row['first_name'])
-                  ->where('last_name', $row['last_name']);
+                ->where('last_name', $row['last_name']);
         })->first();
 
         if ($student) {

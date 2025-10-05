@@ -17,7 +17,7 @@ class HomeworkQuestion extends Model
         'marks',
         'order',
         'is_required',
-        'image'
+        'image',
     ];
 
     public function getImageAttribute()
@@ -61,13 +61,13 @@ class HomeworkQuestion extends Model
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
 
     protected $casts = [
-        'is_required' => 'boolean'
+        'is_required' => 'boolean',
     ];
 
     public function homework()

@@ -19,20 +19,16 @@ class BannerService
 
     /**
      * Get all banners with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
-        $perPage = request()->perPage ?? $perPage ;
+        $perPage = request()->perPage ?? $perPage;
+
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all banners without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -41,9 +37,6 @@ class BannerService
 
     /**
      * Find banner by ID
-     *
-     * @param int $id
-     * @return Banner|null
      */
     public function findById(int $id): ?Banner
     {
@@ -53,8 +46,6 @@ class BannerService
     /**
      * Find banner by ID or fail
      *
-     * @param int $id
-     * @return Banner
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Banner
@@ -65,8 +56,6 @@ class BannerService
     /**
      * Create a new banner
      *
-     * @param array $data
-     * @return Banner
      * @throws \Exception
      */
     public function create(array $data): Banner
@@ -91,9 +80,6 @@ class BannerService
     /**
      * Update an existing banner
      *
-     * @param Banner $banner
-     * @param array $data
-     * @return Banner
      * @throws \Exception
      */
     public function update(Banner $banner, array $data): Banner
@@ -114,7 +100,7 @@ class BannerService
             Log::error('Error updating Banner', [
                 'id' => $banner->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -123,8 +109,6 @@ class BannerService
     /**
      * Delete a banner
      *
-     * @param Banner $banner
-     * @return bool
      * @throws \Exception
      */
     public function delete(Banner $banner): bool
@@ -143,7 +127,7 @@ class BannerService
             DB::rollBack();
             Log::error('Error deleting Banner', [
                 'id' => $banner->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -151,9 +135,6 @@ class BannerService
 
     /**
      * Search banners based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -161,9 +142,9 @@ class BannerService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -171,11 +152,11 @@ class BannerService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -185,14 +166,13 @@ class BannerService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete banners
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -206,7 +186,7 @@ class BannerService
 
             Log::info('Bulk delete banners completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -214,7 +194,7 @@ class BannerService
             DB::rollBack();
             Log::error('Error in bulk delete banners', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -223,9 +203,7 @@ class BannerService
     /**
      * Get banners by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -234,8 +212,6 @@ class BannerService
 
     /**
      * Count total banners
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -244,9 +220,6 @@ class BannerService
 
     /**
      * Check if banner exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -255,9 +228,6 @@ class BannerService
 
     /**
      * Get latest banners
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -267,8 +237,6 @@ class BannerService
     /**
      * Duplicate a banner
      *
-     * @param Banner $banner
-     * @return Banner
      * @throws \Exception
      */
     public function duplicate(Banner $banner): Banner
@@ -285,7 +253,7 @@ class BannerService
 
             Log::info('Banner duplicated successfully', [
                 'original_id' => $banner->id,
-                'new_id' => $newBanner->id
+                'new_id' => $newBanner->id,
             ]);
 
             return $newBanner;
@@ -293,7 +261,7 @@ class BannerService
             DB::rollBack();
             Log::error('Error duplicating Banner', [
                 'id' => $banner->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

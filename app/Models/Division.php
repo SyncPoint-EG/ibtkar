@@ -22,16 +22,15 @@ class Division extends Model
      * @return string
      */
 
-//     public function getNameAttribute()
-//     {
-//         return $this->attributes['name_'.app()->getLocale()];
-//     }
+    //     public function getNameAttribute()
+    //     {
+    //         return $this->attributes['name_'.app()->getLocale()];
+    //     }
 
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
-
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function stage()
     {

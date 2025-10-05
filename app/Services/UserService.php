@@ -19,19 +19,14 @@ class UserService
 
     /**
      * Get all users with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all users without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class UserService
 
     /**
      * Find user by ID
-     *
-     * @param int $id
-     * @return User|null
      */
     public function findById(int $id): ?User
     {
@@ -52,8 +44,6 @@ class UserService
     /**
      * Find user by ID or fail
      *
-     * @param int $id
-     * @return User
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): User
@@ -64,8 +54,6 @@ class UserService
     /**
      * Create a new user
      *
-     * @param array $data
-     * @return User
      * @throws \Exception
      */
     public function create(array $data): User
@@ -90,9 +78,6 @@ class UserService
     /**
      * Update an existing user
      *
-     * @param User $user
-     * @param array $data
-     * @return User
      * @throws \Exception
      */
     public function update(User $user, array $data): User
@@ -113,7 +98,7 @@ class UserService
             Log::error('Error updating User', [
                 'id' => $user->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class UserService
     /**
      * Delete a user
      *
-     * @param User $user
-     * @return bool
      * @throws \Exception
      */
     public function delete(User $user): bool
@@ -142,7 +125,7 @@ class UserService
             DB::rollBack();
             Log::error('Error deleting User', [
                 'id' => $user->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class UserService
 
     /**
      * Search users based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class UserService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class UserService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class UserService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete users
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class UserService
 
             Log::info('Bulk delete users completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class UserService
             DB::rollBack();
             Log::error('Error in bulk delete users', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class UserService
     /**
      * Get users by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class UserService
 
     /**
      * Count total users
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class UserService
 
     /**
      * Check if user exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class UserService
 
     /**
      * Get latest users
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class UserService
     /**
      * Duplicate a user
      *
-     * @param User $user
-     * @return User
      * @throws \Exception
      */
     public function duplicate(User $user): User
@@ -284,7 +251,7 @@ class UserService
 
             Log::info('User duplicated successfully', [
                 'original_id' => $user->id,
-                'new_id' => $newUser->id
+                'new_id' => $newUser->id,
             ]);
 
             return $newUser;
@@ -292,7 +259,7 @@ class UserService
             DB::rollBack();
             Log::error('Error duplicating User', [
                 'id' => $user->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

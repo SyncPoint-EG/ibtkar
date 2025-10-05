@@ -22,9 +22,9 @@ return new class extends Migration
             $table->foreignId('district_id')->nullable()->constrained('districts')->cascadeOnDelete();
             $table->foreignId('center_id')->nullable()->constrained('centers')->cascadeOnDelete();
             $table->foreignId('stage_id')->constrained('stages')->cascadeOnDelete();
-            $table->foreignId('grade_id')   ->constrained('grades')->cascadeOnDelete();
-            $table->foreignId('division_id')->nullable()->constrained('divisions')->cascadeOnDelete()                           ;
-            $table->foreignId('education_type_id')->nullable()->constrained('education_types')->cascadeOnDelete()                           ;
+            $table->foreignId('grade_id')->constrained('grades')->cascadeOnDelete();
+            $table->foreignId('division_id')->nullable()->constrained('divisions')->cascadeOnDelete();
+            $table->foreignId('education_type_id')->nullable()->constrained('education_types')->cascadeOnDelete();
             $table->string('gender')->nullable();
             $table->date('birth_date')->nullable();
             $table->boolean('status')->default(false);

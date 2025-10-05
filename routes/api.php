@@ -8,20 +8,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('stages',[HomeController::class, 'getStages']);
-Route::get('grades/{id}',[HomeController::class, 'getGrades']);
-Route::get('divisions/{stage}/{grade}',[HomeController::class, 'getDivisions']);
-Route::get('centers',[HomeController::class, 'getCenters']);
-Route::get('education-types',[HomeController::class, 'getEducationTypes']);
-Route::get('governorates',[HomeController::class, 'getGovernorates']);
-Route::get('districts/{governorate}',[HomeController::class, 'getDistricts']);
+Route::get('stages', [HomeController::class, 'getStages']);
+Route::get('grades/{id}', [HomeController::class, 'getGrades']);
+Route::get('divisions/{stage}/{grade}', [HomeController::class, 'getDivisions']);
+Route::get('centers', [HomeController::class, 'getCenters']);
+Route::get('education-types', [HomeController::class, 'getEducationTypes']);
+Route::get('governorates', [HomeController::class, 'getGovernorates']);
+Route::get('districts/{governorate}', [HomeController::class, 'getDistricts']);
 
-
-
-Route::get('courses',[HomeController::class, 'getCourses']);
-Route::get('teachers',[HomeController::class, 'getTeachers']);
-Route::get('attachments',[HomeController::class, 'getAttachments']);
-//Route::get('student/tables', [App\Http\Controllers\Mobile\Student\TableController::class, 'getTeacherTables'])->middleware('auth:sanctum');
+Route::get('courses', [HomeController::class, 'getCourses']);
+Route::get('teachers', [HomeController::class, 'getTeachers']);
+Route::get('attachments', [HomeController::class, 'getAttachments']);
+// Route::get('student/tables', [App\Http\Controllers\Mobile\Student\TableController::class, 'getTeacherTables'])->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'notifications', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);

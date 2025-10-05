@@ -17,7 +17,7 @@ class LessonAttachmentController extends Controller
             'bio' => 'nullable|string',
         ]);
 
-        $attachment = new LessonAttachment();
+        $attachment = new LessonAttachment;
         $attachment->name = $request->name;
         $attachment->file = $request->file('file'); // This will trigger the mutator
         $attachment->bio = $request->bio;
@@ -40,18 +40,18 @@ class LessonAttachmentController extends Controller
     public function toggleFeatured(LessonAttachment $attachment): \Illuminate\Http\JsonResponse
     {
         try {
-            $attachment->is_featured = !$attachment->is_featured;
+            $attachment->is_featured = ! $attachment->is_featured;
             $attachment->save();
 
             return response()->json([
                 'success' => true,
                 'message' => __('dashboard.lesson_attachment.featured_status_updated'),
-                'is_featured' => $attachment->is_featured
+                'is_featured' => $attachment->is_featured,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+                'message' => __('dashboard.common.error').': '.$e->getMessage(),
             ], 500);
         }
     }

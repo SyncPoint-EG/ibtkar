@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentApprovalRequest;
 use App\Services\PaymentApprovalService;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PaymentApprovalController extends Controller
 {
@@ -22,7 +22,6 @@ class PaymentApprovalController extends Controller
     /**
      * Display a listing of pending payment approvals.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -35,7 +34,7 @@ class PaymentApprovalController extends Controller
                 'success' => true,
                 'data' => $payments,
                 'statistics' => $statistics,
-                'message' => 'Pending payments retrieved successfully.'
+                'message' => 'Pending payments retrieved successfully.',
             ]);
         }
 
@@ -45,8 +44,6 @@ class PaymentApprovalController extends Controller
     /**
      * Accept a pending payment.
      *
-     * @param PaymentApprovalRequest $request
-     * @param int $paymentId
      * @return RedirectResponse|JsonResponse
      */
     public function accept(PaymentApprovalRequest $request, int $paymentId)
@@ -57,7 +54,7 @@ class PaymentApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Payment accepted successfully.'
+                    'message' => 'Payment accepted successfully.',
                 ]);
             }
 
@@ -67,20 +64,18 @@ class PaymentApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error accepting payment: ' . $e->getMessage()
+                    'message' => 'Error accepting payment: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Error accepting payment: ' . $e->getMessage());
+                ->with('error', 'Error accepting payment: '.$e->getMessage());
         }
     }
 
     /**
      * Reject a pending payment.
      *
-     * @param PaymentApprovalRequest $request
-     * @param int $paymentId
      * @return RedirectResponse|JsonResponse
      */
     public function reject(PaymentApprovalRequest $request, int $paymentId)
@@ -91,7 +86,7 @@ class PaymentApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Payment rejected successfully.'
+                    'message' => 'Payment rejected successfully.',
                 ]);
             }
 
@@ -101,12 +96,12 @@ class PaymentApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error rejecting payment: ' . $e->getMessage()
+                    'message' => 'Error rejecting payment: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Error rejecting payment: ' . $e->getMessage());
+                ->with('error', 'Error rejecting payment: '.$e->getMessage());
         }
     }
 }

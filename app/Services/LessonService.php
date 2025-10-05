@@ -19,9 +19,6 @@ class LessonService
 
     /**
      * Get all lessons with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
@@ -40,7 +37,7 @@ class LessonService
                 $query->where('chapter_id', $chapter_id);
             })
             ->when($filters['name'] ?? null, function ($query, $name) {
-                $query->where('name', 'like', '%' . $name . '%');
+                $query->where('name', 'like', '%'.$name.'%');
             })
             ->when($filters['created_at'] ?? null, function ($query, $created_at) {
                 $query->whereDate('created_at', $created_at);
@@ -55,8 +52,6 @@ class LessonService
 
     /**
      * Get all lessons without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -65,9 +60,6 @@ class LessonService
 
     /**
      * Find lesson by ID
-     *
-     * @param int $id
-     * @return Lesson|null
      */
     public function findById(int $id): ?Lesson
     {
@@ -77,8 +69,6 @@ class LessonService
     /**
      * Find lesson by ID or fail
      *
-     * @param int $id
-     * @return Lesson
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Lesson
@@ -89,8 +79,6 @@ class LessonService
     /**
      * Create a new lesson
      *
-     * @param array $data
-     * @return Lesson
      * @throws \Exception
      */
     public function create(array $data): Lesson
@@ -115,9 +103,6 @@ class LessonService
     /**
      * Update an existing lesson
      *
-     * @param Lesson $lesson
-     * @param array $data
-     * @return Lesson
      * @throws \Exception
      */
     public function update(Lesson $lesson, array $data): Lesson
@@ -138,7 +123,7 @@ class LessonService
             Log::error('Error updating Lesson', [
                 'id' => $lesson->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -147,8 +132,6 @@ class LessonService
     /**
      * Delete a lesson
      *
-     * @param Lesson $lesson
-     * @return bool
      * @throws \Exception
      */
     public function delete(Lesson $lesson): bool
@@ -167,7 +150,7 @@ class LessonService
             DB::rollBack();
             Log::error('Error deleting Lesson', [
                 'id' => $lesson->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -175,9 +158,6 @@ class LessonService
 
     /**
      * Search lessons based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -185,9 +165,9 @@ class LessonService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -195,11 +175,11 @@ class LessonService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -209,14 +189,13 @@ class LessonService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete lessons
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -230,7 +209,7 @@ class LessonService
 
             Log::info('Bulk delete lessons completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -238,7 +217,7 @@ class LessonService
             DB::rollBack();
             Log::error('Error in bulk delete lessons', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -247,9 +226,7 @@ class LessonService
     /**
      * Get lessons by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -258,8 +235,6 @@ class LessonService
 
     /**
      * Count total lessons
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -268,9 +243,6 @@ class LessonService
 
     /**
      * Check if lesson exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -279,9 +251,6 @@ class LessonService
 
     /**
      * Get latest lessons
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -291,8 +260,6 @@ class LessonService
     /**
      * Duplicate a lesson
      *
-     * @param Lesson $lesson
-     * @return Lesson
      * @throws \Exception
      */
     public function duplicate(Lesson $lesson): Lesson
@@ -309,7 +276,7 @@ class LessonService
 
             Log::info('Lesson duplicated successfully', [
                 'original_id' => $lesson->id,
-                'new_id' => $newLesson->id
+                'new_id' => $newLesson->id,
             ]);
 
             return $newLesson;
@@ -317,7 +284,7 @@ class LessonService
             DB::rollBack();
             Log::error('Error duplicating Lesson', [
                 'id' => $lesson->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -325,7 +292,7 @@ class LessonService
 
     public function getStudents(Lesson $lesson)
     {
-        $students = new Collection();
+        $students = new Collection;
         $payments = $lesson->payments()->with('student')->get();
         foreach ($payments as $payment) {
             if ($payment->student) {

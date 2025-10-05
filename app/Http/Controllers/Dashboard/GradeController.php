@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GradeRequest;
+use App\Models\Grade;
 use App\Models\Stage;
 use App\Services\GradeService;
-use App\Models\Grade;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -22,8 +21,6 @@ class GradeController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,20 +31,16 @@ class GradeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
         $stages = Stage::all();
-        return view('dashboard.grades.create',compact('stages'));
+
+        return view('dashboard.grades.create', compact('stages'));
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param GradeRequest $request
-     * @return RedirectResponse
      */
     public function store(GradeRequest $request): RedirectResponse
     {
@@ -59,15 +52,12 @@ class GradeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Grade: ' . $e->getMessage());
+                ->with('error', 'Error creating Grade: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Grade $grade
-     * @return View
      */
     public function show(Grade $grade): View
     {
@@ -76,22 +66,16 @@ class GradeController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Grade $grade
-     * @return View
      */
     public function edit(Grade $grade): View
     {
         $stages = Stage::all();
-        return view('dashboard.grades.edit', compact('grade','stages'));
+
+        return view('dashboard.grades.edit', compact('grade', 'stages'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param GradeRequest $request
-     * @param Grade $grade
-     * @return RedirectResponse
      */
     public function update(GradeRequest $request, Grade $grade): RedirectResponse
     {
@@ -103,15 +87,12 @@ class GradeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Grade: ' . $e->getMessage());
+                ->with('error', 'Error updating Grade: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Grade $grade
-     * @return RedirectResponse
      */
     public function destroy(Grade $grade): RedirectResponse
     {
@@ -122,7 +103,7 @@ class GradeController extends Controller
                 ->with('success', 'Grade deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Grade: ' . $e->getMessage());
+                ->with('error', 'Error deleting Grade: '.$e->getMessage());
         }
     }
 }

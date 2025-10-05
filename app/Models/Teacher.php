@@ -9,12 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Student;
-use App\Models\Story;
 
 class Teacher extends Authenticatable
 {
-    use HasFactory ,HasApiTokens, Notifiable;
+    use HasApiTokens ,HasFactory, Notifiable;
 
     const DAYS_OF_WEEK = [
         1 => 'saturday',
@@ -31,8 +29,7 @@ class Teacher extends Authenticatable
      *
      * @var array
      */
-
-    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate','password', 'is_featured','uuid','website_image'];
+    protected $fillable = ['name', 'phone', 'other_phone', 'bio', 'image', 'rate', 'password', 'is_featured', 'uuid', 'website_image'];
 
     protected function casts(): array
     {
@@ -56,8 +53,6 @@ class Teacher extends Authenticatable
      *
      * @return string
      */
-
-
     public static function boot()
     {
         parent::boot();
@@ -72,9 +67,9 @@ class Teacher extends Authenticatable
     }
 
     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function scopeForStudent($query, Student $student)
     {
@@ -88,44 +83,43 @@ class Teacher extends Authenticatable
                 });
             }
         })
-        ->orWhereHas('courses', function ($q) use ($student) {
-            $q->where('stage_id', $student->stage_id);
-            $q->where('grade_id', $student->grade_id);
-            if ($student->division_id) {
-                $q->where(function ($qq) use ($student) {
-                    $qq->where('division_id', $student->division_id)
-                        ->orWhereNull('division_id');
-                });
-            }
-        });
+            ->orWhereHas('courses', function ($q) use ($student) {
+                $q->where('stage_id', $student->stage_id);
+                $q->where('grade_id', $student->grade_id);
+                if ($student->division_id) {
+                    $q->where(function ($qq) use ($student) {
+                        $qq->where('division_id', $student->division_id)
+                            ->orWhereNull('division_id');
+                    });
+                }
+            });
     }
-
 
     public function subjects()
     {
         return $this->belongsToMany(Subject::class)
-            ->withPivot(['stage_id','grade_id','division_id','day_of_week','time'])
-            ;
+            ->withPivot(['stage_id', 'grade_id', 'division_id', 'day_of_week', 'time']);
     }
+
     public function subjectTeacherAssignments()
     {
         return $this->hasMany(SubjectTeacher::class, 'teacher_id')->with(['subject', 'grade', 'stage', 'division']);
     }
 
-//    public function stages()
-//    {
-//        return $this->belongsToMany(\App\Models\Stage::class);
-//    }
-//
-//    public function grades()
-//    {
-//        return $this->belongsToMany(\App\Models\Grade::class);
-//    }
-//
-//    public function divisions()
-//    {
-//        return $this->belongsToMany(\App\Models\Division::class);
-//    }
+    //    public function stages()
+    //    {
+    //        return $this->belongsToMany(\App\Models\Stage::class);
+    //    }
+    //
+    //    public function grades()
+    //    {
+    //        return $this->belongsToMany(\App\Models\Grade::class);
+    //    }
+    //
+    //    public function divisions()
+    //    {
+    //        return $this->belongsToMany(\App\Models\Division::class);
+    //    }
 
     public function getImageAttribute()
     {
@@ -149,7 +143,7 @@ class Teacher extends Authenticatable
      * Set the user's image.
      * This is a setter that handles image upload
      */
-        public function setImageAttribute($value)
+    public function setImageAttribute($value)
     {
         // If value is null or empty, keep existing image
         if (empty($value)) {
@@ -168,7 +162,7 @@ class Teacher extends Authenticatable
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
@@ -214,7 +208,7 @@ class Teacher extends Authenticatable
             $this->attributes['website_image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['website_image'] = $value;
         }
     }
@@ -241,10 +235,11 @@ class Teacher extends Authenticatable
     {
         return $this->hasManyThrough(Division::class, SubjectTeacher::class, 'teacher_id', 'id', 'id', 'division_id');
     }
-//    public function subjects()
-//    {
-//        return $this->hasManyThrough(Subject::class, Course::class, 'teacher_id', 'id', 'id', 'subject_id');
-//    }
+
+    //    public function subjects()
+    //    {
+    //        return $this->hasManyThrough(Subject::class, Course::class, 'teacher_id', 'id', 'id', 'subject_id');
+    //    }
     public function students()
     {
         return Student::first();
@@ -252,7 +247,7 @@ class Teacher extends Authenticatable
 
     public function chapters()
     {
-        return Chapter::whereIn('course_id',$this->courses()->pluck('id'));
+        return Chapter::whereIn('course_id', $this->courses()->pluck('id'));
 
     }
 
@@ -270,9 +265,10 @@ class Teacher extends Authenticatable
         $teacherStages = $this->courses->pluck('stage_id');
         $teacherGrades = $this->courses->pluck('grade_id');
         $teacherDivisions = $this->courses->pluck('division_id');
+
         return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
-            $q->wherein('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
-            ->whereIn('division_id',$teacherDivisions);
+            $q->wherein('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades)
+                ->whereIn('division_id', $teacherDivisions);
         })->count();
     }
 
@@ -281,11 +277,12 @@ class Teacher extends Authenticatable
         $teacherStages = $this->courses->pluck('stage_id');
         $teacherGrades = $this->courses->pluck('grade_id');
         $teacherDivisions = $this->courses->pluck('division_id');
+
         return Student::where(function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
-            $q->whereIn('stage_id',$teacherStages)->whereIn('grade_id',$teacherGrades)
-                ->whereIn('division_id',$teacherDivisions);
+            $q->whereIn('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades)
+                ->whereIn('division_id', $teacherDivisions);
         })
-        ->count();
+            ->count();
     }
 
     public function attachments()
@@ -293,7 +290,8 @@ class Teacher extends Authenticatable
         $attachments = LessonAttachment::query()->whereHas('lesson.chapter.course', function ($query) {
             $query->whereIn('teacher_id', [$this->id]);
         })->latest();
-        return $attachments ;
+
+        return $attachments;
     }
 
     public function stories()

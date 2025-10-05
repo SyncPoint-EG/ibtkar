@@ -22,12 +22,10 @@ class Course extends Model
      *
      * @return string
      */
-
-
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function getWebsiteImageAttribute()
     {
@@ -70,11 +68,10 @@ class Course extends Model
             $this->attributes['website_image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['website_image'] = $value;
         }
     }
-
 
     public function educationType()
     {

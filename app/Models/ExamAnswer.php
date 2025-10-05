@@ -12,7 +12,7 @@ class ExamAnswer extends Model
         'selected_option_id',
         'essay_answer',
         'true_false_answer',
-        'marks_awarded'
+        'marks_awarded',
     ];
 
     protected $casts = [

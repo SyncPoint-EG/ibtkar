@@ -22,13 +22,13 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method'    => 'required|in:instapay,wallet,ibtkar_wallet,code',
-            'payment_image'     => 'required_if:payment_method,instapay,wallet|image|mimes:jpg,jpeg,png',
-            'phone_number'      => 'required_if:payment_method,instapay,wallet|nullable',
-            'payment_code'      => 'required_if:payment_method,code|nullable|exists:codes,code',
-            'course_id'         => 'required_without_all:chapter_id,lesson_id|prohibits:chapter_id,lesson_id|nullable|exists:courses,id',
-            'chapter_id'        => 'required_without_all:course_id,lesson_id|prohibits:course_id,lesson_id|nullable|exists:chapters,id',
-            'lesson_id'         => 'required_without_all:course_id,chapter_id|prohibits:course_id,chapter_id|nullable|exists:lessons,id',
+            'payment_method' => 'required|in:instapay,wallet,ibtkar_wallet,code',
+            'payment_image' => 'required_if:payment_method,instapay,wallet|image|mimes:jpg,jpeg,png',
+            'phone_number' => 'required_if:payment_method,instapay,wallet|nullable',
+            'payment_code' => 'required_if:payment_method,code|nullable|exists:codes,code',
+            'course_id' => 'required_without_all:chapter_id,lesson_id|prohibits:chapter_id,lesson_id|nullable|exists:courses,id',
+            'chapter_id' => 'required_without_all:course_id,lesson_id|prohibits:course_id,lesson_id|nullable|exists:chapters,id',
+            'lesson_id' => 'required_without_all:course_id,chapter_id|prohibits:course_id,chapter_id|nullable|exists:lessons,id',
         ];
     }
 }

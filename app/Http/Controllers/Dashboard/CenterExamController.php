@@ -27,6 +27,7 @@ class CenterExamController extends Controller
     public function index()
     {
         $centerExams = CenterExam::with(['center', 'stage', 'grade', 'division'])->paginate(10);
+
         return view('dashboard.center_exams.index', compact('centerExams'));
     }
 
@@ -40,6 +41,7 @@ class CenterExamController extends Controller
         $grades = Grade::all();
         $divisions = Division::all(); // Or filter based on stage/grade if needed
         $teachers = Teacher::all();
+
         return view('dashboard.center_exams.create', compact('centers', 'stages', 'grades', 'divisions', 'teachers'));
     }
 
@@ -76,6 +78,7 @@ class CenterExamController extends Controller
     public function show(CenterExam $centerExam)
     {
         $centerExam->load(['center', 'stage', 'grade', 'division', 'questions.options']);
+
         return view('dashboard.center_exams.show', compact('centerExam'));
     }
 
@@ -89,6 +92,7 @@ class CenterExamController extends Controller
         $grades = Grade::all();
         $divisions = Division::all(); // Or filter based on stage/grade if needed
         $teachers = Teacher::all();
+
         return view('dashboard.center_exams.edit', compact('centerExam', 'centers', 'stages', 'grades', 'divisions', 'teachers'));
     }
 
@@ -125,6 +129,7 @@ class CenterExamController extends Controller
     public function destroy(CenterExam $centerExam)
     {
         $this->centerExamService->deleteCenterExam($centerExam->id);
+
         return redirect()->route('center-exams.index')
             ->with('success', 'Center Exam deleted successfully.');
     }
@@ -132,7 +137,7 @@ class CenterExamController extends Controller
     public function submissions(CenterExam $centerExam)
     {
         $centerExam->load('attempts.student', 'attempts.answers.question.options');
+
         return view('dashboard.center_exams.submissions', compact('centerExam'));
     }
 }
-

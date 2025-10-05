@@ -9,12 +9,12 @@ class Payment extends Model
 {
     protected $guarded = [];
 
-
     const PAYMENT_STATUS = [
         'pending' => 'Pending',
         'approved' => 'Approved',
         'rejected' => 'Rejected',
     ];
+
     public function getPaymentImageAttribute()
     {
         if ($this->attributes['payment_image']) {
@@ -56,7 +56,7 @@ class Payment extends Model
             $this->attributes['payment_image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['payment_image'] = $value;
         }
     }
@@ -65,6 +65,7 @@ class Payment extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
     public function chapter()
     {
         return $this->belongsTo(Chapter::class);

@@ -12,7 +12,6 @@ use App\Models\Semister;
 use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Subject;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AllDataSeeder extends Seeder
@@ -30,19 +29,19 @@ class AllDataSeeder extends Seeder
             'governorate_id' => $governorate->id,
         ]);
         $center = Center::create([
-            'name' => 'Yassin Center'
+            'name' => 'Yassin Center',
         ]);
         $stage = Stage::create([
-            'name' => 'المرحلة الثانوية'
+            'name' => 'المرحلة الثانوية',
         ]);
         $grade = Grade::create([
             'stage_id' => $stage->id,
-            'name' => 'الصف الاول'
+            'name' => 'الصف الاول',
         ]);
         $division = Division::create([
             'stage_id' => $stage->id,
             'grade_id' => $grade->id,
-            'name' => 'علمي'
+            'name' => 'علمي',
         ]);
         $student = Student::create([
             'first_name' => 'ياسين',
@@ -60,13 +59,13 @@ class AllDataSeeder extends Seeder
             'status' => 1,
         ]);
         $subject = Subject::create([
-            'name' => 'فيزياء'
+            'name' => 'فيزياء',
         ]);
         $educationType = EducationType::create([
-            'name'=>'عام'
+            'name' => 'عام',
         ]);
         $semister = Semister::create([
-            'name' => 'الترم الاول'
+            'name' => 'الترم الاول',
         ]);
     }
 }

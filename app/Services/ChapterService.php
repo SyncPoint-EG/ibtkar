@@ -19,19 +19,14 @@ class ChapterService
 
     /**
      * Get all chapters with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all chapters without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class ChapterService
 
     /**
      * Find chapter by ID
-     *
-     * @param int $id
-     * @return Chapter|null
      */
     public function findById(int $id): ?Chapter
     {
@@ -52,8 +44,6 @@ class ChapterService
     /**
      * Find chapter by ID or fail
      *
-     * @param int $id
-     * @return Chapter
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Chapter
@@ -64,8 +54,6 @@ class ChapterService
     /**
      * Create a new chapter
      *
-     * @param array $data
-     * @return Chapter
      * @throws \Exception
      */
     public function create(array $data): Chapter
@@ -90,9 +78,6 @@ class ChapterService
     /**
      * Update an existing chapter
      *
-     * @param Chapter $chapter
-     * @param array $data
-     * @return Chapter
      * @throws \Exception
      */
     public function update(Chapter $chapter, array $data): Chapter
@@ -113,7 +98,7 @@ class ChapterService
             Log::error('Error updating Chapter', [
                 'id' => $chapter->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class ChapterService
     /**
      * Delete a chapter
      *
-     * @param Chapter $chapter
-     * @return bool
      * @throws \Exception
      */
     public function delete(Chapter $chapter): bool
@@ -142,7 +125,7 @@ class ChapterService
             DB::rollBack();
             Log::error('Error deleting Chapter', [
                 'id' => $chapter->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class ChapterService
 
     /**
      * Search chapters based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class ChapterService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class ChapterService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class ChapterService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete chapters
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class ChapterService
 
             Log::info('Bulk delete chapters completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class ChapterService
             DB::rollBack();
             Log::error('Error in bulk delete chapters', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class ChapterService
     /**
      * Get chapters by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class ChapterService
 
     /**
      * Count total chapters
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class ChapterService
 
     /**
      * Check if chapter exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class ChapterService
 
     /**
      * Get latest chapters
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class ChapterService
     /**
      * Duplicate a chapter
      *
-     * @param Chapter $chapter
-     * @return Chapter
      * @throws \Exception
      */
     public function duplicate(Chapter $chapter): Chapter
@@ -284,7 +251,7 @@ class ChapterService
 
             Log::info('Chapter duplicated successfully', [
                 'original_id' => $chapter->id,
-                'new_id' => $newChapter->id
+                'new_id' => $newChapter->id,
             ]);
 
             return $newChapter;
@@ -292,7 +259,7 @@ class ChapterService
             DB::rollBack();
             Log::error('Error duplicating Chapter', [
                 'id' => $chapter->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -300,7 +267,7 @@ class ChapterService
 
     public function getStudents(Chapter $chapter)
     {
-        $students = new Collection();
+        $students = new Collection;
         $payments = $chapter->payments()->with('student')->get();
         foreach ($payments as $payment) {
             if ($payment->student) {

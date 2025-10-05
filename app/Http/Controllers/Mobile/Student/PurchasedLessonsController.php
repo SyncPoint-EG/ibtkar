@@ -30,7 +30,7 @@ class PurchasedLessonsController extends Controller
         $courseIds = $courseIds->merge(Course::where('price', 0)->pluck('id'));
 
         $lessons = Lesson::query()
-            ->where(function (Builder $query) use($lessonIds,$chapterIds,$courseIds ,$subjectId){
+            ->where(function (Builder $query) use ($lessonIds, $chapterIds, $courseIds) {
                 $query->whereIn('id', $lessonIds)
                     ->orWhereIn('chapter_id', $chapterIds)
                     ->orWhereHas('chapter', function ($q) use ($courseIds) {
@@ -40,9 +40,9 @@ class PurchasedLessonsController extends Controller
             })
 
             ->whereHas('chapter.course', function ($q) use ($student) {
-                $q->where('stage_id',$student->stage_id);
-                $q->where('grade_id',$student->grade_id);
-                if($student->division_id){
+                $q->where('stage_id', $student->stage_id);
+                $q->where('grade_id', $student->grade_id);
+                if ($student->division_id) {
                     $q->where(function ($qq) use ($student) {
                         $qq->where('division_id', $student->division_id)
                             ->orWhereNull('division_id');
@@ -58,7 +58,7 @@ class PurchasedLessonsController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => LessonResource::collection($lessons->unique('id'))
+            'data' => LessonResource::collection($lessons->unique('id')),
         ]);
     }
 }

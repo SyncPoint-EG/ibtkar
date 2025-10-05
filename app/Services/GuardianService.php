@@ -19,19 +19,14 @@ class GuardianService
 
     /**
      * Get all guardians with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all guardians without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class GuardianService
 
     /**
      * Find guardian by ID
-     *
-     * @param int $id
-     * @return Guardian|null
      */
     public function findById(int $id): ?Guardian
     {
@@ -52,8 +44,6 @@ class GuardianService
     /**
      * Find guardian by ID or fail
      *
-     * @param int $id
-     * @return Guardian
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Guardian
@@ -64,8 +54,6 @@ class GuardianService
     /**
      * Create a new guardian
      *
-     * @param array $data
-     * @return Guardian
      * @throws \Exception
      */
     public function create(array $data): Guardian
@@ -90,9 +78,6 @@ class GuardianService
     /**
      * Update an existing guardian
      *
-     * @param Guardian $guardian
-     * @param array $data
-     * @return Guardian
      * @throws \Exception
      */
     public function update(Guardian $guardian, array $data): Guardian
@@ -113,7 +98,7 @@ class GuardianService
             Log::error('Error updating Guardian', [
                 'id' => $guardian->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class GuardianService
     /**
      * Delete a guardian
      *
-     * @param Guardian $guardian
-     * @return bool
      * @throws \Exception
      */
     public function delete(Guardian $guardian): bool
@@ -142,7 +125,7 @@ class GuardianService
             DB::rollBack();
             Log::error('Error deleting Guardian', [
                 'id' => $guardian->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class GuardianService
 
     /**
      * Search guardians based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class GuardianService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class GuardianService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class GuardianService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete guardians
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class GuardianService
 
             Log::info('Bulk delete guardians completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class GuardianService
             DB::rollBack();
             Log::error('Error in bulk delete guardians', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class GuardianService
     /**
      * Get guardians by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class GuardianService
 
     /**
      * Count total guardians
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class GuardianService
 
     /**
      * Check if guardian exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class GuardianService
 
     /**
      * Get latest guardians
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class GuardianService
     /**
      * Duplicate a guardian
      *
-     * @param Guardian $guardian
-     * @return Guardian
      * @throws \Exception
      */
     public function duplicate(Guardian $guardian): Guardian
@@ -284,7 +251,7 @@ class GuardianService
 
             Log::info('Guardian duplicated successfully', [
                 'original_id' => $guardian->id,
-                'new_id' => $newGuardian->id
+                'new_id' => $newGuardian->id,
             ]);
 
             return $newGuardian;
@@ -292,7 +259,7 @@ class GuardianService
             DB::rollBack();
             Log::error('Error duplicating Guardian', [
                 'id' => $guardian->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

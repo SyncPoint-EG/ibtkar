@@ -21,7 +21,7 @@ class SimpleTeacherResource extends JsonResource
             'bio' => $this->bio,
             'image' => $this->image,
             'day_of_week' => Teacher::DAYS_OF_WEEK[$this->day_of_week] ?? null,
-            'hour'        => $this->time
+            'hour' => $this->time,
 
         ];
     }

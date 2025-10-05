@@ -16,11 +16,11 @@ class HomeworkAnswer extends Model
         'answer_text',
         'selected_option_id',
         'is_correct',
-        'marks_obtained'
+        'marks_obtained',
     ];
 
     protected $casts = [
-        'is_correct' => 'boolean'
+        'is_correct' => 'boolean',
     ];
 
     public function homework()

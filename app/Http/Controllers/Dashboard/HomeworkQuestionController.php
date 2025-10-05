@@ -64,7 +64,7 @@ class HomeworkQuestionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Question added successfully.',
-                'question' => $question->load('options')
+                'question' => $question->load('options'),
             ]);
         }
 
@@ -129,7 +129,7 @@ class HomeworkQuestionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Question updated successfully.',
-                'question' => $question->load('options')
+                'question' => $question->load('options'),
             ]);
         }
 
@@ -148,7 +148,7 @@ class HomeworkQuestionController extends Controller
         if (request()->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Question deleted successfully.'
+                'message' => 'Question deleted successfully.',
             ]);
         }
 

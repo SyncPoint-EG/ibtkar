@@ -12,7 +12,9 @@ class FirebasePushNotification extends Notification
     use Queueable;
 
     private $title;
+
     private $body;
+
     private $data;
 
     /**

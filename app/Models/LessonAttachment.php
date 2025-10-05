@@ -62,7 +62,7 @@ class LessonAttachment extends Model
             $this->attributes['type'] = $value->getClientMimeType();
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['path'] = $value;
         }
     }

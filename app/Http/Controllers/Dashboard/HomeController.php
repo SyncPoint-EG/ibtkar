@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chapter;
+use App\Models\Charge;
 use App\Models\Code;
 use App\Models\Course;
 use App\Models\Exam;
@@ -14,8 +15,6 @@ use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
-use App\Models\Charge;
-use App\Models\Semister;
 use App\Models\Watch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,7 +78,7 @@ class HomeController extends Controller
                 'Paid Courses Total' => (clone $paidCoursesQuery)->sum('amount'),
                 'Total Payments Amount' => $allPaymentsQuery->sum('amount'),
                 'Coupons Count' => Code::where($dateFilter)->count(),
-                'Used Coupons Count' => Code::where('number_of_uses','>',0)->where($dateFilter)->count(),
+                'Used Coupons Count' => Code::where('number_of_uses', '>', 0)->where($dateFilter)->count(),
                 'Charge Actions Count' => (clone $chargesQuery)->count(),
                 'Charge Actions Total' => (clone $chargesQuery)->sum('amount'),
             ];

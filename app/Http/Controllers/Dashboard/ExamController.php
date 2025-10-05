@@ -1,4 +1,5 @@
 <?php
+
 // app/Http/Controllers/ExamController.php
 
 namespace App\Http\Controllers\Dashboard;
@@ -18,6 +19,7 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::with('lesson')->paginate(10);
+
         return view('dashboard.exams.index', compact('exams'));
     }
 
@@ -25,6 +27,7 @@ class ExamController extends Controller
     {
         $lessons = Lesson::all();
         $teachers = \App\Models\Teacher::all();
+
         return view('dashboard.exams.create', compact('lessons', 'teachers'));
     }
 
@@ -39,10 +42,10 @@ class ExamController extends Controller
             $validated['lesson_id'] = null;
         }
 
-        $validated['total_marks'] = 0 ;
-        if($request->is_active){
+        $validated['total_marks'] = 0;
+        if ($request->is_active) {
             $validated['is_active'] = 1;
-        }else{
+        } else {
             $validated['is_active'] = 0;
         }
         $exam = Exam::create($validated);
@@ -54,6 +57,7 @@ class ExamController extends Controller
     public function show(Exam $exam)
     {
         $exam->load(['lesson', 'questions.options']);
+
         return view('dashboard.exams.show', compact('exam'));
     }
 
@@ -61,6 +65,7 @@ class ExamController extends Controller
     {
         $lessons = Lesson::all();
         $teachers = \App\Models\Teacher::all();
+
         return view('dashboard.exams.edit', compact('exam', 'lessons', 'teachers'));
     }
 
@@ -75,9 +80,9 @@ class ExamController extends Controller
             $validated['lesson_id'] = null;
         }
 
-        if($request->is_active){
+        if ($request->is_active) {
             $validated['is_active'] = 1;
-        }else{
+        } else {
             $validated['is_active'] = 0;
         }
         $exam->update($validated);
@@ -89,13 +94,14 @@ class ExamController extends Controller
     public function destroy(Exam $exam)
     {
         $exam->delete();
+
         return redirect()->route('exams.index')
             ->with('success', 'Exam deleted successfully.');
     }
 
     public function addQuestion(Request $request, Exam $exam)
     {
-//        return $request ;
+        //        return $request ;
         $request->validate([
             'question_text' => 'required|string',
             'question_type' => 'required|in:true_false,multiple_choice,essay',
@@ -151,18 +157,19 @@ class ExamController extends Controller
 
             // Update exam total marks
             $exam->update([
-                'total_marks' => $exam->questions()->sum('marks')
+                'total_marks' => $exam->questions()->sum('marks'),
             ]);
 
             DB::commit();
+
             return redirect()->route('exams.show', $exam)
                 ->with('success', 'Question added successfully.');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->with('error', 'Error adding question: ' . $e->getMessage());
+
+            return back()->with('error', 'Error adding question: '.$e->getMessage());
         }
     }
-
 
     public function getQuestion(Request $request, Exam $exam, Question $question)
     {
@@ -171,6 +178,7 @@ class ExamController extends Controller
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Question not found in this exam.'], 404);
             }
+
             return back()->with('error', 'Question not found in this exam.');
         }
 
@@ -182,13 +190,13 @@ class ExamController extends Controller
                 'marks' => $question->marks,
                 'image' => $question->image,
                 'correct_essay_answer' => $question->correct_essay_answer,
-                'options' => $question->options->map(function($option) {
+                'options' => $question->options->map(function ($option) {
                     return [
                         'id' => $option->id,
                         'option_text' => $option->option_text,
-                        'is_correct' => $option->is_correct
+                        'is_correct' => $option->is_correct,
                     ];
-                })
+                }),
             ];
 
             return response()->json(['success' => true, 'question' => $questionData]);
@@ -204,6 +212,7 @@ class ExamController extends Controller
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Question not found in this exam.'], 404);
             }
+
             return back()->with('error', 'Question not found in this exam.');
         }
 
@@ -249,7 +258,7 @@ class ExamController extends Controller
             // Create new options based on type
             if ($request->question_type === 'multiple_choice') {
                 foreach ($request->options as $index => $optionText) {
-                    if (!empty(trim($optionText))) {
+                    if (! empty(trim($optionText))) {
                         QuestionOption::create([
                             'question_id' => $question->id,
                             'option_text' => $optionText,
@@ -272,7 +281,7 @@ class ExamController extends Controller
 
             // Update exam total marks
             $exam->update([
-                'total_marks' => $exam->questions()->sum('marks')
+                'total_marks' => $exam->questions()->sum('marks'),
             ]);
 
             DB::commit();
@@ -280,11 +289,12 @@ class ExamController extends Controller
             if ($request->ajax()) {
                 // Return updated question data
                 $updatedQuestion = $question->fresh(['options']);
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Question updated successfully.',
                     'question' => $updatedQuestion,
-                    'total_marks' => $exam->fresh()->total_marks
+                    'total_marks' => $exam->fresh()->total_marks,
                 ]);
             }
 
@@ -295,12 +305,13 @@ class ExamController extends Controller
             DB::rollback();
 
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Error updating question: ' . $e->getMessage()]);
+                return response()->json(['success' => false, 'message' => 'Error updating question: '.$e->getMessage()]);
             }
 
-            return back()->with('error', 'Error updating question: ' . $e->getMessage());
+            return back()->with('error', 'Error updating question: '.$e->getMessage());
         }
     }
+
     public function removeQuestion(Exam $exam, Question $question)
     {
         if ($question->exam_id !== $exam->id) {
@@ -324,7 +335,7 @@ class ExamController extends Controller
             $totalMarks = $exam->questions()->sum('marks');
 
             $exam->update([
-                'total_marks' => $totalMarks
+                'total_marks' => $totalMarks,
             ]);
 
             DB::commit();
@@ -334,23 +345,25 @@ class ExamController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Error removing question: ' . $e->getMessage());
+            \Log::error('Error removing question: '.$e->getMessage());
 
-            return back()->with('error', 'Error removing question: ' . $e->getMessage());
+            return back()->with('error', 'Error removing question: '.$e->getMessage());
         }
     }
 
     public function toggleActive(Exam $exam)
     {
-        $exam->update(['is_active' => !$exam->is_active]);
+        $exam->update(['is_active' => ! $exam->is_active]);
 
         $status = $exam->is_active ? 'activated' : 'deactivated';
+
         return back()->with('success', "Exam {$status} successfully.");
     }
 
     public function submissions(Exam $exam)
     {
         $exam->load('attempts.student', 'attempts.answers.question.options');
+
         return view('dashboard.exams.submissions', compact('exam'));
     }
 }

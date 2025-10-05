@@ -24,7 +24,6 @@ class AuthController extends Controller
     /**
      * Handle registration request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
@@ -63,7 +62,6 @@ class AuthController extends Controller
     /**
      * Handle login request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function login(Request $request)
@@ -94,7 +92,6 @@ class AuthController extends Controller
     /**
      * Handle logout request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
@@ -135,14 +132,13 @@ class AuthController extends Controller
     public function profile()
     {
         return view('auth.profile', [
-            'user' => Auth::user()
+            'user' => Auth::user(),
         ]);
     }
 
     /**
      * Update user profile.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateProfile(Request $request)
@@ -163,7 +159,7 @@ class AuthController extends Controller
 
         // Update password if provided
         if ($request->filled('current_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
+            if (! Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors([
                     'current_password' => 'The provided password does not match your current password.',
                 ]);
@@ -180,7 +176,6 @@ class AuthController extends Controller
     /**
      * API login endpoint.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function apiLogin(Request $request)
@@ -194,9 +189,9 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Invalid login credentials'
+                'message' => 'Invalid login credentials',
             ], 401);
         }
 
@@ -213,7 +208,6 @@ class AuthController extends Controller
     /**
      * API register endpoint.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function apiRegister(Request $request)
@@ -246,7 +240,6 @@ class AuthController extends Controller
     /**
      * API logout endpoint.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function apiLogout(Request $request)

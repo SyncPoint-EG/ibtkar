@@ -9,8 +9,6 @@ use App\Http\Resources\GradesResource;
 use App\Http\Resources\LessonResource;
 use App\Http\Resources\StagesResource;
 use App\Http\Resources\SubjectResource;
-use App\Models\Banner;
-use App\Models\Course;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Lesson;
@@ -20,50 +18,53 @@ use App\Models\Subject;
 use App\Services\BannerService;
 use App\Services\SubjectService;
 use Carbon\Carbon;
-use Hamcrest\Core\Set;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     protected SubjectService $subjectService;
+
     protected BannerService $bannerService;
 
-    public function __construct(SubjectService $subjectService , BannerService $bannerService)
+    public function __construct(SubjectService $subjectService, BannerService $bannerService)
     {
         $this->subjectService = $subjectService;
         $this->bannerService = $bannerService;
 
     }
+
     public function getBanners()
     {
         $banners = $this->bannerService->getAllPaginated();
+
         return BannerResource::collection($banners);
     }
 
     public function getPlanPrice()
     {
         return response()->json([
-            'price'  => Setting::where('key','general plan price')->first()->value,
+            'price' => Setting::where('key', 'general plan price')->first()->value,
         ]);
     }
+
     public function getSubjects()
     {
         $student = auth('student')->user();
 
-        $subjects = Subject::whereHas('courses',function ($q) use ($student){
-            $q->where('stage_id',$student->stage_id);
-            $q->where('grade_id',$student->grade_id);
-            if($student->division_id){
+        $subjects = Subject::whereHas('courses', function ($q) use ($student) {
+            $q->where('stage_id', $student->stage_id);
+            $q->where('grade_id', $student->grade_id);
+            if ($student->division_id) {
                 $q->where(function ($qq) use ($student) {
                     $qq->where('division_id', $student->division_id)
                         ->orWhereNull('division_id');
                 });
             }
         })
-            ->orWhereHas('subjectTeacherAssignments',function ($q) use ($student){
-                $q->where('stage_id',$student->stage_id);
-                $q->where('grade_id',$student->grade_id);
-                if($student->division_id){
+            ->orWhereHas('subjectTeacherAssignments', function ($q) use ($student) {
+                $q->where('stage_id', $student->stage_id);
+                $q->where('grade_id', $student->grade_id);
+                if ($student->division_id) {
                     $q->where(function ($qq) use ($student) {
                         $qq->where('division_id', $student->division_id)
                             ->orWhereNull('division_id');
@@ -71,25 +72,33 @@ class HomeController extends Controller
                 }
             })
             ->get();
+
         return SubjectResource::collection($subjects);
     }
+
     public function getSubject(Subject $subject)
     {
         return new SubjectResource($subject);
     }
+
     public function getDivisions()
     {
         $divisions = Division::all();
+
         return DivisionResource::collection($divisions);
     }
+
     public function getStages()
     {
         $stages = Stage::all();
+
         return StagesResource::collection($stages);
     }
+
     public function getGrades()
     {
         $grades = Grade::all();
+
         return GradesResource::collection($grades);
     }
 
@@ -99,7 +108,7 @@ class HomeController extends Controller
         $date = $request->input('date', Carbon::today()->toDateString());
 
         $lessons = Lesson::where('date', $date)
-            ->whereHas('chapter.course',function ($q) use ($student){
+            ->whereHas('chapter.course', function ($q) use ($student) {
                 $q->where('stage_id', $student->stage_id)
                     ->where('grade_id', $student->grade_id)
                     ->where('division_id', $student->division_id);

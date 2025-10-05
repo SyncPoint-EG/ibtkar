@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Mobile\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\GuardianResource;
 use App\Http\Resources\TeacherResource;
-use App\Models\Guardian;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,10 +14,10 @@ class TeacherAuthController extends Controller
     {
 
         $teacher = Teacher::where('phone', $request->get('phone'))->first();
-        if(!$teacher){
+        if (! $teacher) {
             return response()->json([
                 'success' => false,
-                'message' => 'invalid credentials'
+                'message' => 'invalid credentials',
             ]);
         }
         if ($teacher && Hash::check($request->get('password'), $teacher->password)) {
@@ -36,19 +34,21 @@ class TeacherAuthController extends Controller
             }
 
             $token = $teacher->createToken('TeacherToken')->plainTextToken;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully',
                 'teacher' => new TeacherResource($teacher),
-                'token' => $token
+                'token' => $token,
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid login details'
+                'message' => 'Invalid login details',
             ]);
         }
     }
+
     public function logout(Request $request)
     {
         $user = auth('teacher')->user(); // get the authenticated user
@@ -62,7 +62,7 @@ class TeacherAuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ]);
     }
 }

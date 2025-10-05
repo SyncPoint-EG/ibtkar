@@ -63,7 +63,7 @@ class Story extends Model
             $this->attributes['content'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['content'] = $value;
         }
     }

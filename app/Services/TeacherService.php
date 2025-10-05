@@ -19,19 +19,14 @@ class TeacherService
 
     /**
      * Get all teachers with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all teachers without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class TeacherService
 
     /**
      * Find teacher by ID
-     *
-     * @param int $id
-     * @return Teacher|null
      */
     public function findById(int $id): ?Teacher
     {
@@ -52,8 +44,6 @@ class TeacherService
     /**
      * Find teacher by ID or fail
      *
-     * @param int $id
-     * @return Teacher
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Teacher
@@ -64,8 +54,6 @@ class TeacherService
     /**
      * Create a new teacher
      *
-     * @param array $data
-     * @return Teacher
      * @throws \Exception
      */
     public function create(array $data): Teacher
@@ -90,9 +78,6 @@ class TeacherService
     /**
      * Update an existing teacher
      *
-     * @param Teacher $teacher
-     * @param array $data
-     * @return Teacher
      * @throws \Exception
      */
     public function update(Teacher $teacher, array $data): Teacher
@@ -113,7 +98,7 @@ class TeacherService
             Log::error('Error updating Teacher', [
                 'id' => $teacher->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class TeacherService
     /**
      * Delete a teacher
      *
-     * @param Teacher $teacher
-     * @return bool
      * @throws \Exception
      */
     public function delete(Teacher $teacher): bool
@@ -143,7 +126,7 @@ class TeacherService
             DB::rollBack();
             Log::error('Error deleting Teacher', [
                 'id' => $teacher->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -151,9 +134,6 @@ class TeacherService
 
     /**
      * Search teachers based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -161,9 +141,9 @@ class TeacherService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -171,11 +151,11 @@ class TeacherService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -185,14 +165,13 @@ class TeacherService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete teachers
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -206,7 +185,7 @@ class TeacherService
 
             Log::info('Bulk delete teachers completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -214,7 +193,7 @@ class TeacherService
             DB::rollBack();
             Log::error('Error in bulk delete teachers', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -223,9 +202,7 @@ class TeacherService
     /**
      * Get teachers by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -234,8 +211,6 @@ class TeacherService
 
     /**
      * Count total teachers
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -244,9 +219,6 @@ class TeacherService
 
     /**
      * Check if teacher exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -255,9 +227,6 @@ class TeacherService
 
     /**
      * Get latest teachers
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -267,8 +236,6 @@ class TeacherService
     /**
      * Duplicate a teacher
      *
-     * @param Teacher $teacher
-     * @return Teacher
      * @throws \Exception
      */
     public function duplicate(Teacher $teacher): Teacher
@@ -285,7 +252,7 @@ class TeacherService
 
             Log::info('Teacher duplicated successfully', [
                 'original_id' => $teacher->id,
-                'new_id' => $newTeacher->id
+                'new_id' => $newTeacher->id,
             ]);
 
             return $newTeacher;
@@ -293,7 +260,7 @@ class TeacherService
             DB::rollBack();
             Log::error('Error duplicating Teacher', [
                 'id' => $teacher->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

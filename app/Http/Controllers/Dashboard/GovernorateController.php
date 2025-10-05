@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GovernorateRequest;
-use App\Services\GovernorateService;
 use App\Models\Governorate;
-use Illuminate\Http\Request;
+use App\Services\GovernorateService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class GovernorateController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class GovernorateController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class GovernorateController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param GovernorateRequest $request
-     * @return RedirectResponse
      */
     public function store(GovernorateRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class GovernorateController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Governorate: ' . $e->getMessage());
+                ->with('error', 'Error creating Governorate: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Governorate $governorate
-     * @return View
      */
     public function show(Governorate $governorate): View
     {
@@ -74,9 +63,6 @@ class GovernorateController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Governorate $governorate
-     * @return View
      */
     public function edit(Governorate $governorate): View
     {
@@ -85,10 +71,6 @@ class GovernorateController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param GovernorateRequest $request
-     * @param Governorate $governorate
-     * @return RedirectResponse
      */
     public function update(GovernorateRequest $request, Governorate $governorate): RedirectResponse
     {
@@ -100,15 +82,12 @@ class GovernorateController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Governorate: ' . $e->getMessage());
+                ->with('error', 'Error updating Governorate: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Governorate $governorate
-     * @return RedirectResponse
      */
     public function destroy(Governorate $governorate): RedirectResponse
     {
@@ -119,7 +98,7 @@ class GovernorateController extends Controller
                 ->with('success', 'Governorate deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Governorate: ' . $e->getMessage());
+                ->with('error', 'Error deleting Governorate: '.$e->getMessage());
         }
     }
 }

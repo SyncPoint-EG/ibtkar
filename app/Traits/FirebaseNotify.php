@@ -9,7 +9,7 @@ trait FirebaseNotify
 {
     public function sendFirebaseNotification($users, $title, $body)
     {
-        if (!is_iterable($users)) {
+        if (! is_iterable($users)) {
             $users = [$users];
         }
 
@@ -18,7 +18,7 @@ trait FirebaseNotify
 
     public function sendAndStoreFirebaseNotification($users, $title, $body, $data = [])
     {
-        if (!is_iterable($users)) {
+        if (! is_iterable($users)) {
             $users = [$users];
         }
 

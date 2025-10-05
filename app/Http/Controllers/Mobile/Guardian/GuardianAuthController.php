@@ -3,26 +3,20 @@
 namespace App\Http\Controllers\Mobile\Guardian;
 
 use App\Http\Requests\GuardianRequest;
-use App\Http\Requests\StudentRequest;
 use App\Http\Resources\GuardianResource;
-use App\Http\Resources\StudentResource;
 use App\Models\Guardian;
-use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class GuardianAuthController
 {
-
     public function register(GuardianRequest $request)
     {
         $validated = $request->validated();
         $validated['verification_code'] = rand(1000, 9999);
         $guardian = Guardian::create($request->validated());
 
-
         // sending code must be here
-
 
         return response()->json([
             'message' => 'Guardian registered successfully',
@@ -44,7 +38,7 @@ class GuardianAuthController
             'success' => true,
             'message' => 'You Are logged in successfully',
             'student' => new GuardianResource($guardian),
-            'token' => $token
+            'token' => $token,
         ], 201);
     }
 
@@ -66,16 +60,17 @@ class GuardianAuthController
             }
 
             $token = $guardian->createToken('GuardianToken')->plainTextToken;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Logged in successfully',
                 'guardian' => new GuardianResource($guardian),
-                'token' => $token
+                'token' => $token,
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid login details'
+                'message' => 'Invalid login details',
             ]);
         }
     }
@@ -88,6 +83,7 @@ class GuardianAuthController
         $guardian = Guardian::where('phone', $request->get('phone'))->first();
         if ($guardian) {
             $code = $guardian->generateVerificationCode();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Verification code sent to your mobile number',
@@ -109,7 +105,7 @@ class GuardianAuthController
 
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ]);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use App\Models\User;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -55,20 +55,20 @@ class RolesAndPermissionsSeeder extends Seeder
         // Assign all permissions to Super Admin role
         $superAdminRole->syncPermissions($createdPermissions);
 
-//        // Optional: Create a super admin user
-//        $superAdmin = User::firstOrCreate(
-//            ['email' => 'admin@example.com'],
-//            [
-//                'name' => 'Super Admin',
-//                'password' => Hash::make('password'), // Change this!
-//                'email_verified_at' => now(),
-//            ]
-//        );
+        //        // Optional: Create a super admin user
+        //        $superAdmin = User::firstOrCreate(
+        //            ['email' => 'admin@example.com'],
+        //            [
+        //                'name' => 'Super Admin',
+        //                'password' => Hash::make('password'), // Change this!
+        //                'email_verified_at' => now(),
+        //            ]
+        //        );
 
         // Assign super_admin role to the user
 
-        $this->command->info('Created ' . count($permissions) . ' permissions from routes.');
-        $this->command->info('Permissions: ' . implode(', ', $permissions));
+        $this->command->info('Created '.count($permissions).' permissions from routes.');
+        $this->command->info('Permissions: '.implode(', ', $permissions));
         $this->command->info('Created Super Admin role with all permissions assigned.');
         $this->command->info('Created Super Admin user: admin@example.com');
     }

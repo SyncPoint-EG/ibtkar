@@ -14,7 +14,7 @@ class ExamAttempt extends Model
         'score',
         'total_marks',
         'is_submitted',
-        'is_passed'
+        'is_passed',
     ];
 
     protected $casts = [

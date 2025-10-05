@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChapterRequest;
+use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Stage;
-use App\Models\Teacher;
-use App\Services\ChapterService;
-use App\Models\Chapter;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Watch;
-use Illuminate\Http\Request;
+use App\Services\ChapterService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ChapterController extends Controller
@@ -28,8 +28,6 @@ class ChapterController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -37,12 +35,12 @@ class ChapterController extends Controller
             'course.teacher',
             'course.stage',
             'course.grade',
-            'course.division'
+            'course.division',
         ]);
 
         // Name filter
         if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
+            $query->where('name', 'like', '%'.$request->name.'%');
         }
 
         // Course filter
@@ -92,8 +90,6 @@ class ChapterController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create($course_id = null): View
     {
@@ -102,58 +98,48 @@ class ChapterController extends Controller
         if ($course_id) {
             $selectedCourse = Course::find($course_id);
         }
-        return view('dashboard.chapters.create',compact('courses','selectedCourse'));
+
+        return view('dashboard.chapters.create', compact('courses', 'selectedCourse'));
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param ChapterRequest $request
-     * @return RedirectResponse
      */
     public function store(ChapterRequest $request): RedirectResponse
     {
         try {
-            $chapter =$this->chapterService->create($request->validated());
+            $chapter = $this->chapterService->create($request->validated());
 
-            return redirect()->route('chapters.show',$chapter->id)->with('success', 'Chapter created successfully');
+            return redirect()->route('chapters.show', $chapter->id)->with('success', 'Chapter created successfully');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Chapter: ' . $e->getMessage());
+                ->with('error', 'Error creating Chapter: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Chapter $chapter
-     * @return View
      */
     public function show(Chapter $chapter): View
     {
         $students = $this->chapterService->getStudents($chapter);
+
         return view('dashboard.chapters.show', compact('chapter', 'students'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Chapter $chapter
-     * @return View
      */
     public function edit(Chapter $chapter): View
     {
         $courses = Course::select('id', 'name')->get();
-        return view('dashboard.chapters.edit', compact('chapter','courses'));
+
+        return view('dashboard.chapters.edit', compact('chapter', 'courses'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param ChapterRequest $request
-     * @param Chapter $chapter
-     * @return RedirectResponse
      */
     public function update(ChapterRequest $request, Chapter $chapter): RedirectResponse
     {
@@ -165,15 +151,12 @@ class ChapterController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Chapter: ' . $e->getMessage());
+                ->with('error', 'Error updating Chapter: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Chapter $chapter
-     * @return RedirectResponse
      */
     public function destroy(Chapter $chapter): RedirectResponse
     {
@@ -184,7 +167,7 @@ class ChapterController extends Controller
                 ->with('success', 'Chapter deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Chapter: ' . $e->getMessage());
+                ->with('error', 'Error deleting Chapter: '.$e->getMessage());
         }
     }
 

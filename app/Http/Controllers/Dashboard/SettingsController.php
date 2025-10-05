@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SettingsController extends Controller
@@ -16,6 +16,7 @@ class SettingsController extends Controller
     public function bulkEdit(): View
     {
         $settings = Setting::all();
+
         return view('dashboard.settings.edit', compact('settings'));
     }
 
@@ -39,5 +40,4 @@ class SettingsController extends Controller
 
         return redirect()->route('settings.bulkEdit')->with('success', __('dashboard.settings.updated_successfully'));
     }
-
 }

@@ -5,18 +5,19 @@ namespace App\Http\Controllers\Dashboard;
 use App\Exports\CodesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CodeRequest;
+use App\Models\Code;
 use App\Services\CodeService;
 use App\Services\TeacherService;
-use App\Models\Code;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CodeController extends Controller
 {
     protected CodeService $codeService;
+
     protected TeacherService $teacherService;
 
     public function __construct(CodeService $codeService, TeacherService $teacherService)
@@ -28,7 +29,6 @@ class CodeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -42,7 +42,7 @@ class CodeController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $codes,
-                'message' => 'Codes retrieved successfully.'
+                'message' => 'Codes retrieved successfully.',
             ]);
         }
 
@@ -59,18 +59,18 @@ class CodeController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Ready to create new Code.'
+                'message' => 'Ready to create new Code.',
             ]);
         }
 
         $teachers = $this->teacherService->getAll();
+
         return view('dashboard.codes.create', compact('teachers'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param CodeRequest $request
      * @return RedirectResponse|JsonResponse
      */
     public function store(CodeRequest $request)
@@ -87,7 +87,7 @@ class CodeController extends Controller
                 }
             } else {
                 $validatedData['number_of_uses'] = 0;
-                if(!$request->code){
+                if (! $request->code) {
                     $validatedData['code'] = $this->codeService->generateUniqueCode();
                 }
                 $this->codeService->create($validatedData);
@@ -96,7 +96,7 @@ class CodeController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Code(s) created successfully.'
+                    'message' => 'Code(s) created successfully.',
                 ], 201);
             }
 
@@ -106,21 +106,19 @@ class CodeController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error creating Code: ' . $e->getMessage()
+                    'message' => 'Error creating Code: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Code: ' . $e->getMessage());
+                ->with('error', 'Error creating Code: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Code $code
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function show(Code $code, Request $request)
@@ -129,7 +127,7 @@ class CodeController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $code,
-                'message' => 'Code retrieved successfully.'
+                'message' => 'Code retrieved successfully.',
             ]);
         }
 
@@ -139,8 +137,6 @@ class CodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Code $code
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function edit(Code $code, Request $request)
@@ -149,19 +145,18 @@ class CodeController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $code,
-                'message' => 'Code ready for editing.'
+                'message' => 'Code ready for editing.',
             ]);
         }
 
         $teachers = $this->teacherService->getAll();
+
         return view('dashboard.codes.edit', compact('code', 'teachers'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param CodeRequest $request
-     * @param Code $code
      * @return RedirectResponse|JsonResponse
      */
     public function update(CodeRequest $request, Code $code)
@@ -175,7 +170,7 @@ class CodeController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => $updatedCode,
-                    'message' => 'Code updated successfully.'
+                    'message' => 'Code updated successfully.',
                 ]);
             }
 
@@ -185,21 +180,19 @@ class CodeController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error updating Code: ' . $e->getMessage()
+                    'message' => 'Error updating Code: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Code: ' . $e->getMessage());
+                ->with('error', 'Error updating Code: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Code $code
-     * @param Request $request
      * @return RedirectResponse|JsonResponse
      */
     public function destroy(Code $code, Request $request)
@@ -210,7 +203,7 @@ class CodeController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Code deleted successfully.'
+                    'message' => 'Code deleted successfully.',
                 ]);
             }
 
@@ -220,20 +213,17 @@ class CodeController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error deleting Code: ' . $e->getMessage()
+                    'message' => 'Error deleting Code: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Error deleting Code: ' . $e->getMessage());
+                ->with('error', 'Error deleting Code: '.$e->getMessage());
         }
     }
 
     /**
      * Get filtered/searched results
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function search(Request $request): JsonResponse
     {
@@ -243,21 +233,18 @@ class CodeController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $results,
-                'message' => 'Search completed successfully.'
+                'message' => 'Search completed successfully.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Search error: ' . $e->getMessage()
+                'message' => 'Search error: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Bulk delete resources
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function bulkDelete(Request $request): JsonResponse
     {
@@ -267,12 +254,12 @@ class CodeController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Successfully deleted {$deleted} codes."
+                'message' => "Successfully deleted {$deleted} codes.",
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bulk delete error: ' . $e->getMessage()
+                'message' => 'Bulk delete error: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -280,6 +267,7 @@ class CodeController extends Controller
     public function export(Request $request)
     {
         $filters = $request->only(['teacher_id', 'expires_at', 'for', 'created_at_from', 'created_at_to', 'code', 'code_classification']);
+
         return Excel::download(new CodesExport($filters), 'codes.xlsx');
     }
 }

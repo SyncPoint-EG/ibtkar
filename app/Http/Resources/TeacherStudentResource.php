@@ -55,6 +55,7 @@ class TeacherStudentResource extends JsonResource
 
         $examData = $exams->map(function ($exam) use ($attempts) {
             $attempt = $attempts->get($exam->id);
+
             return [
                 'id' => $exam->id,
                 'name' => $exam->name,
@@ -66,7 +67,7 @@ class TeacherStudentResource extends JsonResource
         // --- Lessons Status (Optimized to avoid N+1 queries) ---
 
         $courseIds = Course::where('teacher_id', $teacher->id)->pluck('id');
-        $teacherLessons = Lesson::whereHas('chapter', function($q) use ($courseIds) {
+        $teacherLessons = Lesson::whereHas('chapter', function ($q) use ($courseIds) {
             $q->whereIn('course_id', $courseIds);
         })->with('chapter')->get();
         $teacherLessonIds = $teacherLessons->pluck('id');
@@ -74,11 +75,11 @@ class TeacherStudentResource extends JsonResource
         $payments = Payment::where('student_id', $student->id)
             ->where(function ($query) use ($teacherLessonIds, $teacherLessons) {
                 $query->whereIn('lesson_id', $teacherLessonIds)
-                      ->orWhereIn('chapter_id', $teacherLessons->pluck('chapter_id')->unique())
-                      ->orWhereIn('course_id', $teacherLessons->pluck('chapter.course_id')->unique());
+                    ->orWhereIn('chapter_id', $teacherLessons->pluck('chapter_id')->unique())
+                    ->orWhereIn('course_id', $teacherLessons->pluck('chapter.course_id')->unique());
             })
             ->get();
-        
+
         $purchasedLessonIds = $payments->whereNotNull('lesson_id')->pluck('lesson_id');
         $purchasedChapterIds = $payments->whereNotNull('chapter_id')->pluck('chapter_id');
         $purchasedCourseIds = $payments->whereNotNull('course_id')->pluck('course_id');

@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GuardianRequest;
-use App\Services\GuardianService;
 use App\Models\Guardian;
-use Illuminate\Http\Request;
+use App\Services\GuardianService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class GuardianController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class GuardianController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class GuardianController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param GuardianRequest $request
-     * @return RedirectResponse
      */
     public function store(GuardianRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class GuardianController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Guardian: ' . $e->getMessage());
+                ->with('error', 'Error creating Guardian: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Guardian $guardian
-     * @return View
      */
     public function show(Guardian $guardian): View
     {
@@ -74,9 +63,6 @@ class GuardianController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Guardian $guardian
-     * @return View
      */
     public function edit(Guardian $guardian): View
     {
@@ -85,10 +71,6 @@ class GuardianController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param GuardianRequest $request
-     * @param Guardian $guardian
-     * @return RedirectResponse
      */
     public function update(GuardianRequest $request, Guardian $guardian): RedirectResponse
     {
@@ -100,15 +82,12 @@ class GuardianController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Guardian: ' . $e->getMessage());
+                ->with('error', 'Error updating Guardian: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Guardian $guardian
-     * @return RedirectResponse
      */
     public function destroy(Guardian $guardian): RedirectResponse
     {
@@ -119,7 +98,7 @@ class GuardianController extends Controller
                 ->with('success', 'Guardian deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Guardian: ' . $e->getMessage());
+                ->with('error', 'Error deleting Guardian: '.$e->getMessage());
         }
     }
 }

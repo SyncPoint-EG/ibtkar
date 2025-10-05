@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChargeApprovalRequest;
 use App\Services\ChargeApprovalService;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ChargeApprovalController extends Controller
 {
@@ -22,7 +22,6 @@ class ChargeApprovalController extends Controller
     /**
      * Display a listing of pending charge approvals.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -33,7 +32,7 @@ class ChargeApprovalController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $charges,
-                'message' => 'Pending charges retrieved successfully.'
+                'message' => 'Pending charges retrieved successfully.',
             ]);
         }
 
@@ -43,8 +42,6 @@ class ChargeApprovalController extends Controller
     /**
      * Accept a pending charge.
      *
-     * @param ChargeApprovalRequest $request
-     * @param int $chargeId
      * @return RedirectResponse|JsonResponse
      */
     public function accept(ChargeApprovalRequest $request, int $chargeId)
@@ -55,7 +52,7 @@ class ChargeApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Charge accepted successfully.'
+                    'message' => 'Charge accepted successfully.',
                 ]);
             }
 
@@ -65,20 +62,18 @@ class ChargeApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error accepting charge: ' . $e->getMessage()
+                    'message' => 'Error accepting charge: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Error accepting charge: ' . $e->getMessage());
+                ->with('error', 'Error accepting charge: '.$e->getMessage());
         }
     }
 
     /**
      * Reject a pending charge.
      *
-     * @param ChargeApprovalRequest $request
-     * @param int $chargeId
      * @return RedirectResponse|JsonResponse
      */
     public function reject(ChargeApprovalRequest $request, int $chargeId)
@@ -89,7 +84,7 @@ class ChargeApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Charge rejected successfully.'
+                    'message' => 'Charge rejected successfully.',
                 ]);
             }
 
@@ -99,12 +94,12 @@ class ChargeApprovalController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error rejecting charge: ' . $e->getMessage()
+                    'message' => 'Error rejecting charge: '.$e->getMessage(),
                 ], 500);
             }
 
             return redirect()->back()
-                ->with('error', 'Error rejecting charge: ' . $e->getMessage());
+                ->with('error', 'Error rejecting charge: '.$e->getMessage());
         }
     }
 }

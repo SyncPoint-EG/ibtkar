@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EducationTypeRequest;
-use App\Services\EducationTypeService;
 use App\Models\EducationType;
-use Illuminate\Http\Request;
+use App\Services\EducationTypeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class EducationTypeController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class EducationTypeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class EducationTypeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param EducationTypeRequest $request
-     * @return RedirectResponse
      */
     public function store(EducationTypeRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class EducationTypeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating EducationType: ' . $e->getMessage());
+                ->with('error', 'Error creating EducationType: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param EducationType $educationType
-     * @return View
      */
     public function show(EducationType $educationType): View
     {
@@ -74,9 +63,6 @@ class EducationTypeController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param EducationType $educationType
-     * @return View
      */
     public function edit(EducationType $educationType): View
     {
@@ -85,10 +71,6 @@ class EducationTypeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param EducationTypeRequest $request
-     * @param EducationType $educationType
-     * @return RedirectResponse
      */
     public function update(EducationTypeRequest $request, EducationType $educationType): RedirectResponse
     {
@@ -100,15 +82,12 @@ class EducationTypeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating EducationType: ' . $e->getMessage());
+                ->with('error', 'Error updating EducationType: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param EducationType $educationType
-     * @return RedirectResponse
      */
     public function destroy(EducationType $educationType): RedirectResponse
     {
@@ -119,7 +98,7 @@ class EducationTypeController extends Controller
                 ->with('success', 'EducationType deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting EducationType: ' . $e->getMessage());
+                ->with('error', 'Error deleting EducationType: '.$e->getMessage());
         }
     }
 }

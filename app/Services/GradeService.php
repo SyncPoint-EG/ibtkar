@@ -19,19 +19,14 @@ class GradeService
 
     /**
      * Get all grades with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all grades without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class GradeService
 
     /**
      * Find grade by ID
-     *
-     * @param int $id
-     * @return Grade|null
      */
     public function findById(int $id): ?Grade
     {
@@ -52,8 +44,6 @@ class GradeService
     /**
      * Find grade by ID or fail
      *
-     * @param int $id
-     * @return Grade
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Grade
@@ -64,8 +54,6 @@ class GradeService
     /**
      * Create a new grade
      *
-     * @param array $data
-     * @return Grade
      * @throws \Exception
      */
     public function create(array $data): Grade
@@ -90,9 +78,6 @@ class GradeService
     /**
      * Update an existing grade
      *
-     * @param Grade $grade
-     * @param array $data
-     * @return Grade
      * @throws \Exception
      */
     public function update(Grade $grade, array $data): Grade
@@ -113,7 +98,7 @@ class GradeService
             Log::error('Error updating Grade', [
                 'id' => $grade->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class GradeService
     /**
      * Delete a grade
      *
-     * @param Grade $grade
-     * @return bool
      * @throws \Exception
      */
     public function delete(Grade $grade): bool
@@ -142,7 +125,7 @@ class GradeService
             DB::rollBack();
             Log::error('Error deleting Grade', [
                 'id' => $grade->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class GradeService
 
     /**
      * Search grades based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class GradeService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class GradeService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class GradeService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete grades
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class GradeService
 
             Log::info('Bulk delete grades completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class GradeService
             DB::rollBack();
             Log::error('Error in bulk delete grades', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class GradeService
     /**
      * Get grades by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class GradeService
 
     /**
      * Count total grades
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class GradeService
 
     /**
      * Check if grade exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class GradeService
 
     /**
      * Get latest grades
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class GradeService
     /**
      * Duplicate a grade
      *
-     * @param Grade $grade
-     * @return Grade
      * @throws \Exception
      */
     public function duplicate(Grade $grade): Grade
@@ -284,7 +251,7 @@ class GradeService
 
             Log::info('Grade duplicated successfully', [
                 'original_id' => $grade->id,
-                'new_id' => $newGrade->id
+                'new_id' => $newGrade->id,
             ]);
 
             return $newGrade;
@@ -292,7 +259,7 @@ class GradeService
             DB::rollBack();
             Log::error('Error duplicating Grade', [
                 'id' => $grade->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

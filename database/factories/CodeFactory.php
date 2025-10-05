@@ -23,6 +23,7 @@ class CodeFactory extends Factory
     public function definition()
     {
         $forOptions = ['course', 'chapter', 'lesson'];
+
         return [
             'code' => Str::random(10),
             'for' => $this->faker->randomElement($forOptions),

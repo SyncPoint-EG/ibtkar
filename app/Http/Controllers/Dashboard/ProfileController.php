@@ -16,6 +16,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
+
         return view('dashboard.profile.edit', compact('user'));
     }
 
@@ -39,7 +40,7 @@ class ProfileController extends Controller
 
         // Check current password if trying to change password
         if ($request->filled('password')) {
-            if (!$request->filled('current_password') || !Hash::check($request->current_password, $user->password)) {
+            if (! $request->filled('current_password') || ! Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'Current password is incorrect.']);
             }
         }

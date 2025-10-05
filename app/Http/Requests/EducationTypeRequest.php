@@ -25,7 +25,7 @@ class EducationTypeRequest extends FormRequest
     {
         return [
 
-            'name' => 'required'
+            'name' => 'required',
         ];
     }
 }

@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CenterRequest;
-use App\Services\CenterService;
 use App\Models\Center;
-use Illuminate\Http\Request;
+use App\Services\CenterService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class CenterController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class CenterController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class CenterController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param CenterRequest $request
-     * @return RedirectResponse
      */
     public function store(CenterRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class CenterController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Center: ' . $e->getMessage());
+                ->with('error', 'Error creating Center: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Center $center
-     * @return View
      */
     public function show(Center $center): View
     {
@@ -74,9 +63,6 @@ class CenterController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Center $center
-     * @return View
      */
     public function edit(Center $center): View
     {
@@ -85,10 +71,6 @@ class CenterController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param CenterRequest $request
-     * @param Center $center
-     * @return RedirectResponse
      */
     public function update(CenterRequest $request, Center $center): RedirectResponse
     {
@@ -100,15 +82,12 @@ class CenterController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Center: ' . $e->getMessage());
+                ->with('error', 'Error updating Center: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Center $center
-     * @return RedirectResponse
      */
     public function destroy(Center $center): RedirectResponse
     {
@@ -119,7 +98,7 @@ class CenterController extends Controller
                 ->with('success', 'Center deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Center: ' . $e->getMessage());
+                ->with('error', 'Error deleting Center: '.$e->getMessage());
         }
     }
 }

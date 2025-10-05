@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->string('website_image')->nullable()->after('image');
+        Schema::table('reward_points', function (Blueprint $table) {
+            $table->string('image')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->dropColumn('website_image');
+        Schema::table('reward_points', function (Blueprint $table) {
+            $table->dropColumn('image');
         });
     }
 };

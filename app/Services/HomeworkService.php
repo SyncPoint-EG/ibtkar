@@ -19,19 +19,14 @@ class HomeworkService
 
     /**
      * Get all homework with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all homework without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class HomeworkService
 
     /**
      * Find homework by ID
-     *
-     * @param int $id
-     * @return Homework|null
      */
     public function findById(int $id): ?Homework
     {
@@ -52,8 +44,6 @@ class HomeworkService
     /**
      * Find homework by ID or fail
      *
-     * @param int $id
-     * @return Homework
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Homework
@@ -64,8 +54,6 @@ class HomeworkService
     /**
      * Create a new homework
      *
-     * @param array $data
-     * @return Homework
      * @throws \Exception
      */
     public function create(array $data): Homework
@@ -90,9 +78,6 @@ class HomeworkService
     /**
      * Update an existing homework
      *
-     * @param Homework $homework
-     * @param array $data
-     * @return Homework
      * @throws \Exception
      */
     public function update(Homework $homework, array $data): Homework
@@ -113,7 +98,7 @@ class HomeworkService
             Log::error('Error updating Homework', [
                 'id' => $homework->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class HomeworkService
     /**
      * Delete a homework
      *
-     * @param Homework $homework
-     * @return bool
      * @throws \Exception
      */
     public function delete(Homework $homework): bool
@@ -142,7 +125,7 @@ class HomeworkService
             DB::rollBack();
             Log::error('Error deleting Homework', [
                 'id' => $homework->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class HomeworkService
 
     /**
      * Search homework based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class HomeworkService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class HomeworkService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class HomeworkService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete homework
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class HomeworkService
 
             Log::info('Bulk delete homework completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class HomeworkService
             DB::rollBack();
             Log::error('Error in bulk delete homework', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class HomeworkService
     /**
      * Get homework by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class HomeworkService
 
     /**
      * Count total homework
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class HomeworkService
 
     /**
      * Check if homework exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class HomeworkService
 
     /**
      * Get latest homework
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class HomeworkService
     /**
      * Duplicate a homework
      *
-     * @param Homework $homework
-     * @return Homework
      * @throws \Exception
      */
     public function duplicate(Homework $homework): Homework
@@ -284,7 +251,7 @@ class HomeworkService
 
             Log::info('Homework duplicated successfully', [
                 'original_id' => $homework->id,
-                'new_id' => $newHomework->id
+                'new_id' => $newHomework->id,
             ]);
 
             return $newHomework;
@@ -292,7 +259,7 @@ class HomeworkService
             DB::rollBack();
             Log::error('Error duplicating Homework', [
                 'id' => $homework->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

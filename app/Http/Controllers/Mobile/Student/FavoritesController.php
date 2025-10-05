@@ -11,8 +11,10 @@ class FavoritesController extends Controller
     public function listFavorites()
     {
         $student = auth('student')->user();
+
         return LessonResource::collection($student->favorites);
     }
+
     public function addToFavorite(Request $request)
     {
         $request->validate([
@@ -21,22 +23,25 @@ class FavoritesController extends Controller
 
         $student = auth('student')->user();
         $student->favorites()->attach($request->lesson_id);
+
         return response()->json([
             'success' => true,
-            'message' => 'success'
+            'message' => 'success',
         ]);
 
     }
 
-    public function removeFromFavorite(Request $request){
+    public function removeFromFavorite(Request $request)
+    {
         $request->validate([
             'lesson_id' => ['required', 'exists:lessons,id'],
         ]);
         $student = auth('student')->user();
         $student->favorites()->detach($request->lesson_id);
+
         return response()->json([
             'success' => true,
-            'message' => 'success'
+            'message' => 'success',
         ]);
     }
 }

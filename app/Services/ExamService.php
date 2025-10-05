@@ -19,19 +19,14 @@ class ExamService
 
     /**
      * Get all exams with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all exams without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class ExamService
 
     /**
      * Find exam by ID
-     *
-     * @param int $id
-     * @return Exam|null
      */
     public function findById(int $id): ?Exam
     {
@@ -52,8 +44,6 @@ class ExamService
     /**
      * Find exam by ID or fail
      *
-     * @param int $id
-     * @return Exam
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Exam
@@ -64,8 +54,6 @@ class ExamService
     /**
      * Create a new exam
      *
-     * @param array $data
-     * @return Exam
      * @throws \Exception
      */
     public function create(array $data): Exam
@@ -90,9 +78,6 @@ class ExamService
     /**
      * Update an existing exam
      *
-     * @param Exam $exam
-     * @param array $data
-     * @return Exam
      * @throws \Exception
      */
     public function update(Exam $exam, array $data): Exam
@@ -113,7 +98,7 @@ class ExamService
             Log::error('Error updating Exam', [
                 'id' => $exam->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class ExamService
     /**
      * Delete a exam
      *
-     * @param Exam $exam
-     * @return bool
      * @throws \Exception
      */
     public function delete(Exam $exam): bool
@@ -142,7 +125,7 @@ class ExamService
             DB::rollBack();
             Log::error('Error deleting Exam', [
                 'id' => $exam->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class ExamService
 
     /**
      * Search exams based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class ExamService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class ExamService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class ExamService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete exams
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class ExamService
 
             Log::info('Bulk delete exams completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class ExamService
             DB::rollBack();
             Log::error('Error in bulk delete exams', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class ExamService
     /**
      * Get exams by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class ExamService
 
     /**
      * Count total exams
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class ExamService
 
     /**
      * Check if exam exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class ExamService
 
     /**
      * Get latest exams
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class ExamService
     /**
      * Duplicate a exam
      *
-     * @param Exam $exam
-     * @return Exam
      * @throws \Exception
      */
     public function duplicate(Exam $exam): Exam
@@ -284,7 +251,7 @@ class ExamService
 
             Log::info('Exam duplicated successfully', [
                 'original_id' => $exam->id,
-                'new_id' => $newExam->id
+                'new_id' => $newExam->id,
             ]);
 
             return $newExam;
@@ -292,7 +259,7 @@ class ExamService
             DB::rollBack();
             Log::error('Error duplicating Exam', [
                 'id' => $exam->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

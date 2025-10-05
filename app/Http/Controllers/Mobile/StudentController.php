@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
-use App\Services\StudentService;
 use App\Models\Student;
-use Illuminate\Http\Request;
+use App\Services\StudentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class StudentController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class StudentController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class StudentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param StudentRequest $request
-     * @return RedirectResponse
      */
     public function store(StudentRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Student: ' . $e->getMessage());
+                ->with('error', 'Error creating Student: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Student $student
-     * @return View
      */
     public function show(Student $student): View
     {
@@ -74,9 +63,6 @@ class StudentController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Student $student
-     * @return View
      */
     public function edit(Student $student): View
     {
@@ -85,10 +71,6 @@ class StudentController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param StudentRequest $request
-     * @param Student $student
-     * @return RedirectResponse
      */
     public function update(StudentRequest $request, Student $student): RedirectResponse
     {
@@ -100,15 +82,12 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Student: ' . $e->getMessage());
+                ->with('error', 'Error updating Student: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Student $student
-     * @return RedirectResponse
      */
     public function destroy(Student $student): RedirectResponse
     {
@@ -119,7 +98,7 @@ class StudentController extends Controller
                 ->with('success', 'Student deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Student: ' . $e->getMessage());
+                ->with('error', 'Error deleting Student: '.$e->getMessage());
         }
     }
 }

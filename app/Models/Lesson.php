@@ -22,13 +22,10 @@ class Lesson extends Model
      *
      * @return string
      */
-
-
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
-
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function chapter()
     {
@@ -44,10 +41,12 @@ class Lesson extends Model
     {
         return $this->hasMany(Homework::class);
     }
+
     public function exams()
     {
         return $this->hasMany(Exam::class);
     }
+
     public function getVideoImageAttribute()
     {
         if ($this->attributes['video_image']) {
@@ -89,7 +88,7 @@ class Lesson extends Model
             $this->attributes['video_image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['video_image'] = $value;
         }
     }

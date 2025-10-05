@@ -21,8 +21,6 @@ class Permission extends Model
      *
      * @return string
      */
-
-
     public function roles()
     {
         return $this->belongsToMany(\App\Models\Role::class);

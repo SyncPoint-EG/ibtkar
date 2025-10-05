@@ -19,20 +19,16 @@ class CourseService
 
     /**
      * Get all courses with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
-        $perPage = request()->perPage ?? $perPage ;
+        $perPage = request()->perPage ?? $perPage;
+
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all courses without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -41,9 +37,6 @@ class CourseService
 
     /**
      * Find course by ID
-     *
-     * @param int $id
-     * @return Course|null
      */
     public function findById(int $id): ?Course
     {
@@ -53,8 +46,6 @@ class CourseService
     /**
      * Find course by ID or fail
      *
-     * @param int $id
-     * @return Course
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Course
@@ -65,8 +56,6 @@ class CourseService
     /**
      * Create a new course
      *
-     * @param array $data
-     * @return Course
      * @throws \Exception
      */
     public function create(array $data): Course
@@ -91,9 +80,6 @@ class CourseService
     /**
      * Update an existing course
      *
-     * @param Course $course
-     * @param array $data
-     * @return Course
      * @throws \Exception
      */
     public function update(Course $course, array $data): Course
@@ -114,7 +100,7 @@ class CourseService
             Log::error('Error updating Course', [
                 'id' => $course->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -123,8 +109,6 @@ class CourseService
     /**
      * Delete a course
      *
-     * @param Course $course
-     * @return bool
      * @throws \Exception
      */
     public function delete(Course $course): bool
@@ -143,7 +127,7 @@ class CourseService
             DB::rollBack();
             Log::error('Error deleting Course', [
                 'id' => $course->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -151,9 +135,6 @@ class CourseService
 
     /**
      * Search courses based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -161,9 +142,9 @@ class CourseService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -171,11 +152,11 @@ class CourseService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -185,14 +166,13 @@ class CourseService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete courses
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -206,7 +186,7 @@ class CourseService
 
             Log::info('Bulk delete courses completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -214,7 +194,7 @@ class CourseService
             DB::rollBack();
             Log::error('Error in bulk delete courses', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -223,9 +203,7 @@ class CourseService
     /**
      * Get courses by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -234,8 +212,6 @@ class CourseService
 
     /**
      * Count total courses
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -244,9 +220,6 @@ class CourseService
 
     /**
      * Check if course exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -255,9 +228,6 @@ class CourseService
 
     /**
      * Get latest courses
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -267,8 +237,6 @@ class CourseService
     /**
      * Duplicate a course
      *
-     * @param Course $course
-     * @return Course
      * @throws \Exception
      */
     public function duplicate(Course $course): Course
@@ -285,7 +253,7 @@ class CourseService
 
             Log::info('Course duplicated successfully', [
                 'original_id' => $course->id,
-                'new_id' => $newCourse->id
+                'new_id' => $newCourse->id,
             ]);
 
             return $newCourse;
@@ -293,7 +261,7 @@ class CourseService
             DB::rollBack();
             Log::error('Error duplicating Course', [
                 'id' => $course->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -301,7 +269,7 @@ class CourseService
 
     public function getStudents(Course $course)
     {
-        $students = new Collection();
+        $students = new Collection;
         $payments = $course->payments()->with('student')->get();
         foreach ($payments as $payment) {
             if ($payment->student) {

@@ -3,11 +3,10 @@
 namespace App\Imports;
 
 use App\Models\Teacher;
+use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Validators\ValidationException;
-use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 
 class TeachersImport implements ToModel, WithHeadingRow, WithValidation
 {

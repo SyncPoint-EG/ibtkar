@@ -19,46 +19,43 @@ class StudentService
 
     /**
      * Get all students with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
         $query = $this->model->with($with);
 
-        if (!empty($filters['name'])) {
+        if (! empty($filters['name'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('first_name', 'like', '%' . $filters['name'] . '%')
-                    ->orWhere('last_name', 'like', '%' . $filters['name'] . '%');
+                $q->where('first_name', 'like', '%'.$filters['name'].'%')
+                    ->orWhere('last_name', 'like', '%'.$filters['name'].'%');
             });
         }
 
-        if (!empty($filters['phone'])) {
-            $query->where('phone', 'like', '%' . $filters['phone'] . '%');
+        if (! empty($filters['phone'])) {
+            $query->where('phone', 'like', '%'.$filters['phone'].'%');
         }
 
-        if (!empty($filters['governorate_id'])) {
+        if (! empty($filters['governorate_id'])) {
             $query->where('governorate_id', $filters['governorate_id']);
         }
 
-        if (!empty($filters['center_id'])) {
+        if (! empty($filters['center_id'])) {
             $query->where('center_id', $filters['center_id']);
         }
 
-        if (!empty($filters['stage_id'])) {
+        if (! empty($filters['stage_id'])) {
             $query->where('stage_id', $filters['stage_id']);
         }
 
-        if (!empty($filters['grade_id'])) {
+        if (! empty($filters['grade_id'])) {
             $query->where('grade_id', $filters['grade_id']);
         }
 
-        if (!empty($filters['division_id'])) {
+        if (! empty($filters['division_id'])) {
             $query->where('division_id', $filters['division_id']);
         }
 
-        if (!empty($filters['education_type_id'])) {
+        if (! empty($filters['education_type_id'])) {
             $query->where('education_type_id', $filters['education_type_id']);
         }
 
@@ -66,7 +63,7 @@ class StudentService
             $query->where('status', $filters['status']);
         }
 
-        if (!empty($filters['gender'])) {
+        if (! empty($filters['gender'])) {
             $query->where('gender', $filters['gender']);
         }
 
@@ -75,8 +72,6 @@ class StudentService
 
     /**
      * Get all students without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -85,9 +80,6 @@ class StudentService
 
     /**
      * Find student by ID
-     *
-     * @param int $id
-     * @return Student|null
      */
     public function findById(int $id): ?Student
     {
@@ -97,8 +89,6 @@ class StudentService
     /**
      * Find student by ID or fail
      *
-     * @param int $id
-     * @return Student
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Student
@@ -109,8 +99,6 @@ class StudentService
     /**
      * Create a new student
      *
-     * @param array $data
-     * @return Student
      * @throws \Exception
      */
     public function create(array $data): Student
@@ -135,9 +123,6 @@ class StudentService
     /**
      * Update an existing student
      *
-     * @param Student $student
-     * @param array $data
-     * @return Student
      * @throws \Exception
      */
     public function update(Student $student, array $data): Student
@@ -145,7 +130,7 @@ class StudentService
         try {
             DB::beginTransaction();
 
-            if (!isset($data['password']) || !$data['password']) {
+            if (! isset($data['password']) || ! $data['password']) {
                 unset($data['password']);
             }
 
@@ -162,7 +147,7 @@ class StudentService
             Log::error('Error updating Student', [
                 'id' => $student->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -171,8 +156,6 @@ class StudentService
     /**
      * Delete a student
      *
-     * @param Student $student
-     * @return bool
      * @throws \Exception
      */
     public function delete(Student $student): bool
@@ -191,7 +174,7 @@ class StudentService
             DB::rollBack();
             Log::error('Error deleting Student', [
                 'id' => $student->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -199,9 +182,6 @@ class StudentService
 
     /**
      * Search students based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -209,9 +189,9 @@ class StudentService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -219,11 +199,11 @@ class StudentService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -233,14 +213,13 @@ class StudentService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete students
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -254,7 +233,7 @@ class StudentService
 
             Log::info('Bulk delete students completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -262,7 +241,7 @@ class StudentService
             DB::rollBack();
             Log::error('Error in bulk delete students', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -271,9 +250,7 @@ class StudentService
     /**
      * Get students by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -282,8 +259,6 @@ class StudentService
 
     /**
      * Count total students
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -292,9 +267,6 @@ class StudentService
 
     /**
      * Check if student exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -303,9 +275,6 @@ class StudentService
 
     /**
      * Get latest students
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -315,8 +284,6 @@ class StudentService
     /**
      * Duplicate a student
      *
-     * @param Student $student
-     * @return Student
      * @throws \Exception
      */
     public function duplicate(Student $student): Student
@@ -333,7 +300,7 @@ class StudentService
 
             Log::info('Student duplicated successfully', [
                 'original_id' => $student->id,
-                'new_id' => $newStudent->id
+                'new_id' => $newStudent->id,
             ]);
 
             return $newStudent;
@@ -341,7 +308,7 @@ class StudentService
             DB::rollBack();
             Log::error('Error duplicating Student', [
                 'id' => $student->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

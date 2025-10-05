@@ -11,30 +11,27 @@ use App\Http\Controllers\Mobile\Student\LessonController;
 use App\Http\Controllers\Mobile\Student\LuckWheelController;
 use App\Http\Controllers\Mobile\Student\PaymentController;
 use App\Http\Controllers\Mobile\Student\ProfileController;
+use App\Http\Controllers\Mobile\Student\PurchasedLessonsController;
+use App\Http\Controllers\Mobile\Student\RewardController;
 use App\Http\Controllers\Mobile\Student\StudentAuthController;
 use App\Http\Controllers\Mobile\Student\TableController;
 use App\Http\Controllers\Mobile\Student\TeacherController;
-use App\Http\Controllers\Mobile\Student\RewardController;
-use App\Http\Controllers\Mobile\Student\PurchasedLessonsController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::post('register',[StudentAuthController::class, 'register']);
-Route::post('verify-phone/{id}',[StudentAuthController::class, 'verifyPhone']);
-Route::post('login',[StudentAuthController::class, 'login']);
-Route::post('reset-password',[StudentAuthController::class, 'resetPassword']);
-Route::post('logout',[StudentAuthController::class, 'logout']);
-
-
+Route::post('register', [StudentAuthController::class, 'register']);
+Route::post('verify-phone/{id}', [StudentAuthController::class, 'verifyPhone']);
+Route::post('login', [StudentAuthController::class, 'login']);
+Route::post('reset-password', [StudentAuthController::class, 'resetPassword']);
+Route::post('logout', [StudentAuthController::class, 'logout']);
 
 Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
-    Route::post('purchase',[PaymentController::class, 'store']);
-    Route::post('charge-wallet',[PaymentController::class, 'chargeWallet']);
+    Route::post('purchase', [PaymentController::class, 'store']);
+    Route::post('charge-wallet', [PaymentController::class, 'chargeWallet']);
     Route::get('general-plan-price', [HomeController::class, 'getPlanPrice']);
 
-    //delete account
-    Route::post('delete-account',[StudentAuthController::class, 'deleteAccount']);
+    // delete account
+    Route::post('delete-account', [StudentAuthController::class, 'deleteAccount']);
     // profile routes
     Route::get('profile', [ProfileController::class, 'show']);
     Route::post('profile', [ProfileController::class, 'update']);
@@ -42,25 +39,25 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     Route::get('students-by-points', [ProfileController::class, 'studentsByPoints']);
 
-    Route::post('delete-account',[ProfileController::class,'deleteAccount']);
+    Route::post('delete-account', [ProfileController::class, 'deleteAccount']);
 
     Route::get('banners', [HomeController::class, 'getBanners']);
 
-    Route::get('subjects',[HomeController::class,'getSubjects']);
-    Route::get('subject/{subject}',[HomeController::class,'getSubject']);
+    Route::get('subjects', [HomeController::class, 'getSubjects']);
+    Route::get('subject/{subject}', [HomeController::class, 'getSubject']);
 
     Route::get('courses', [CourseController::class, 'index']);
     Route::get('courses/{course}', [CourseController::class, 'show']);
 
-    //lessons routes
+    // lessons routes
     Route::get('lessons', [LessonController::class, 'getLessons']);
     Route::get('lesson/{lesson}', [LessonController::class, 'getLesson']);
     Route::post('lesson-watch/{lesson}', [LessonController::class, 'watch']);
 
-    //lessons attachment routes
+    // lessons attachment routes
     Route::get('attachments', [AttachmentController::class, 'allAttachments']);
 
-    //teachers routes
+    // teachers routes
     Route::get('teachers', [TeacherController::class, 'index']);
     Route::get('teachers-stories', [TeacherController::class, 'teacherStories']);
     Route::get('teacher/{teacher}', [TeacherController::class, 'show']);
@@ -68,13 +65,13 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('teacher/{teacher}/lessons-by-subject', [TeacherController::class, 'lessonsBySubject']);
 
     // selects routes
-    Route::get('divisions',[HomeController::class,'getDivisions']);
-    Route::get('stages',[HomeController::class,'getStages']);
-    Route::get('grades',[HomeController::class,'getGrades']);
+    Route::get('divisions', [HomeController::class, 'getDivisions']);
+    Route::get('stages', [HomeController::class, 'getStages']);
+    Route::get('grades', [HomeController::class, 'getGrades']);
     Route::get('timeline', [HomeController::class, 'timeline']);
 
     // luck wheel items
-    Route::get('luck-wheel',[LuckWheelController::class, 'index']);
+    Route::get('luck-wheel', [LuckWheelController::class, 'index']);
 
     // exams routes
     Route::get('exams', [ExamController::class, 'index']);
@@ -94,15 +91,14 @@ Route::group(['middleware' => 'auth:student'], function () {
     // purchased lessons
     Route::get('my-lessons', [PurchasedLessonsController::class, 'index']);
 
-
     // favorites routes
-    Route::get('favorite',[FavoritesController::class,'listFavorites']);
-    Route::post('add-to-favorite',[FavoritesController::class,'addToFavorite']);
-    Route::post('remove-from-favorite',[FavoritesController::class,'removeFromFavorite']);
+    Route::get('favorite', [FavoritesController::class, 'listFavorites']);
+    Route::post('add-to-favorite', [FavoritesController::class, 'addToFavorite']);
+    Route::post('remove-from-favorite', [FavoritesController::class, 'removeFromFavorite']);
 
     // tables routes
-    Route::get('general-table',[TableController::class,'getGeneralTeacherTables']);
-    Route::get('private-table',[TableController::class,'getPrivateTable']);
+    Route::get('general-table', [TableController::class, 'getGeneralTeacherTables']);
+    Route::get('private-table', [TableController::class, 'getPrivateTable']);
 
     // rewards routes
     Route::get('rewards', [RewardController::class, 'index']);

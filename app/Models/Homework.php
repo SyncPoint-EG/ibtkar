@@ -17,12 +17,12 @@ class Homework extends Model
         'lesson_id',
         'total_marks',
         'is_active',
-        'due_date'
+        'due_date',
     ];
 
     protected $casts = [
         'due_date' => 'date',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
     ];
 
     public function lesson()

@@ -28,20 +28,20 @@ class FixCodes extends Command
     {
         $codes = Code::all();
         foreach ($codes as $code) {
-            if($code->teacher_id == 2){
-                if($code->for == 'lesson'){
-                    $code->price = 80 ;
+            if ($code->teacher_id == 2) {
+                if ($code->for == 'lesson') {
+                    $code->price = 80;
                 }
-                if($code->for == 'chapter'){
-                    $code->price = 300 ;
+                if ($code->for == 'chapter') {
+                    $code->price = 300;
                 }
             }
-            if($code->teacher_id == 6){
-                if($code->for == 'lesson'){
-                    $code->price = 70 ;
+            if ($code->teacher_id == 6) {
+                if ($code->for == 'lesson') {
+                    $code->price = 70;
                 }
-                if($code->for == 'chapter'){
-                    $code->price = 220 ;
+                if ($code->for == 'chapter') {
+                    $code->price = 220;
                 }
             }
             $code->save();

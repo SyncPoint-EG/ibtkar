@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\RoleRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
+use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-
-
     public function index()
     {
         $roles = Role::with('permissions')->latest()->paginate(10);
@@ -21,7 +18,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all()->groupBy(function($permission) {
+        $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('_', $permission->name)[1] ?? 'general';
         });
 
@@ -32,7 +29,7 @@ class RoleController extends Controller
     {
         $role = Role::create([
             'name' => $request->name,
-            'guard_name' => $request->guard_name ?? 'web'
+            'guard_name' => $request->guard_name ?? 'web',
         ]);
 
         if ($request->has('permissions')) {
@@ -48,7 +45,7 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $role->load('permissions');
-        $groupedPermissions = $role->permissions->groupBy(function($permission) {
+        $groupedPermissions = $role->permissions->groupBy(function ($permission) {
             return explode('_', $permission->name)[1] ?? 'general';
         });
 
@@ -57,7 +54,7 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all()->groupBy(function($permission) {
+        $permissions = Permission::all()->groupBy(function ($permission) {
             return explode('_', $permission->name)[1] ?? 'general';
         });
 
@@ -68,19 +65,19 @@ class RoleController extends Controller
 
     public function update(RoleRequest $request, Role $role)
     {
-//        return $request ;
+        //        return $request ;
         $role->update([
             'name' => $request->name,
-            'guard_name' => $request->guard_name ?? 'web'
+            'guard_name' => $request->guard_name ?? 'web',
         ]);
 
         if ($request->has('permissions')) {
             $permissions = Permission::whereIn('id', $request->permissions)->pluck('name')->toArray();
             $role->syncPermissions($permissions);
         }
-//        else {
-//            $role->syncPermissions([]);
-//        }
+        //        else {
+        //            $role->syncPermissions([]);
+        //        }
 
         return redirect()->route('roles.index')
             ->with('success', 'Role updated successfully.');

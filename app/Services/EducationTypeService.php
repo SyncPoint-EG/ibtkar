@@ -19,19 +19,14 @@ class EducationTypeService
 
     /**
      * Get all educationTypes with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all educationTypes without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class EducationTypeService
 
     /**
      * Find educationType by ID
-     *
-     * @param int $id
-     * @return EducationType|null
      */
     public function findById(int $id): ?EducationType
     {
@@ -52,8 +44,6 @@ class EducationTypeService
     /**
      * Find educationType by ID or fail
      *
-     * @param int $id
-     * @return EducationType
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): EducationType
@@ -64,8 +54,6 @@ class EducationTypeService
     /**
      * Create a new educationType
      *
-     * @param array $data
-     * @return EducationType
      * @throws \Exception
      */
     public function create(array $data): EducationType
@@ -90,9 +78,6 @@ class EducationTypeService
     /**
      * Update an existing educationType
      *
-     * @param EducationType $educationType
-     * @param array $data
-     * @return EducationType
      * @throws \Exception
      */
     public function update(EducationType $educationType, array $data): EducationType
@@ -113,7 +98,7 @@ class EducationTypeService
             Log::error('Error updating EducationType', [
                 'id' => $educationType->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class EducationTypeService
     /**
      * Delete a educationType
      *
-     * @param EducationType $educationType
-     * @return bool
      * @throws \Exception
      */
     public function delete(EducationType $educationType): bool
@@ -142,7 +125,7 @@ class EducationTypeService
             DB::rollBack();
             Log::error('Error deleting EducationType', [
                 'id' => $educationType->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class EducationTypeService
 
     /**
      * Search educationTypes based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class EducationTypeService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class EducationTypeService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class EducationTypeService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete educationTypes
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class EducationTypeService
 
             Log::info('Bulk delete educationTypes completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class EducationTypeService
             DB::rollBack();
             Log::error('Error in bulk delete educationTypes', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class EducationTypeService
     /**
      * Get educationTypes by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class EducationTypeService
 
     /**
      * Count total educationTypes
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class EducationTypeService
 
     /**
      * Check if educationType exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class EducationTypeService
 
     /**
      * Get latest educationTypes
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class EducationTypeService
     /**
      * Duplicate a educationType
      *
-     * @param EducationType $educationType
-     * @return EducationType
      * @throws \Exception
      */
     public function duplicate(EducationType $educationType): EducationType
@@ -284,7 +251,7 @@ class EducationTypeService
 
             Log::info('EducationType duplicated successfully', [
                 'original_id' => $educationType->id,
-                'new_id' => $newEducationType->id
+                'new_id' => $newEducationType->id,
             ]);
 
             return $newEducationType;
@@ -292,7 +259,7 @@ class EducationTypeService
             DB::rollBack();
             Log::error('Error duplicating EducationType', [
                 'id' => $educationType->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

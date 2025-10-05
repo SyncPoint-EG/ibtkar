@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeworkController extends Controller
 {
-    use GamificationTrait ;
+    use GamificationTrait;
+
     public function index()
     {
         $student = auth('student')->user();
@@ -29,15 +30,16 @@ class HomeworkController extends Controller
     public function show(Homework $homework)
     {
         $homework->load('questions.options');
+
         return new HomeworkResource($homework);
     }
 
-    public function submit(Request $request,  $homeworkId)
+    public function submit(Request $request, $homeworkId)
     {
         $student = Auth::user();
         $homework = Homework::with('questions.options', 'lesson.chapter.course')->findOrFail($homeworkId);
         // Authorization: Check if student is enrolled in the course
-        if (!$student->isEnrolledInCourse($homework->lesson->chapter->course_id)) {
+        if (! $student->isEnrolledInCourse($homework->lesson->chapter->course_id)) {
             return response()->json(['message' => 'You are not authorized to submit this homework.'], 403);
         }
 
@@ -70,7 +72,7 @@ class HomeworkController extends Controller
 
         foreach ($validated['answers'] as $answerData) {
             $question = $questions->get($answerData['question_id']);
-            if (!$question) {
+            if (! $question) {
                 continue;
             }
 
@@ -100,14 +102,14 @@ class HomeworkController extends Controller
         // HomeworkAnswer::insert($answers);
 
         $homeworkAttempt->update(['score' => $total_score]);
-        $points =$this->givePoints($student , 'solve_exam');
+        $points = $this->givePoints($student, 'solve_exam');
 
         return response()->json([
             'message' => 'Homework submitted successfully.',
             'score' => $total_score,
             'total_degree' => $questions->sum('marks'),
             'homework_attempt' => $homeworkAttempt,
-            'rewarded_points' => $points
+            'rewarded_points' => $points,
 
         ]);
     }

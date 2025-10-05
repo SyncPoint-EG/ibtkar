@@ -19,19 +19,14 @@ class GovernorateService
 
     /**
      * Get all governorates with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all governorates without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class GovernorateService
 
     /**
      * Find governorate by ID
-     *
-     * @param int $id
-     * @return Governorate|null
      */
     public function findById(int $id): ?Governorate
     {
@@ -52,8 +44,6 @@ class GovernorateService
     /**
      * Find governorate by ID or fail
      *
-     * @param int $id
-     * @return Governorate
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Governorate
@@ -64,8 +54,6 @@ class GovernorateService
     /**
      * Create a new governorate
      *
-     * @param array $data
-     * @return Governorate
      * @throws \Exception
      */
     public function create(array $data): Governorate
@@ -90,9 +78,6 @@ class GovernorateService
     /**
      * Update an existing governorate
      *
-     * @param Governorate $governorate
-     * @param array $data
-     * @return Governorate
      * @throws \Exception
      */
     public function update(Governorate $governorate, array $data): Governorate
@@ -113,7 +98,7 @@ class GovernorateService
             Log::error('Error updating Governorate', [
                 'id' => $governorate->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class GovernorateService
     /**
      * Delete a governorate
      *
-     * @param Governorate $governorate
-     * @return bool
      * @throws \Exception
      */
     public function delete(Governorate $governorate): bool
@@ -142,7 +125,7 @@ class GovernorateService
             DB::rollBack();
             Log::error('Error deleting Governorate', [
                 'id' => $governorate->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class GovernorateService
 
     /**
      * Search governorates based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class GovernorateService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class GovernorateService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class GovernorateService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete governorates
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class GovernorateService
 
             Log::info('Bulk delete governorates completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class GovernorateService
             DB::rollBack();
             Log::error('Error in bulk delete governorates', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class GovernorateService
     /**
      * Get governorates by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class GovernorateService
 
     /**
      * Count total governorates
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class GovernorateService
 
     /**
      * Check if governorate exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class GovernorateService
 
     /**
      * Get latest governorates
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class GovernorateService
     /**
      * Duplicate a governorate
      *
-     * @param Governorate $governorate
-     * @return Governorate
      * @throws \Exception
      */
     public function duplicate(Governorate $governorate): Governorate
@@ -284,7 +251,7 @@ class GovernorateService
 
             Log::info('Governorate duplicated successfully', [
                 'original_id' => $governorate->id,
-                'new_id' => $newGovernorate->id
+                'new_id' => $newGovernorate->id,
             ]);
 
             return $newGovernorate;
@@ -292,7 +259,7 @@ class GovernorateService
             DB::rollBack();
             Log::error('Error duplicating Governorate', [
                 'id' => $governorate->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

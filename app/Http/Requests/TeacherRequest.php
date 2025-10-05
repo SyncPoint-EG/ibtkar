@@ -26,25 +26,26 @@ class TeacherRequest extends FormRequest
         $passwordRules = $this->isMethod('post')
             ? ['required', 'string', 'min:6', 'confirmed']
             : ['nullable', 'string', 'min:6', 'confirmed'];
+
         return [
-            'name'         => 'required|string|max:255',
-            'phone'        => 'required|string|max:20',
-            'other_phone'  => 'nullable|string|max:20',
-            'bio'          => 'nullable|string',
-            'image'        => 'nullable|image',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'other_phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string',
+            'image' => 'nullable|image',
             'website_image' => 'nullable|image',
-            'rate'         => 'nullable|numeric',
-            'password'     => $passwordRules,
+            'rate' => 'nullable|numeric',
+            'password' => $passwordRules,
             'is_featured' => 'nullable|boolean',
-//            'day_of_week'  => 'nullable|integer|between:1,7',
-//            'time'         => 'nullable|date_format:H:i',
+            //            'day_of_week'  => 'nullable|integer|between:1,7',
+            //            'time'         => 'nullable|date_format:H:i',
 
             // Validate assignments (new way)
-//            'assignments' => 'required|array|min:1',
-//            'assignments.*.subject_id'  => 'required|exists:subjects,id',
-//            'assignments.*.stage_id'    => 'required|exists:stages,id',
-//            'assignments.*.grade_id'    => 'required|exists:grades,id',
-//            'assignments.*.division_id' => 'nullable|exists:divisions,id',
+            //            'assignments' => 'required|array|min:1',
+            //            'assignments.*.subject_id'  => 'required|exists:subjects,id',
+            //            'assignments.*.stage_id'    => 'required|exists:stages,id',
+            //            'assignments.*.grade_id'    => 'required|exists:grades,id',
+            //            'assignments.*.division_id' => 'nullable|exists:divisions,id',
         ];
     }
 }

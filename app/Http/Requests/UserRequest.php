@@ -25,12 +25,12 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|max:255',
-//            'name_ar' => 'required|max:255',
+            //            'name_ar' => 'required|max:255',
             'is_active' => 'required',
             'role' => 'required|exists:roles,id',
-//            'company_id' => 'required|exists:companies,id',
-//            'team_id' => 'required|exists:teams,id',
-//            'image' => 'nullable',
+            //            'company_id' => 'required|exists:companies,id',
+            //            'team_id' => 'required|exists:teams,id',
+            //            'image' => 'nullable',
             'phone' => 'required',
             'email' => 'required|email|unique:users,email',
         ];
@@ -41,7 +41,7 @@ class UserRequest extends FormRequest
             $rules['password'] = 'nullable|confirmed';
             // Update email validation to exclude current user
             $userId = $this->route('user') ? $this->route('user')->id : $this->route()->parameter('user');
-            $rules['email'] = 'required|email|unique:users,email,' . $userId;
+            $rules['email'] = 'required|email|unique:users,email,'.$userId;
         } else {
             // For store: password is required and confirmed
             $rules['password'] = 'required|confirmed';

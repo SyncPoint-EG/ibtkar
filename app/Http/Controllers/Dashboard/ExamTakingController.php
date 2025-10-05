@@ -1,4 +1,5 @@
 <?php
+
 // app/Http/Controllers/ExamTakingController.php
 
 namespace App\Http\Controllers\Dashboard;
@@ -20,10 +21,11 @@ class ExamTakingController extends Controller
     {
         $this->examAttemptService = $examAttemptService;
     }
+
     public function takeExam(Exam $exam)
     {
         // Check if exam is available
-        if (!$exam->isAvailable()) {
+        if (! $exam->isAvailable()) {
             return redirect()->back()->with('error', 'This exam is not currently available.');
         }
 
@@ -44,7 +46,7 @@ class ExamTakingController extends Controller
             ->where('is_submitted', false)
             ->first();
 
-        if (!$ongoingAttempt) {
+        if (! $ongoingAttempt) {
             // Create new attempt
             $ongoingAttempt = ExamAttempt::create([
                 'exam_id' => $exam->id,
@@ -153,7 +155,8 @@ class ExamTakingController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->with('error', 'Error submitting exam: ' . $e->getMessage());
+
+            return back()->with('error', 'Error submitting exam: '.$e->getMessage());
         }
     }
 
@@ -167,7 +170,7 @@ class ExamTakingController extends Controller
         $attempt->load([
             'exam.questions.options',
             'answers.question.options',
-            'answers.selectedOption'
+            'answers.selectedOption',
         ]);
 
         return view('dashboard.exams.results', compact('attempt'));

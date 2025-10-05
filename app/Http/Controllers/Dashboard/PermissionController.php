@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\PermissionRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PermissionRequest;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-
     public function index()
     {
         $permissions = Permission::latest()->paginate(10);
@@ -17,12 +15,10 @@ class PermissionController extends Controller
         return view('dashboard.permissions.index', compact('permissions'));
     }
 
-
     public function create()
     {
         return view('dashboard.permissions.create');
     }
-
 
     public function store(PermissionRequest $request)
     {
@@ -32,18 +28,15 @@ class PermissionController extends Controller
             ->with('success', 'Permission created successfully.');
     }
 
-
     public function show(Permission $permission)
     {
         return view('dashboard.permissions.show', compact('permission'));
     }
 
-
     public function edit(Permission $permission)
     {
         return view('dashboard.permissions.edit', compact('permission'));
     }
-
 
     public function update(PermissionRequest $request, Permission $permission)
     {
@@ -52,7 +45,6 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')
             ->with('success', 'Permission updated successfully.');
     }
-
 
     public function destroy(Permission $permission)
     {

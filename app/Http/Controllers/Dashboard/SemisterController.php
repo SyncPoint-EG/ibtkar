@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SemisterRequest;
-use App\Services\SemisterService;
 use App\Models\Semister;
-use Illuminate\Http\Request;
+use App\Services\SemisterService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class SemisterController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class SemisterController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class SemisterController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param SemisterRequest $request
-     * @return RedirectResponse
      */
     public function store(SemisterRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class SemisterController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Semister: ' . $e->getMessage());
+                ->with('error', 'Error creating Semister: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Semister $semister
-     * @return View
      */
     public function show(Semister $semister): View
     {
@@ -74,9 +63,6 @@ class SemisterController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Semister $semister
-     * @return View
      */
     public function edit(Semister $semister): View
     {
@@ -85,10 +71,6 @@ class SemisterController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param SemisterRequest $request
-     * @param Semister $semister
-     * @return RedirectResponse
      */
     public function update(SemisterRequest $request, Semister $semister): RedirectResponse
     {
@@ -100,15 +82,12 @@ class SemisterController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Semister: ' . $e->getMessage());
+                ->with('error', 'Error updating Semister: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Semister $semister
-     * @return RedirectResponse
      */
     public function destroy(Semister $semister): RedirectResponse
     {
@@ -119,7 +98,7 @@ class SemisterController extends Controller
                 ->with('success', 'Semister deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Semister: ' . $e->getMessage());
+                ->with('error', 'Error deleting Semister: '.$e->getMessage());
         }
     }
 }

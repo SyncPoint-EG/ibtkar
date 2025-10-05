@@ -11,9 +11,6 @@ class ChargeApprovalService
 {
     /**
      * Get all pending charges with pagination.
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getPendingChargesPaginated(int $perPage): LengthAwarePaginator
     {
@@ -25,8 +22,6 @@ class ChargeApprovalService
     /**
      * Accept a pending charge.
      *
-     * @param int $chargeId
-     * @return void
      * @throws \Exception
      */
     public function acceptCharge(int $chargeId): void
@@ -50,8 +45,6 @@ class ChargeApprovalService
     /**
      * Reject a pending charge.
      *
-     * @param int $chargeId
-     * @return void
      * @throws \Exception
      */
     public function rejectCharge(int $chargeId): void

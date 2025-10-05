@@ -25,6 +25,7 @@ class CenterExamService
     {
         $centerExam = CenterExam::findOrFail($id);
         $centerExam->update($data);
+
         return $centerExam;
     }
 

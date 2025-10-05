@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Question extends Model
 {
-
     public $with = ['options'];
+
     protected $fillable = [
         'exam_id',
         'question_text',
@@ -16,7 +16,7 @@ class Question extends Model
         'marks',
         'order',
         'image',
-        'correct_essay_answer'
+        'correct_essay_answer',
     ];
 
     public function getImageAttribute()
@@ -60,7 +60,7 @@ class Question extends Model
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
@@ -85,6 +85,7 @@ class Question extends Model
         if ($this->question_type === 'multiple_choice') {
             return $this->options()->where('is_correct', true)->first();
         }
+
         return null;
     }
 }

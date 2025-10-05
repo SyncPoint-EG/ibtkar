@@ -8,7 +8,8 @@ class Favorite extends Model
 {
     protected $guarded = [];
 
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 

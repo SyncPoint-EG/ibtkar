@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Mobile\Student;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SubjectTeacherResource;
 use App\Models\SubjectTeacher;
-use App\Models\Teacher;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
@@ -18,7 +16,7 @@ class TableController extends Controller
         $query = SubjectTeacher::with('teacher')->where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id);
 
-        if($student->division_id){
+        if ($student->division_id) {
             $query->where(function ($qq) use ($student) {
                 $qq->where('division_id', $student->division_id)
                     ->orWhereNull('division_id');
@@ -43,7 +41,7 @@ class TableController extends Controller
         $student = auth()->guard('student')->user();
         $query = SubjectTeacher::with('teacher')->where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
-            ->whereHas('teacher.courses', function ($q) use ($student) {
+            ->whereHas('teacher.courses', function ($q) {
                 $q->where(function ($q) {
                     $q->whereHas('payments')
                         ->orWhereHas('chapters.payments')
@@ -51,7 +49,7 @@ class TableController extends Controller
                 });
             });
 
-        if($student->division_id){
+        if ($student->division_id) {
             $query->where(function ($qq) use ($student) {
                 $qq->where('division_id', $student->division_id)
                     ->orWhereNull('division_id');

@@ -15,10 +15,11 @@ class LessonResource extends JsonResource
     public function toArray(Request $request): array
     {
         $user = auth('student')->user();
-        $watches_count = null ;
-        if($user){
-            $watches_count  = $this->resource->watches()->where('student_id', $user->id)?->first() ? 3 -  $this->resource->watches()->where('student_id', $user->id)?->first()?->count : 3 ;
+        $watches_count = null;
+        if ($user) {
+            $watches_count = $this->resource->watches()->where('student_id', $user->id)?->first() ? 3 - $this->resource->watches()->where('student_id', $user->id)?->first()?->count : 3;
         }
+
         return [
             'id' => $this->id,
             'name' => $this->name,

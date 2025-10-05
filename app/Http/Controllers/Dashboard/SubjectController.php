@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubjectRequest;
-use App\Services\SubjectService;
 use App\Models\Subject;
-use Illuminate\Http\Request;
+use App\Services\SubjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class SubjectController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class SubjectController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class SubjectController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param SubjectRequest $request
-     * @return RedirectResponse
      */
     public function store(SubjectRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class SubjectController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Subject: ' . $e->getMessage());
+                ->with('error', 'Error creating Subject: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Subject $subject
-     * @return View
      */
     public function show(Subject $subject): View
     {
@@ -74,9 +63,6 @@ class SubjectController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Subject $subject
-     * @return View
      */
     public function edit(Subject $subject): View
     {
@@ -85,10 +71,6 @@ class SubjectController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param SubjectRequest $request
-     * @param Subject $subject
-     * @return RedirectResponse
      */
     public function update(SubjectRequest $request, Subject $subject): RedirectResponse
     {
@@ -100,15 +82,12 @@ class SubjectController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Subject: ' . $e->getMessage());
+                ->with('error', 'Error updating Subject: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Subject $subject
-     * @return RedirectResponse
      */
     public function destroy(Subject $subject): RedirectResponse
     {
@@ -119,7 +98,7 @@ class SubjectController extends Controller
                 ->with('success', 'Subject deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Subject: ' . $e->getMessage());
+                ->with('error', 'Error deleting Subject: '.$e->getMessage());
         }
     }
 }

@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
-    use GamificationTrait ;
+    use GamificationTrait;
+
     protected ExamAttemptService $examAttemptService;
 
     public function __construct(ExamAttemptService $examAttemptService)
     {
         $this->examAttemptService = $examAttemptService;
     }
+
     public function index()
     {
         $student = auth('student')->user();
@@ -41,6 +43,7 @@ class ExamController extends Controller
     {
         $exam = Exam::findOrFail($examId);
         $exam->load('questions.options');
+
         return new ExamResource($exam);
     }
 
@@ -51,7 +54,7 @@ class ExamController extends Controller
 
         // Authorization: Check if student is eligible for this exam
         $isEligible = $exam->lesson ? $student->isEnrolledInLesson($exam->lesson) : $student->isEnrolledInCourse($exam->course_id);
-        if (!$isEligible) {
+        if (! $isEligible) {
             return response()->json(['message' => 'You are not authorized to submit this exam.(purchase the course first)'], 403);
         }
 
@@ -61,9 +64,9 @@ class ExamController extends Controller
             ->where('is_submitted', true)
             ->first();
 
-//        if ($previousAttempt && $previousAttempt->is_passed) {
-//            return response()->json(['message' => 'You have already submitted this exam.'], 400);
-//        }
+        //        if ($previousAttempt && $previousAttempt->is_passed) {
+        //            return response()->json(['message' => 'You have already submitted this exam.'], 400);
+        //        }
 
         $validated = $request->validate([
             'answers' => 'required|array',
@@ -87,7 +90,7 @@ class ExamController extends Controller
 
         foreach ($validated['answers'] as $answerData) {
             $question = $questions->get($answerData['question_id']);
-            if (!$question) {
+            if (! $question) {
                 continue;
             }
 
@@ -130,14 +133,14 @@ class ExamController extends Controller
         ]);
 
         $this->examAttemptService->checkIfPassed($examAttempt);
-        $points =$this->givePoints($student , 'solve_exam');
+        $points = $this->givePoints($student, 'solve_exam');
 
         return response()->json([
             'message' => 'Exam submitted successfully.',
             'score' => $total_score,
             'total_degree' => $examAttempt->total_marks,
             'exam_attempt' => $examAttempt,
-            'rewarded_points' => $points
+            'rewarded_points' => $points,
 
         ]);
     }

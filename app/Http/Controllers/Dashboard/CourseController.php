@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
+use App\Models\Course;
 use App\Models\Division;
 use App\Models\EducationType;
 use App\Models\Grade;
@@ -14,9 +15,8 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Watch;
 use App\Services\CourseService;
-use App\Models\Course;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CourseController extends Controller
@@ -30,8 +30,6 @@ class CourseController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -42,8 +40,6 @@ class CourseController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create($teacher_id = null): View
     {
@@ -58,51 +54,44 @@ class CourseController extends Controller
         if ($teacher_id) {
             $selectedTeacher = Teacher::find($teacher_id);
         }
-        return view('dashboard.courses.create',compact('educationTypes', 'stages', 'grades','divisions','semisters','subjects','teachers','selectedTeacher'));
+
+        return view('dashboard.courses.create', compact('educationTypes', 'stages', 'grades', 'divisions', 'semisters', 'subjects', 'teachers', 'selectedTeacher'));
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param CourseRequest $request
-     * @return RedirectResponse
      */
     public function store(CourseRequest $request): RedirectResponse
     {
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
-            if($request->hasFile('website_image')){
+            if ($request->hasFile('website_image')) {
                 $data['website_image'] = $request->file('website_image');
             }
             $course = $this->courseService->create($data);
 
-            return redirect()->route('courses.show',$course->id)
+            return redirect()->route('courses.show', $course->id)
                 ->with('success', 'Course created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Course: ' . $e->getMessage());
+                ->with('error', 'Error creating Course: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Course $course
-     * @return View
      */
     public function show(Course $course): View
     {
         $students = $this->courseService->getStudents($course);
+
         return view('dashboard.courses.show', compact('course', 'students'));
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Course $course
-     * @return View
      */
     public function edit(Course $course): View
     {
@@ -113,22 +102,19 @@ class CourseController extends Controller
         $divisions = Division::all();
         $semisters = Semister::all();
         $subjects = Subject::all();
-        return view('dashboard.courses.edit', compact('course','teachers','educationTypes','stages','grades','divisions','semisters','subjects'));
+
+        return view('dashboard.courses.edit', compact('course', 'teachers', 'educationTypes', 'stages', 'grades', 'divisions', 'semisters', 'subjects'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param CourseRequest $request
-     * @param Course $course
-     * @return RedirectResponse
      */
     public function update(CourseRequest $request, Course $course): RedirectResponse
     {
         try {
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
-            if($request->hasFile('website_image')){
+            if ($request->hasFile('website_image')) {
                 $data['website_image'] = $request->file('website_image');
             }
             $this->courseService->update($course, $data);
@@ -138,15 +124,12 @@ class CourseController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Course: ' . $e->getMessage());
+                ->with('error', 'Error updating Course: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Course $course
-     * @return RedirectResponse
      */
     public function destroy(Course $course): RedirectResponse
     {
@@ -157,25 +140,25 @@ class CourseController extends Controller
                 ->with('success', 'Course deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Course: ' . $e->getMessage());
+                ->with('error', 'Error deleting Course: '.$e->getMessage());
         }
     }
 
     public function toggleFeatured(Course $course): \Illuminate\Http\JsonResponse
     {
         try {
-            $course->is_featured = !$course->is_featured;
+            $course->is_featured = ! $course->is_featured;
             $course->save();
 
             return response()->json([
                 'success' => true,
                 'message' => __('dashboard.course.featured_status_updated'),
-                'is_featured' => $course->is_featured
+                'is_featured' => $course->is_featured,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('dashboard.common.error') . ': ' . $e->getMessage()
+                'message' => __('dashboard.common.error').': '.$e->getMessage(),
             ], 500);
         }
     }

@@ -12,23 +12,22 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable , HasRoles;
+    use HasFactory, HasRoles , Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-//    protected $fillable = [
-//        'name',
-//        'email',
-//        'password',
-//        'phone',
-//        'image'
-//    ];
+    //    protected $fillable = [
+    //        'name',
+    //        'email',
+    //        'password',
+    //        'phone',
+    //        'image'
+    //    ];
 
     protected $fillable = ['name', 'company_id', 'team_id', 'is_active', 'image', 'email', 'password', 'phone'];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -52,7 +51,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
 
     /**
      * Get the user's image URL.
@@ -99,7 +97,7 @@ class User extends Authenticatable
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
@@ -115,17 +113,15 @@ class User extends Authenticatable
         }
     }
 
-
-//    public function team()
-//    {
-//        return $this->belongsTo(\App\Models\Team::class);
-//    }
-//
-//    public function company()
-//    {
-//        return $this->belongsTo(\App\Models\Company::class);
-//    }
-
+    //    public function team()
+    //    {
+    //        return $this->belongsTo(\App\Models\Team::class);
+    //    }
+    //
+    //    public function company()
+    //    {
+    //        return $this->belongsTo(\App\Models\Company::class);
+    //    }
 
     public function scopeActive($query)
     {
@@ -141,5 +137,4 @@ class User extends Authenticatable
     {
         return $this->devices()->pluck('fcm_token')->toArray();
     }
-
 }

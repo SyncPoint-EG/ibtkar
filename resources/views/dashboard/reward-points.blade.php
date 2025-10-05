@@ -26,7 +26,7 @@
                             </div>
                             <div class="card-body collapse in">
                                 <div class="card-block">
-                                    <form action="{{ route('reward-points.update') }}" method="POST">
+                                    <form action="{{ route('reward-points.update') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <table class="table">
@@ -34,6 +34,7 @@
                                                 <tr>
                                                     <th>{{ trans('dashboard.reward_points.fields.reward') }}</th>
                                                     <th>{{ trans('dashboard.reward_points.fields.points_cost') }}</th>
+                                                    <th>{{ trans('dashboard.reward_points.fields.image') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -42,6 +43,10 @@
                                                         <td>{{ $rewardPoint->description }}</td>
                                                         <td>
                                                             <input type="number" name="points_cost[{{ $rewardPoint->id }}]" value="{{ $rewardPoint->points_cost }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="file" name="image[{{ $rewardPoint->id }}]" class="form-control">
+                                                            <img src="{{ $rewardPoint->image }}" alt="" width="100">
                                                         </td>
                                                     </tr>
                                                 @endforeach

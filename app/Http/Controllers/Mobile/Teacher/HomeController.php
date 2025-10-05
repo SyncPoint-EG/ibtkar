@@ -7,9 +7,8 @@ use App\Http\Resources\AttachmentResource;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\HomeworkResource;
 use App\Http\Resources\LessonResource;
-use App\Http\Resources\StudentProfileResource;
-use App\Http\Resources\TeacherStudentResource;
 use App\Http\Resources\StudentResource;
+use App\Http\Resources\TeacherStudentResource;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Exam;
@@ -18,28 +17,29 @@ use App\Models\Lesson;
 use App\Models\LessonAttachment;
 use App\Models\Payment;
 use App\Models\Student;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function getExams(){
+    public function getExams()
+    {
         $teacher = auth()->guard('teacher')->user();
         $exams = Exam::where(function ($query) use ($teacher) {
             $query->whereHas('lesson.chapter.course', function ($query) use ($teacher) {
                 $query->where('teacher_id', $teacher->id);
             })->orWhere('teacher_id', $teacher->id);
         })->where('is_active', 1)->get();
-//        })->where('is_active', 1)->whereDate('start_date','>',now())->get();
+        //        })->where('is_active', 1)->whereDate('start_date','>',now())->get();
 
         return ExamResource::collection($exams);
     }
 
-
-    public function getHomeworks(){
+    public function getHomeworks()
+    {
         $teacher = auth()->guard('teacher')->user();
         $homework = Homework::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
-        })->where('is_active', 1)->whereDate('due_date','>',now())->get();
+        })->where('is_active', 1)->whereDate('due_date', '>', now())->get();
+
         return HomeworkResource::collection($homework);
     }
 
@@ -49,6 +49,7 @@ class HomeController extends Controller
         $attachments = LessonAttachment::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
         })->paginate(15);
+
         return AttachmentResource::collection($attachments);
     }
 
@@ -64,6 +65,7 @@ class HomeController extends Controller
             ->distinct()
             ->pluck('student_id');
         $students = Student::whereIn('id', $studentsIds)->get();
+
         return StudentResource::collection($students);
 
     }
@@ -71,6 +73,7 @@ class HomeController extends Controller
     public function getStudent($studentId)
     {
         $student = Student::query()->findOrFail($studentId);
+
         return new TeacherStudentResource($student);
     }
 
@@ -80,6 +83,7 @@ class HomeController extends Controller
         $lessons = Lesson::whereHas('chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
         })->get();
+
         return LessonResource::collection($lessons);
     }
 }

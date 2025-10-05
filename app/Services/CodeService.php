@@ -19,19 +19,14 @@ class CodeService
 
     /**
      * Get all codes with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all codes without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class CodeService
 
     /**
      * Find code by ID
-     *
-     * @param int $id
-     * @return Code|null
      */
     public function findById(int $id): ?Code
     {
@@ -52,8 +44,6 @@ class CodeService
     /**
      * Find code by ID or fail
      *
-     * @param int $id
-     * @return Code
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Code
@@ -64,8 +54,6 @@ class CodeService
     /**
      * Create a new code
      *
-     * @param array $data
-     * @return Code
      * @throws \Exception
      */
     public function create(array $data): Code
@@ -90,9 +78,6 @@ class CodeService
     /**
      * Update an existing code
      *
-     * @param Code $code
-     * @param array $data
-     * @return Code
      * @throws \Exception
      */
     public function update(Code $code, array $data): Code
@@ -113,7 +98,7 @@ class CodeService
             Log::error('Error updating Code', [
                 'id' => $code->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class CodeService
     /**
      * Delete a code
      *
-     * @param Code $code
-     * @return bool
      * @throws \Exception
      */
     public function delete(Code $code): bool
@@ -142,7 +125,7 @@ class CodeService
             DB::rollBack();
             Log::error('Error deleting Code', [
                 'id' => $code->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,39 +133,36 @@ class CodeService
 
     /**
      * Search codes based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria, int $perPage = 15, array $with = []): LengthAwarePaginator
     {
         $query = $this->model->with($with);
 
-        if (isset($criteria['teacher_id']) && !empty($criteria['teacher_id'])) {
+        if (isset($criteria['teacher_id']) && ! empty($criteria['teacher_id'])) {
             $query->where('teacher_id', $criteria['teacher_id']);
         }
 
-        if (isset($criteria['expires_at']) && !empty($criteria['expires_at'])) {
+        if (isset($criteria['expires_at']) && ! empty($criteria['expires_at'])) {
             $query->whereDate('expires_at', $criteria['expires_at']);
         }
 
-        if (isset($criteria['for']) && !empty($criteria['for'])) {
+        if (isset($criteria['for']) && ! empty($criteria['for'])) {
             $query->where('for', $criteria['for']);
         }
 
-        if (isset($criteria['created_at_from']) && !empty($criteria['created_at_from'])) {
+        if (isset($criteria['created_at_from']) && ! empty($criteria['created_at_from'])) {
             $query->where('created_at', '>=', $criteria['created_at_from']);
         }
 
-        if (isset($criteria['created_at_to']) && !empty($criteria['created_at_to'])) {
+        if (isset($criteria['created_at_to']) && ! empty($criteria['created_at_to'])) {
             $query->where('created_at', '<=', $criteria['created_at_to']);
         }
 
-        if (isset($criteria['code']) && !empty($criteria['code'])) {
-            $query->where('code', 'like', '%' . $criteria['code'] . '%');
+        if (isset($criteria['code']) && ! empty($criteria['code'])) {
+            $query->where('code', 'like', '%'.$criteria['code'].'%');
         }
 
-        if (isset($criteria['code_classification']) && !empty($criteria['code_classification'])) {
+        if (isset($criteria['code_classification']) && ! empty($criteria['code_classification'])) {
             $query->where('code_classification', $criteria['code_classification']);
         }
 
@@ -207,8 +187,6 @@ class CodeService
     /**
      * Bulk delete codes
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -222,7 +200,7 @@ class CodeService
 
             Log::info('Bulk delete codes completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -230,7 +208,7 @@ class CodeService
             DB::rollBack();
             Log::error('Error in bulk delete codes', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -239,9 +217,7 @@ class CodeService
     /**
      * Get codes by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -250,8 +226,6 @@ class CodeService
 
     /**
      * Count total codes
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -260,9 +234,6 @@ class CodeService
 
     /**
      * Check if code exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -271,9 +242,6 @@ class CodeService
 
     /**
      * Get latest codes
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -283,8 +251,6 @@ class CodeService
     /**
      * Duplicate a code
      *
-     * @param Code $code
-     * @return Code
      * @throws \Exception
      */
     public function duplicate(Code $code): Code
@@ -301,7 +267,7 @@ class CodeService
 
             Log::info('Code duplicated successfully', [
                 'original_id' => $code->id,
-                'new_id' => $newCode->id
+                'new_id' => $newCode->id,
             ]);
 
             return $newCode;
@@ -309,17 +275,19 @@ class CodeService
             DB::rollBack();
             Log::error('Error duplicating Code', [
                 'id' => $code->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
     }
+
     public function generateUniqueCode()
     {
-        $code = null ;
-        do{
+        $code = null;
+        do {
             $code = str_pad(random_int(1000000000, 9999999999), 10, '0', STR_PAD_LEFT);
-        }while(Code::query()->where('code', $code)->exists());
+        } while (Code::query()->where('code', $code)->exists());
+
         return $code;
     }
 }

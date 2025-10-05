@@ -16,7 +16,7 @@ class Subject extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'logo', 'second_logo','uuid'];
+    protected $fillable = ['name', 'logo', 'second_logo', 'uuid'];
 
     /**
      * Get the table associated with the model.
@@ -24,10 +24,10 @@ class Subject extends Model
      * @return string
      */
 
-//     public function getNameAttribute()
-//     {
-//         return $this->attributes['name_'.app()->getLocale()];
-//     }
+    //     public function getNameAttribute()
+    //     {
+    //         return $this->attributes['name_'.app()->getLocale()];
+    //     }
     public static function boot()
     {
         parent::boot();
@@ -40,11 +40,11 @@ class Subject extends Model
             $subject->uuid = $code;
         });
     }
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function getLogoAttribute()
     {
@@ -87,7 +87,7 @@ class Subject extends Model
             $this->attributes['logo'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['logo'] = $value;
         }
     }
@@ -102,7 +102,7 @@ class Subject extends Model
 
             // Check if file exists in storage
             if (Storage::disk('public')->exists($this->attributes['second_logo'])) {
-                return asset(Storage::url($this->attributes['second_logo'])) ;
+                return asset(Storage::url($this->attributes['second_logo']));
             }
         }
 
@@ -133,11 +133,10 @@ class Subject extends Model
             $this->attributes['second_logo'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['second_logo'] = $value;
         }
     }
-
 
     public function courses()
     {

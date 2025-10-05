@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,8 +23,6 @@ class Guardian extends Authenticatable
      *
      * @return string
      */
-
-
     protected function casts(): array
     {
         return [
@@ -42,15 +39,16 @@ class Guardian extends Authenticatable
     {
         return $this->devices()->pluck('fcm_token')->toArray();
     }
-     public function getNameAttribute()
-     {
-         return $this->attributes['name_'.app()->getLocale()];
-     }
 
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
+    public function getNameAttribute()
+    {
+        return $this->attributes['name_'.app()->getLocale()];
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function generateVerificationCode()
     {
@@ -58,7 +56,7 @@ class Guardian extends Authenticatable
 
         $this->update([
             'verification_code' => $code,
-//            'verification_code_expires_at' => now()->addMinutes(15), // Code expires in 15 minutes
+            //            'verification_code_expires_at' => now()->addMinutes(15), // Code expires in 15 minutes
         ]);
 
         return $code;

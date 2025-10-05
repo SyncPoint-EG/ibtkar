@@ -19,20 +19,16 @@ class SubjectService
 
     /**
      * Get all subjects with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
-        $perPage = request()->perPage ?? $perPage ;
+        $perPage = request()->perPage ?? $perPage;
+
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all subjects without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -41,9 +37,6 @@ class SubjectService
 
     /**
      * Find subject by ID
-     *
-     * @param int $id
-     * @return Subject|null
      */
     public function findById(int $id): ?Subject
     {
@@ -53,8 +46,6 @@ class SubjectService
     /**
      * Find subject by ID or fail
      *
-     * @param int $id
-     * @return Subject
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Subject
@@ -65,8 +56,6 @@ class SubjectService
     /**
      * Create a new subject
      *
-     * @param array $data
-     * @return Subject
      * @throws \Exception
      */
     public function create(array $data): Subject
@@ -91,9 +80,6 @@ class SubjectService
     /**
      * Update an existing subject
      *
-     * @param Subject $subject
-     * @param array $data
-     * @return Subject
      * @throws \Exception
      */
     public function update(Subject $subject, array $data): Subject
@@ -114,7 +100,7 @@ class SubjectService
             Log::error('Error updating Subject', [
                 'id' => $subject->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -123,8 +109,6 @@ class SubjectService
     /**
      * Delete a subject
      *
-     * @param Subject $subject
-     * @return bool
      * @throws \Exception
      */
     public function delete(Subject $subject): bool
@@ -143,7 +127,7 @@ class SubjectService
             DB::rollBack();
             Log::error('Error deleting Subject', [
                 'id' => $subject->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -151,9 +135,6 @@ class SubjectService
 
     /**
      * Search subjects based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -161,9 +142,9 @@ class SubjectService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -171,11 +152,11 @@ class SubjectService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -185,14 +166,13 @@ class SubjectService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete subjects
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -206,7 +186,7 @@ class SubjectService
 
             Log::info('Bulk delete subjects completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -214,7 +194,7 @@ class SubjectService
             DB::rollBack();
             Log::error('Error in bulk delete subjects', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -223,9 +203,7 @@ class SubjectService
     /**
      * Get subjects by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -234,8 +212,6 @@ class SubjectService
 
     /**
      * Count total subjects
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -244,9 +220,6 @@ class SubjectService
 
     /**
      * Check if subject exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -255,9 +228,6 @@ class SubjectService
 
     /**
      * Get latest subjects
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -267,8 +237,6 @@ class SubjectService
     /**
      * Duplicate a subject
      *
-     * @param Subject $subject
-     * @return Subject
      * @throws \Exception
      */
     public function duplicate(Subject $subject): Subject
@@ -285,7 +253,7 @@ class SubjectService
 
             Log::info('Subject duplicated successfully', [
                 'original_id' => $subject->id,
-                'new_id' => $newSubject->id
+                'new_id' => $newSubject->id,
             ]);
 
             return $newSubject;
@@ -293,7 +261,7 @@ class SubjectService
             DB::rollBack();
             Log::error('Error duplicating Subject', [
                 'id' => $subject->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

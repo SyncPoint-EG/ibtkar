@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Mobile\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Story;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class StoryController extends Controller
 {
     public function index()
     {
         $teacher = auth()->guard('teacher')->user();
-        $stories = Story::with('teacher')->where('teacher_id',$teacher->id)->where('created_at', '>=', now()->subDay())->get();
+        $stories = Story::with('teacher')->where('teacher_id', $teacher->id)->where('created_at', '>=', now()->subDay())->get();
+
         return response()->json($stories);
     }
 

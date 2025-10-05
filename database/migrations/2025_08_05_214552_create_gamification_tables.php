@@ -27,7 +27,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        
     }
 
     /**
@@ -37,6 +36,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('action_points');
         Schema::dropIfExists('reward_points');
-        
+
     }
 };

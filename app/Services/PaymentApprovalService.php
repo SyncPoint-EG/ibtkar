@@ -10,9 +10,6 @@ class PaymentApprovalService
 {
     /**
      * Get all pending payments with pagination.
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getPendingPaymentsPaginated(int $perPage): LengthAwarePaginator
     {
@@ -25,7 +22,7 @@ class PaymentApprovalService
             'lesson.chapter.course.subject',
             'lesson.chapter.course.teacher',
             'chapter.course.subject',
-            'chapter.course.teacher'
+            'chapter.course.teacher',
         ])->latest()->paginate($perPage);
     }
 
@@ -49,8 +46,6 @@ class PaymentApprovalService
     /**
      * Accept a pending payment.
      *
-     * @param int $paymentId
-     * @return void
      * @throws \Exception
      */
     public function acceptPayment(int $paymentId): void
@@ -77,8 +72,6 @@ class PaymentApprovalService
     /**
      * Reject a pending payment.
      *
-     * @param int $paymentId
-     * @return void
      * @throws \Exception
      */
     public function rejectPayment(int $paymentId): void

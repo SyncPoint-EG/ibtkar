@@ -23,15 +23,15 @@ class Banner extends Model
      * @return string
      */
 
-//     public function getNameAttribute()
-//     {
-//         return $this->attributes['name_'.app()->getLocale()];
-//     }
+    //     public function getNameAttribute()
+    //     {
+    //         return $this->attributes['name_'.app()->getLocale()];
+    //     }
 
-     public function scopeActive($query)
-     {
-         return $query->where('is_active', 1);
-     }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 
     public function getImageAttribute()
     {
@@ -74,10 +74,8 @@ class Banner extends Model
             $this->attributes['image'] = $path;
         }
         // If it's a string path
-        else if (is_string($value)) {
+        elseif (is_string($value)) {
             $this->attributes['image'] = $value;
         }
     }
-
-
 }

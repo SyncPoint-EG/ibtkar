@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActionPoint;
-use App\Models\RewardPoint;
 use App\Models\LuckWheelItem;
+use App\Models\RewardPoint;
 use Illuminate\Http\Request;
 
 class GamificationController extends Controller
@@ -13,6 +13,7 @@ class GamificationController extends Controller
     public function editActionPoints()
     {
         $actionPoints = ActionPoint::all();
+
         return view('dashboard.action-points', compact('actionPoints'));
     }
 
@@ -34,6 +35,7 @@ class GamificationController extends Controller
     public function editRewardPoints()
     {
         $rewardPoints = RewardPoint::all();
+
         return view('dashboard.reward-points', compact('rewardPoints'));
     }
 
@@ -42,10 +44,19 @@ class GamificationController extends Controller
         $request->validate([
             'points_cost' => 'required|array',
             'points_cost.*' => 'required|integer|min:0',
+            'image' => 'nullable|array',
+            'image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         foreach ($request->points_cost as $id => $points_cost) {
-            RewardPoint::where('id', $id)->update(['points_cost' => $points_cost]);
+            $rewardPoint = RewardPoint::find($id);
+            if ($rewardPoint) {
+                $rewardPoint->points_cost = $points_cost;
+                if ($request->hasFile('image.'.$id)) {
+                    $rewardPoint->image = $request->file('image.'.$id);
+                }
+                $rewardPoint->save();
+            }
         }
 
         return redirect()->route('reward-points.edit')
@@ -55,6 +66,7 @@ class GamificationController extends Controller
     public function editLuckWheelItems()
     {
         $luckWheelItems = LuckWheelItem::all();
+
         return view('dashboard.luck-wheel', compact('luckWheelItems'));
     }
 

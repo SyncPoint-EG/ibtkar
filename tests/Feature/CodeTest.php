@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Code;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -41,7 +40,8 @@ class CodeTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_codes_index(){
+    public function a_user_can_view_codes_index()
+    {
         $this->withoutExceptionHandling();
         $response = $this->get(route('codes.index'));
         $response->assertOk();

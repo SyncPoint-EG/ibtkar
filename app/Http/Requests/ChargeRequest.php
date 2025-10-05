@@ -22,9 +22,9 @@ class ChargeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method'    => 'required|in:instapay,wallet,code',
-            'payment_image'     => 'required|image|mimes:jpg,jpeg,png',
-            'phone_number'      => 'required',
+            'payment_method' => 'required|in:instapay,wallet,code',
+            'payment_image' => 'required|image|mimes:jpg,jpeg,png',
+            'phone_number' => 'required',
         ];
     }
 }

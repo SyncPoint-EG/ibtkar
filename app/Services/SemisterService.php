@@ -19,19 +19,14 @@ class SemisterService
 
     /**
      * Get all semisters with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all semisters without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class SemisterService
 
     /**
      * Find semister by ID
-     *
-     * @param int $id
-     * @return Semister|null
      */
     public function findById(int $id): ?Semister
     {
@@ -52,8 +44,6 @@ class SemisterService
     /**
      * Find semister by ID or fail
      *
-     * @param int $id
-     * @return Semister
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Semister
@@ -64,8 +54,6 @@ class SemisterService
     /**
      * Create a new semister
      *
-     * @param array $data
-     * @return Semister
      * @throws \Exception
      */
     public function create(array $data): Semister
@@ -90,9 +78,6 @@ class SemisterService
     /**
      * Update an existing semister
      *
-     * @param Semister $semister
-     * @param array $data
-     * @return Semister
      * @throws \Exception
      */
     public function update(Semister $semister, array $data): Semister
@@ -113,7 +98,7 @@ class SemisterService
             Log::error('Error updating Semister', [
                 'id' => $semister->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class SemisterService
     /**
      * Delete a semister
      *
-     * @param Semister $semister
-     * @return bool
      * @throws \Exception
      */
     public function delete(Semister $semister): bool
@@ -142,7 +125,7 @@ class SemisterService
             DB::rollBack();
             Log::error('Error deleting Semister', [
                 'id' => $semister->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class SemisterService
 
     /**
      * Search semisters based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class SemisterService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class SemisterService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class SemisterService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete semisters
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class SemisterService
 
             Log::info('Bulk delete semisters completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class SemisterService
             DB::rollBack();
             Log::error('Error in bulk delete semisters', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class SemisterService
     /**
      * Get semisters by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class SemisterService
 
     /**
      * Count total semisters
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class SemisterService
 
     /**
      * Check if semister exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class SemisterService
 
     /**
      * Get latest semisters
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class SemisterService
     /**
      * Duplicate a semister
      *
-     * @param Semister $semister
-     * @return Semister
      * @throws \Exception
      */
     public function duplicate(Semister $semister): Semister
@@ -284,7 +251,7 @@ class SemisterService
 
             Log::info('Semister duplicated successfully', [
                 'original_id' => $semister->id,
-                'new_id' => $newSemister->id
+                'new_id' => $newSemister->id,
             ]);
 
             return $newSemister;
@@ -292,7 +259,7 @@ class SemisterService
             DB::rollBack();
             Log::error('Error duplicating Semister', [
                 'id' => $semister->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

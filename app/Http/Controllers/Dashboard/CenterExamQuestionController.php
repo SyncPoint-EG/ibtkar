@@ -61,14 +61,15 @@ class CenterExamQuestionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Question added successfully.',
-                'question' => $question
+                'question' => $question,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to add question.',
-                'errors' => ['general' => [$e->getMessage()]]
+                'errors' => ['general' => [$e->getMessage()]],
             ], 500);
         }
     }
@@ -128,14 +129,15 @@ class CenterExamQuestionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Question updated successfully.',
-                'question' => $question
+                'question' => $question,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update question.',
-                'errors' => ['general' => [$e->getMessage()]]
+                'errors' => ['general' => [$e->getMessage()]],
             ], 500);
         }
     }
@@ -150,16 +152,18 @@ class CenterExamQuestionController extends Controller
             $question->options()->delete();
             $question->delete();
             DB::commit();
+
             return response()->json([
                 'success' => true,
-                'message' => 'Question deleted successfully.'
+                'message' => 'Question deleted successfully.',
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete question.',
-                'errors' => ['general' => [$e->getMessage()]]
+                'errors' => ['general' => [$e->getMessage()]],
             ], 500);
         }
     }
@@ -167,9 +171,10 @@ class CenterExamQuestionController extends Controller
     public function edit(CenterExamQuestion $question)
     {
         $question->load('options');
+
         return response()->json([
             'success' => true,
-            'question' => $question
+            'question' => $question,
         ]);
     }
 }

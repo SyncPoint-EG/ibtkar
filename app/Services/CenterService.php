@@ -19,19 +19,14 @@ class CenterService
 
     /**
      * Get all centers with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all centers without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class CenterService
 
     /**
      * Find center by ID
-     *
-     * @param int $id
-     * @return Center|null
      */
     public function findById(int $id): ?Center
     {
@@ -52,8 +44,6 @@ class CenterService
     /**
      * Find center by ID or fail
      *
-     * @param int $id
-     * @return Center
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): Center
@@ -64,8 +54,6 @@ class CenterService
     /**
      * Create a new center
      *
-     * @param array $data
-     * @return Center
      * @throws \Exception
      */
     public function create(array $data): Center
@@ -90,9 +78,6 @@ class CenterService
     /**
      * Update an existing center
      *
-     * @param Center $center
-     * @param array $data
-     * @return Center
      * @throws \Exception
      */
     public function update(Center $center, array $data): Center
@@ -113,7 +98,7 @@ class CenterService
             Log::error('Error updating Center', [
                 'id' => $center->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class CenterService
     /**
      * Delete a center
      *
-     * @param Center $center
-     * @return bool
      * @throws \Exception
      */
     public function delete(Center $center): bool
@@ -142,7 +125,7 @@ class CenterService
             DB::rollBack();
             Log::error('Error deleting Center', [
                 'id' => $center->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class CenterService
 
     /**
      * Search centers based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class CenterService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class CenterService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class CenterService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete centers
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class CenterService
 
             Log::info('Bulk delete centers completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class CenterService
             DB::rollBack();
             Log::error('Error in bulk delete centers', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class CenterService
     /**
      * Get centers by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class CenterService
 
     /**
      * Count total centers
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class CenterService
 
     /**
      * Check if center exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class CenterService
 
     /**
      * Get latest centers
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class CenterService
     /**
      * Duplicate a center
      *
-     * @param Center $center
-     * @return Center
      * @throws \Exception
      */
     public function duplicate(Center $center): Center
@@ -284,7 +251,7 @@ class CenterService
 
             Log::info('Center duplicated successfully', [
                 'original_id' => $center->id,
-                'new_id' => $newCenter->id
+                'new_id' => $newCenter->id,
             ]);
 
             return $newCenter;
@@ -292,7 +259,7 @@ class CenterService
             DB::rollBack();
             Log::error('Error duplicating Center', [
                 'id' => $center->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

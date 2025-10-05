@@ -1,48 +1,41 @@
 <?php
 
+use App\Http\Controllers\Dashboard\BannerController;
+use App\Http\Controllers\Dashboard\CenterController;
+use App\Http\Controllers\Dashboard\CenterExamController;
 use App\Http\Controllers\Dashboard\CenterExamQuestionController;
+use App\Http\Controllers\Dashboard\ChapterController;
+use App\Http\Controllers\Dashboard\ChargeApprovalController;
+use App\Http\Controllers\Dashboard\CodeController;
+use App\Http\Controllers\Dashboard\CourseController;
+use App\Http\Controllers\Dashboard\DistrictController;
+use App\Http\Controllers\Dashboard\DivisionController;
+use App\Http\Controllers\Dashboard\EducationTypeController;
+use App\Http\Controllers\Dashboard\ExamController;
+use App\Http\Controllers\Dashboard\GovernorateController;
+use App\Http\Controllers\Dashboard\GradeController;
+use App\Http\Controllers\Dashboard\GuardianController;
+use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 use App\Http\Controllers\Dashboard\HomeworkController;
 use App\Http\Controllers\Dashboard\HomeworkQuestionController;
+use App\Http\Controllers\Dashboard\LessonAttachmentController;
+use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\PaymentApprovalController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
-use App\Http\Controllers\Dashboard\GamificationController;
+use App\Http\Controllers\Dashboard\SemisterController;
 use App\Http\Controllers\Dashboard\SettingsController;
-use App\Http\Controllers\Dashboard\CenterExamController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\PostController;
-use App\Http\Controllers\Dashboard\CompanyController;
-use App\Http\Controllers\Dashboard\TeamController;
-use App\Http\Controllers\Dashboard\UserController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\GovernorateController;
-use App\Http\Controllers\Dashboard\DistrictController;
-use App\Http\Controllers\Dashboard\CenterController;
 use App\Http\Controllers\Dashboard\StageController;
-use App\Http\Controllers\Dashboard\GradeController;
-use App\Http\Controllers\Dashboard\DivisionController;
 use App\Http\Controllers\Dashboard\StudentController;
-use App\Http\Controllers\Dashboard\GuardianController;
 use App\Http\Controllers\Dashboard\SubjectController;
 use App\Http\Controllers\Dashboard\TeacherController;
-use App\Http\Controllers\Dashboard\EducationTypeController;
-use App\Http\Controllers\Dashboard\SemisterController;
-use App\Http\Controllers\Dashboard\CourseController;
-use App\Http\Controllers\Dashboard\ChapterController;
-use App\Http\Controllers\Dashboard\LessonController;
-use App\Http\Controllers\Dashboard\LessonAttachmentController;
-use App\Http\Controllers\Dashboard\ExamController;
-use App\Http\Controllers\Dashboard\BannerController;
-use App\Http\Controllers\Dashboard\CodeController;
-use App\Http\Controllers\Dashboard\PaymentApprovalController;
-use App\Http\Controllers\Dashboard\ChargeApprovalController;
-use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
+use App\Http\Controllers\Dashboard\UserController;
+use Illuminate\Support\Facades\Route;
 
+Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
- Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class,'index'])->name('dashboard')->middleware('auth');
-
-//Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
-
+// Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 
 // Authentication Routes
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'showRegisterForm'])->name('register')->middleware('guest');
@@ -59,15 +52,13 @@ Route::put('/profile', [App\Http\Controllers\AuthController::class, 'updateProfi
 Route::get('/forgot-password', [App\Http\Controllers\AuthController::class, 'showForgotPasswordForm'])->name('password.request')->middleware('guest');
 Route::get('/reset-password', [App\Http\Controllers\AuthController::class, 'showResetPasswordForm'])->name('password.reset')->middleware('guest');
 
-
-
 // Profile routes (protected by auth middleware)
 Route::middleware(['auth'])->group(function () {
-//    Route::get('/statistics', function () {
-//
-//        return view('dashboard.temp.index');
-//    })->name('dashboard');
-//    Route::get('/dashboard', [DashboardHomeController::class, 'index'])->name('dashboard');
+    //    Route::get('/statistics', function () {
+    //
+    //        return view('dashboard.temp.index');
+    //    })->name('dashboard');
+    //    Route::get('/dashboard', [DashboardHomeController::class, 'index'])->name('dashboard');
     // Profile edit page
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
@@ -141,18 +132,8 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-
-
-
-
-
-
-
-
-
-
 // Routes for Role
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('roles', [RoleController::class, 'index'])
         ->name('roles.index')
         ->middleware('can:view_role');
@@ -183,7 +164,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Permission
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('permissions', [PermissionController::class, 'index'])
         ->name('permissions.index')
         ->middleware('can:view_permission');
@@ -213,10 +194,8 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_permission');
 });
 
-
-
 // Routes for User
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('users', [UserController::class, 'index'])
         ->name('users.index')
         ->middleware('can:view_user');
@@ -246,10 +225,8 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_user');
 });
 
-
-
 // Routes for Governorate
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('governorates', [GovernorateController::class, 'index'])
         ->name('governorates.index')
         ->middleware('can:view_governorate');
@@ -280,7 +257,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Governorate
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('governorates', [GovernorateController::class, 'index'])
         ->name('governorates.index')
         ->middleware('can:view_governorate');
@@ -311,7 +288,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Governorate
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('governorates', [GovernorateController::class, 'index'])
         ->name('governorates.index')
         ->middleware('can:view_governorate');
@@ -342,7 +319,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for District
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('districts', [DistrictController::class, 'index'])
         ->name('districts.index')
         ->middleware('can:view_district');
@@ -373,7 +350,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Center
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('centers', [CenterController::class, 'index'])
         ->name('centers.index')
         ->middleware('can:view_center');
@@ -404,7 +381,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Stage
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('stages', [StageController::class, 'index'])
         ->name('stages.index')
         ->middleware('can:view_stage');
@@ -435,7 +412,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Grade
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('grades', [GradeController::class, 'index'])
         ->name('grades.index')
         ->middleware('can:view_grade');
@@ -466,69 +443,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Grade
-Route::middleware(['auth'])->group(function() {
-    Route::get('grades', [GradeController::class, 'index'])
-        ->name('grades.index')
-        ->middleware('can:view_grade');
-
-    Route::get('grades/create', [GradeController::class, 'create'])
-        ->name('grades.create')
-        ->middleware('can:create_grade');
-
-    Route::post('grades', [GradeController::class, 'store'])
-        ->name('grades.store')
-        ->middleware('can:create_grade');
-
-    Route::get('grades/{grade}', [GradeController::class, 'show'])
-        ->name('grades.show')
-        ->middleware('can:view_grade');
-
-    Route::get('grades/{grade}/edit', [GradeController::class, 'edit'])
-        ->name('grades.edit')
-        ->middleware('can:edit_grade');
-
-    Route::put('grades/{grade}', [GradeController::class, 'update'])
-        ->name('grades.update')
-        ->middleware('can:edit_grade');
-
-    Route::delete('grades/{grade}', [GradeController::class, 'destroy'])
-        ->name('grades.destroy')
-        ->middleware('can:delete_grade');
-});
-
-// Routes for District
-Route::middleware(['auth'])->group(function() {
-    Route::get('districts', [DistrictController::class, 'index'])
-        ->name('districts.index')
-        ->middleware('can:view_district');
-
-    Route::get('districts/create', [DistrictController::class, 'create'])
-        ->name('districts.create')
-        ->middleware('can:create_district');
-
-    Route::post('districts', [DistrictController::class, 'store'])
-        ->name('districts.store')
-        ->middleware('can:create_district');
-
-    Route::get('districts/{district}', [DistrictController::class, 'show'])
-        ->name('districts.show')
-        ->middleware('can:view_district');
-
-    Route::get('districts/{district}/edit', [DistrictController::class, 'edit'])
-        ->name('districts.edit')
-        ->middleware('can:edit_district');
-
-    Route::put('districts/{district}', [DistrictController::class, 'update'])
-        ->name('districts.update')
-        ->middleware('can:edit_district');
-
-    Route::delete('districts/{district}', [DistrictController::class, 'destroy'])
-        ->name('districts.destroy')
-        ->middleware('can:delete_district');
-});
-
-// Routes for Grade
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('grades', [GradeController::class, 'index'])
         ->name('grades.index')
         ->middleware('can:view_grade');
@@ -559,7 +474,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for District
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('districts', [DistrictController::class, 'index'])
         ->name('districts.index')
         ->middleware('can:view_district');
@@ -590,7 +505,69 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Grade
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
+    Route::get('grades', [GradeController::class, 'index'])
+        ->name('grades.index')
+        ->middleware('can:view_grade');
+
+    Route::get('grades/create', [GradeController::class, 'create'])
+        ->name('grades.create')
+        ->middleware('can:create_grade');
+
+    Route::post('grades', [GradeController::class, 'store'])
+        ->name('grades.store')
+        ->middleware('can:create_grade');
+
+    Route::get('grades/{grade}', [GradeController::class, 'show'])
+        ->name('grades.show')
+        ->middleware('can:view_grade');
+
+    Route::get('grades/{grade}/edit', [GradeController::class, 'edit'])
+        ->name('grades.edit')
+        ->middleware('can:edit_grade');
+
+    Route::put('grades/{grade}', [GradeController::class, 'update'])
+        ->name('grades.update')
+        ->middleware('can:edit_grade');
+
+    Route::delete('grades/{grade}', [GradeController::class, 'destroy'])
+        ->name('grades.destroy')
+        ->middleware('can:delete_grade');
+});
+
+// Routes for District
+Route::middleware(['auth'])->group(function () {
+    Route::get('districts', [DistrictController::class, 'index'])
+        ->name('districts.index')
+        ->middleware('can:view_district');
+
+    Route::get('districts/create', [DistrictController::class, 'create'])
+        ->name('districts.create')
+        ->middleware('can:create_district');
+
+    Route::post('districts', [DistrictController::class, 'store'])
+        ->name('districts.store')
+        ->middleware('can:create_district');
+
+    Route::get('districts/{district}', [DistrictController::class, 'show'])
+        ->name('districts.show')
+        ->middleware('can:view_district');
+
+    Route::get('districts/{district}/edit', [DistrictController::class, 'edit'])
+        ->name('districts.edit')
+        ->middleware('can:edit_district');
+
+    Route::put('districts/{district}', [DistrictController::class, 'update'])
+        ->name('districts.update')
+        ->middleware('can:edit_district');
+
+    Route::delete('districts/{district}', [DistrictController::class, 'destroy'])
+        ->name('districts.destroy')
+        ->middleware('can:delete_district');
+});
+
+// Routes for Grade
+Route::middleware(['auth'])->group(function () {
     Route::get('grades', [GradeController::class, 'index'])
         ->name('grades.index')
         ->middleware('can:view_grade');
@@ -621,7 +598,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Division
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('divisions', [DivisionController::class, 'index'])
         ->name('divisions.index')
         ->middleware('can:view_division');
@@ -651,10 +628,8 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_division');
 });
 
-
-
 // Routes for Student
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('students', [StudentController::class, 'index'])
         ->name('students.index')
         ->middleware('can:view_student');
@@ -697,7 +672,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Guardian
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('guardians', [GuardianController::class, 'index'])
         ->name('guardians.index')
         ->middleware('can:view_guardian');
@@ -728,7 +703,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Subject
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('subjects', [SubjectController::class, 'index'])
         ->name('subjects.index')
         ->middleware('can:view_subject');
@@ -759,7 +734,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Teacher
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('teachers', [TeacherController::class, 'index'])
         ->name('teachers.index')
         ->middleware('can:view_teacher');
@@ -827,7 +802,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for EducationType
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('education-types', [EducationTypeController::class, 'index'])
         ->name('education-types.index')
         ->middleware('can:view_educationtype');
@@ -858,7 +833,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Semister
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('semisters', [SemisterController::class, 'index'])
         ->name('semisters.index')
         ->middleware('can:view_semister');
@@ -888,10 +863,8 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_semister');
 });
 
-
-
 // Routes for Course
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('courses', [CourseController::class, 'index'])
         ->name('courses.index')
         ->middleware('can:view_course');
@@ -926,10 +899,8 @@ Route::middleware(['auth'])->group(function() {
         ->name('courses.students.watches.update');
 });
 
-
-
 // Routes for Chapter
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('chapters', [ChapterController::class, 'index'])
         ->name('chapters.index')
         ->middleware('can:view_chapter');
@@ -962,7 +933,7 @@ Route::middleware(['auth'])->group(function() {
 });
 
 // Routes for Lesson
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('lessons/teachers', [LessonController::class, 'teachers'])->name('lessons.teachers');
     Route::get('lessons/teacher/{teacher_id}', [LessonController::class, 'index'])->name('lessons.teacher');
     Route::get('lessons', [LessonController::class, 'index'])
@@ -1004,9 +975,8 @@ Route::middleware(['auth'])->group(function() {
         ->name('lessons.students.watches.update');
 });
 
-
 // Routes for Exam
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('exams', [ExamController::class, 'index'])
         ->name('exams.index')
         ->middleware('can:view_exam');
@@ -1060,7 +1030,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('exam-attempts/{attempt}/grade', [ExamController::class, 'updateGrade'])->name('exam-attempts.update-grade');
 });
 
-
 // Routes for Homework
 
 Route::middleware(['auth'])->group(function () {
@@ -1112,31 +1081,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('center-exam-questions/{question}/edit', [CenterExamQuestionController::class, 'edit'])->name('center-exam-questions.edit');
 });
 
-
 Route::middleware(['auth'])->group(function () {
     Route::get('settings/bulk-edit', [SettingsController::class, 'bulkEdit'])
         ->name('settings.bulkEdit')
-    ->middleware('can:update_settings');
+        ->middleware('can:update_settings');
     Route::put('settings/bulk-update', [SettingsController::class, 'bulkUpdate'])
         ->name('settings.bulkUpdate')
         ->middleware('can:update_settings');
 });
 
 // Routes for Gamification
-Route::middleware(['auth'])->group(function() {
-        Route::get('action-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editActionPoints'])->name('action-points.edit')->middleware('can:edit_action_points');
+Route::middleware(['auth'])->group(function () {
+    Route::get('action-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editActionPoints'])->name('action-points.edit')->middleware('can:edit_action_points');
     Route::put('action-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateActionPoints'])->name('action-points.update')->middleware('can:edit_action_points');
-        Route::get('reward-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editRewardPoints'])->name('reward-points.edit')->middleware('can:edit_reward_points');
+    Route::get('reward-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editRewardPoints'])->name('reward-points.edit')->middleware('can:edit_reward_points');
     Route::put('reward-points', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateRewardPoints'])->name('reward-points.update')->middleware('can:edit_reward_points');
 
     Route::get('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editLuckWheelItems'])->name('luck-wheel.edit')->middleware('can:edit_luck_wheel');
     Route::put('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateLuckWheelItems'])->name('luck-wheel.update')->middleware('can:edit_luck_wheel');
 });
 
-
-
 // Routes for Banner
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('banners', [BannerController::class, 'index'])
         ->name('banners.index')
         ->middleware('can:view_banner');
@@ -1166,9 +1132,8 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_banner');
 });
 
-
 // Routes for Code
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('codes', [CodeController::class, 'index'])
         ->name('codes.index')
         ->middleware('can:view_code');

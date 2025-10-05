@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StageRequest;
-use App\Services\StageService;
 use App\Models\Stage;
-use Illuminate\Http\Request;
+use App\Services\StageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -21,8 +20,6 @@ class StageController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +30,6 @@ class StageController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -43,9 +38,6 @@ class StageController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param StageRequest $request
-     * @return RedirectResponse
      */
     public function store(StageRequest $request): RedirectResponse
     {
@@ -57,15 +49,12 @@ class StageController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error creating Stage: ' . $e->getMessage());
+                ->with('error', 'Error creating Stage: '.$e->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param Stage $stage
-     * @return View
      */
     public function show(Stage $stage): View
     {
@@ -74,9 +63,6 @@ class StageController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param Stage $stage
-     * @return View
      */
     public function edit(Stage $stage): View
     {
@@ -85,10 +71,6 @@ class StageController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param StageRequest $request
-     * @param Stage $stage
-     * @return RedirectResponse
      */
     public function update(StageRequest $request, Stage $stage): RedirectResponse
     {
@@ -100,15 +82,12 @@ class StageController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Error updating Stage: ' . $e->getMessage());
+                ->with('error', 'Error updating Stage: '.$e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param Stage $stage
-     * @return RedirectResponse
      */
     public function destroy(Stage $stage): RedirectResponse
     {
@@ -119,7 +98,7 @@ class StageController extends Controller
                 ->with('success', 'Stage deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting Stage: ' . $e->getMessage());
+                ->with('error', 'Error deleting Stage: '.$e->getMessage());
         }
     }
 }

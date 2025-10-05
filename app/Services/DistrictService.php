@@ -19,19 +19,14 @@ class DistrictService
 
     /**
      * Get all districts with pagination
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
-    public function getAllPaginated(int $perPage = 15 , $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
     {
         return $this->model->with($with)->latest()->paginate($perPage);
     }
 
     /**
      * Get all districts without pagination
-     *
-     * @return Collection
      */
     public function getAll(): Collection
     {
@@ -40,9 +35,6 @@ class DistrictService
 
     /**
      * Find district by ID
-     *
-     * @param int $id
-     * @return District|null
      */
     public function findById(int $id): ?District
     {
@@ -52,8 +44,6 @@ class DistrictService
     /**
      * Find district by ID or fail
      *
-     * @param int $id
-     * @return District
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findByIdOrFail(int $id): District
@@ -64,8 +54,6 @@ class DistrictService
     /**
      * Create a new district
      *
-     * @param array $data
-     * @return District
      * @throws \Exception
      */
     public function create(array $data): District
@@ -90,9 +78,6 @@ class DistrictService
     /**
      * Update an existing district
      *
-     * @param District $district
-     * @param array $data
-     * @return District
      * @throws \Exception
      */
     public function update(District $district, array $data): District
@@ -113,7 +98,7 @@ class DistrictService
             Log::error('Error updating District', [
                 'id' => $district->id,
                 'error' => $e->getMessage(),
-                'data' => $data
+                'data' => $data,
             ]);
             throw $e;
         }
@@ -122,8 +107,6 @@ class DistrictService
     /**
      * Delete a district
      *
-     * @param District $district
-     * @return bool
      * @throws \Exception
      */
     public function delete(District $district): bool
@@ -142,7 +125,7 @@ class DistrictService
             DB::rollBack();
             Log::error('Error deleting District', [
                 'id' => $district->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -150,9 +133,6 @@ class DistrictService
 
     /**
      * Search districts based on criteria
-     *
-     * @param array $criteria
-     * @return LengthAwarePaginator
      */
     public function search(array $criteria): LengthAwarePaginator
     {
@@ -160,9 +140,9 @@ class DistrictService
 
         // Add search logic based on your model's searchable fields
         // Example implementation:
-        if (isset($criteria['search']) && !empty($criteria['search'])) {
+        if (isset($criteria['search']) && ! empty($criteria['search'])) {
             $searchTerm = $criteria['search'];
-            $query->where(function ($q) use ($searchTerm) {
+            $query->where(function ($q) {
                 // Add searchable columns here
                 // $q->where('name', 'LIKE', "%{$searchTerm}%")
                 //   ->orWhere('email', 'LIKE', "%{$searchTerm}%");
@@ -170,11 +150,11 @@ class DistrictService
         }
 
         // Add date range filtering
-        if (isset($criteria['start_date']) && !empty($criteria['start_date'])) {
+        if (isset($criteria['start_date']) && ! empty($criteria['start_date'])) {
             $query->whereDate('created_at', '>=', $criteria['start_date']);
         }
 
-        if (isset($criteria['end_date']) && !empty($criteria['end_date'])) {
+        if (isset($criteria['end_date']) && ! empty($criteria['end_date'])) {
             $query->whereDate('created_at', '<=', $criteria['end_date']);
         }
 
@@ -184,14 +164,13 @@ class DistrictService
         $query->orderBy($sortBy, $sortOrder);
 
         $perPage = $criteria['per_page'] ?? 15;
+
         return $query->paginate($perPage);
     }
 
     /**
      * Bulk delete districts
      *
-     * @param array $ids
-     * @return int
      * @throws \Exception
      */
     public function bulkDelete(array $ids): int
@@ -205,7 +184,7 @@ class DistrictService
 
             Log::info('Bulk delete districts completed', [
                 'ids' => $ids,
-                'deleted_count' => $deleted
+                'deleted_count' => $deleted,
             ]);
 
             return $deleted;
@@ -213,7 +192,7 @@ class DistrictService
             DB::rollBack();
             Log::error('Error in bulk delete districts', [
                 'ids' => $ids,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -222,9 +201,7 @@ class DistrictService
     /**
      * Get districts by specific field
      *
-     * @param string $field
-     * @param mixed $value
-     * @return Collection
+     * @param  mixed  $value
      */
     public function getByField(string $field, $value): Collection
     {
@@ -233,8 +210,6 @@ class DistrictService
 
     /**
      * Count total districts
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -243,9 +218,6 @@ class DistrictService
 
     /**
      * Check if district exists
-     *
-     * @param int $id
-     * @return bool
      */
     public function exists(int $id): bool
     {
@@ -254,9 +226,6 @@ class DistrictService
 
     /**
      * Get latest districts
-     *
-     * @param int $limit
-     * @return Collection
      */
     public function getLatest(int $limit = 10): Collection
     {
@@ -266,8 +235,6 @@ class DistrictService
     /**
      * Duplicate a district
      *
-     * @param District $district
-     * @return District
      * @throws \Exception
      */
     public function duplicate(District $district): District
@@ -284,7 +251,7 @@ class DistrictService
 
             Log::info('District duplicated successfully', [
                 'original_id' => $district->id,
-                'new_id' => $newDistrict->id
+                'new_id' => $newDistrict->id,
             ]);
 
             return $newDistrict;
@@ -292,7 +259,7 @@ class DistrictService
             DB::rollBack();
             Log::error('Error duplicating District', [
                 'id' => $district->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }

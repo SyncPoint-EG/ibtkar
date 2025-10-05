@@ -14,8 +14,8 @@ class Exam extends Model
      *
      * @var array
      */
-
     public $with = ['questions'];
+
     protected $fillable = [
         'title',
         'description',
@@ -27,7 +27,7 @@ class Exam extends Model
         'is_active',
         'start_date',
         'end_date',
-        'pass_degree'
+        'pass_degree',
     ];
 
     protected $casts = [
@@ -64,8 +64,9 @@ class Exam extends Model
     public function isAvailable()
     {
         $now = now();
+
         return $this->is_active &&
-            (!$this->start_date || $this->start_date <= $now) &&
-            (!$this->end_date || $this->end_date >= $now);
+            (! $this->start_date || $this->start_date <= $now) &&
+            (! $this->end_date || $this->end_date >= $now);
     }
 }
