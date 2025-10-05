@@ -20,10 +20,10 @@ class RewardController extends Controller
         return response()->json(['data' => $rewards]);
     }
 
-    public function purchase(RewardPoint $reward_point): JsonResponse
+    public function purchase($reward_pointId): JsonResponse
     {
         $student = Auth::user();
-
+        $reward_point = RewardPoint::findOrFail($reward_pointId);
         if ($this->deductPoints($student, $reward_point->points_cost)) {
             StudentReward::create([
                 'student_id' => $student->id,

@@ -106,5 +106,5 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     // rewards routes
     Route::get('rewards', [RewardController::class, 'index']);
-    Route::post('rewards/{reward_point}/purchase', [RewardController::class, 'purchase']);
+    Route::post('rewards/{id}/purchase', [RewardController::class, 'purchase']);
 });
