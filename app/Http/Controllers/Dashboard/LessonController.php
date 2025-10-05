@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LessonRequest;
 use App\Models\Chapter;
 use App\Models\Lesson;
+use App\Models\LessonAttachment;
 use App\Models\Student;
 use App\Models\Watch;
 use App\Services\LessonService;
@@ -144,6 +145,7 @@ class LessonController extends Controller
     {
         try {
             Watch::where('lesson_id',$lesson->id)->delete();
+            LessonAttachment::where('lesson_id',$lesson->id)->delete();
             $this->lessonService->delete($lesson);
 
             return redirect()->route('lessons.index')
