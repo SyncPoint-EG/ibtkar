@@ -51,8 +51,7 @@ class ProfileController extends Controller
     {
         $student = auth('student')->user();
 
-        $students = Student::where('id', '!=', $student->id)
-            ->where('stage_id', $student->stage_id)
+        $students = Student::where('stage_id', $student->stage_id)
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
             ->orderBy('points', 'DESC')
