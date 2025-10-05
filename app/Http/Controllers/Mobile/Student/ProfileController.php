@@ -51,7 +51,7 @@ class ProfileController extends Controller
             ->where('grade_id', $student->grade_id)
             ->where('division_id', $student->division_id)
             ->orderBy('points', 'desc')
-            ->select('id', 'name','image','points')
+            ->select('id', 'first_name','last_name','image','points')
             ->get();
 
         return response()->json([
