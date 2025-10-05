@@ -143,6 +143,7 @@ class LessonController extends Controller
     public function destroy(Lesson $lesson): RedirectResponse
     {
         try {
+            Watch::where('lesson_id',$lesson->id)->delete();
             $this->lessonService->delete($lesson);
 
             return redirect()->route('lessons.index')
