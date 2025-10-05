@@ -22,7 +22,7 @@ class RewardController extends Controller
 
     public function purchase($reward_pointId): JsonResponse
     {
-        $student = Auth::user();
+        $student = Auth::guard('student')->user();
         $reward_point = RewardPoint::findOrFail($reward_pointId);
         if ($this->deductPoints($student, $reward_point->points_cost)) {
             StudentReward::create([
@@ -34,5 +34,14 @@ class RewardController extends Controller
         }
 
         return response()->json(['message' => 'Not enough points.'], 422);
+    }
+    public function rewardsHistory()
+    {
+        $student = Auth::guard('student')->user();
+
+        $rewardsHistory = StudentReward::with('rewardPoint')
+            ->where('student_id', $student->id)
+            ->get();
+        return response()->json(['data' => $rewardsHistory]);
     }
 }

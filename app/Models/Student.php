@@ -410,4 +410,9 @@ class Student extends Authenticatable
     {
         return $this->devices()->pluck('fcm_token')->toArray();
     }
+
+    public function rewards()
+    {
+        return $this->hasMany(StudentReward::class);
+    }
 }
