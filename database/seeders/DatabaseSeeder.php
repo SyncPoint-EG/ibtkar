@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             //            AllDataSeeder::class,
             SettingsTableSeeder::class,
-            ActionPointsSeeder::class,
+        // $this->call(UsersTableSeeder::class);
             RewardPointsSeeder::class,
             LuckWheelItemSeeder::class,
             // Add other seeders here if needed
