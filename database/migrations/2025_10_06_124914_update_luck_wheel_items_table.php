@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('luck_wheel_items', function (Blueprint $table) {
             $table->dropColumn('gift');
             $table->string('key');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->string('type');
         });
     }
