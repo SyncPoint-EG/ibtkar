@@ -44,4 +44,9 @@ class RewardController extends Controller
             ->get();
         return response()->json(['data' => $rewardsHistory]);
     }
+    public function actionPoints()
+    {
+        $actionPoints = RewardPoint::all();
+        return response()->json(['data' => $actionPoints]);
+    }
 }
