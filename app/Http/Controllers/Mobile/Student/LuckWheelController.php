@@ -44,6 +44,10 @@ class LuckWheelController extends Controller
         // $this->givePoints($student, 'Luck Wheel Spin');
 
         $winningItem = LuckWheelItem::findOrFail($request->luck_wheel_item_id);
+        if($winningItem->type === 'points') {
+            $student->points += $winningItem->value;
+            $student->save();
+        }
         // Record the spin
         StudentLuckWheelSpin::create([
             'student_id' => $student->id,
