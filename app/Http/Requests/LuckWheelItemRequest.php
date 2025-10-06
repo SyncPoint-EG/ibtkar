@@ -28,7 +28,7 @@ class LuckWheelItemRequest extends FormRequest
 
         return [
             'key' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
+            'value' => 'nullable|string|max:255',
             'type' => 'required|string|in:points,nothing',
             'appearance_percentage' => [
                 'required',
