@@ -76,10 +76,9 @@ class LuckWheelController extends Controller
             ->whereDate('created_at', Carbon::today())
             ->first();
 
-        if ($lastSpin) {
-            return response()->json(['message' => 'You have already spun the wheel today.'], 400);
-        }else{
-            return response()->json(['message' => 'You can spin the wheel today.'], 200);
-        }
+        return response()->json([
+            'can_spin' => $lastSpin ? false : true,
+        ]);
+
     }
 }
