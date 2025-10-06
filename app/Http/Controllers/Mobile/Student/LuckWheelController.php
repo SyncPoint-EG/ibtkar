@@ -68,4 +68,18 @@ class LuckWheelController extends Controller
 
         return $items->first();
     }
+
+    public function checkSpin()
+    {
+        $student = auth('student')->user();
+        $lastSpin = StudentLuckWheelSpin::where('student_id', $student->id)
+            ->whereDate('created_at', Carbon::today())
+            ->first();
+
+        if ($lastSpin) {
+            return response()->json(['message' => 'You have already spun the wheel today.'], 400);
+        }else{
+            return response()->json(['message' => 'You can spin the wheel today.'], 200);
+        }
+    }
 }

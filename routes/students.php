@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     // luck wheel items
     Route::get('luck-wheel', [LuckWheelController::class, 'index']);
     Route::post('luck-wheel/spin', [LuckWheelController::class, 'spin']);
+    Route::get('check-spin', [LuckWheelController::class, 'checkSpin']);
 
     // exams routes
     Route::get('exams', [ExamController::class, 'index']);
