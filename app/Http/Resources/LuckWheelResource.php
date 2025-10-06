@@ -16,7 +16,9 @@ class LuckWheelResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'gift' => $this->gift,
+            'key' => $this->key,
+            'value' => $this->value,
+            'type' => $this->type,
             'appearance_percentage' => $this->appearance_percentage,
         ];
     }
