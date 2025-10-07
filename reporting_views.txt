@@ -17,12 +17,15 @@ SELECT
     s.wallet AS `Wallet`,
     s.points AS `Points`,
     s.created_at AS `Created At`,
-    d.name AS `Division`,
-    g.name AS `Government`,
+    gr.name AS `Grade`,
+    d.name AS `division`,
+    g.name AS `governorate`,
     gu.phone AS `Parent Phone`,
     (SELECT COUNT(*) FROM watches w WHERE w.student_id = s.id) AS `Total Views Count`
 FROM
     students s
+LEFT JOIN
+    grades gr ON s.grade_id = gr.id
 LEFT JOIN
     divisions d ON s.division_id = d.id
 LEFT JOIN
@@ -39,10 +42,10 @@ CREATE OR REPLACE VIEW `v_teachers_report` AS
 SELECT DISTINCT
     t.id AS `Teacher ID`,
     t.name AS `Teacher Name`,
-    (SELECT GROUP_CONCAT(sub.name SEPARATOR ', ')
+    (SELECT GROUP_CONCAT(DISTINCT sub.name SEPARATOR ', ')
      FROM subjects sub
-     JOIN subject_teacher st ON sub.id = st.subject_id
-     WHERE st.teacher_id = t.id) AS `Subjects`,
+     JOIN courses c ON sub.id = c.subject_id
+     WHERE c.teacher_id = t.id) AS `Subjects`,
     (SELECT COUNT(*)
      FROM lessons l
      JOIN chapters ch ON l.chapter_id = ch.id
@@ -57,7 +60,7 @@ SELECT DISTINCT
 FROM teachers t
 LEFT JOIN (
     SELECT
-        c.teacher_id,
+        COALESCE(c.teacher_id, c2.teacher_id, c3.teacher_id) AS teacher_id,
         COUNT(DISTINCT p.student_id) AS student_count
     FROM payments p
     LEFT JOIN courses c ON p.course_id = c.id
@@ -67,10 +70,8 @@ LEFT JOIN (
     LEFT JOIN chapters ch3 ON l.chapter_id = ch3.id
     LEFT JOIN courses c3 ON ch3.course_id = c3.id
     WHERE p.student_id IS NOT NULL
-      AND (c.teacher_id IS NOT NULL
-           OR c2.teacher_id IS NOT NULL
-           OR c3.teacher_id IS NOT NULL)
-    GROUP BY COALESCE(c.teacher_id, c2.teacher_id, c3.teacher_id)
+      AND COALESCE(c.teacher_id, c2.teacher_id, c3.teacher_id) IS NOT NULL
+    GROUP BY teacher_id
 ) student_counts ON t.id = student_counts.teacher_id;
 
 
@@ -80,16 +81,18 @@ LEFT JOIN (
 CREATE OR REPLACE VIEW `v_payments_report` AS
 SELECT
     CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
-    s.id AS `Student Code`,
+    s.id AS `Student ID`,
     p.payment_method AS `Payment Method`,
+    p.created_at AS `Payment Date`,
     CASE
         WHEN p.course_id IS NOT NULL THEN 'Course'
         WHEN p.chapter_id IS NOT NULL THEN 'Chapter'
         WHEN p.lesson_id IS NOT NULL THEN 'Lesson'
         ELSE 'N/A'
-    END AS `Payment Type`,
+    END AS `Payment Item`,
+    COALESCE(c_course.name, ch.name, l.name) AS `Payment For`,
     COALESCE(t_course.name, t_chapter.name, t_lesson.name) AS `Teacher Name`,
-    COALESCE(t_course.id, t_chapter.id, t_lesson.id) AS `Teacher Code`
+    COALESCE(t_course.id, t_chapter.id, t_lesson.id) AS `Teacher ID`
 FROM
     payments p
 LEFT JOIN
@@ -122,21 +125,24 @@ SELECT
     c.for AS `Code Type`,
     c.code_classification AS `Classification`,
     t.name AS `Teacher Name`,
-    t.id AS `Teacher Code`,
+    t.id AS `Teacher ID`,
     c.price AS `Price`,
     CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
-    s.id AS `Student Code`,
+    s.id AS `Student ID`,
+    g.name AS `Grade`,
     CASE
         WHEN p.id IS NOT NULL THEN 'Used'
         ELSE 'Unused'
     END AS `Code Status`,
+    p.created_at AS `Usage Time`,
     CASE
         WHEN p.course_id IS NOT NULL THEN 'Course'
         WHEN p.chapter_id IS NOT NULL THEN 'Chapter'
         WHEN p.lesson_id IS NOT NULL THEN 'Lesson'
         ELSE NULL
-    END AS `Used For What`,
-    p.created_at AS `Usage Time`
+    END AS `Used For Type`,
+    COALESCE(crs.name, chp.name, lsn.name) AS `Used For Name`,
+    (SELECT w.count FROM watches w WHERE w.student_id = p.student_id AND w.lesson_id = p.lesson_id LIMIT 1) AS `Watch Count`
 FROM
     codes c
 LEFT JOIN
@@ -144,4 +150,48 @@ LEFT JOIN
 LEFT JOIN
     payments p ON c.code = p.payment_code
 LEFT JOIN
-    students s ON p.student_id = s.id;
+    students s ON p.student_id = s.id
+LEFT JOIN
+    courses crs ON p.course_id = crs.id
+LEFT JOIN
+    chapters chp ON p.chapter_id = chp.id
+LEFT JOIN
+    lessons lsn ON p.lesson_id = lsn.id
+LEFT JOIN
+    chapters lsn_chp ON lsn.chapter_id = lsn_chp.id
+LEFT JOIN
+    courses lsn_crs ON lsn_chp.course_id = lsn_crs.id
+LEFT JOIN
+    courses chp_crs ON chp.course_id = chp_crs.id
+LEFT JOIN
+    grades g ON g.id = COALESCE(crs.grade_id, lsn_crs.grade_id, chp_crs.grade_id);
+
+-- =================================================================
+--  Team Lead Suggestions
+-- =================================================================
+--
+--  Hello Team,
+--
+--  Here are the updated views with the requested changes. I've also
+--  included a few suggestions to improve our reporting capabilities:
+--
+--  1. Performance: The use of subqueries in the SELECT statement (like in
+--     v_teachers_report) can sometimes lead to performance issues on large
+--     datasets, as the subquery is executed for each row. The current
+--     implementation is okay, but if we notice these views slowing down,
+--     we should consider refactoring them to use JOINs with derived tables.
+--
+--  2. Indexing: To ensure these views run quickly, we must confirm that
+--     we have database indexes on all foreign key columns (e.g., student_id,
+--     teacher_id, course_id) and any other columns used in JOINs or
+--     WHERE clauses.
+--
+--  3. New View Suggestion: I recommend creating a `v_lessons_report` view.
+--     This would help us analyze the performance of individual lessons,
+--     tracking metrics like total views, unique viewers, and number of
+--     purchases. This could provide valuable insights for the teachers
+--     and content team.
+--
+--  Let me know your thoughts.
+--
+-- =================================================================
