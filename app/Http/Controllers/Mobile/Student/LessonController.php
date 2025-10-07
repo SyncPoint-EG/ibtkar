@@ -43,10 +43,11 @@ class LessonController extends Controller
                 $qq->orWhere('course_id', $course->id);
             });
 
-            if($query->payment_method == 'instapay' || $query->payment_method == 'wallet' ) {
-                $query->where('payment_status',Payment::PAYMENT_STATUS['approved']);
-            }
-        })->exists();
+        })->where(function ($query){
+                if($query->payment_method == 'instapay' || $query->payment_method == 'wallet' ) {
+                    $query->where('payment_status',Payment::PAYMENT_STATUS['approved']);
+                }
+            })->exists();
         $max_watches = $student->watches()->where('lesson_id', $lesson->id)->first();
         if (! $is_free && $max_watches && $max_watches->count > 3) {
             return response()->json([
