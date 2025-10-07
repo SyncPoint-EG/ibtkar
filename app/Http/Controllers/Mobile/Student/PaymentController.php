@@ -127,11 +127,25 @@ class PaymentController extends Controller
             $payment = Payment::create($validated);
             DB::commit();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'تمت عملية الشراء بنجاح',
-                'rewarded_points' => $points,
-            ]);
+            if (in_array($request->payment_method, ['code', 'ibtkar_wallet'])) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'تمت عملية الشراء بنجاح',
+                    'rewarded_points' => $points,
+                ]);
+            }elseif (in_array($request->payment_method, ['instapay', 'wallet'])){
+                return response()->json([
+                    'status' => true,
+                    'message' => 'تمت عملية الشراء بنجاح و في انتظار موافقة الادمن',
+                    'rewarded_points' => $points,
+                ],400);
+            }
+
+//            return response()->json([
+//                'status' => true,
+//                'message' => 'تمت عملية الشراء بنجاح',
+//                'rewarded_points' => $points,
+//            ]);
         } catch (\Exception $exception) {
             DB::rollBack();
 
