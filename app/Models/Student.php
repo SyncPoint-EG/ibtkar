@@ -226,7 +226,12 @@ class Student extends Authenticatable
         }
         // Check for lesson purchase
         $isPurchased = Payment::where('student_id', $this->id)
-            ->where('lesson_id', $lessonId)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
+            ->where('lesson_id', $lessonId)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])->where(function ($query) {
+                $query->where(function ($q) {
+                    $q->whereIn('payment_method', ['instapay', 'wallet'])
+                        ->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+                })->orWhereNotIn('payment_method', ['instapay', 'wallet']);
+            })
             ->exists();
 
         if ($isPurchased) {
@@ -235,7 +240,12 @@ class Student extends Authenticatable
 
         // Check for chapter purchase
         $isPurchased = Payment::where('student_id', $this->id)
-            ->where('chapter_id', $lesson->chapter_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
+            ->where('chapter_id', $lesson->chapter_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])->where(function ($query) {
+                $query->where(function ($q) {
+                    $q->whereIn('payment_method', ['instapay', 'wallet'])
+                        ->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+                })->orWhereNotIn('payment_method', ['instapay', 'wallet']);
+            })
             ->exists();
 
         if ($isPurchased) {
@@ -247,7 +257,12 @@ class Student extends Authenticatable
 
         if ($chapter) {
             $isPurchased = Payment::where('student_id', $this->id)
-                ->where('course_id', $chapter->course_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])
+                ->where('course_id', $chapter->course_id)->where('payment_status', \App\Models\Payment::PAYMENT_STATUS['approved'])->where(function ($query) {
+                    $query->where(function ($q) {
+                        $q->whereIn('payment_method', ['instapay', 'wallet'])
+                            ->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+                    })->orWhereNotIn('payment_method', ['instapay', 'wallet']);
+                })
                 ->exists();
         }
 
