@@ -28,8 +28,9 @@ class LessonController extends Controller
         return LessonResource::collection($lessons);
     }
 
-    public function getLesson(Lesson $lesson)
+    public function getLesson($lessonId)
     {
+        $lesson = Lesson::findOrFail($lessonId);
         $chapter = $lesson->chapter;
         $course = $chapter->course;
 
