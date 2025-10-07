@@ -36,9 +36,15 @@ class LessonController extends Controller
         $student = auth('student')->user();
         $is_free = $lesson->price == 0 || $chapter->price == 0 || $course->price == 0;
         $is_purchased = Payment::where('student_id', $student->id)->where(function ($query) use ($lesson, $chapter, $course) {
-            $query->where('lesson_id', $lesson->id)
-                ->orWhere('chapter_id', $chapter->id)
-                ->orWhere('course_id', $course->id);
+            $query->where(function ($qq) use ($lesson, $chapter, $course) {
+                $qq->where('lesson_id', $lesson->id);
+                $qq->orWhere('chapter_id', $chapter->id);
+                $qq->orWhere('course_id', $course->id);
+            });
+
+            if($query->payment_method == 'instapay' || $query->payment_method == 'wallet' ) {
+                $query->where('payment_status',Payment::PAYMENT_STATUS['approved']);
+            }
         })->exists();
         $max_watches = $student->watches()->where('lesson_id', $lesson->id)->first();
         if (! $is_free && $max_watches && $max_watches->count > 3) {
