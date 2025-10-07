@@ -138,7 +138,7 @@ class PaymentController extends Controller
                     'status' => true,
                     'message' => 'تمت عملية الشراء بنجاح و في انتظار موافقة الادمن',
                     'rewarded_points' => $points,
-                ],400);
+                ],201);
             }
 
 //            return response()->json([
