@@ -5,8 +5,8 @@ return [
     'log_enabled' => env('FCM_LOG_ENABLED', false),
 
     'project' => [
-        'project_id' => env('FCM_PROJECT_ID','ibtakar-platform'),
-        'credentials' => env('FCM_CREDENTIALS'),
+        'project_id' => 'ibtakar-platform',
+        'credentials' => '/var/www/ibtkar/public/fcm.json',
     ],
 
     'http' => [
