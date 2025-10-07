@@ -1,0 +1,147 @@
+-- =================================================================
+--  Reporting Views for Ibtkar Database
+-- =================================================================
+--  Copy and paste this entire script into the SQL tab in phpMyAdmin
+--  and execute it. Make sure your database `ibtkar` is selected.
+-- =================================================================
+
+-- =================================================================
+--  View 1: Students Report
+-- =================================================================
+CREATE OR REPLACE VIEW `v_students_report` AS
+SELECT
+    s.id AS `Student ID`,
+    CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
+    s.gender AS `Gender`,
+    s.phone AS `Mobile Number`,
+    s.wallet AS `Wallet`,
+    s.points AS `Points`,
+    s.created_at AS `Created At`,
+    d.name AS `Division`,
+    g.name AS `Government`,
+    gu.phone AS `Parent Phone`,
+    (SELECT COUNT(*) FROM watches w WHERE w.student_id = s.id) AS `Total Views Count`
+FROM
+    students s
+LEFT JOIN
+    divisions d ON s.division_id = d.id
+LEFT JOIN
+    guardians gu ON s.guardian_id = gu.id
+LEFT JOIN
+    districts di ON s.district_id = di.id
+LEFT JOIN
+    governorates g ON di.governorate_id = g.id;
+
+-- =================================================================
+--  View 2: Teachers Report
+-- =================================================================
+CREATE OR REPLACE VIEW `v_teachers_report` AS
+SELECT DISTINCT
+    t.id AS `Teacher ID`,
+    t.name AS `Teacher Name`,
+    (SELECT GROUP_CONCAT(sub.name SEPARATOR ', ')
+     FROM subjects sub
+     JOIN subject_teacher st ON sub.id = st.subject_id
+     WHERE st.teacher_id = t.id) AS `Subjects`,
+    (SELECT COUNT(*)
+     FROM lessons l
+     JOIN chapters ch ON l.chapter_id = ch.id
+     JOIN courses c ON ch.course_id = c.id
+     WHERE c.teacher_id = t.id) AS `Number of Lectures`,
+    COALESCE(student_counts.student_count, 0) AS `Number of Students`,
+    (SELECT MAX(l.created_at)
+     FROM lessons l
+     JOIN chapters ch ON l.chapter_id = ch.id
+     JOIN courses c ON ch.course_id = c.id
+     WHERE c.teacher_id = t.id) AS `Last Lecture Date`
+FROM teachers t
+LEFT JOIN (
+    SELECT
+        c.teacher_id,
+        COUNT(DISTINCT p.student_id) AS student_count
+    FROM payments p
+    LEFT JOIN courses c ON p.course_id = c.id
+    LEFT JOIN chapters ch ON p.chapter_id = ch.id
+    LEFT JOIN courses c2 ON ch.course_id = c2.id
+    LEFT JOIN lessons l ON p.lesson_id = l.id
+    LEFT JOIN chapters ch3 ON l.chapter_id = ch3.id
+    LEFT JOIN courses c3 ON ch3.course_id = c3.id
+    WHERE p.student_id IS NOT NULL
+      AND (c.teacher_id IS NOT NULL
+           OR c2.teacher_id IS NOT NULL
+           OR c3.teacher_id IS NOT NULL)
+    GROUP BY COALESCE(c.teacher_id, c2.teacher_id, c3.teacher_id)
+) student_counts ON t.id = student_counts.teacher_id;
+
+
+-- =================================================================
+--  View 3: Payments Report
+-- =================================================================
+CREATE OR REPLACE VIEW `v_payments_report` AS
+SELECT
+    CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
+    s.id AS `Student Code`,
+    p.payment_method AS `Payment Method`,
+    CASE
+        WHEN p.course_id IS NOT NULL THEN 'Course'
+        WHEN p.chapter_id IS NOT NULL THEN 'Chapter'
+        WHEN p.lesson_id IS NOT NULL THEN 'Lesson'
+        ELSE 'N/A'
+    END AS `Payment Type`,
+    COALESCE(t_course.name, t_chapter.name, t_lesson.name) AS `Teacher Name`,
+    COALESCE(t_course.id, t_chapter.id, t_lesson.id) AS `Teacher Code`
+FROM
+    payments p
+LEFT JOIN
+    students s ON p.student_id = s.id
+LEFT JOIN
+    courses c_course ON p.course_id = c_course.id
+LEFT JOIN
+    teachers t_course ON c_course.teacher_id = t_course.id
+LEFT JOIN
+    chapters ch ON p.chapter_id = ch.id
+LEFT JOIN
+    courses c_chapter ON ch.course_id = c_chapter.id
+LEFT JOIN
+    teachers t_chapter ON c_chapter.teacher_id = t_chapter.id
+LEFT JOIN
+    lessons l ON p.lesson_id = l.id
+LEFT JOIN
+    chapters ch_lesson ON l.chapter_id = ch_lesson.id
+LEFT JOIN
+    courses c_lesson ON ch_lesson.course_id = c_lesson.id
+LEFT JOIN
+    teachers t_lesson ON c_lesson.teacher_id = t_lesson.id;
+
+-- =================================================================
+--  View 4: Codes Report
+-- =================================================================
+CREATE OR REPLACE VIEW `v_codes_report` AS
+SELECT
+    c.code AS `Code`,
+    c.for AS `Code Type`,
+    c.code_classification AS `Classification`,
+    t.name AS `Teacher Name`,
+    t.id AS `Teacher Code`,
+    c.price AS `Price`,
+    CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
+    s.id AS `Student Code`,
+    CASE
+        WHEN p.id IS NOT NULL THEN 'Used'
+        ELSE 'Unused'
+    END AS `Code Status`,
+    CASE
+        WHEN p.course_id IS NOT NULL THEN 'Course'
+        WHEN p.chapter_id IS NOT NULL THEN 'Chapter'
+        WHEN p.lesson_id IS NOT NULL THEN 'Lesson'
+        ELSE NULL
+    END AS `Used For What`,
+    p.created_at AS `Usage Time`
+FROM
+    codes c
+LEFT JOIN
+    teachers t ON c.teacher_id = t.id
+LEFT JOIN
+    payments p ON c.code = p.payment_code
+LEFT JOIN
+    students s ON p.student_id = s.id;
