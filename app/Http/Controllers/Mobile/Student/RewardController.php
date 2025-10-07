@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActionPoint;
 use App\Models\RewardPoint;
 use App\Models\StudentReward;
 use App\Traits\GamificationTrait;
@@ -43,5 +44,10 @@ class RewardController extends Controller
             ->where('student_id', $student->id)
             ->get();
         return response()->json(['data' => $rewardsHistory]);
+    }
+    public function actionPoints()
+    {
+        $actionPoints = ActionPoint::all();
+        return response()->json(['data' => $actionPoints]);
     }
 }

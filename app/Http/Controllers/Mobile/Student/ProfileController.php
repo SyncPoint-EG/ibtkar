@@ -63,4 +63,11 @@ class ProfileController extends Controller
         ]);
 
     }
+    public function studentPoints()
+    {
+        $student = auth('student')->user();
+        return response()->json([
+            'points' => $student->points,
+        ]);
+    }
 }

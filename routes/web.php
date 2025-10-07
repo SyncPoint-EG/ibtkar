@@ -32,6 +32,7 @@ use App\Http\Controllers\Dashboard\SubjectController;
 use App\Http\Controllers\Dashboard\TeacherController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\LuckWheelItemController;
 
 Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
@@ -46,7 +47,6 @@ Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->
 Route::get('/language/{locale}', [\App\Http\Controllers\HomeController::class, 'switchLanguage'])->name('language.switch');
 // Profile Routes
 Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile'])->name('profile')->middleware('auth');
-Route::put('/profile', [App\Http\Controllers\AuthController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 
 // Password Reset Routes
 Route::get('/forgot-password', [App\Http\Controllers\AuthController::class, 'showForgotPasswordForm'])->name('password.request')->middleware('guest');
@@ -1172,4 +1172,36 @@ Route::middleware(['auth'])->group(function () {
         Route::get('payments', [\App\Http\Controllers\Dashboard\ReportController::class, 'payments'])->name('payments');
         Route::get('codes', [\App\Http\Controllers\Dashboard\ReportController::class, 'codes'])->name('codes');
     });
+});
+
+
+// Routes for LuckWheelItem
+Route::middleware(['auth'])->group(function() {
+    Route::get('luck-wheel-items', [LuckWheelItemController::class, 'index'])
+        ->name('luck-wheel-items.index')
+        ->middleware('can:view_luckwheelitem');
+
+    Route::get('luck-wheel-items/create', [LuckWheelItemController::class, 'create'])
+        ->name('luck-wheel-items.create')
+        ->middleware('can:create_luckwheelitem');
+
+    Route::post('luck-wheel-items', [LuckWheelItemController::class, 'store'])
+        ->name('luck-wheel-items.store')
+        ->middleware('can:create_luckwheelitem');
+
+    Route::get('luck-wheel-items/{luckWheelItem}', [LuckWheelItemController::class, 'show'])
+        ->name('luck-wheel-items.show')
+        ->middleware('can:view_luckwheelitem');
+
+    Route::get('luck-wheel-items/{luckWheelItem}/edit', [LuckWheelItemController::class, 'edit'])
+        ->name('luck-wheel-items.edit')
+        ->middleware('can:edit_luckwheelitem');
+
+    Route::put('luck-wheel-items/{luckWheelItem}', [LuckWheelItemController::class, 'update'])
+        ->name('luck-wheel-items.update')
+        ->middleware('can:edit_luckwheelitem');
+
+    Route::delete('luck-wheel-items/{luckWheelItem}', [LuckWheelItemController::class, 'destroy'])
+        ->name('luck-wheel-items.destroy')
+        ->middleware('can:delete_luckwheelitem');
 });

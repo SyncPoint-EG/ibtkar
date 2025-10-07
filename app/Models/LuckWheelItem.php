@@ -9,8 +9,29 @@ class LuckWheelItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'gift',
-        'appearance_percentage',
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['key', 'value', 'type', 'appearance_percentage'];
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+
+     public function getNameAttribute()
+     {
+         return $this->attributes['name_'.app()->getLocale()];
+     }
+
+     public function scopeActive($query)
+     {
+         return $query->where('is_active', 1);
+     }
+
+
+    
 }

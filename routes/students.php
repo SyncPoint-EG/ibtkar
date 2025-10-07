@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::post('profile', [ProfileController::class, 'update']);
     Route::post('update-image', [ProfileController::class, 'updateImage']);
 
+    Route::get('student-points', [ProfileController::class, 'studentPoints']);
     Route::get('students-by-points', [ProfileController::class, 'studentsByPoints']);
 
     Route::post('delete-account', [ProfileController::class, 'deleteAccount']);
@@ -73,6 +74,7 @@ Route::group(['middleware' => 'auth:student'], function () {
     // luck wheel items
     Route::get('luck-wheel', [LuckWheelController::class, 'index']);
     Route::post('luck-wheel/spin', [LuckWheelController::class, 'spin']);
+    Route::get('check-spin', [LuckWheelController::class, 'checkSpin']);
 
     // exams routes
     Route::get('exams', [ExamController::class, 'index']);
@@ -105,4 +107,5 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::get('rewards', [RewardController::class, 'index']);
     Route::post('rewards/{id}/purchase', [RewardController::class, 'purchase']);
     Route::get('rewards-history', [RewardController::class, 'rewardsHistory']);
+    Route::get('action-points', [RewardController::class, 'actionPoints']);
 });

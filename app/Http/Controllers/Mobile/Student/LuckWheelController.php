@@ -44,6 +44,10 @@ class LuckWheelController extends Controller
         // $this->givePoints($student, 'Luck Wheel Spin');
 
         $winningItem = LuckWheelItem::findOrFail($request->luck_wheel_item_id);
+        if($winningItem->type === 'points') {
+            $student->points += $winningItem->value;
+            $student->save();
+        }
         // Record the spin
         StudentLuckWheelSpin::create([
             'student_id' => $student->id,
@@ -67,5 +71,18 @@ class LuckWheelController extends Controller
         }
 
         return $items->first();
+    }
+
+    public function checkSpin()
+    {
+        $student = auth('student')->user();
+        $lastSpin = StudentLuckWheelSpin::where('student_id', $student->id)
+            ->whereDate('created_at', Carbon::today())
+            ->first();
+
+        return response()->json([
+            'can_spin' => $lastSpin ? false : true,
+        ]);
+
     }
 }
