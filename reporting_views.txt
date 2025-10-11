@@ -33,7 +33,7 @@ LEFT JOIN
 LEFT JOIN
     districts di ON s.district_id = di.id
 LEFT JOIN
-    governorates g ON di.governorate_id = g.id;
+    governorates g ON s.governorate_id = g.id;
 
 -- =================================================================
 --  View 2: Teachers Report
