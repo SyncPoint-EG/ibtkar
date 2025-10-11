@@ -102,7 +102,7 @@ class HomeworkController extends Controller
         // HomeworkAnswer::insert($answers);
 
         $homeworkAttempt->update(['score' => $total_score]);
-        $points = $this->givePoints($student, 'solve_exam');
+        $points = $this->givePoints($student, 'solve_homework');
 
         return response()->json([
             'message' => 'Homework submitted successfully.',
