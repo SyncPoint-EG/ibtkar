@@ -83,6 +83,7 @@ SELECT
     CONCAT(s.first_name, ' ', s.last_name) AS `Student Name`,
     s.id AS `Student ID`,
     p.payment_method AS `Payment Method`,
+    p.payment_status AS `Payment Status`,
     p.created_at AS `Payment Date`,
     CASE
         WHEN p.course_id IS NOT NULL THEN 'Course'

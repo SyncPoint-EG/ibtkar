@@ -11,9 +11,10 @@ class PaymentApprovalService
     /**
      * Get all pending payments with pagination.
      */
-    public function getPendingPaymentsPaginated(int $perPage): LengthAwarePaginator
+    public function getPendingPaymentsPaginated(array $filters): LengthAwarePaginator
     {
-        return Payment::with([
+        $perPage = $filters['per_page'] ?? 15;
+        $query = Payment::with([
             'student.stage',
             'student.grade',
             'student.division',
@@ -23,7 +24,17 @@ class PaymentApprovalService
             'lesson.chapter.course.teacher',
             'chapter.course.subject',
             'chapter.course.teacher',
-        ])->latest()->paginate($perPage);
+        ]);
+
+        if (!empty($filters['payment_method'])) {
+            $query->where('payment_method', $filters['payment_method']);
+        }
+
+        if (!empty($filters['payment_status'])) {
+            $query->where('payment_status', $filters['payment_status']);
+        }
+
+        return $query->latest()->paginate($perPage);
     }
 
     public function getPaymentStatistics(): array

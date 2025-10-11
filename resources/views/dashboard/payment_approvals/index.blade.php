@@ -102,6 +102,41 @@
                                 </div>
                             </div>
                             <div class="card-body collapse in">
+                                <div class="card-block">
+                                    <form action="{{ route('payment_approvals.index') }}" method="GET">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="payment_method">{{ __('dashboard.payment_approval.fields.payment_method') }}</label>
+                                                    <select name="payment_method" id="payment_method" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        <option value="instapay" {{ request()->get('payment_method') == 'instapay' ? 'selected' : '' }}>Instapay</option>
+                                                        <option value="wallet" {{ request()->get('payment_method') == 'wallet' ? 'selected' : '' }}>Wallet</option>
+                                                        <option value="ibtkar_wallet" {{ request()->get('payment_method') == 'ibtkar_wallet' ? 'selected' : '' }}>Ibtkar Wallet</option>
+                                                        <option value="code" {{ request()->get('payment_method') == 'code' ? 'selected' : '' }}>Code</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="payment_status">{{ __('dashboard.payment_approval.fields.status') }}</label>
+                                                    <select name="payment_status" id="payment_status" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach(\App\Models\Payment::PAYMENT_STATUS as $key => $status)
+                                                            <option value="{{ $key }}" {{ request()->get('payment_status') == $key ? 'selected' : '' }}>{{ $status }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary btn-block">{{ __('dashboard.common.filter') }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead class="thead-inverse">
