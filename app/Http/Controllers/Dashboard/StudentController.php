@@ -50,7 +50,18 @@ class StudentController extends Controller
                 ];
             });
             return response()->json([
-                'results' => $results,
+                'results' => $students->map(function ($student) {
+                    return [
+                        'id' => $student->id,
+                        'text' => $student->first_name . ' ' . $student->last_name . ' (' . $student->phone . ')',
+                        'first_name' => $student->first_name,
+                        'last_name' => $student->last_name,
+                        'phone' => $student->phone,
+                    ];
+                }),
+                'pagination' => [
+                    'more' => false
+                ]
             ]);
         }
 

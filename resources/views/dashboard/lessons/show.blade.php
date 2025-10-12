@@ -175,7 +175,7 @@
                                                         method="POST">
                                                         @csrf
                                                         <div class="input-group">
-                                                            <select class="form-control select2" name="student_id"
+                                                            <select class="form-control select2 " id="select_student" name="student_id"
                                                                     data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
                                                                 <option></option>
                                                             </select>
@@ -246,7 +246,7 @@
 @section('page_scripts')
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+            $('#select_student').select2();
         });
         $(document).ready(function () {
             $('.delete-btn').on('click', function (e) {
@@ -269,10 +269,41 @@
                             page: params.page
                         };
                     },
+                    processResults: function (data, params) {
+                        // parse the results into the format expected by Select2
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data, except to indicate that infinite
+                        // scrolling can be used
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.data,
+                            pagination: {
+                                more: (params.page * 30) < data.total
+                            }
+                        };
+                    },
                     cache: true
                 },
                 placeholder: '{{ __("dashboard.student.search_by_name_or_phone") }}',
+                escapeMarkup: function (markup) {
+                    return markup;
+                }, // let our custom formatter work
                 minimumInputLength: 1,
+                templateResult: function (student) {
+                    if (student.loading) {
+                        return student.text;
+                    }
+
+                    return "<div class='select2-result-repository clearfix'>" +
+                        "<div class='select2-result-repository__meta'>" +
+                        "<div class='select2-result-repository__title'>" + student.first_name + " " + student.last_name + "</div>" +
+                        "<div class='select2-result-repository__description'>" + student.phone + "</div>" +
+                        "</div></div>";
+                },
+                templateSelection: function (student) {
+                    return student.first_name + " " + student.last_name || student.text;
+                }
             });
         });
     </script>
