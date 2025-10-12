@@ -50,7 +50,7 @@ class StudentController extends Controller
                 ];
             });
             return response()->json([
-                'results' => $students->map(function ($student) {
+                'data' => $students->map(function ($student) {
                     return [
                         'id' => $student->id,
                         'text' => $student->first_name . ' ' . $student->last_name . ' (' . $student->phone . ')',

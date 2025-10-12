@@ -174,16 +174,17 @@
                                                         action="{{ route('lessons.students.payments.store', $lesson->id) }}"
                                                         method="POST">
                                                         @csrf
-                                                        <div class="input-group">
-                                                            <select class="form-control select2 " id="select_student" name="student_id"
-                                                                    data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
-                                                                <option></option>
-                                                            </select>
-                                                            <input type="hidden" name="payment_method" value="gift">
-                                                            <br>
-                                                            <div class="input-group-append">
+                                                        <input type="hidden" name="payment_method" value="gift">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <select class="form-control select2" id="select_student" name="student_id"
+                                                                        data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
+                                                                    <option></option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-2">
                                                                 <button type="submit"
-                                                                        class="btn btn-primary">{{ __('dashboard.common.add_student') }}</button>
+                                                                        class="btn btn-primary btn-block">{{ __('dashboard.common.add_student') }}</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -276,8 +277,21 @@
                         // scrolling can be used
                         params.page = params.page || 1;
 
+                        var results = [];
+                        if (data && data.data) { // Check if data and data.data exist
+                            results = data.data.map(function(student) {
+                                return {
+                                    id: student.id,
+                                    text: student.first_name + ' ' + student.last_name,
+                                    first_name: student.first_name,
+                                    last_name: student.last_name,
+                                    phone: student.phone
+                                };
+                            });
+                        }
+
                         return {
-                            results: data.data,
+                            results: results,
                             pagination: {
                                 more: (params.page * 30) < data.total
                             }
@@ -302,7 +316,10 @@
                         "</div></div>";
                 },
                 templateSelection: function (student) {
-                    return student.first_name + " " + student.last_name || student.text;
+                    if (student.first_name && student.last_name) {
+                        return student.first_name + " " + student.last_name;
+                    }
+                    return student.text;
                 }
             });
         });

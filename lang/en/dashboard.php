@@ -250,6 +250,7 @@ return [
             'actions' => 'Actions',
             'no_records' => 'No Students found.',
             'no_students' => 'No students found for this item.',
+            'search_by_name_or_phone' => 'Search By Name Or Phone.',
             'fill_required' => 'Please fill in all required fields to create a new Student.',
             'update_info' => 'Update the information for this Student.',
             'delete_confirm' => 'Are you sure you want to delete this Student?',
