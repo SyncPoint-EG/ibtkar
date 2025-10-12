@@ -17,17 +17,20 @@ class StudentService
         $this->model = $model;
     }
 
-    /**
-     * Get all students with pagination
-     */
-    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
+    private function applyFilters($query, array $filters = [])
     {
-        $query = $this->model->with($with);
-
         if (! empty($filters['name'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('first_name', 'like', '%'.$filters['name'].'%')
                     ->orWhere('last_name', 'like', '%'.$filters['name'].'%');
+            });
+        }
+
+        if (! empty($filters['q'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('first_name', 'like', '%'.$filters['q'].'%')
+                    ->orWhere('last_name', 'like', '%'.$filters['q'].'%')
+                    ->orWhere('phone', 'like', '%'.$filters['q'].'%');
             });
         }
 
@@ -67,15 +70,27 @@ class StudentService
             $query->where('gender', $filters['gender']);
         }
 
+        return $query;
+    }
+
+    /**
+     * Get all students with pagination
+     */
+    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
+    {
+        $query = $this->model->with($with);
+        $query = $this->applyFilters($query, $filters);
         return $query->latest()->paginate($perPage);
     }
 
     /**
      * Get all students without pagination
      */
-    public function getAll(): Collection
+    public function getAll(array $filters = [], array $with = []): Collection
     {
-        return $this->model->all();
+        $query = $this->model->with($with);
+        $query = $this->applyFilters($query, $filters);
+        return $query->get();
     }
 
     /**

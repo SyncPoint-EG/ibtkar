@@ -973,6 +973,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('lesson-attachments/{attachment}/toggle-featured', [LessonAttachmentController::class, 'toggleFeatured'])->name('lesson-attachments.toggle-featured')->middleware('can:edit_lesson');
     Route::post('lessons/{lesson}/students/{student}/watches', [LessonController::class, 'updateWatches'])
         ->name('lessons.students.watches.update');
+    Route::post('lessons/{lesson}/students/payments', [PaymentApprovalController::class, 'storeForStudent'])
+        ->name('lessons.students.payments.store')
+        ->middleware('can:create_payment');
 });
 
 // Routes for Exam

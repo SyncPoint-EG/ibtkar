@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentApprovalRequest;
+use App\Models\Lesson;
+use App\Models\Student;
 use App\Services\PaymentApprovalService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -102,6 +104,22 @@ class PaymentApprovalController extends Controller
 
             return redirect()->back()
                 ->with('error', 'Error rejecting payment: '.$e->getMessage());
+        }
+    }
+
+    public function storeForStudent(Request $request, Lesson $lesson)
+    {
+        $student = Student::find($request->student_id);
+        if (!$student) {
+            return redirect()->back()->with('error', 'Student not found.');
+        }
+
+        try {
+            $this->paymentApprovalService->createGiftPayment($lesson, $student);
+
+            return redirect()->back()->with('success', 'Payment added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error adding payment: ' . $e->getMessage());
         }
     }
 }

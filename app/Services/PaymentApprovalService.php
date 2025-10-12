@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Student;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -94,6 +95,27 @@ class PaymentApprovalService
         }
 
         $payment->payment_status = Payment::PAYMENT_STATUS['rejected'];
+        $payment->save();
+    }
+
+    public function createGiftPayment(Lesson $lesson, Student $student): void
+    {
+        // Check if the student already has an approved payment for this lesson
+        $existingPayment = Payment::where('student_id', $student->id)
+            ->where('lesson_id', $lesson->id)
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->exists();
+
+        if ($existingPayment) {
+            throw new \Exception('Student already has an approved payment for this lesson.');
+        }
+
+        $payment = new Payment();
+        $payment->student_id = $student->id;
+        $payment->lesson_id = $lesson->id;
+        $payment->amount = $lesson->price;
+        $payment->payment_method = 'gift';
+        $payment->payment_status = Payment::PAYMENT_STATUS['approved'];
         $payment->save();
     }
 }

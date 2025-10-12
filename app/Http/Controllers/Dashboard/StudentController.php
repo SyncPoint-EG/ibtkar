@@ -33,12 +33,29 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $filters = $request->only([
             'name', 'phone', 'governorate_id', 'center_id', 'stage_id',
             'grade_id', 'division_id', 'education_type_id', 'status', 'gender',
+            'q'
         ]);
+
+        if ($request->ajax()) {
+            $students = $this->studentService->getAll( $filters);
+            return response()->json([
+                'data' => $students->map(function ($student) {
+                    return [
+                        'id' => $student->id,
+                        'text' => $student->first_name . ' ' . $student->last_name . ' (' . $student->phone . ')',
+                        'first_name' => $student->first_name,
+                        'last_name' => $student->last_name,
+                        'phone' => $student->phone,
+                    ];
+                }),
+                'total' => $students->count()
+            ]);
+        }
 
         $students = $this->studentService->getAllPaginated(15, $filters);
 
