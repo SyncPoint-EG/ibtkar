@@ -245,9 +245,9 @@
 
 @section('page_scripts')
     <script>
-        $(document).ready(function() {
-            $('#select_student').select2();
-        });
+        // $(document).ready(function() {
+        //     $('#select_student').select2();
+        // });
         $(document).ready(function () {
             $('.delete-btn').on('click', function (e) {
                 e.preventDefault();
@@ -258,7 +258,7 @@
                 }
             });
 
-            $('.select2').select2({
+            $('#select_student').select2({
                 ajax: {
                     url: '{{ route("students.index") }}',
                     dataType: 'json',
