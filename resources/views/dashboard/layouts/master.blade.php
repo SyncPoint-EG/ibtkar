@@ -24,8 +24,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- VENDOR CSS -->
     @if(app()->getLocale() == 'ar')
         <!-- RTL CSS Files -->
@@ -258,6 +256,8 @@
 
 <!-- BEGIN VENDOR JS-->
 <script src="{{ asset('dashboard/app-assets/js/core/libraries/jquery.min.js') }}" type="text/javascript"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{{ asset('dashboard/app-assets/vendors/js/ui/tether.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('dashboard/app-assets/js/core/libraries/bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('dashboard/app-assets/vendors/js/ui/perfect-scrollbar.jquery.min.js') }}" type="text/javascript"></script>
