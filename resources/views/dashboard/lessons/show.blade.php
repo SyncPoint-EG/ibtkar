@@ -65,22 +65,27 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.lesson.fields.video_link") }}
-                                                                :</strong><a href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a>
+                                                                :</strong><a
+                                                                href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a>
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.lesson.fields.video_image") }}
-                                                                :</strong> <img src="{{ $lesson->video_image }}" width="100px">
+                                                                :</strong> <img src="{{ $lesson->video_image }}"
+                                                                                width="100px">
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.chapter.title") }}
-                                                                :</strong> <a href="{{route('chapters.show',$lesson->chapter_id)}}">{{ $lesson->chapter?->name }}</a>
+                                                                :</strong> <a
+                                                                href="{{route('chapters.show',$lesson->chapter_id)}}">{{ $lesson->chapter?->name }}</a>
                                                         </div>
                                                         <div class="mb-3">
                                                             <strong>{{ __("dashboard.course.title") }}
-                                                                :</strong> <a href="{{route('courses.show',$lesson->chapter?->course_id)}}">{{ $lesson->chapter?->course?->name }}</a>
+                                                                :</strong> <a
+                                                                href="{{route('courses.show',$lesson->chapter?->course_id)}}">{{ $lesson->chapter?->course?->name }}</a>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.type") }}:</strong> {{ __('dashboard.lesson.types.' . $lesson->type) }}
+                                                            <strong>{{ __("dashboard.lesson.fields.type") }}
+                                                                :</strong> {{ __('dashboard.lesson.types.' . $lesson->type) }}
                                                         </div>
 
                                                         <tr>
@@ -165,15 +170,20 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="mb-3">
-                                                    <form action="{{ route('lessons.students.payments.store', $lesson->id) }}" method="POST">
+                                                    <form
+                                                        action="{{ route('lessons.students.payments.store', $lesson->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         <div class="input-group">
-                                                            <select class="form-control select2" name="student_id" data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
+                                                            <select class="form-control select2" name="student_id"
+                                                                    data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
                                                                 <option></option>
                                                             </select>
                                                             <input type="hidden" name="payment_method" value="gift">
+                                                            <br>
                                                             <div class="input-group-append">
-                                                                <button type="submit" class="btn btn-primary">{{ __('dashboard.common.add') }}</button>
+                                                                <button type="submit"
+                                                                        class="btn btn-primary">{{ __('dashboard.common.add_student') }}</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -194,12 +204,17 @@
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                                                     <td>{{ $student->watches_count }}</td>
                                                                     <td>
-                                                                        <form action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}" method="POST">
+                                                                        <form
+                                                                            action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
+                                                                            method="POST">
                                                                             @csrf
                                                                             <div class="input-group">
-                                                                                <input type="number" name="watches" class="form-control" value="{{ $student->watches_count }}">
+                                                                                <input type="number" name="watches"
+                                                                                       class="form-control"
+                                                                                       value="{{ $student->watches_count }}">
                                                                                 <div class="input-group-append">
-                                                                                    <button type="submit" class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
+                                                                                    <button type="submit"
+                                                                                            class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
@@ -268,7 +283,9 @@
                     cache: true
                 },
                 placeholder: '{{ __("dashboard.student.search_by_name_or_phone") }}',
-                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                escapeMarkup: function (markup) {
+                    return markup;
+                }, // let our custom formatter work
                 minimumInputLength: 1,
                 templateResult: function (student) {
                     if (student.loading) {

@@ -55,6 +55,7 @@ return [
             'from' => 'From',
             'to' => 'To',
             'view_lessons' => 'View Lessons',
+            'add_student' => 'Add Student',
         ],
         'settings' => [
             'title' => 'Settings',
