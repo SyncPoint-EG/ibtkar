@@ -43,17 +43,14 @@ class StudentController extends Controller
 
         if ($request->ajax()) {
             $students = $this->studentService->getAll( $filters);
+            $results = $students->map(function ($student) {
+                return [
+                    'id' => $student->id,
+                    'text' => $student->first_name . ' ' . $student->last_name . ' (' . $student->phone . ')',
+                ];
+            });
             return response()->json([
-                'data' => $students->map(function ($student) {
-                    return [
-                        'id' => $student->id,
-                        'text' => $student->first_name . ' ' . $student->last_name . ' (' . $student->phone . ')',
-                        'first_name' => $student->first_name,
-                        'last_name' => $student->last_name,
-                        'phone' => $student->phone,
-                    ];
-                }),
-                'total' => $students->count()
+                'results' => $results,
             ]);
         }
 
