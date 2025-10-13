@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
+
 class FirebasePushNotification extends Notification
 {
     use Queueable;
@@ -28,7 +30,7 @@ class FirebasePushNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Get the notification\'s delivery channels.
      *
      * @return array<int, string>
      */
@@ -42,12 +44,10 @@ class FirebasePushNotification extends Notification
      */
     public function toFcm(object $notifiable): FcmMessage
     {
-        return FcmMessage::create()
-            ->setNotification(
-                \NotificationChannels\Fcm\Resources\Notification::create()
-                    ->setTitle($this->title)
-                    ->setBody($this->body)
-            )->setData($this->data);
+        return (new FcmMessage(notification: new FcmNotification(
+            title: $this->title,
+            body: $this->body
+        )))->data($this->data);
     }
 
     /**

@@ -15,12 +15,16 @@ use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\User;
 use App\Models\Watch;
+use App\Traits\FirebaseNotify;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
+    use FirebaseNotify ;
     public function index(Request $request)
     {
         $startDate = $request->input('start_date');
@@ -98,5 +102,10 @@ class HomeController extends Controller
             ->pluck('count', 'date');
 
         return view('dashboard.index', compact('mainStats', 'financialStats', 'lessonsChart', 'lessonViewsChart', 'startDate', 'endDate'));
+    }
+
+    public function test()
+    {
+        return $this->sendFirebaseNotification(User::first(),'test','body');
     }
 }

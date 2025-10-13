@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\LuckWheelItemController;
 
 Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
-
+Route::get('test',[\App\Http\Controllers\Dashboard\HomeController::class,'test']);
 // Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 
 // Authentication Routes
