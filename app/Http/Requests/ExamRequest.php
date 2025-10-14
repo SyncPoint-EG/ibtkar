@@ -6,38 +6,30 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ExamRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $rules = [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'duration_minutes' => 'required|integer|min:1',
+            'total_marks' => 'required|integer|min:0',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
-            'exam_for' => 'required|in:lesson,teacher',
-            'pass_degree' => 'required|integer|min:0',
+            'is_active' => 'boolean',
+            'exam_type' => 'required|in:lesson,teacher',
         ];
 
-        if ($this->input('exam_for') === 'lesson') {
+        if ($this->input('exam_type') === 'lesson') {
             $rules['lesson_id'] = 'required|exists:lessons,id';
         } else {
-            $rules['teacher_id'] = 'required|exists:teachers,id';
             $rules['course_id'] = 'required|exists:courses,id';
+            // teacher_id is optional on the exam itself, as it can be inferred from the course.
+            $rules['teacher_id'] = 'nullable|exists:teachers,id';
         }
 
         return $rules;

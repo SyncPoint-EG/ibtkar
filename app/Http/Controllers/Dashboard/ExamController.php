@@ -25,33 +25,29 @@ class ExamController extends Controller
 
     public function create()
     {
-        $lessons = Lesson::all();
         $teachers = \App\Models\Teacher::all();
 
-        return view('dashboard.exams.create', compact('lessons', 'teachers'));
+        return view('dashboard.exams.create', compact('teachers'));
     }
 
     public function store(ExamRequest $request)
     {
         $validated = $request->validated();
 
-        if ($request->exam_for === 'lesson') {
-            $validated['teacher_id'] = null;
+        // Handle boolean for is_active checkbox
+        $validated['is_active'] = $request->has('is_active');
+
+        if ($request->input('exam_type') === 'lesson') {
             $validated['course_id'] = null;
-        } else {
+            $validated['teacher_id'] = null;
+        } else { // exam_type is 'teacher'
             $validated['lesson_id'] = null;
         }
 
-        $validated['total_marks'] = 0;
-        if ($request->is_active) {
-            $validated['is_active'] = 1;
-        } else {
-            $validated['is_active'] = 0;
-        }
         $exam = Exam::create($validated);
 
         return redirect()->route('exams.show', $exam)
-            ->with('success', 'Exam created successfully.');
+            ->with('success', 'Exam created successfully. You can now add questions.');
     }
 
     public function show(Exam $exam)

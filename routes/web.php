@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ExamApiController;
 use App\Http\Controllers\Dashboard\BannerController;
 use App\Http\Controllers\Dashboard\CenterController;
 use App\Http\Controllers\Dashboard\CenterExamController;
@@ -1211,4 +1212,14 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('luck-wheel-items/{luckWheelItem}', [LuckWheelItemController::class, 'destroy'])
         ->name('luck-wheel-items.destroy')
         ->middleware('can:delete_luckwheelitem');
+});
+
+Route::prefix('api')->middleware('auth')->name('api.')->group(function () {
+    Route::get('teachers/{teacher}/courses', [ExamApiController::class, 'getTeacherCourses'])->name('teachers.courses');
+    Route::get('stages', [ExamApiController::class, 'getStages'])->name('stages');
+    Route::get('stages/{stage}/grades', [ExamApiController::class, 'getGradesByStage'])->name('stages.grades');
+    Route::get('grades/{stageId}/{gradeId}/divisions', [ExamApiController::class, 'getDivisionsByGrade'])->name('grades.divisions');
+    Route::get('courses-by-filters', [ExamApiController::class, 'getCoursesByFilters'])->name('courses.by-filters');
+    Route::get('courses/{course}/chapters', [ExamApiController::class, 'getChaptersByCourse'])->name('courses.chapters');
+    Route::get('chapters/{chapter}/lessons', [ExamApiController::class, 'getLessonsByChapter'])->name('chapters.lessons');
 });
