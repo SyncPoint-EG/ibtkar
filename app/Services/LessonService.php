@@ -304,7 +304,7 @@ class LessonService
 
         foreach ($students as $student) {
             $watch = $student->watches()->where('lesson_id', $lesson->id)->first();
-            $student->watches_count = $watch ? $watch->watches : 0;
+            $student->watches_count = $watch ? $watch->count : 0;
         }
 
         return $students;
