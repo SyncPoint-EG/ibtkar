@@ -195,39 +195,52 @@
                                                             <thead>
                                                             <tr>
                                                                 <th>{{ __('dashboard.student.fields.name') }}</th>
+                                                                <th>{{ __('dashboard.lesson.fields.paid') }}</th>
                                                                 <th>{{ __('dashboard.common.watches') }}</th>
                                                                 <th>{{ __('dashboard.common.actions') }}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
                                                             @foreach($students as $student)
+                                                                @php
+                                                                    $payment = \App\Models\Payment::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
+                                                                @endphp
                                                                 <tr>
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                                                    <td>
+                                                                        @if($payment)
+                                                                            <span class="badge badge-success">{{ __('dashboard.common.yes') }}</span>
+                                                                        @else
+                                                                            <span class="badge badge-danger">{{ __('dashboard.common.no') }}</span>
+                                                                        @endif
+                                                                    </td>
                                                                     <td>{{ $student->watches_count }}</td>
                                                                     <td>
                                                                         <form
                                                                             action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
-                                                                            method="POST">
+                                                                            method="POST" class="d-inline-block align-top mr-1">
                                                                             @csrf
                                                                             <div class="input-group">
-                                                                                <div class="row">
-                                                                                    <div class="col-lg-3">
-                                                                                        <input type="number" name="watches"
-                                                                                               class="form-control"
-                                                                                               value="{{ $student->watches_count }}">
-                                                                                    </div>
-                                                                                    <div class="col-lg-3">
-                                                                                        <button type="submit"
-                                                                                                class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
-                                                                                    </div>
-
-                                                                                </div>
-
+                                                                                <input type="number" name="watches"
+                                                                                       class="form-control"
+                                                                                       value="{{ $student->watches_count }}" style="width: 70px;">
                                                                                 <div class="input-group-append">
-
+                                                                                    <button type="submit"
+                                                                                            class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
+                                                                        @if($payment)
+                                                                            <form
+                                                                                action="{{ route('payments.destroy', $payment->id) }}"
+                                                                                method="POST" class="delete-form d-inline-block align-top">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="button" class="btn btn-sm btn-danger delete-payment-btn">
+                                                                                    <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}
+                                                                                </button>
+                                                                            </form>
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -255,16 +268,20 @@
 
 @section('page_scripts')
     <script>
-        // $(document).ready(function() {
-        //     $('#select_student').select2();
-        // });
         $(document).ready(function () {
+            // Lesson delete confirmation
             $('.delete-btn').on('click', function (e) {
                 e.preventDefault();
-
-                // SweetAlert or custom confirmation
                 if (confirm('{{ __("dashboard.lesson.delete_confirm") }}')) {
-                    $(this).closest('form').submit();
+                    $(this).closest('form.delete-form').submit();
+                }
+            });
+
+            // Payment delete confirmation
+            $('#students-section').on('click', '.delete-payment-btn', function (e) {
+                e.preventDefault();
+                if (confirm('{{ __("dashboard.payment.delete_confirm") }}')) {
+                    $(this).closest('form.delete-form').submit();
                 }
             });
 
@@ -280,14 +297,10 @@
                         };
                     },
                     processResults: function (data, params) {
-                        // parse the results into the format expected by Select2
-                        // since we are using custom formatting functions we do not need to
-                        // alter the remote JSON data, except to indicate that infinite
-                        // scrolling can be used
                         params.page = params.page || 1;
 
                         var results = [];
-                        if (data && data.data) { // Check if data and data.data exist
+                        if (data && data.data) {
                             results = data.data.map(function(student) {
                                 return {
                                     id: student.id,
