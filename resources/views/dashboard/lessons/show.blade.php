@@ -225,29 +225,32 @@
                                                                     </td>
                                                                     <td>{{ $student->watches_count }}</td>
                                                                     <td>
-                                                                        <form
-                                                                            action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
-                                                                            method="POST" class="d-inline-block align-top mr-1">
-                                                                            @csrf
-{{--                                                                            <div class="input-group">--}}
-                                                                                <div class="row">
-                                                                                    <div class="col-lg-3">
-                                                                                        <input type="number" name="watches"
-                                                                                                                  class="form-control"
-                                                                                                                  value="{{ $student->watches_count }}" style="width: 70px;">
+                                                                        <div class="row">
+                                                                            <form
+                                                                                action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
+                                                                                method="POST" class="d-inline-block align-top mr-1">
+                                                                                @csrf
+                                                                                <div class="input-group">
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-3">
+                                                                                            <input type="number" name="watches"
+                                                                                                   class="form-control"
+                                                                                                   value="{{ $student->watches_count }}" style="width: 70px;">
+                                                                                        </div>
+                                                                                        <div class="col-lg-3">
+                                                                                            <button type="submit"
+                                                                                                    class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div class="col-lg-3">
-                                                                                        <button type="submit"
-                                                                                                class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
-                                                                                    </div>
-                                                                                </div>
 
-{{--                                                                                <div class="input-group-append">--}}
-{{--                                                                                   --}}
-{{--                                                                                </div>--}}
-{{--                                                                            </div>--}}
-                                                                        </form>
-                                                                        <br>
+                                                                                    {{--                                                                                <div class="input-group-append">--}}
+                                                                                    {{--                                                                                   --}}
+                                                                                    {{--                                                                                </div>--}}
+                                                                                </div>
+                                                                            </form>
+
+                                                                        </div>
+
                                                                         <div class="row">
                                                                             @if($payment)
                                                                                 <form
