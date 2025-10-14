@@ -280,7 +280,7 @@ return [
                 'points' => 'Points',
                 'education_type_id' => 'Education Type Id',
                 'wallet' => 'Wallet',
-                'id' => 'ID',
+                'id' => 'Student ID',
             ],
             'import_students' => 'Import Students',
             'import_instructions' => 'The Excel file should have the following columns in the specified order:',

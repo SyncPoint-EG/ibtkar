@@ -203,6 +203,7 @@
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
                                                             <tr>
+                                                                <th>{{ __('dashboard.student.fields.id') }}</th>
                                                                 <th>{{ __('dashboard.student.fields.name') }}</th>
                                                                 <th>{{ __('dashboard.common.is_watched') }}</th>
                                                                 <th>{{ __('dashboard.common.watches') }}</th>
@@ -216,6 +217,7 @@
                                                                     $watch = App\Models\Watch::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
                                                                 @endphp
                                                                 <tr>
+                                                                    <td>{{ $student->id }} </td>
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                                                     <td>
                                                                         @if($watch)
