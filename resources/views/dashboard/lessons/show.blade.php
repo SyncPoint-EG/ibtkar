@@ -245,7 +245,7 @@
 {{--                                                                                </div>--}}
                                                                             </div>
                                                                         </form>
-                                                                        <div class="col-lg-6">
+                                                                        <div class="row">
                                                                             @if($payment)
                                                                                 <form
                                                                                     action="{{ route('payments.destroy', $payment->id) }}"
