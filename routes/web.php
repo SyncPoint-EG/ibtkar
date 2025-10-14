@@ -22,6 +22,7 @@ use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\LessonAttachmentController;
 use App\Http\Controllers\Dashboard\LessonController;
 use App\Http\Controllers\Dashboard\PaymentApprovalController;
+use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
@@ -1020,10 +1021,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Student exam taking routes
-    Route::get('exams/{exam}/take', [ExamTakingController::class, 'takeExam'])->name('exams.take');
-    Route::post('exams/{exam}/submit', [ExamTakingController::class, 'submitExam'])->name('exams.submit');
-    Route::post('exams/{exam}/save-answer', [ExamTakingController::class, 'saveAnswer'])->name('exams.save-answer');
-    Route::get('exam-attempts/{attempt}/results', [ExamTakingController::class, 'showResults'])->name('exam-attempts.results');
+//    Route::get('exams/{exam}/take', [ExamTakingController::class, 'takeExam'])->name('exams.take');
+//    Route::post('exams/{exam}/submit', [ExamTakingController::class, 'submitExam'])->name('exams.submit');
+//    Route::post('exams/{exam}/save-answer', [ExamTakingController::class, 'saveAnswer'])->name('exams.save-answer');
+//    Route::get('exam-attempts/{attempt}/results', [ExamTakingController::class, 'showResults'])->name('exam-attempts.results');
 
     // Admin exam management routes (if not already added)
     Route::get('exams/{exam}/questions/{question}', [ExamController::class, 'getQuestion'])->name('exams.get-question');
@@ -1214,7 +1215,7 @@ Route::middleware(['auth'])->group(function() {
         ->middleware('can:delete_luckwheelitem');
 });
 
-Route::prefix('api')->middleware('auth')->name('api.')->group(function () {
+Route::prefix('api')->name('api.')->group(function () {
     Route::get('teachers/{teacher}/courses', [ExamApiController::class, 'getTeacherCourses'])->name('teachers.courses');
     Route::get('stages', [ExamApiController::class, 'getStages'])->name('stages');
     Route::get('stages/{stage}/grades', [ExamApiController::class, 'getGradesByStage'])->name('stages.grades');
