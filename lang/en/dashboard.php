@@ -3,6 +3,7 @@
 return [
         'common' => [
             'dashboard' => 'Dashboard',
+            'delete_payment' => 'Delete Payment',
             'save' => 'Save',
             'optional' => 'Optional',
             'update' => 'Update',
