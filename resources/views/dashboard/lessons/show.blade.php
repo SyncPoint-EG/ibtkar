@@ -239,17 +239,17 @@
                                                                                 </div>
                                                                             </div>
                                                                         </form>
-                                                                        @if($payment)
-                                                                            <form
-                                                                                action="{{ route('payments.destroy', $payment->id) }}"
-                                                                                method="POST" class="delete-form d-inline-block align-top">
-                                                                                @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="button" class="btn btn-sm btn-danger delete-payment-btn">
-                                                                                    <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}
-                                                                                </button>
-                                                                            </form>
-                                                                        @endif
+{{--                                                                        @if($payment)--}}
+{{--                                                                            <form--}}
+{{--                                                                                action="{{ route('payments.destroy', $payment->id) }}"--}}
+{{--                                                                                method="POST" class="delete-form d-inline-block align-top">--}}
+{{--                                                                                @csrf--}}
+{{--                                                                                @method('DELETE')--}}
+{{--                                                                                <button type="button" class="btn btn-sm btn-danger delete-payment-btn">--}}
+{{--                                                                                    <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}--}}
+{{--                                                                                </button>--}}
+{{--                                                                            </form>--}}
+{{--                                                                        @endif--}}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
