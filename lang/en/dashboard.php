@@ -3,6 +3,7 @@
 return [
         'common' => [
             'dashboard' => 'Dashboard',
+            'create' => 'Create',
             'delete_payment' => 'Delete Payment',
             'is_watched' => 'Is Watched',
             'save' => 'Save',
@@ -632,6 +633,11 @@ return [
                 'start_date' => 'Start Date',
                 'end_date' => 'End Date',
             ],
+            'types'=> [
+                'lesson' => 'Lesson',
+                'teacher' => 'Teacher'
+            ],
+            'exam_for' => 'Exam For'
         ],
         'homework' => [
             'title' => 'Homework',

@@ -59,28 +59,32 @@ class ExamController extends Controller
 
     public function edit(Exam $exam)
     {
-        $lessons = Lesson::all();
         $teachers = \App\Models\Teacher::all();
 
-        return view('dashboard.exams.edit', compact('exam', 'lessons', 'teachers'));
+        // Eager-load relationships for pre-selection in the view
+        if ($exam->lesson_id) {
+            $exam->load('lesson.chapter.course.stage', 'lesson.chapter.course.grade', 'lesson.chapter.course.division');
+        } elseif ($exam->course_id) {
+            $exam->load('course', 'teacher');
+        }
+
+        return view('dashboard.exams.edit', compact('exam', 'teachers'));
     }
 
     public function update(ExamRequest $request, Exam $exam)
     {
         $validated = $request->validated();
 
-        if ($request->exam_for === 'lesson') {
-            $validated['teacher_id'] = null;
+        // Handle boolean for is_active checkbox
+        $validated['is_active'] = $request->has('is_active');
+
+        if ($request->input('exam_type') === 'lesson') {
             $validated['course_id'] = null;
-        } else {
+            $validated['teacher_id'] = null;
+        } else { // exam_type is 'teacher'
             $validated['lesson_id'] = null;
         }
 
-        if ($request->is_active) {
-            $validated['is_active'] = 1;
-        } else {
-            $validated['is_active'] = 0;
-        }
         $exam->update($validated);
 
         return redirect()->route('exams.show', $exam)
