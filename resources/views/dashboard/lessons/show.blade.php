@@ -210,9 +210,12 @@
                                                                             method="POST">
                                                                             @csrf
                                                                             <div class="input-group">
-                                                                                <input type="number" name="watches"
-                                                                                       class="form-control"
-                                                                                       value="{{ $student->watches_count }}">
+                                                                                <div class="row">
+                                                                                    <input type="number" name="watches"
+                                                                                           class="form-control"
+                                                                                           value="{{ $student->watches_count }}">
+                                                                                </div>
+
                                                                                 <div class="input-group-append">
                                                                                     <button type="submit"
                                                                                             class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
