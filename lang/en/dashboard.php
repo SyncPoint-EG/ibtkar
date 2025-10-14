@@ -4,6 +4,7 @@ return [
         'common' => [
             'dashboard' => 'Dashboard',
             'delete_payment' => 'Delete Payment',
+            'is_watched' => 'Is Watched',
             'save' => 'Save',
             'optional' => 'Optional',
             'update' => 'Update',
