@@ -225,31 +225,33 @@
                                                                     </td>
                                                                     <td>{{ $student->watches_count }}</td>
                                                                     <td>
-                                                                        <form
-                                                                            action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
-                                                                            method="POST" class="d-inline-block align-top mr-1">
-                                                                            @csrf
-                                                                            <div class="input-group">
-                                                                                <input type="number" name="watches"
-                                                                                       class="form-control"
-                                                                                       value="{{ $student->watches_count }}" style="width: 70px;">
-                                                                                <div class="input-group-append">
-                                                                                    <button type="submit"
-                                                                                            class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
-                                                                        @if($payment)
+                                                                        <div class="d-flex align-items-center">
                                                                             <form
-                                                                                action="{{ route('payments.destroy', $payment->id) }}"
-                                                                                method="POST" class="delete-form d-inline-block align-top">
+                                                                                action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
+                                                                                method="POST" class="mr-1">
                                                                                 @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="button" class="btn btn-sm btn-danger delete-payment-btn">
-                                                                                    <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}
-                                                                                </button>
+                                                                                <div class="input-group">
+                                                                                    <input type="number" name="watches"
+                                                                                           class="form-control"
+                                                                                           value="{{ $student->watches_count }}" style="width: 70px;">
+                                                                                    <div class="input-group-append">
+                                                                                        <button type="submit"
+                                                                                                class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
+                                                                                    </div>
+                                                                                </div>
                                                                             </form>
-                                                                        @endif
+                                                                            @if($payment)
+                                                                                <form
+                                                                                    action="{{ route('payments.destroy', $payment->id) }}"
+                                                                                    method="POST" class="delete-form">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <button type="button" class="btn btn-sm btn-danger delete-payment-btn" title="{{ __('dashboard.common.delete_payment') }}">
+                                                                                        <i class="icon-trash"></i>
+                                                                                    </button>
+                                                                                </form>
+                                                                            @endif
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
