@@ -436,18 +436,41 @@ class TeacherController extends Controller
         $studentsQuery = Student::whereIn('id', $studentIds);
 
         // Filtering
-        if ($request->has('search')) {
-            $studentsQuery->where('name', 'like', '%'.$request->input('search').'%');
+        if ($request->filled('search')) {
+            $studentsQuery->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->input('search').'%')
+                    ->orWhere('phone', 'like', '%'.$request->input('search').'%');
+            });
         }
 
-        $students = $studentsQuery->paginate(10);
+        if ($request->filled('stage_id')) {
+            $studentsQuery->whereHas('grade.stage', function ($q) use ($request) {
+                $q->where('id', $request->input('stage_id'));
+            });
+        }
 
-        return view('dashboard.teachers.students', compact('teacher', 'students'));
+        if ($request->filled('grade_id')) {
+            $studentsQuery->where('grade_id', $request->input('grade_id'));
+        }
+
+        if ($request->filled('division_id')) {
+            $studentsQuery->where('division_id', $request->input('division_id'));
+        }
+
+        $students = $studentsQuery->paginate(10)->withQueryString();
+
+        // Get filter options
+        $assignments = $teacher->subjectTeacherAssignments()->with('stage', 'grade', 'division')->get();
+        $stages = $assignments->pluck('stage')->unique()->whereNotNull();
+        $grades = $assignments->pluck('grade')->unique()->whereNotNull();
+        $divisions = $assignments->pluck('division')->unique()->whereNotNull();
+
+        return view('dashboard.teachers.students', compact('teacher', 'students', 'stages', 'grades', 'divisions'));
     }
 
-    public function exportStudents(Teacher $teacher)
+    public function exportStudents(Request $request, Teacher $teacher)
     {
-        return Excel::download(new TeacherStudentsExport($teacher), 'students.xlsx');
+        return Excel::download(new TeacherStudentsExport($teacher, $request->all()), 'students.xlsx');
     }
 
     public function generateReport(Request $request, Teacher $teacher)

@@ -42,15 +42,64 @@
                             <div class="card-body collapse in">
                                 <div class="card-block card-dashboard">
                                     <div class="row mb-2">
-                                        <div class="col-md-6">
-                                            <a href="{{ route('teachers.students.export', $teacher->id) }}" class="btn btn-success mb-1">
-                                                <i class="icon-download"></i> {{ __('dashboard.common.export') }}
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6 text-right">
+                                        <div class="col-md-12">
                                             <form method="GET" action="{{ route('teachers.students', $teacher->id) }}">
-                                                <input type="text" name="search" class="form-control" style="width: auto; display: inline-block;" placeholder="{{ __('dashboard.student.search_placeholder') }}" value="{{ request('search') }}">
-                                                <button type="submit" class="btn btn-primary">{{ __('dashboard.common.search') }}</button>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="stage_id">{{ __('dashboard.stage.title') }}</label>
+                                                            <select name="stage_id" id="stage_id" class="form-control">
+                                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                                @if(isset($stages))
+                                                                    @foreach($stages as $stage)
+                                                                        <option value="{{ $stage->id }}" {{ request('stage_id') == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
+                                                            <select name="grade_id" id="grade_id" class="form-control">
+                                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                                @if(isset($grades))
+                                                                    @foreach($grades as $grade)
+                                                                        <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="division_id">{{ __('dashboard.division.title') }}</label>
+                                                            <select name="division_id" id="division_id" class="form-control">
+                                                                <option value="">{{ __('dashboard.common.all') }}</option>
+                                                                @if(isset($divisions))
+                                                                    @foreach($divisions as $division)
+                                                                        <option value="{{ $division->id }}" {{ request('division_id') == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="search">{{ __('dashboard.common.search') }}</label>
+                                                            <input type="text" name="search" id="search" class="form-control" placeholder="{{ __('dashboard.student.search_placeholder') }}" value="{{ request('search') }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                                        <a href="{{ route('teachers.students', $teacher->id) }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
+                                                        <a href="{{ route('teachers.students.export', ['teacher' => $teacher->id] + request()->query()) }}" class="btn btn-success">
+                                                            <i class="icon-download"></i> {{ __('dashboard.common.export') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
