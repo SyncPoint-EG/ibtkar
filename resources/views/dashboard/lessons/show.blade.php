@@ -229,7 +229,7 @@
                                                                             action="{{ route('lessons.students.watches.update', [$lesson->id, $student->id]) }}"
                                                                             method="POST" class="d-inline-block align-top mr-1">
                                                                             @csrf
-                                                                            <div class="input-group">
+{{--                                                                            <div class="input-group">--}}
                                                                                 <div class="row">
                                                                                     <div class="col-lg-3">
                                                                                         <input type="number" name="watches"
@@ -245,7 +245,7 @@
 {{--                                                                                <div class="input-group-append">--}}
 {{--                                                                                   --}}
 {{--                                                                                </div>--}}
-                                                                            </div>
+{{--                                                                            </div>--}}
                                                                         </form>
                                                                         <br>
                                                                         <div class="row">
