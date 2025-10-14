@@ -211,14 +211,20 @@
                                                                             @csrf
                                                                             <div class="input-group">
                                                                                 <div class="row">
-                                                                                    <input type="number" name="watches"
-                                                                                           class="form-control"
-                                                                                           value="{{ $student->watches_count }}">
+                                                                                    <div class="col-lg-3">
+                                                                                        <input type="number" name="watches"
+                                                                                               class="form-control"
+                                                                                               value="{{ $student->watches_count }}">
+                                                                                    </div>
+                                                                                    <div class="col-lg-3">
+                                                                                        <button type="submit"
+                                                                                                class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
+                                                                                    </div>
+
                                                                                 </div>
 
                                                                                 <div class="input-group-append">
-                                                                                    <button type="submit"
-                                                                                            class="btn btn-primary">{{ __('dashboard.common.update') }}</button>
+
                                                                                 </div>
                                                                             </div>
                                                                         </form>
