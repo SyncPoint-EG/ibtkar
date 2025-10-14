@@ -231,9 +231,11 @@
                                                                             @csrf
                                                                             <div class="input-group">
                                                                                 <div class="row">
-                                                                                    <div class="col-lg-3"> <input type="number" name="watches"
+                                                                                    <div class="col-lg-3">
+                                                                                        <input type="number" name="watches"
                                                                                                                   class="form-control"
-                                                                                                                  value="{{ $student->watches_count }}" style="width: 70px;"></div>
+                                                                                                                  value="{{ $student->watches_count }}" style="width: 70px;">
+                                                                                    </div>
                                                                                     <div class="col-lg-3">
                                                                                         <button type="submit"
                                                                                                 class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
@@ -245,6 +247,7 @@
 {{--                                                                                </div>--}}
                                                                             </div>
                                                                         </form>
+                                                                        <br>
                                                                         <div class="row">
                                                                             @if($payment)
                                                                                 <form
