@@ -203,7 +203,7 @@
                                                             <tbody>
                                                             @foreach($students as $student)
                                                                 @php
-                                                                    $payment = \App\Models\Payment::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
+                                                                    $payment = App\Models\Payment::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
                                                                 @endphp
                                                                 <tr>
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
