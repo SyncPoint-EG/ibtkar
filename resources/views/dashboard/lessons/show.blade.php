@@ -204,7 +204,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th>{{ __('dashboard.student.fields.name') }}</th>
-                                                                <th>{{ __('dashboard.lesson.fields.is_watched') }}</th>
+                                                                <th>{{ __('dashboard.common.is_watched') }}</th>
                                                                 <th>{{ __('dashboard.common.watches') }}</th>
                                                                 <th>{{ __('dashboard.common.actions') }}</th>
                                                             </tr>
