@@ -204,7 +204,7 @@
                                                             <thead>
                                                             <tr>
                                                                 <th>{{ __('dashboard.student.fields.name') }}</th>
-                                                                <th>{{ __('dashboard.lesson.fields.paid') }}</th>
+                                                                <th>{{ __('dashboard.lesson.fields.is_watched') }}</th>
                                                                 <th>{{ __('dashboard.common.watches') }}</th>
                                                                 <th>{{ __('dashboard.common.actions') }}</th>
                                                             </tr>
@@ -213,11 +213,12 @@
                                                             @foreach($students as $student)
                                                                 @php
                                                                     $payment = App\Models\Payment::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
+                                                                    $watch = App\Models\Watch::where('student_id', $student->id)->where('lesson_id', $lesson->id)->first();
                                                                 @endphp
                                                                 <tr>
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                                                     <td>
-                                                                        @if($payment)
+                                                                        @if($watch)
                                                                             <span class="badge badge-success">{{ __('dashboard.common.yes') }}</span>
                                                                         @else
                                                                             <span class="badge badge-danger">{{ __('dashboard.common.no') }}</span>
