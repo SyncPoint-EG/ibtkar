@@ -231,7 +231,7 @@
                                                                                 method="POST" class="d-inline-block align-top mr-1">
                                                                                 @csrf
                                                                                 <div class="input-group">
-{{--                                                                                    <div class="row">--}}
+                                                                                    <div class="row">
                                                                                         <div class="col-lg-3">
                                                                                             <input type="number" name="watches"
                                                                                                    class="form-control"
@@ -241,7 +241,7 @@
                                                                                             <button type="submit"
                                                                                                     class="btn btn-sm btn-primary">{{ __('dashboard.common.update') }}</button>
                                                                                         </div>
-{{--                                                                                    </div>--}}
+                                                                                    </div>
 
                                                                                     {{--                                                                                <div class="input-group-append">--}}
                                                                                     {{--                                                                                   --}}
@@ -251,19 +251,19 @@
 
                                                                         </div>
 
-                                                                        <div class="row">
-                                                                            @if($payment)
-                                                                                <form
-                                                                                    action="{{ route('payments.destroy', $payment->id) }}"
-                                                                                    method="POST" class="delete-form d-inline-block align-top">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <button type="button" class="btn btn-sm btn-danger delete-payment-btn">
-                                                                                        <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}
-                                                                                    </button>
-                                                                                </form>
-                                                                            @endif
-                                                                        </div>
+{{--                                                                        <div class="row">--}}
+{{--                                                                            @if($payment)--}}
+{{--                                                                                <form--}}
+{{--                                                                                    action="{{ route('payments.destroy', $payment->id) }}"--}}
+{{--                                                                                    method="POST" class="delete-form d-inline-block align-top">--}}
+{{--                                                                                    @csrf--}}
+{{--                                                                                    @method('DELETE')--}}
+{{--                                                                                    <button type="button" class="btn btn-sm btn-danger delete-payment-btn">--}}
+{{--                                                                                        <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}--}}
+{{--                                                                                    </button>--}}
+{{--                                                                                </form>--}}
+{{--                                                                            @endif--}}
+{{--                                                                        </div>--}}
 
 
                                                                     </td>
