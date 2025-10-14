@@ -205,6 +205,8 @@
                                                             <tr>
                                                                 <th>{{ __('dashboard.student.fields.id') }}</th>
                                                                 <th>{{ __('dashboard.student.fields.name') }}</th>
+                                                                <th>{{ __('dashboard.student.fields.phone') }}</th>
+                                                                <th>{{ __('dashboard.student.fields.guardian_number') }}</th>
                                                                 <th>{{ __('dashboard.common.is_watched') }}</th>
                                                                 <th>{{ __('dashboard.common.watches') }}</th>
                                                                 <th>{{ __('dashboard.common.actions') }}</th>
@@ -219,6 +221,8 @@
                                                                 <tr>
                                                                     <td>{{ $student->id }} </td>
                                                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                                                    <td>{{ $student->phone }} </td>
+                                                                    <td>{{ $student->guardian?->phone }} </td>
                                                                     <td>
                                                                         @if($watch)
                                                                             <span class="badge badge-success">{{ __('dashboard.common.yes') }}</span>
