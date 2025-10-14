@@ -19,7 +19,7 @@ class Student extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status', 'verification_code', 'mac_address', 'referral_code', 'image'];
+    protected $fillable = ['first_name', 'last_name', 'phone', 'password', 'governorate_id', 'district_id', 'center_id', 'stage_id', 'grade_id', 'division_id', 'gender', 'birth_date', 'status', 'verification_code', 'mac_address', 'referral_code', 'image','wallet','education_type_id'];
 
     /**
      * Get the table associated with the model.

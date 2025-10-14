@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Exports\PurchasedLessonsExport;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StudentDashbaordRequest;
 use App\Http\Requests\StudentRequest;
 use App\Imports\StudentsImport;
 use App\Models\Center;
@@ -12,6 +13,7 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\Governorate;
 use App\Models\Grade;
+use App\Models\Guardian;
 use App\Models\Payment;
 use App\Models\Stage;
 use App\Models\Student;
@@ -99,7 +101,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request): RedirectResponse
+    public function store(StudentDashbaordRequest $request): RedirectResponse
     {
         try {
             $validated = $request->validated();
@@ -152,20 +154,34 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentRequest $request, Student $student): RedirectResponse
+    public function update(StudentDashbaordRequest $request, Student $student): RedirectResponse
     {
-        try {
+//        try {
             $validated = $request->validated();
             $validated['status'] = 1;
             $this->studentService->update($student, $validated);
 
+            if($request->guardian_number){
+                $guardian = $student->guardian;
+                if($guardian){
+                    $guardian->phone = $request->guardian_number;
+                    $guardian->save();
+                }else{
+                    $guardian =Guardian::create([
+                        'phone' => $request->guardian_number,
+                        'password' => bcrypt($request->guardian_number)
+                    ]);
+                    $student->guardian_id = $guardian->id ;
+                    $student->save();
+                }
+            }
             return redirect()->route('students.index')
                 ->with('success', 'Student updated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Error updating Student: '.$e->getMessage());
-        }
+//        } catch (\Exception $e) {
+//            return redirect()->back()
+//                ->withInput()
+//                ->with('error', 'Error updating Student: '.$e->getMessage());
+//        }
     }
 
     /**

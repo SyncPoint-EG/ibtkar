@@ -46,7 +46,23 @@
                                         <div class="card-text">
                                             <p>{{ __('dashboard.student.update_info') }}</p>
                                         </div>
+                                        @if ($errors->any())
 
+                                            <div class="alert alert-danger">
+
+                                                <ul>
+
+                                                    @foreach ($errors->all() as $error)
+
+                                                        <li>{{ $error }}</li>
+
+                                                    @endforeach
+
+                                                </ul>
+
+                                            </div>
+
+                                        @endif
                                         <form class="form" method="POST"
                                               action="{{ route('students.update', $student->id) }}"
                                               enctype="multipart/form-data">
@@ -95,6 +111,21 @@
                                                            data-placement="top"
                                                            data-title="{{ __("dashboard.student.fields.phone") }}">
                                                     @error('phone')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        for="phone">{{ __("dashboard.student.fields.guardian_number") }}</label>
+                                                    <input type="text" id="guardian_number"
+                                                           class="form-control @error('guardian_number') is-invalid @enderror"
+                                                           name="guardian_number"
+                                                           value="{{ isset($student->guardian) ? $student?->guardian?->phone : old('guardian_number') }}"
+                                                           placeholder="{{ __("dashboard.student.fields.guardian_number") }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.student.fields.guardian_number") }}">
+                                                    @error('guardian_number')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -285,9 +316,9 @@
                                                         <option
                                                             value="">{{ __("dashboard.common.select") }} {{ __("dashboard.student.fields.gender") }}</option>
                                                         <option
-                                                            value="Male" {{ isset($student) && $student->gender == 'male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
+                                                            value="Male" {{ isset($student) && $student->gender == 'Male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
                                                         <option
-                                                            value="Female" {{ isset($student) && $student->gender == 'female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
+                                                            value="Female" {{ isset($student) && $student->gender == 'Female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
                                                     </select>
                                                     @error('gender')
                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -304,6 +335,20 @@
                                                            data-placement="top"
                                                            data-title="{{ __("dashboard.student.fields.birth_date") }}">
                                                     @error('birth_date')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        for="birth_date">{{ __("dashboard.student.fields.wallet") }}</label>
+                                                    <input type="number" id="wallet"
+                                                           class="form-control @error('wallet') is-invalid @enderror"
+                                                           name="wallet"
+                                                           value="{{ isset($student) ? $student->wallet : old('wallet') }}"
+                                                           data-toggle="tooltip" data-trigger="hover"
+                                                           data-placement="top"
+                                                           data-title="{{ __("dashboard.student.fields.wallet") }}">
+                                                    @error('wallet')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
