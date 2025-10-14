@@ -11,10 +11,8 @@
                 <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper col-xs-12">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('lessons.index') }}">{{ __('dashboard.lesson.list') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.common.dashboard') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('lessons.index') }}">{{ __('dashboard.lesson.list') }}</a></li>
                             <li class="breadcrumb-item active">{{ __('dashboard.lesson.view') }}</li>
                         </ol>
                     </div>
@@ -31,13 +29,16 @@
                                     <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
-                                            <li><a href="{{ route('lessons.edit', $lesson->id) }}"
-                                                   class="btn btn-sm btn-primary"><i
-                                                        class="icon-pencil"></i> {{ __('dashboard.common.edit') }}</a>
+                                            <li>
+                                                <a href="{{ route('lessons.edit', $lesson->id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="icon-pencil"></i> {{ __('dashboard.common.edit') }}
+                                                </a>
                                             </li>
-                                            <li><a href="{{ route('lessons.index') }}" class="btn btn-sm btn-secondary"><i
-                                                        class="icon-arrow-left4"></i> {{ __('dashboard.common.back') }}
-                                                </a></li>
+                                            <li>
+                                                <a href="{{ route('lessons.index') }}" class="btn btn-sm btn-secondary">
+                                                    <i class="icon-arrow-left4"></i> {{ __('dashboard.common.back') }}
+                                                </a>
+                                            </li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
                                         </ul>
@@ -54,40 +55,48 @@
                                                             <th width="200">{{ __('dashboard.common.id') }}</th>
                                                             <td>{{ $lesson->id }}</td>
                                                         </tr>
-
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.name") }}
-                                                                :</strong> {{ $lesson->name }}
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.desc") }}
-                                                                :</strong> {{ $lesson->desc }}
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.video_link") }}
-                                                                :</strong><a
-                                                                href="{{ $lesson->video_link }}">{{__('dashboard.lesson.fields.video_link')}}</a>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.video_image") }}
-                                                                :</strong> <img src="{{ $lesson->video_image }}"
-                                                                                width="100px">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.chapter.title") }}
-                                                                :</strong> <a
-                                                                href="{{route('chapters.show',$lesson->chapter_id)}}">{{ $lesson->chapter?->name }}</a>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.course.title") }}
-                                                                :</strong> <a
-                                                                href="{{route('courses.show',$lesson->chapter?->course_id)}}">{{ $lesson->chapter?->course?->name }}</a>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <strong>{{ __("dashboard.lesson.fields.type") }}
-                                                                :</strong> {{ __('dashboard.lesson.types.' . $lesson->type) }}
-                                                        </div>
-
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.fields.name") }}</th>
+                                                            <td>{{ $lesson->name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.fields.desc") }}</th>
+                                                            <td>{{ $lesson->desc }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.fields.video_link") }}</th>
+                                                            <td>
+                                                                <a href="{{ $lesson->video_link }}">
+                                                                    {{__('dashboard.lesson.fields.video_link')}}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.fields.video_image") }}</th>
+                                                            <td>
+                                                                <img src="{{ $lesson->video_image }}" width="100px">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.chapter.title") }}</th>
+                                                            <td>
+                                                                <a href="{{route('chapters.show',$lesson->chapter_id)}}">
+                                                                    {{ $lesson->chapter?->name }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.course.title") }}</th>
+                                                            <td>
+                                                                <a href="{{route('courses.show',$lesson->chapter?->course_id)}}">
+                                                                    {{ $lesson->chapter?->course?->name }}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.fields.type") }}</th>
+                                                            <td>{{ __('dashboard.lesson.types.' . $lesson->type) }}</td>
+                                                        </tr>
                                                         <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
                                                             <td>{{ $lesson->created_at->format('Y-m-d H:i:s') }}</td>
