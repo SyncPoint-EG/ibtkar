@@ -84,6 +84,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('payment_approvals.reject')
         ->middleware('can:reject_payment_approval');
 
+    Route::delete('payments/{payment}', [PaymentController::class, 'destroy'])
+        ->name('payments.destroy')
+        ->middleware('can:delete_payment');
+
     // Routes for Charge Approvals
     Route::get('charge-approvals', [ChargeApprovalController::class, 'index'])
         ->name('charge_approvals.index')

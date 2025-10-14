@@ -246,7 +246,7 @@
                                                                                 @csrf
                                                                                 @method('DELETE')
                                                                                 <button type="button" class="btn btn-sm btn-danger delete-payment-btn">
-                                                                                    <i class="icon-trash"></i> delete
+                                                                                    <i class="icon-trash"></i> {{ __('dashboard.common.delete_payment') }}
                                                                                 </button>
                                                                             </form>
                                                                         @endif
