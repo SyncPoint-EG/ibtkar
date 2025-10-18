@@ -204,4 +204,9 @@ class LessonController extends Controller
 
         return redirect()->back()->with('success', 'Watches updated successfully.');
     }
+
+    public function exportStudents(Lesson $lesson)
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\LessonStudentsExport($lesson), 'lesson-'.$lesson->id.'-students.xlsx');
+    }
 }
