@@ -1017,6 +1017,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('exams/{exam}/submissions', [ExamController::class, 'submissions'])
         ->name('exams.submissions')
         ->middleware('can:view_exam');
+
+    Route::get('exams/{exam}/submissions/export', [ExamController::class, 'exportSubmissions'])
+        ->name('exams.submissions.export')
+        ->middleware('can:view_exam');
 });
 
 Route::middleware(['auth'])->group(function () {
