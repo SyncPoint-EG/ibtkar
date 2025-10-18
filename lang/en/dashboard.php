@@ -59,6 +59,7 @@ return [
             'to' => 'To',
             'view_lessons' => 'View Lessons',
             'add_student' => 'Add Student',
+            'export_students' => 'Export Students',
         ],
         'settings' => [
             'title' => 'Settings',
