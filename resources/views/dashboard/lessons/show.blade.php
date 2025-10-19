@@ -47,7 +47,7 @@
                                 <div class="card-body collapse in">
                                     <div class="card-block">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
@@ -98,6 +98,18 @@
                                                             <td>{{ __('dashboard.lesson.types.' . $lesson->type) }}</td>
                                                         </tr>
                                                         <tr>
+                                                            <th>{{ __("dashboard.lesson.all_purchased_students") }}</th>
+                                                            <td>{{$totalStudents}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.students_watched") }}</th>
+                                                            <td>{{$watchedStudents}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>{{ __("dashboard.lesson.students_not_watched") }}</th>
+                                                            <td>{{$totalStudents - $watchedStudents}}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <th>{{ __('dashboard.common.created_at') }}</th>
                                                             <td>{{ $lesson->created_at->format('Y-m-d H:i:s') }}</td>
                                                         </tr>
@@ -109,9 +121,9 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <x-svg-pie-chart :watched="$watchedStudents" :total="$totalStudents" />
-                                            </div>
+{{--                                            <div class="col-md-6">--}}
+{{--                                                {!! $chart->container() !!}--}}
+{{--                                            </div>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -292,86 +304,8 @@
     </div>
 @endsection
 
-@section('page_scripts')
-    <script>
-        $(document).ready(function () {
-            // Lesson delete confirmation
-            $('.delete-btn').on('click', function (e) {
-                e.preventDefault();
-                if (confirm('{{ __("dashboard.lesson.delete_confirm") }}')) {
-                    $(this).closest('form.delete-form').submit();
-                }
-            });
-
-            // Payment delete confirmation
-            $('#students-section').on('click', '.delete-payment-btn', function (e) {
-                e.preventDefault();
-                if (confirm('{{ __("dashboard.payment.delete_confirm") }}')) {
-                    $(this).closest('form.delete-form').submit();
-                }
-            });
-
-            $('#select_student').select2({
-                ajax: {
-                    url: '{{ route("students.index") }}',
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            page: params.page
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-
-                        var results = [];
-                        if (data && data.data) {
-                            results = data.data.map(function(student) {
-                                return {
-                                    id: student.id,
-                                    text: student.first_name + ' ' + student.last_name,
-                                    first_name: student.first_name,
-                                    last_name: student.last_name,
-                                    phone: student.phone
-                                };
-                            });
-                        }
-
-                        return {
-                            results: results,
-                            pagination: {
-                                more: (params.page * 30) < data.total
-                            }
-                        };
-                    },
-                    cache: true
-                },
-                placeholder: '{{ __("dashboard.student.search_by_name_or_phone") }}',
-                escapeMarkup: function (markup) {
-                    return markup;
-                }, // let our custom formatter work
-                minimumInputLength: 1,
-                templateResult: function (student) {
-                    if (student.loading) {
-                        return student.text;
-                    }
-
-                    return "<div class='select2-result-repository clearfix'>" +
-                        "<div class='select2-result-repository__meta'>" +
-                        "<div class='select2-result-repository__title'>" + student.first_name + " " + student.last_name + "</div>" +
-                        "<div class='select2-result-repository__description'>" + student.phone + "</div>" +
-                        "</div></div>";
-                },
-                templateSelection: function (student) {
-                    if (student.first_name && student.last_name) {
-                        return student.first_name + " " + student.last_name;
-                    }
-                    return student.text;
-                }
-            });
+{{--@section('page_scripts')--}}
+{{--    {!! $chart->script() !!}--}}
+{{--@endsection--}}
 
 
-        });
-    </script>
-@endsection

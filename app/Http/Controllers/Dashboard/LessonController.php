@@ -112,7 +112,11 @@ class LessonController extends Controller
             }
         }
 
-        return view('dashboard.lessons.show', compact('lesson', 'students', 'totalStudents', 'watchedStudents'));
+//        $chart = new \App\Charts\LessonStudentsChart;
+//        $chart->labels(['Watched', 'Not Watched']);
+//        $chart->dataset('My dataset', 'doughnut', [$watchedStudents, $totalStudents - $watchedStudents]);
+
+        return view('dashboard.lessons.show', compact('lesson', 'students','watchedStudents','totalStudents'));
     }
 
     /**
