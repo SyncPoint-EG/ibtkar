@@ -280,15 +280,17 @@ class Teacher extends Authenticatable
 
     public function getStudentsCountAttribute()
     {
-        $teacherStages = $this->courses->pluck('stage_id');
-        $teacherGrades = $this->courses->pluck('grade_id');
-        $teacherDivisions = $this->courses->pluck('division_id');
+        $courseIds = $this->courses()->pluck('id');
 
-        return Student::where(function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
-            $q->whereIn('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades)
-                ->whereIn('division_id', $teacherDivisions);
-        })
-            ->count();
+        $chapterIds = \App\Models\Chapter::whereIn('course_id', $courseIds)->pluck('id');
+
+        $lessonIds = \App\Models\Lesson::whereIn('chapter_id', $chapterIds)->pluck('id');
+
+        return Student::query()->whereHas('payments',function ($q) use($lessonIds,$chapterIds,$courseIds){
+            $q->whereIn('lesson_id',$lessonIds)
+                ->orWhereIn('chapter_id',$chapterIds)
+                ->orWhereIn('course_id',$courseIds);
+        })->count();
     }
 
     public function attachments()
