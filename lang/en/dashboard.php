@@ -505,6 +505,8 @@ return [
                 'bio' => 'Bio',
                 'website_image' => 'Website Image',
             ],
+            'teachers_courses' => 'Teachers Courses',
+            'number_of_courses' => 'Number of courses',
         ],
         'education_type' => [
             'title' => 'Education Type',
@@ -551,6 +553,8 @@ return [
                 'course_id' => 'Course Id',
                 'price' => 'Price',
             ],
+            'teachers_chapters' => 'Teachers Chapters',
+            'number_of_chapters' => 'Number of chapters',
         ],
         'lesson' => [
             'title' => 'Lesson',

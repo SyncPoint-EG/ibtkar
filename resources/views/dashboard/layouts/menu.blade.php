@@ -98,12 +98,12 @@
 @endcan
 
 @can('view_course')
-    <li class=" nav-item"><a href="{{ route('courses.index') }}"><i class="icon-folder"></i><span data-i18n="nav.courses.main" class="menu-title">{{__('dashboard.course.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('courses.teachers') }}"><i class="icon-folder"></i><span data-i18n="nav.courses.main" class="menu-title">{{__('dashboard.course.title_plural')}}</span></a>
     </li>
 @endcan
 
 @can('view_chapter')
-    <li class=" nav-item"><a href="{{ route('chapters.index') }}"><i class="icon-bookmark"></i><span data-i18n="nav.chapters.main" class="menu-title">{{__('dashboard.chapter.title_plural')}}</span></a>
+    <li class=" nav-item"><a href="{{ route('chapters.teachers') }}"><i class="icon-bookmark"></i><span data-i18n="nav.chapters.main" class="menu-title">{{__('dashboard.chapter.title_plural')}}</span></a>
     </li>
 @endcan
 

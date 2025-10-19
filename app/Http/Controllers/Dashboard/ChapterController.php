@@ -171,6 +171,23 @@ class ChapterController extends Controller
         }
     }
 
+    public function teachers()
+    {
+        $teachers = \App\Models\Teacher::all();
+        foreach ($teachers as $teacher) {
+            $teacher->chapters_count = $teacher->chapters()->count();
+        }
+
+        return view('dashboard.chapters.teachers', compact('teachers'));
+    }
+
+    public function teacherGrades($teacher_id)
+    {
+        $teacher = \App\Models\Teacher::findOrFail($teacher_id);
+        $grades = $teacher->grades;
+        return view('dashboard.chapters.teacher-grades', compact('teacher', 'grades'));
+    }
+
     public function updateWatches(Request $request, Chapter $chapter, Student $student)
     {
         $request->validate([

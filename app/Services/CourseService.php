@@ -20,11 +20,18 @@ class CourseService
     /**
      * Get all courses with pagination
      */
-    public function getAllPaginated(int $perPage = 15, $with = []): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, array $filters = [], array $with = []): LengthAwarePaginator
     {
         $perPage = request()->perPage ?? $perPage;
 
-        return $this->model->with($with)->latest()->paginate($perPage);
+        return $this->model
+            ->when($filters['teacher_id'] ?? null, function ($query, $teacher_id) {
+                $query->where('teacher_id', $teacher_id);
+            })
+            ->when($filters['grade_id'] ?? null, function ($query, $grade_id) {
+                $query->where('grade_id', $grade_id);
+            })
+            ->with($with)->latest()->paginate($perPage);
     }
 
     /**

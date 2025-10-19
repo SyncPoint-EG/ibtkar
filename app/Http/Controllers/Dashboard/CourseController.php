@@ -31,11 +31,31 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $courses = $this->courseService->getAllPaginated();
+        $filters = $request->only(['teacher_id', 'grade_id']);
+        $courses = $this->courseService->getAllPaginated(15, $filters);
+        $teachers = Teacher::all();
+        $grades = Grade::all();
 
-        return view('dashboard.courses.index', compact('courses'));
+        return view('dashboard.courses.index', compact('courses', 'teachers', 'grades'));
+    }
+
+    public function teachers()
+    {
+        $teachers = \App\Models\Teacher::all();
+        foreach ($teachers as $teacher) {
+            $teacher->courses_count = $teacher->courses()->count();
+        }
+
+        return view('dashboard.courses.teachers', compact('teachers'));
+    }
+
+    public function teacherGrades($teacher_id)
+    {
+        $teacher = \App\Models\Teacher::findOrFail($teacher_id);
+        $grades = $teacher->grades;
+        return view('dashboard.courses.teacher-grades', compact('teacher', 'grades'));
     }
 
     /**

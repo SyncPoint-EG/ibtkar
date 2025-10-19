@@ -871,7 +871,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Routes for Course
 Route::middleware(['auth'])->group(function () {
-    Route::get('courses', [CourseController::class, 'index'])
+    Route::get('courses/teachers', [CourseController::class, 'teachers'])->name('courses.teachers');
+Route::get('courses/teachers/{teacher_id}/grades', [CourseController::class, 'teacherGrades'])->name('courses.teacher.grades');
+Route::get('courses', [CourseController::class, 'index'])
         ->name('courses.index')
         ->middleware('can:view_course');
 
@@ -907,7 +909,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Routes for Chapter
 Route::middleware(['auth'])->group(function () {
-    Route::get('chapters', [ChapterController::class, 'index'])
+    Route::get('chapters/teachers', [ChapterController::class, 'teachers'])->name('chapters.teachers');
+Route::get('chapters/teachers/{teacher_id}/grades', [ChapterController::class, 'teacherGrades'])->name('chapters.teacher.grades');
+Route::get('chapters', [ChapterController::class, 'index'])
         ->name('chapters.index')
         ->middleware('can:view_chapter');
 
