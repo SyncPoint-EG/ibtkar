@@ -265,13 +265,17 @@ class Teacher extends Authenticatable
         $teacherStages = $this->courses->pluck('stage_id');
         $teacherGrades = $this->courses->pluck('grade_id');
         $teacherDivisions = $this->courses->pluck('division_id');
-
         return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
-            $q->wherein('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades);
-            if($teacherDivisions){
-                $q->whereIn('division_id', $teacherDivisions);
-            }
+            $q->wherein('teacher_id', $this->id);
+
         })->count();
+
+//        return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
+//            $q->wherein('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades);
+//            if($teacherDivisions){
+//                $q->whereIn('division_id', $teacherDivisions);
+//            }
+//        })->count();
     }
 
     public function getStudentsCountAttribute()
