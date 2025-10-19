@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Lesson;
 use App\Models\Payment;
+use App\Models\Watch;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -36,12 +37,16 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             'Payment Method',
             'Amount',
             'Payment Code',
+            'Is Watched',
+            'Watch Count',
             'Date',
         ];
     }
 
     public function map($payment): array
     {
+        $watch = Watch::where('student_id', $payment?->student->id)->where('lesson_id', $payment?->lesson->id)->first();
+
         return [
             $payment->student->id,
             $payment->student->name,
@@ -51,6 +56,8 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             $payment->payment_method,
             $payment->amount,
             $payment->payment_code,
+            $watch ? 'Yes' : 'No',
+            $payment?->student?->watches_count,
             $payment->created_at->format('d-m-Y H:i'),
         ];
     }
