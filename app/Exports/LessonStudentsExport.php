@@ -57,7 +57,7 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             $payment->amount,
             $payment->payment_code,
             $watch ? 'Yes' : 'No',
-            $payment?->student?->watches_count,
+            $watch->count,
             $payment->created_at->format('d-m-Y H:i'),
         ];
     }
