@@ -366,4 +366,9 @@ class ExamController extends Controller
 
         return view('dashboard.exams.submissions', compact('exam'));
     }
+
+    public function exportSubmissions(Exam $exam)
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SubmissionsExport($exam), 'submissions-'.$exam->id.'.xlsx');
+    }
 }

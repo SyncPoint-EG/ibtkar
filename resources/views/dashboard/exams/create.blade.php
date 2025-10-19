@@ -83,7 +83,7 @@
                                                             <select class="form-control" id="teacher_id" data-placeholder="{{ __('dashboard.common.select') }}">
                                                                 <option value="">{{ __('dashboard.common.select') }}</option>
                                                                 @foreach($teachers as $teacher)
-                                                                    <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                                                                    <option value="{{ $teacher->id }}">{{ $teacher->name }} </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>

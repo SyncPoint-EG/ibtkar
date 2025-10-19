@@ -25,11 +25,17 @@
                                 <h4 class="card-title">Submissions</h4>
                             </div>
                             <div class="card-body collapse in">
+                                <div class="card-block">
+                                    <a href="{{ route('exams.submissions.export', $exam->id) }}" class="btn btn-success mb-1">
+                                        <i class="icon-download"></i> {{ __('dashboard.common.export') }}
+                                    </a>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                         <tr>
                                             <th>Student</th>
+                                            <th>Student Phone</th>
                                             <th>Score</th>
                                             <th>Submitted At</th>
                                             <th>Actions</th>
@@ -39,6 +45,7 @@
                                         @foreach($exam->attempts as $attempt)
                                             <tr>
                                                 <td>{{ $attempt->student->name }}</td>
+                                                <td>{{ $attempt->student->phone }}</td>
                                                 <td>{{ $attempt->score }} / {{ $attempt->total_marks }}</td>
                                                 <td>{{ $attempt->created_at->format('d-m-Y H:i') }}</td>
                                                 <td>

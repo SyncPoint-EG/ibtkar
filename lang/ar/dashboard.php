@@ -54,6 +54,7 @@ return [
         'from' => 'من',
         'to' => 'إلى',
         'view_lessons' => 'عرض الدروس',
+        'export_students' => 'تصدير الطلاب',
     ],
     'settings' => [
         'title' => 'الإعدادات',

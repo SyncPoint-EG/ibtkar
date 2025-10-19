@@ -982,6 +982,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('lessons/{lesson}/students/payments', [PaymentApprovalController::class, 'storeForStudent'])
         ->name('lessons.students.payments.store')
         ->middleware('can:create_payment');
+
+    Route::get('lessons/{lesson}/students/export', [LessonController::class, 'exportStudents'])
+        ->name('lessons.students.export')
+        ->middleware('can:view_lesson');
 });
 
 // Routes for Exam
@@ -1016,6 +1020,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('exams/{exam}/submissions', [ExamController::class, 'submissions'])
         ->name('exams.submissions')
+        ->middleware('can:view_exam');
+
+    Route::get('exams/{exam}/submissions/export', [ExamController::class, 'exportSubmissions'])
+        ->name('exams.submissions.export')
         ->middleware('can:view_exam');
 });
 
