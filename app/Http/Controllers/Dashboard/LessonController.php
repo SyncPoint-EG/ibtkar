@@ -32,7 +32,7 @@ class LessonController extends Controller
      */
     public function index(Request $request, $teacher_id = null): View
     {
-        $filters = $request->only(['course_id', 'chapter_id', 'name', 'created_at', 'date']);
+        $filters = $request->only(['course_id', 'chapter_id', 'name', 'created_at', 'date','teacher_id']);
         if ($teacher_id) {
             $filters['teacher_id'] = $teacher_id;
         }
