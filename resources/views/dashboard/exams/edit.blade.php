@@ -187,7 +187,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="pass_degree">{{ __('dashboard.exam.fields.pass_degree') }} <span class="text-danger">*</span></label>
+                                                        <input type="number" class="form-control @error('pass_degree') is-invalid @enderror"
+                                                               id="pass_degree" name="pass_degree" value="{{ $exam->pass_degree }}" min="1" required>
+                                                        @error('pass_degree')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group">
                                                 <label class="display-inline-block custom-control custom-checkbox">
                                                     <input type="hidden" name="is_active" value="0">

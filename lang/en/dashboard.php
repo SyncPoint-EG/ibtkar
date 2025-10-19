@@ -632,6 +632,7 @@ return [
                 'is_active' => 'Is Active',
                 'start_date' => 'Start Date',
                 'end_date' => 'End Date',
+                'pass_degree' => 'Pass Degree',
             ],
             'types'=> [
                 'lesson' => 'Lesson',
