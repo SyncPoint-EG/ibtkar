@@ -267,8 +267,10 @@ class Teacher extends Authenticatable
         $teacherDivisions = $this->courses->pluck('division_id');
 
         return Lesson::whereHas('chapter.course', function ($q) use ($teacherDivisions, $teacherStages, $teacherGrades) {
-            $q->wherein('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades)
-                ->whereIn('division_id', $teacherDivisions);
+            $q->wherein('stage_id', $teacherStages)->whereIn('grade_id', $teacherGrades);
+            if($teacherDivisions){
+                $q->whereIn('division_id', $teacherDivisions);
+            }
         })->count();
     }
 

@@ -33,6 +33,8 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             'Student Name',
             'Student Phone',
             'Guardian Phone',
+            'Lesson ID',
+            'Lesson Name',
             'Payment ID',
             'Payment Status',
             'Payment Method',
@@ -46,13 +48,15 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($payment): array
     {
-        $watch = Watch::where('student_id', $payment?->student->id)->where('lesson_id', $payment?->lesson->id)->first();
+        $watch = Watch::where('student_id', $payment?->student?->id)->where('lesson_id', $payment?->lesson?->id)->first();
 
         return [
             $payment->student->id,
             $payment->student->name,
             $payment->student->phone,
             $payment?->student?->guardian->phone,
+            $payment?->lesson?->id,
+            $payment?->lesson?->name,
             $payment->id,
             $payment->payment_status,
             $payment->payment_method,

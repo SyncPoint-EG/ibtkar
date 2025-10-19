@@ -36,6 +36,7 @@
                                         <tr>
                                             <th>Student</th>
                                             <th>Student Phone</th>
+                                            <th>Guardian Phone</th>
                                             <th>Score</th>
                                             <th>Submitted At</th>
                                             <th>Actions</th>
@@ -46,6 +47,7 @@
                                             <tr>
                                                 <td>{{ $attempt->student->name }}</td>
                                                 <td>{{ $attempt->student->phone }}</td>
+                                                <td>{{ $attempt->student?->guardian?->phone }}</td>
                                                 <td>{{ $attempt->score }} / {{ $attempt->total_marks }}</td>
                                                 <td>{{ $attempt->created_at->format('d-m-Y H:i') }}</td>
                                                 <td>
