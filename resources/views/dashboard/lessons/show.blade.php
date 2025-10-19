@@ -106,6 +106,10 @@
                                                             <td>{{$watchedStudents}}</td>
                                                         </tr>
                                                         <tr>
+                                                            <th>{{ __("dashboard.lesson.students_watched_percentage") }}</th>
+                                                            <td>{{$watchedStudents / $totalStudents * 100 .' %'}}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <th>{{ __("dashboard.lesson.students_not_watched") }}</th>
                                                             <td>{{$totalStudents - $watchedStudents}}</td>
                                                         </tr>

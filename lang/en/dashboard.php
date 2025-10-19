@@ -564,6 +564,7 @@ return [
 
             'all_purchased_students' => 'All Purchased Students Count',
             'students_watched' => 'Students Watched Count',
+            'students_watched_percentage' => 'Students Watched Percentage',
             'students_not_watched' => 'Students Not Watched Count',
 
             'create' => 'Create Lesson',
