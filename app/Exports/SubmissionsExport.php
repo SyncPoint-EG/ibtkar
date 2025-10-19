@@ -26,7 +26,7 @@ class SubmissionsExport implements FromCollection, WithHeadings, WithMapping
         return [
             'Student Name',
             'Student Phone',
-            'Guardian Phone',
+//            'Guardian Phone',
             'Score',
             'Total Marks',
             'Submitted At',
@@ -38,7 +38,7 @@ class SubmissionsExport implements FromCollection, WithHeadings, WithMapping
         return [
             $attempt->student->name,
             $attempt->student->phone,
-            $attempt->student?->guardian->phone,
+//            $attempt->student?->guardian->phone,
             $attempt->score,
             $attempt->total_marks,
             $attempt->created_at->format('d-m-Y H:i'),
