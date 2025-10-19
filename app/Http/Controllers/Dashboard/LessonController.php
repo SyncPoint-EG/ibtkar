@@ -104,8 +104,15 @@ class LessonController extends Controller
     public function show(Lesson $lesson): View
     {
         $students = $this->lessonService->getStudents($lesson);
+        $totalStudents = $students->count();
+        $watchedStudents = 0;
+        foreach($students as $student){
+            if($student->watches()->where('lesson_id', $lesson->id)->exists()){
+                $watchedStudents++;
+            }
+        }
 
-        return view('dashboard.lessons.show', compact('lesson', 'students'));
+        return view('dashboard.lessons.show', compact('lesson', 'students', 'totalStudents', 'watchedStudents'));
     }
 
     /**

@@ -47,7 +47,7 @@
                                 <div class="card-body collapse in">
                                     <div class="card-block">
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
@@ -108,6 +108,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <canvas id="studentsChart"></canvas>
                                             </div>
                                         </div>
                                     </div>
@@ -290,6 +293,7 @@
 @endsection
 
 @section('page_scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         $(document).ready(function () {
             // Lesson delete confirmation
@@ -365,6 +369,43 @@
                         return student.first_name + " " + student.last_name;
                     }
                     return student.text;
+                }
+            });
+
+            var ctx = document.getElementById('studentsChart').getContext('2d');
+            var watchedStudents = {{ $watchedStudents }};
+            var totalStudents = {{ $totalStudents }};
+            var notWatchedStudents = totalStudents - watchedStudents;
+
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Watched', 'Not Watched'],
+                    datasets: [{
+                        label: '# of Students',
+                        data: [watchedStudents, notWatchedStudents],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Students Watch Statistics'
+                        }
+                    }
                 }
             });
         });
