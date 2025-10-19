@@ -51,7 +51,7 @@
                                         <div class="col-md-8">
                                             <h5 class="card-title">{{ $teacher->name }}</h5>
                                             <p class="card-text">{{ __('dashboard.lesson.number_of_lessons') }}: {{ $teacher->lessons_count }}</p>
-                                            <a href="{{ route('lessons.teacher', ['teacher_id' => $teacher->id]) }}" class="btn btn-primary">{{ __('dashboard.common.view_lessons') }}</a>
+                                            <a href="{{ route('lessons.teacher.grades', ['teacher_id' => $teacher->id]) }}" class="btn btn-primary">{{ __('dashboard.common.view_grades') }}</a>
                                         </div>
                                     </div>
                                 </div>

@@ -95,11 +95,24 @@
                                                     <input type="date" name="date" id="date" class="form-control" value="{{ request('date') }}">
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
-                                            <a href="{{ route('lessons.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
 
 
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <div class="form-group">
+                                                    <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
+                                                    <select name="grade_id" id="grade_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($grades as $grade)
+                                                            <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                        <a href="{{ route('lessons.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
 
                                     </form>
 

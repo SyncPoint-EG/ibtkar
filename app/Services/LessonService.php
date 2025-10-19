@@ -28,6 +28,11 @@ class LessonService
                     $query->where('teacher_id', $teacher_id);
                 });
             })
+            ->when($filters['grade_id'] ?? null, function ($query, $grade_id) {
+                return $query->whereHas('chapter.course', function ($query) use ($grade_id) {
+                    $query->where('grade_id', $grade_id);
+                });
+            })
             ->when($filters['course_id'] ?? null, function ($query, $course_id) {
                 return $query->whereHas('chapter', function ($query) use ($course_id) {
                     $query->where('course_id', $course_id);

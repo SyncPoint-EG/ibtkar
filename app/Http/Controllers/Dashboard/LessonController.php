@@ -32,7 +32,7 @@ class LessonController extends Controller
      */
     public function index(Request $request, $teacher_id = null): View
     {
-        $filters = $request->only(['course_id', 'chapter_id', 'name', 'created_at', 'date','teacher_id']);
+        $filters = $request->only(['course_id', 'chapter_id', 'name', 'created_at', 'date','teacher_id','grade_id']);
         if ($teacher_id) {
             $filters['teacher_id'] = $teacher_id;
         }
@@ -40,8 +40,9 @@ class LessonController extends Controller
         $teachers = \App\Models\Teacher::all();
         $courses = \App\Models\Course::all();
         $chapters = \App\Models\Chapter::all();
+        $grades = \App\Models\Grade::all();
 
-        return view('dashboard.lessons.index', compact('lessons', 'teachers', 'courses', 'chapters'));
+        return view('dashboard.lessons.index', compact('lessons', 'teachers', 'courses', 'chapters','grades'));
     }
 
     /**
@@ -189,6 +190,13 @@ class LessonController extends Controller
         }
 
         return view('dashboard.lessons.teachers', compact('teachers'));
+    }
+
+    public function teacherGrades($teacher_id)
+    {
+        $teacher = \App\Models\Teacher::findOrFail($teacher_id);
+        $grades = $teacher->grades;
+        return view('dashboard.lessons.teacher-grades', compact('teacher', 'grades'));
     }
 
     public function updateWatches(Request $request, Lesson $lesson, Student $student)

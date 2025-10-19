@@ -58,6 +58,7 @@ return [
             'from' => 'From',
             'to' => 'To',
             'view_lessons' => 'View Lessons',
+            'view_grades' => 'View Grades',
             'add_student' => 'Add Student',
             'export_students' => 'Export Students',
         ],

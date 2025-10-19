@@ -941,6 +941,7 @@ Route::middleware(['auth'])->group(function () {
 // Routes for Lesson
 Route::middleware(['auth'])->group(function () {
     Route::get('lessons/teachers', [LessonController::class, 'teachers'])->name('lessons.teachers');
+Route::get('lessons/teachers/{teacher_id}/grades', [LessonController::class, 'teacherGrades'])->name('lessons.teacher.grades');
     Route::get('lessons/teacher/{teacher_id}', [LessonController::class, 'index'])->name('lessons.teacher');
     Route::get('lessons', [LessonController::class, 'index'])
         ->name('lessons.index')
