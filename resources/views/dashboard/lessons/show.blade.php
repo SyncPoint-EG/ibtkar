@@ -110,7 +110,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <canvas id="studentsChart"></canvas>
+                                                <x-svg-pie-chart :watched="$watchedStudents" :total="$totalStudents" />
                                             </div>
                                         </div>
                                     </div>
@@ -371,42 +371,7 @@
                 }
             });
 
-            var ctx = document.getElementById('studentsChart').getContext('2d');
-            var watchedStudents = {{ $watchedStudents }};
-            var totalStudents = {{ $totalStudents }};
-            var notWatchedStudents = totalStudents - watchedStudents;
 
-            var myChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Watched', 'Not Watched'],
-                    datasets: [{
-                        label: '# of Students',
-                        data: [watchedStudents, notWatchedStudents],
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(255, 99, 132, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 99, 132, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Students Watch Statistics'
-                        }
-                    }
-                }
-            });
         });
     </script>
 @endsection
