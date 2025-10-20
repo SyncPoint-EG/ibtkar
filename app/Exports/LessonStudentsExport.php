@@ -51,9 +51,9 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
         $watch = Watch::where('student_id', $payment?->student?->id)->where('lesson_id', $payment?->lesson?->id)->first();
 
         return [
-            $payment->student->id,
-            $payment->student->name,
-            $payment->student->phone,
+            $payment?->student->id,
+            $payment?->student->name,
+            $payment?->student->phone,
             $payment?->student?->guardian->phone,
             $payment?->lesson?->id,
             $payment?->lesson?->name,
@@ -64,7 +64,7 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             $payment->payment_code,
             $watch ? 'Yes' : 'No',
             $watch->count,
-            $payment->created_at->format('d-m-Y H:i'),
+            $payment?->created_at?->format('d-m-Y H:i'),
         ];
     }
 }
