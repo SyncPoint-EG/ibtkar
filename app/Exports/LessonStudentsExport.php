@@ -54,7 +54,7 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             $payment?->student?->id,
             $payment?->student?->name,
             $payment?->student?->phone,
-            $payment?->student?->guardian->phone,
+            $payment?->student?->guardian?->phone,
             $payment?->lesson?->id,
             $payment?->lesson?->name,
             $payment->id,
