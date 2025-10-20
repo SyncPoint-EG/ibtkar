@@ -22,7 +22,7 @@ class ExamRequest extends FormRequest
             'end_date' => 'nullable|date|after:start_date',
             'is_active' => 'boolean',
             'exam_type' => 'required|in:lesson,teacher',
-            'pass_degree' => 'nullable|integer|min:0|max:total_marks',
+            'pass_degree' => 'nullable|',
         ];
 
         if ($this->input('exam_type') === 'lesson') {
