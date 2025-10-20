@@ -73,75 +73,7 @@ class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
             $payment->amount,
             $payment->payment_code,
             $watch ? 'Yes' : 'No',
-            $watch?->watches,
-            $payment?->created_at?->format('d-m-Y H:i'),
-        ];
-    }
-}
-Exports;
-
-use App\Models\Lesson;
-use App\Models\Payment;
-use App\Models\Watch;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-
-class LessonStudentsExport implements FromCollection, WithHeadings, WithMapping
-{
-    protected $lesson;
-
-    public function __construct(Lesson $lesson)
-    {
-        $this->lesson = $lesson;
-    }
-
-    public function collection()
-    {
-        return Payment::where('lesson_id', $this->lesson->id)
-            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
-            ->with('student') // Eager load student details
-            ->get();
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Student ID',
-            'Student Name',
-            'Student Phone',
-            'Guardian Phone',
-            'Lesson ID',
-            'Lesson Name',
-            'Payment ID',
-            'Payment Status',
-            'Payment Method',
-            'Amount',
-            'Payment Code',
-            'Is Watched',
-            'Watch Count',
-            'Date',
-        ];
-    }
-
-    public function map($payment): array
-    {
-        $watch = Watch::where('student_id', $payment?->student?->id)->where('lesson_id', $payment?->lesson?->id)->first();
-
-        return [
-            $payment?->student?->id,
-            $payment?->student?->name,
-            $payment?->student?->phone,
-            $payment?->student?->guardian?->phone,
-            $payment?->lesson?->id,
-            $payment?->lesson?->name,
-            $payment->id,
-            $payment->payment_status,
-            $payment->payment_method,
-            $payment->amount,
-            $payment->payment_code,
-            $watch ? 'Yes' : 'No',
-            $watch->count,
+            $watch?->count,
             $payment?->created_at?->format('d-m-Y H:i'),
         ];
     }
