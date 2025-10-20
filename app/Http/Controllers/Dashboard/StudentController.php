@@ -241,4 +241,19 @@ class StudentController extends Controller
     {
         return Excel::download(new PurchasedLessonsExport($student), 'purchased-lessons.xlsx');
     }
+
+    public function submissions(Student $student)
+    {
+        $examAttempts = $student->examAttempts()->with('exam.lesson')->paginate(10);
+
+        return view('dashboard.students.submissions', compact('student', 'examAttempts'));
+    }
+
+    public function exportSubmissions(Student $student)
+    {
+        $studentName = $student->first_name . '_' . $student->last_name;
+        $date = now()->format('Y-m-d');
+        $fileName = $studentName . '_exams_results_' . $date . '.xlsx';
+        return Excel::download(new \App\Exports\StudentSubmissionsExport($student), $fileName);
+    }
 }

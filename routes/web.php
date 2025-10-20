@@ -38,7 +38,7 @@ use App\Http\Controllers\Dashboard\LuckWheelItemController;
 
 Route::get('/index', [\App\Http\Controllers\Dashboard\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('test',[\App\Http\Controllers\Dashboard\HomeController::class,'test']);
-// Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
+ Route::get('/', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->middleware('guest');
 
 // Authentication Routes
 Route::get('/register', [App\Http\Controllers\AuthController::class, 'showRegisterForm'])->name('register')->middleware('guest');
@@ -674,6 +674,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('students/{student}/export-lessons', [StudentController::class, 'exportLessons'])
         ->name('students.export.lessons')
+        ->middleware('can:view_student');
+
+    Route::get('students/{student}/submissions', [StudentController::class, 'submissions'])
+        ->name('students.submissions')
+        ->middleware('can:view_student');
+
+    Route::get('students/{student}/submissions/export', [StudentController::class, 'exportSubmissions'])
+        ->name('students.submissions.export')
         ->middleware('can:view_student');
 });
 
