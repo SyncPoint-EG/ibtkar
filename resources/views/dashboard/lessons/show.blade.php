@@ -308,8 +308,33 @@
     </div>
 @endsection
 
-{{--@section('page_scripts')--}}
-{{--    {!! $chart->script() !!}--}}
-{{--@endsection--}}
+@section('page_scripts')
+
+    <script>
+        $(document).ready(function() {
+            $('#select_student').select2({
+                ajax: {
+                    url: '{{ route("students.index") }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults: function (data) {
+                        // transform the data to the format select2 expects
+                        return {
+                            results: data.data
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1,
+            });
+        });
+    </script>
+
+@endsection
 
 
