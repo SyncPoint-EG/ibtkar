@@ -209,6 +209,7 @@
                                                         @csrf
                                                         <input type="hidden" name="payment_method" value="gift">
                                                         <div class="row">
+                                                            <label>Add Student to this lesson</label>
                                                             <select class="form-control select2" id="select_student" name="student_id"
                                                                     data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
                                                                 <option></option>
