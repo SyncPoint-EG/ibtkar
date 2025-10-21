@@ -209,15 +209,13 @@
                                                         @csrf
                                                         <input type="hidden" name="payment_method" value="gift">
                                                         <div class="row">
-                                                            <div class="col-md-10">
-                                                                <select class="form-control select2" id="select_student" name="student_id"
-                                                                        data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
-                                                                    <option></option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-2">
+                                                            <select class="form-control select2" id="select_student" name="student_id"
+                                                                    data-placeholder="{{ __('dashboard.student.search_by_name_or_phone') }}">
+                                                                <option></option>
+                                                            </select>
+                                                            <div class="input-group-append m-1">
                                                                 <button type="submit"
-                                                                        class="btn btn-primary btn-block">{{ __('dashboard.common.add_student') }}</button>
+                                                                        class="btn btn-primary">{{ __('dashboard.common.add_student') }}</button>
                                                             </div>
                                                         </div>
                                                     </form>
