@@ -12,7 +12,9 @@ use App\Http\Resources\TeacherStudentResource;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Exam;
+use App\Models\ExamAttempt;
 use App\Models\Homework;
+use App\Models\HomeworkAttempt;
 use App\Models\Lesson;
 use App\Models\LessonAttachment;
 use App\Models\Payment;
@@ -32,6 +34,16 @@ class HomeController extends Controller
 
         return ExamResource::collection($exams);
     }
+    public function getExamStudents($id)
+    {
+        $exam = Exam::findOrFail($id);
+        $attempts = ExamAttempt::query()->where('exam_id',$exam->id)->with('student')->get();
+        return response()->json([
+            'data' => $attempts,
+            'success' => true,
+        ]);
+
+    }
 
     public function getHomeworks()
     {
@@ -41,6 +53,15 @@ class HomeController extends Controller
         })->where('is_active', 1)->whereDate('due_date', '>', now())->get();
 
         return HomeworkResource::collection($homework);
+    }
+    public function getHomeworkStudents($id)
+    {
+        $homework = Homework::findOrFail($id);
+        $attempts = HomeworkAttempt::query()->where('homework_id', $homework->id)->with('student')->get();
+        return response()->json([
+            'data' => $attempts,
+            'success' => true,
+        ]);
     }
 
     public function getAttachments()

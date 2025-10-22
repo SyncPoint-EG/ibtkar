@@ -14,7 +14,9 @@ Route::middleware('auth:teacher')->group(function () {
     Route::get('stories', [StoryController::class, 'index']);
     Route::get('statistics', [StatisticsController::class, 'index']);
     Route::get('exams', [HomeController::class, 'getExams']);
+    Route::get('exam-students/{exam_id}', [HomeController::class, 'getExamStudents']);
     Route::get('homework', [HomeController::class, 'getHomeworks']);
+    Route::get('homework-students/{homework_id}', [HomeController::class, 'getHomeworkStudents']);
     Route::get('attachments', [HomeController::class, 'getAttachments']);
     Route::get('lessons', [HomeController::class, 'getLessons']);
     Route::get('grades', [HomeController::class, 'getGrades']);
