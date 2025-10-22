@@ -64,7 +64,17 @@ class HomeController extends Controller
             ->orWhereIn('lesson_id', $lessonIds)
             ->distinct()
             ->pluck('student_id');
-        $students = Student::whereIn('id', $studentsIds)->get();
+        $students = Student::whereIn('id', $studentsIds)
+            ->when(request('stage_id'), function ($q, $stage_id) {
+                $q->where('stage_id', $stage_id);
+            })
+            ->when(request('grade_id'), function ($q, $grade_id) {
+                $q->where('grade_id', $grade_id);
+            })
+            ->when(request('division_id'), function ($q, $division_id) {
+                $q->where('division_id', $division_id);
+            })
+            ->get();
 
         return StudentResource::collection($students);
 
