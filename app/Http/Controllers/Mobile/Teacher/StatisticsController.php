@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Mobile\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TeacherStudentPaymentResource;
 use App\Models\Course;
 use App\Models\Exam;
 use App\Models\Homework;
 use App\Models\Lesson;
 use App\Models\LessonAttachment;
 use App\Models\Payment;
+use App\Models\Student;
 
 class StatisticsController extends Controller
 {
@@ -38,5 +40,12 @@ class StatisticsController extends Controller
             'attachments_count' => $attachmentsCount,
             'students_count' => $studentsCount,
         ]);
+    }
+
+    public function getStudentsPerLesson($lessonId)
+    {
+        $lesson = Lesson::findOrFail($lessonId);
+        $payments = Payment::where('lesson_id', $lesson->id)->with('student','student.watches')->get();
+        return TeacherStudentPaymentResource::collection($payments);
     }
 }

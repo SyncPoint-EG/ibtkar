@@ -21,4 +21,5 @@ Route::middleware('auth:teacher')->group(function () {
 
     Route::get('students', [HomeController::class, 'getStudents']);
     Route::get('student/{id}', [HomeController::class, 'getStudent']);
+    Route::get('students-per-lesson/{lesson_id}', [StatisticsController::class, 'getStudentsPerLesson']);
 });
