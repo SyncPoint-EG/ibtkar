@@ -999,6 +999,10 @@ Route::get('lessons/teachers/{teacher_id}/grades', [LessonController::class, 'te
     Route::get('lessons/{lesson}/students/export', [LessonController::class, 'exportStudents'])
         ->name('lessons.students.export')
         ->middleware('can:view_lesson');
+
+    Route::post('lessons/{lesson}/students/import', [LessonController::class, 'importStudents'])
+        ->name('lessons.students.import')
+        ->middleware('can:create_lesson');
 });
 
 // Routes for Exam

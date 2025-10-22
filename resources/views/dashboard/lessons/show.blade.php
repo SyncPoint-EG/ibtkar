@@ -193,6 +193,11 @@
                                                     <i class="icon-download"></i> {{ __('dashboard.common.export_students') }}
                                                 </a>
                                             </li>
+                                            <li>
+                                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#importStudentsModal">
+                                                    <i class="icon-upload"></i> Import Students
+                                                </button>
+                                            </li>
                                             <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
                                             <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
                                         </ul>
@@ -304,7 +309,36 @@
                 <!-- Students section end -->
             </div>
         </div>
+<!-- Import Students Modal -->
+<div class="modal fade" id="importStudentsModal" tabindex="-1" role="dialog" aria-labelledby="importStudentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importStudentsModalLabel">Import Students</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('lessons.students.import', $lesson->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        Please make sure the Excel file has a column named 'phone' containing the student phone numbers.
+                    </div>
+                    <div class="form-group">
+                        <label for="file">Excel File</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+
 @endsection
 
 @section('page_scripts')
