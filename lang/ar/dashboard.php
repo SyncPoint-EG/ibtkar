@@ -55,6 +55,7 @@ return [
         'to' => 'إلى',
         'view_lessons' => 'عرض الدروس',
         'export_students' => 'تصدير الطلاب',
+        'date' => 'التاريخ',
     ],
     'settings' => [
         'title' => 'الإعدادات',
@@ -291,6 +292,8 @@ return [
         'import_column_birth_date' => 'تاريخ الميلاد (YYYY-MM-DD)',
         'import_column_status' => 'الحالة (نشط/غير نشط)',
         'purchased_lessons' => 'الدروس المشتراة',
+        'exam_submissions' => 'نتائج الاختبارات',
+        'no_exam_submissions' => 'لا يوجد نتائج اختبارات لهذا الطالب.',
     ],
     'guardian' => [
         'title' => 'ولي الأمر',
@@ -623,6 +626,8 @@ return [
             'is_active' => 'نشط',
             'start_date' => 'تاريخ البدء',
             'end_date' => 'تاريخ الانتهاء',
+            'score' => 'الدرجة',
+            'total_score' => 'الدرجة الكلية',
         ],
     ],
     'homework' => [

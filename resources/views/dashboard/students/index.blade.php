@@ -38,13 +38,15 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="name">{{ __('dashboard.student.fields.name') }}</label>
-                                            <input type="text" id="name" name="name" class="form-control" value="{{ $filters['name'] ?? '' }}">
+                                            <input type="text" id="name" name="name" class="form-control"
+                                                   value="{{ $filters['name'] ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="phone">{{ __('dashboard.student.fields.phone') }}</label>
-                                            <input type="text" id="phone" name="phone" class="form-control" value="{{ $filters['phone'] ?? '' }}">
+                                            <input type="text" id="phone" name="phone" class="form-control"
+                                                   value="{{ $filters['phone'] ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -53,7 +55,8 @@
                                             <select id="governorate_id" name="governorate_id" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($governorates as $governorate)
-                                                    <option value="{{ $governorate->id }}" {{ isset($filters['governorate_id']) && $filters['governorate_id'] == $governorate->id ? 'selected' : '' }}>{{ $governorate->name }}</option>
+                                                    <option
+                                                        value="{{ $governorate->id }}" {{ isset($filters['governorate_id']) && $filters['governorate_id'] == $governorate->id ? 'selected' : '' }}>{{ $governorate->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -64,7 +67,8 @@
                                             <select id="center_id" name="center_id" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($centers as $center)
-                                                    <option value="{{ $center->id }}" {{ isset($filters['center_id']) && $filters['center_id'] == $center->id ? 'selected' : '' }}>{{ $center->name }}</option>
+                                                    <option
+                                                        value="{{ $center->id }}" {{ isset($filters['center_id']) && $filters['center_id'] == $center->id ? 'selected' : '' }}>{{ $center->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -77,7 +81,8 @@
                                             <select id="stage_id" name="stage_id" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($stages as $stage)
-                                                    <option value="{{ $stage->id }}" {{ isset($filters['stage_id']) && $filters['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
+                                                    <option
+                                                        value="{{ $stage->id }}" {{ isset($filters['stage_id']) && $filters['stage_id'] == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -88,7 +93,8 @@
                                             <select id="grade_id" name="grade_id" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($grades as $grade)
-                                                    <option value="{{ $grade->id }}" {{ isset($filters['grade_id']) && $filters['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                    <option
+                                                        value="{{ $grade->id }}" {{ isset($filters['grade_id']) && $filters['grade_id'] == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -99,18 +105,22 @@
                                             <select id="division_id" name="division_id" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($divisions as $division)
-                                                    <option value="{{ $division->id }}" {{ isset($filters['division_id']) && $filters['division_id'] == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                                                    <option
+                                                        value="{{ $division->id }}" {{ isset($filters['division_id']) && $filters['division_id'] == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label for="education_type_id">{{ __('dashboard.education_type.title') }}</label>
-                                            <select id="education_type_id" name="education_type_id" class="form-control">
+                                            <label
+                                                for="education_type_id">{{ __('dashboard.education_type.title') }}</label>
+                                            <select id="education_type_id" name="education_type_id"
+                                                    class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
                                                 @foreach($educationTypes as $educationType)
-                                                    <option value="{{ $educationType->id }}" {{ isset($filters['education_type_id']) && $filters['education_type_id'] == $educationType->id ? 'selected' : '' }}>{{ $educationType->name }}</option>
+                                                    <option
+                                                        value="{{ $educationType->id }}" {{ isset($filters['education_type_id']) && $filters['education_type_id'] == $educationType->id ? 'selected' : '' }}>{{ $educationType->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -122,8 +132,10 @@
                                             <label for="status">{{ __('dashboard.student.fields.status') }}</label>
                                             <select id="status" name="status" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
-                                                <option value="1" {{ isset($filters['status']) && $filters['status'] == '1' ? 'selected' : '' }}>{{ __('dashboard.common.active') }}</option>
-                                                <option value="0" {{ isset($filters['status']) && $filters['status'] == '0' ? 'selected' : '' }}>{{ __('dashboard.common.inactive') }}</option>
+                                                <option
+                                                    value="1" {{ isset($filters['status']) && $filters['status'] == '1' ? 'selected' : '' }}>{{ __('dashboard.common.active') }}</option>
+                                                <option
+                                                    value="0" {{ isset($filters['status']) && $filters['status'] == '0' ? 'selected' : '' }}>{{ __('dashboard.common.inactive') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -132,16 +144,20 @@
                                             <label for="gender">{{ __('dashboard.student.fields.gender') }}</label>
                                             <select id="gender" name="gender" class="form-control">
                                                 <option value="">{{ __('dashboard.common.all') }}</option>
-                                                <option value="male" {{ isset($filters['gender']) && $filters['gender'] == 'male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
-                                                <option value="female" {{ isset($filters['gender']) && $filters['gender'] == 'female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
+                                                <option
+                                                    value="male" {{ isset($filters['gender']) && $filters['gender'] == 'male' ? 'selected' : '' }}>{{ __('dashboard.common.male') }}</option>
+                                                <option
+                                                    value="female" {{ isset($filters['gender']) && $filters['gender'] == 'female' ? 'selected' : '' }}>{{ __('dashboard.common.female') }}</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
-                                        <a href="{{ route('students.index') }}" class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
+                                        <button type="submit"
+                                                class="btn btn-primary">{{ __('dashboard.common.filter') }}</button>
+                                        <a href="{{ route('students.index') }}"
+                                           class="btn btn-secondary">{{ __('dashboard.common.reset') }}</a>
                                     </div>
                                 </div>
                             </form>
@@ -174,56 +190,65 @@
                                     @endcan
 
                                     @can('view_student')
-                                        <a href="{{ route('students.export', request()->query()) }}" class="btn btn-success mb-1">
+                                        <a href="{{ route('students.export', request()->query()) }}"
+                                           class="btn btn-success mb-1">
                                             <i class="icon-download"></i> {{ __('dashboard.common.export') }}
                                         </a>
                                     @endcan
 
                                     @can('create_student')
-                                        <button type="button" class="btn btn-info mb-1" data-toggle="modal" data-target="#importModal">
+                                        <button type="button" class="btn btn-info mb-1" data-toggle="modal"
+                                                data-target="#importModal">
                                             <i class="icon-upload"></i> {{ __('dashboard.common.import') }}
                                         </button>
                                     @endcan
 
-<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">{{ __('dashboard.student.import_students') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label for="file">{{ __('dashboard.common.choose_file') }}</label>
-                        <input type="file" name="file" class="form-control" required>
-                    </div>
-                    <hr>
-                    <h6>{{ __('dashboard.common.instructions') }}</h6>
-                    <p>{{ __('dashboard.student.import_instructions') }}</p>
-                    <ul>
-                        <li>{{ __('dashboard.student.import_column_first_name') }}</li>
-                        <li>{{ __('dashboard.student.import_column_last_name') }}</li>
-                        <li>{{ __('dashboard.student.import_column_phone') }}</li>
-                        <li>{{ __('dashboard.student.import_column_guardian_phone') }}</li>
-                        <li>{{ __('dashboard.student.import_column_district') }}</li>
-                        <li>{{ __('dashboard.student.import_column_center') }}</li>
-                        <li>{{ __('dashboard.student.import_column_stage') }}</li>
-                        <li>{{ __('dashboard.student.import_column_grade') }}</li>
-                        <li>{{ __('dashboard.student.import_column_division') }}</li>
-                        <li>{{ __('dashboard.student.import_column_gender') }}</li>
-                        <li>{{ __('dashboard.student.import_column_birth_date') }}</li>
-                        <li>{{ __('dashboard.student.import_column_status') }}</li>
-                    </ul>
-                    <button type="submit" class="btn btn-primary">{{ __('dashboard.common.import') }}</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                                    <div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="importModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"
+                                                        id="importModalLabel">{{ __('dashboard.student.import_students') }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('students.import') }}" method="POST"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label
+                                                                for="file">{{ __('dashboard.common.choose_file') }}</label>
+                                                            <input type="file" name="file" class="form-control"
+                                                                   required>
+                                                        </div>
+                                                        <hr>
+                                                        <h6>{{ __('dashboard.common.instructions') }}</h6>
+                                                        <p>{{ __('dashboard.student.import_instructions') }}</p>
+                                                        <ul>
+                                                            <li>{{ __('dashboard.student.import_column_first_name') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_last_name') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_phone') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_guardian_phone') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_district') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_center') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_stage') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_grade') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_division') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_gender') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_birth_date') }}</li>
+                                                            <li>{{ __('dashboard.student.import_column_status') }}</li>
+                                                        </ul>
+                                                        <button type="submit"
+                                                                class="btn btn-primary">{{ __('dashboard.common.import') }}</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table">
@@ -267,7 +292,7 @@
                                                 <td>{{ $student->referral_code }}</td>
                                                 <td>{{ $student->points }}</td>
                                                 <td>{{ $student->purchased_lessons_count }}</td>
-                                                <td>
+                                                <td class="text-nowrap">
                                                     @can('view_student')
                                                         <a href="{{ route('students.show', $student->id) }}"
                                                            class="btn btn-info btn-sm">
@@ -279,6 +304,13 @@
                                                         <a href="{{ route('students.edit', $student->id) }}"
                                                            class="btn btn-warning btn-sm">
                                                             <i class="icon-pencil3"></i> {{ __('dashboard.common.edit') }}
+                                                        </a>
+                                                    @endcan
+
+                                                    @can('view_student')
+                                                        <a href="{{ route('students.submissions', $student->id) }}"
+                                                           class="btn btn-success btn-sm">
+                                                            <i class="icon-file-text"></i> {{ __('dashboard.student.exam_submissions') }}
                                                         </a>
                                                     @endcan
 

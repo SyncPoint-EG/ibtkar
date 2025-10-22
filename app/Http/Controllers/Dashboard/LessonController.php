@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportGiftedStudentsRequest;
+use App\Imports\GiftedStudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\LessonRequest;
 use App\Models\Chapter;
 use App\Models\Lesson;
@@ -227,5 +230,33 @@ class LessonController extends Controller
     public function exportStudents(Lesson $lesson)
     {
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\LessonStudentsExport($lesson), 'lesson-'.$lesson->id.'-students.xlsx');
+    }
+
+    public function importStudents(ImportGiftedStudentsRequest $request, Lesson $lesson)
+    {
+        try {
+            $import = new GiftedStudentsImport($lesson);
+            Excel::import($import, $request->file('file'));
+
+            $importedCount = $import->importedCount;
+            $notFoundPhones = $import->notFoundPhones;
+
+            $messages = [];
+            if ($importedCount > 0) {
+                $messages[] = "Successfully imported {$importedCount} students.";
+            }
+
+            if (count($notFoundPhones) > 0) {
+                $messages[] = "The following phone numbers were not found: " . implode(', ', $notFoundPhones);
+            }
+
+            if (empty($messages)) {
+                $messages[] = 'No new students were imported.';
+            }
+
+            return redirect()->back()->with('success', implode(' ', $messages));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred during import: ' . $e->getMessage());
+        }
     }
 }

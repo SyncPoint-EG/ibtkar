@@ -61,6 +61,7 @@ return [
             'view_grades' => 'View Grades',
             'add_student' => 'Add Student',
             'export_students' => 'Export Students',
+            'date' => 'Date',
         ],
         'settings' => [
             'title' => 'Settings',
@@ -300,6 +301,8 @@ return [
             'import_column_birth_date' => 'birth_date (YYYY-MM-DD)',
             'import_column_status' => 'status (Active/Inactive)',
             'purchased_lessons' => 'Purchased Lessons',
+            'exam_submissions' => 'Exam Submissions',
+            'no_exam_submissions' => 'No exam submissions found for this student.',
         ],
         'guardian' => [
             'title' => 'Guardian',
@@ -645,6 +648,8 @@ return [
                 'start_date' => 'Start Date',
                 'end_date' => 'End Date',
                 'pass_degree' => 'Pass Degree',
+                'score' => 'Score',
+                'total_score' => 'Total Score',
             ],
             'types'=> [
                 'lesson' => 'Lesson',
