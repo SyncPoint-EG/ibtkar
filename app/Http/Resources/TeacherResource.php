@@ -39,7 +39,7 @@ class TeacherResource extends JsonResource
             'image' => $this->image,
             'website_image' => $this->website_image,
             'stages' => $this->stages->unique('id')->pluck('name')->values(),
-            'grades' => $this->grades->unique('id')->pluck('name')->values(),
+            'grades' => $this->grades->unique('id')->pluck('id','name')->values(),
             'divisions' => $this->divisions->unique('id')->pluck('name')->values(),
             'subjects' => SubjectResource::collection($this->subjects->unique('id')),
             'courses' => CourseResource::collection($courses),

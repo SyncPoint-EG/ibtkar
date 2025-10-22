@@ -96,4 +96,10 @@ class HomeController extends Controller
 
         return LessonResource::collection($lessons);
     }
+    public function getGrades()
+    {
+        $teacher = auth()->guard('teacher')->user();
+        $grades = $teacher->grades->unique('id')->pluck('name')->values();
+        return response()->json(['data' => $grades], 200);
+    }
 }
