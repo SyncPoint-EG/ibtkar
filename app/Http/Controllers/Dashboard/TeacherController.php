@@ -15,6 +15,7 @@ use App\Models\Stage;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Watch;
 use App\Services\TeacherService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -433,7 +434,10 @@ class TeacherController extends Controller
             })
             ->pluck('student_id')->unique();
 
-        $studentsQuery = Student::whereIn('id', $studentIds);
+        $studentsFromWatches = Watch::whereIn('lesson_id',$lessonIds)->pluck('student_id')->unique();
+
+        $allUniqueStudentIds = $studentIds->merge($studentsFromWatches)->unique();
+        $studentsQuery = Student::whereIn('id', $allUniqueStudentIds);
 
         // Filtering
         if ($request->filled('search')) {
