@@ -36,6 +36,41 @@
                             </div>
 
                             <div class="card-body collapse in">
+                                <div class="card-block">
+                                    <form action="{{ route('exams.index') }}" method="GET">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="teacher_id">{{ __('dashboard.teacher.title') }}</label>
+                                                    <select name="teacher_id" id="teacher_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($teachers as $teacher)
+                                                            <option value="{{ $teacher->id }}" {{ request()->get('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
+                                                    <select name="grade_id" id="grade_id" class="form-control">
+                                                        <option value="">{{ __('dashboard.common.all') }}</option>
+                                                        @foreach($grades as $grade)
+                                                            <option value="{{ $grade->id }}" {{ request()->get('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>&nbsp;</label>
+                                                    <button type="submit" class="btn btn-primary btn-block">{{ __('dashboard.common.filter') }}</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
                                 @if(session('success'))
                                     <div class="alert alert-success alert-dismissible fade in" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
