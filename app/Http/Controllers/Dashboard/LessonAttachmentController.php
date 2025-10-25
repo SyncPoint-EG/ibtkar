@@ -13,7 +13,7 @@ class LessonAttachmentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,ppt,pptx,xls,xlsx|max:20480',
+            'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,ppt,pptx,xls,xlsx',
             'bio' => 'nullable|string',
         ]);
 

@@ -80,4 +80,17 @@ class Payment extends Model
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['payment_method']) && $filters['payment_method']) {
+            $query->where('payment_method', $filters['payment_method']);
+        }
+
+        if (isset($filters['payment_status']) && $filters['payment_status']) {
+            $query->where('payment_status', $filters['payment_status']);
+        }
+
+        return $query;
+    }
 }

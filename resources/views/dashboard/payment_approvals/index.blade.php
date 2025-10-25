@@ -128,10 +128,16 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>&nbsp;</label>
                                                     <button type="submit" class="btn btn-primary btn-block">{{ __('dashboard.common.filter') }}</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>&nbsp;</label>
+                                                    <a href="{{ route('payment_approvals.export', request()->query()) }}" class="btn btn-success btn-block">{{ __('dashboard.common.export') }}</a>
                                                 </div>
                                             </div>
                                         </div>

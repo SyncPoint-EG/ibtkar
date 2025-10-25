@@ -86,6 +86,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('payment_approvals.reject')
         ->middleware('can:reject_payment_approval');
 
+    Route::get('payment-approvals/export', [PaymentApprovalController::class, 'export'])
+        ->name('payment_approvals.export')
+        ->middleware('can:view_payment_approval');
+
     Route::delete('payments/{payment}', [PaymentController::class, 'destroy'])
         ->name('payments.destroy')
         ->middleware('can:delete_payment');

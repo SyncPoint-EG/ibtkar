@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Exports\PaymentApprovalsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentApprovalRequest;
 use App\Models\Lesson;
@@ -11,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentApprovalController extends Controller
 {
@@ -121,5 +123,10 @@ class PaymentApprovalController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error adding payment: ' . $e->getMessage());
         }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new PaymentApprovalsExport($request->all()), 'payment-approvals.xlsx');
     }
 }
