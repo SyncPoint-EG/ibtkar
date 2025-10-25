@@ -69,4 +69,34 @@ class Exam extends Model
             (! $this->start_date || $this->start_date <= $now) &&
             (! $this->end_date || $this->end_date >= $now);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['teacher_id'])) {
+            $teacherId = $filters['teacher_id'];
+            $query->where(function ($q) use ($teacherId) {
+                $q->where('teacher_id', $teacherId)
+                    ->orWhereHas('course', function ($q) use ($teacherId) {
+                        $q->where('teacher_id', $teacherId);
+                    })
+                    ->orWhereHas('lesson.chapter.course', function ($q) use ($teacherId) {
+                        $q->where('teacher_id', $teacherId);
+                    });
+            });
+        }
+
+        if (isset($filters['grade_id'])) {
+            $gradeId = $filters['grade_id'];
+            $query->where(function ($q) use ($gradeId) {
+                $q->whereHas('course', function ($q) use ($gradeId) {
+                    $q->where('grade_id', $gradeId);
+                })
+                ->orWhereHas('lesson.chapter.course', function ($q) use ($gradeId) {
+                    $q->where('grade_id', $gradeId);
+                });
+            });
+        }
+
+        return $query;
+    }
 }

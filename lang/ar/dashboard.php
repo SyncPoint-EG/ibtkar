@@ -629,6 +629,8 @@ return [
             'score' => 'الدرجة',
             'total_score' => 'الدرجة الكلية',
         ],
+        'teachers_exams' => 'امتحانات المعلمين',
+        'number_of_exams' => 'عدد الامتحانات',
     ],
     'homework' => [
         'title' => 'الواجب',

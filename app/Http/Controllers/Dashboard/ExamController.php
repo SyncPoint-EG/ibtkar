@@ -16,11 +16,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ExamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $exams = Exam::with('lesson')->paginate(10);
+        $filters = $request->only(['teacher_id', 'grade_id']);
+        $exams = Exam::with('lesson')->filter($filters)->paginate(10);
+        $teachers = \App\Models\Teacher::all();
+        $grades = \App\Models\Grade::all();
 
-        return view('dashboard.exams.index', compact('exams'));
+        return view('dashboard.exams.index', compact('exams', 'teachers', 'grades'));
     }
 
     public function create()
@@ -370,5 +373,31 @@ class ExamController extends Controller
     public function exportSubmissions(Exam $exam)
     {
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SubmissionsExport($exam), 'submissions-'.$exam->id.'.xlsx');
+    }
+
+    public function teachers()
+    {
+        $teachers = \App\Models\Teacher::all();
+        foreach ($teachers as $teacher) {
+            $teacherExams = Exam::where('teacher_id', $teacher->id)->count();
+
+            $courseIds = $teacher->courses()->pluck('id');
+            $courseExams = Exam::whereIn('course_id', $courseIds)->count();
+
+            $chapterIds = \App\Models\Chapter::whereIn('course_id', $courseIds)->pluck('id');
+            $lessonIds = \App\Models\Lesson::whereIn('chapter_id', $chapterIds)->pluck('id');
+            $lessonExams = Exam::whereIn('lesson_id', $lessonIds)->count();
+
+            $teacher->exams_count = $teacherExams + $courseExams + $lessonExams;
+        }
+
+        return view('dashboard.exams.teachers', compact('teachers'));
+    }
+
+    public function teacherGrades($teacher_id)
+    {
+        $teacher = \App\Models\Teacher::findOrFail($teacher_id);
+        $grades = $teacher->grades;
+        return view('dashboard.exams.teacher-grades', compact('teacher', 'grades'));
     }
 }

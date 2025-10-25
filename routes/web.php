@@ -1011,6 +1011,8 @@ Route::get('lessons/teachers/{teacher_id}/grades', [LessonController::class, 'te
 
 // Routes for Exam
 Route::middleware(['auth'])->group(function () {
+    Route::get('exams/teachers', [ExamController::class, 'teachers'])->name('exams.teachers');
+    Route::get('exams/teachers/{teacher_id}/grades', [ExamController::class, 'teacherGrades'])->name('exams.teacher.grades');
     Route::get('exams', [ExamController::class, 'index'])
         ->name('exams.index')
         ->middleware('can:view_exam');

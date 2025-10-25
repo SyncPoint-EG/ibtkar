@@ -655,7 +655,9 @@ return [
                 'lesson' => 'Lesson',
                 'teacher' => 'Teacher'
             ],
-            'exam_for' => 'Exam For'
+            'exam_for' => 'Exam For',
+            'teachers_exams' => 'Teachers Exams',
+            'number_of_exams' => 'Number of exams',
         ],
         'homework' => [
             'title' => 'Homework',
