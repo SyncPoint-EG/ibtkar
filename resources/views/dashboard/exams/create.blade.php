@@ -230,18 +230,40 @@
 @section('page_scripts')
 <script>
     $(document).ready(function () {
+        const placeholder = '{{ __("dashboard.common.select") }}';
+
         // Helper to reset and fill a select box
-        function populateSelect(selector, data, placeholder) {
+        function populateSelect(selector, data, placeholderText = placeholder) {
             const select = $(selector);
-            select.empty().append(`<option value="">${placeholder}</option>`);
+            select.empty().append(`<option value="">${placeholderText}</option>`);
             $.each(data, function (index, item) {
                 select.append(`<option value="${item.id}">${item.name || (item.first_name + ' ' + item.last_name)}</option>`);
             });
             select.prop('disabled', false);
         }
 
-        function resetSelect(selector, placeholder) {
-            $(selector).empty().append(`<option value="">${placeholder}</option>`).prop('disabled', true);
+        function resetSelect(selector, placeholderText = placeholder) {
+            $(selector).empty().append(`<option value="">${placeholderText}</option>`).prop('disabled', true);
+        }
+
+        function fetchCourses(stageId, gradeId, divisionId = null) {
+            if (!stageId || !gradeId) {
+                return;
+            }
+
+            resetSelect('#lesson_course_id');
+            resetSelect('#chapter_id');
+            resetSelect('#lesson_id');
+            $('#hidden_lesson_id').val('');
+
+            const params = { stage_id: stageId, grade_id: gradeId };
+            if (divisionId) {
+                params.division_id = divisionId;
+            }
+
+            $.get('{{ route("api.courses.by-filters") }}', params, function (data) {
+                populateSelect('#lesson_course_id', data);
+            });
         }
 
         // Initial state setup
@@ -251,16 +273,16 @@
 
         // Pre-fill stages
         $.get('{{ route("api.stages") }}', function (data) {
-            populateSelect('#stage_id', data, '{{ __("dashboard.common.select") }}');
+            populateSelect('#stage_id', data);
         });
 
         // Disable all dependent dropdowns initially
-        resetSelect('#grade_id', '{{ __("dashboard.common.select") }}');
-        resetSelect('#division_id', '{{ __("dashboard.common.select") }}');
-        resetSelect('#lesson_course_id', '{{ __("dashboard.common.select") }}');
-        resetSelect('#chapter_id', '{{ __("dashboard.common.select") }}');
-        resetSelect('#lesson_id', '{{ __("dashboard.common.select") }}');
-        resetSelect('#teacher_course_id', '{{ __("dashboard.common.select") }}');
+        resetSelect('#grade_id');
+        resetSelect('#division_id');
+        resetSelect('#lesson_course_id');
+        resetSelect('#chapter_id');
+        resetSelect('#lesson_id');
+        resetSelect('#teacher_course_id');
 
 
         // --- Event Handlers ---
@@ -278,11 +300,11 @@
         // Teacher Path
         $('#teacher_id').change(function () {
             const teacherId = $(this).val();
-            resetSelect('#teacher_course_id', '{{ __("dashboard.common.select") }}');
+            resetSelect('#teacher_course_id');
             $('#hidden_course_id').val('');
             if (teacherId) {
                 $.get(`/api/teachers/${teacherId}/courses`, function (data) {
-                    populateSelect('#teacher_course_id', data, '{{ __("dashboard.common.select") }}');
+                    populateSelect('#teacher_course_id', data);
                 });
             }
         });
@@ -293,55 +315,73 @@
 
         // Lesson Path
         $('#stage_id, #grade_id, #division_id').change(function() {
-            const stageId = $('#stage_id').val();
-            const gradeId = $('#grade_id').val();
-            const divisionId = $('#division_id').val();
+            const changedId = $(this).attr('id');
+            let stageId = $('#stage_id').val();
+            let gradeId = $('#grade_id').val();
 
-            // Reset dependent dropdowns
-            resetSelect('#lesson_course_id', '{{ __("dashboard.common.select") }}');
-            resetSelect('#chapter_id', '{{ __("dashboard.common.select") }}');
-            resetSelect('#lesson_id', '{{ __("dashboard.common.select") }}');
-            $('#hidden_lesson_id').val('');
-
-            if ($(this).is('#stage_id') && stageId) {
-                resetSelect('#grade_id', '{{ __("dashboard.common.select") }}');
-                resetSelect('#division_id', '{{ __("dashboard.common.select") }}');
-                $.get(`/api/stages/${stageId}/grades`, function (data) {
-                    populateSelect('#grade_id', data, '{{ __("dashboard.common.select") }}');
-                });
-            } else if ($(this).is('#grade_id') && gradeId) {
-                 resetSelect('#division_id', '{{ __("dashboard.common.select") }}');
-                $.get(`/api/grades/${stageId}/${gradeId}/divisions`, function (data) {
-                    populateSelect('#division_id', data, '{{ __("dashboard.common.select") }}');
-                });
+            if (changedId === 'stage_id') {
+                resetSelect('#grade_id');
+                resetSelect('#division_id');
+                resetSelect('#lesson_course_id');
+                resetSelect('#chapter_id');
+                resetSelect('#lesson_id');
+                $('#hidden_lesson_id').val('');
+                if (stageId) {
+                    $.get(`/api/stages/${stageId}/grades`, function (data) {
+                        populateSelect('#grade_id', data);
+                    });
+                }
+                return;
             }
 
-            if (stageId && gradeId && divisionId) {
-                 $.get('{{ route("api.courses.by-filters") }}', { stage_id: stageId, grade_id: gradeId, division_id: divisionId }, function (data) {
-                    populateSelect('#lesson_course_id', data, '{{ __("dashboard.common.select") }}');
-                });
+            if (changedId === 'grade_id') {
+                resetSelect('#division_id');
+                resetSelect('#lesson_course_id');
+                resetSelect('#chapter_id');
+                resetSelect('#lesson_id');
+                $('#hidden_lesson_id').val('');
+                if (stageId && gradeId) {
+                    $.get(`/api/grades/${stageId}/${gradeId}/divisions`, function (data) {
+                        populateSelect('#division_id', data);
+                    });
+                }
+            }
+
+            if (changedId === 'division_id') {
+                resetSelect('#lesson_course_id');
+                resetSelect('#chapter_id');
+                resetSelect('#lesson_id');
+                $('#hidden_lesson_id').val('');
+            }
+
+            stageId = $('#stage_id').val();
+            gradeId = $('#grade_id').val();
+            const divisionId = $('#division_id').val() || null;
+
+            if (stageId && gradeId) {
+                fetchCourses(stageId, gradeId, divisionId);
             }
         });
 
         $('#lesson_course_id').change(function () {
             const courseId = $(this).val();
-            resetSelect('#chapter_id', '{{ __("dashboard.common.select") }}');
-            resetSelect('#lesson_id', '{{ __("dashboard.common.select") }}');
+            resetSelect('#chapter_id');
+            resetSelect('#lesson_id');
             $('#hidden_lesson_id').val('');
             if (courseId) {
                 $.get(`/api/courses/${courseId}/chapters`, function (data) {
-                    populateSelect('#chapter_id', data, '{{ __("dashboard.common.select") }}');
+                    populateSelect('#chapter_id', data);
                 });
             }
         });
 
         $('#chapter_id').change(function () {
             const chapterId = $(this).val();
-            resetSelect('#lesson_id', '{{ __("dashboard.common.select") }}');
+            resetSelect('#lesson_id');
             $('#hidden_lesson_id').val('');
             if (chapterId) {
                 $.get(`/api/chapters/${chapterId}/lessons`, function (data) {
-                    populateSelect('#lesson_id', data, '{{ __("dashboard.common.select") }}');
+                    populateSelect('#lesson_id', data);
                 });
             }
         });

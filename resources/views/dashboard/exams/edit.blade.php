@@ -249,6 +249,22 @@
             $(selector).empty().append(`<option value="">${placeholder}</option>`).prop('disabled', true);
         }
 
+        function fetchCourses(stageId, gradeId, divisionId = null, selectedCourseId = null) {
+            if (!stageId || !gradeId) {
+                resetSelect('#lesson_course_id');
+                return $.Deferred().resolve().promise();
+            }
+
+            const params = { stage_id: stageId, grade_id: gradeId };
+            if (divisionId) {
+                params.division_id = divisionId;
+            }
+
+            return $.get('{{ route("api.courses.by-filters") }}', params, function (data) {
+                populateSelect('#lesson_course_id', data, selectedCourseId);
+            });
+        }
+
         function initPage() {
             const examType = $('input[name="exam_type"]:checked').val();
             $('#teacher-section').toggle(examType === 'teacher');
@@ -264,7 +280,7 @@
                 const course = exam.lesson.chapter.course;
                 const stageId = course.stage.id;
                 const gradeId = course.grade.id;
-                const divisionId = course.division.id;
+                const divisionId = course.division ? course.division.id : null;
                 const courseId = course.id;
                 const chapterId = exam.lesson.chapter.id;
                 const lessonId = exam.lesson.id;
@@ -276,8 +292,7 @@
                         populateSelect('#grade_id', grades, gradeId);
                         $.get(`/api/grades/${stageId}/${gradeId}/divisions`, function (divisions) {
                             populateSelect('#division_id', divisions, divisionId);
-                            $.get('{{ route("api.courses.by-filters") }}', { stage_id: stageId, grade_id: gradeId, division_id: divisionId }, function (courses) {
-                                populateSelect('#lesson_course_id', courses, courseId);
+                            fetchCourses(stageId, gradeId, divisionId, courseId).done(function () {
                                 $.get(`/api/courses/${courseId}/chapters`, function (chapters) {
                                     populateSelect('#chapter_id', chapters, chapterId);
                                     $.get(`/api/chapters/${chapterId}/lessons`, function (lessons) {
@@ -321,29 +336,43 @@
         });
 
         $('#stage_id, #grade_id, #division_id').change(function() {
-            const stageId = $('#stage_id').val();
-            const gradeId = $('#grade_id').val();
-            const divisionId = $('#division_id').val();
+            const changedId = $(this).attr('id');
+            let stageId = $('#stage_id').val();
+            let gradeId = $('#grade_id').val();
 
-            if ($(this).is('#stage_id')) {
+            if (changedId === 'stage_id') {
                 resetSelect('#grade_id');
                 resetSelect('#division_id');
                 resetSelect('#lesson_course_id');
                 resetSelect('#chapter_id');
                 resetSelect('#lesson_id');
+                $('#hidden_lesson_id').val('');
                 if(stageId) $.get(`/api/stages/${stageId}/grades`, data => populateSelect('#grade_id', data));
-            } else if ($(this).is('#grade_id')) {
+                return;
+            }
+
+            if (changedId === 'grade_id') {
                 resetSelect('#division_id');
                 resetSelect('#lesson_course_id');
                 resetSelect('#chapter_id');
                 resetSelect('#lesson_id');
-                if(gradeId) $.get(`/api/grades/${stageId}/${gradeId}/divisions`, data => populateSelect('#division_id', data));
+                $('#hidden_lesson_id').val('');
+                if(stageId && gradeId) $.get(`/api/grades/${stageId}/${gradeId}/divisions`, data => populateSelect('#division_id', data));
             }
 
-            if (stageId && gradeId && divisionId) {
-                 $.get('{{ route("api.courses.by-filters") }}', { stage_id: stageId, grade_id: gradeId, division_id: divisionId }, function (data) {
-                    populateSelect('#lesson_course_id', data);
-                });
+            if (changedId === 'division_id') {
+                resetSelect('#lesson_course_id');
+                resetSelect('#chapter_id');
+                resetSelect('#lesson_id');
+                $('#hidden_lesson_id').val('');
+            }
+
+            stageId = $('#stage_id').val();
+            gradeId = $('#grade_id').val();
+            const divisionId = $('#division_id').val() || null;
+
+            if (stageId && gradeId) {
+                fetchCourses(stageId, gradeId, divisionId);
             }
         });
 
