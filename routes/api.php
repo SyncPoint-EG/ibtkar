@@ -22,7 +22,7 @@ Route::get('teachers', [HomeController::class, 'getTeachers']);
 Route::get('attachments', [HomeController::class, 'getAttachments']);
 // Route::get('student/tables', [App\Http\Controllers\Mobile\Student\TableController::class, 'getTeacherTables'])->middleware('auth:sanctum');
 
-Route::post('codes/import-price', CodeImportController::class)->middleware('auth:sanctum');
+Route::post('codes/import-price', CodeImportController::class);
 
 Route::group(['prefix' => 'notifications', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
