@@ -41,7 +41,7 @@ class CodeImportController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Code prices updated successfully.',
-            'updated' => $import->getUpdatedCount(),
+            'updated_rows' => $import->getUpdatedCount(),
         ]);
     }
 }
