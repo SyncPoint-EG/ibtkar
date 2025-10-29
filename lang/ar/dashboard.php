@@ -801,6 +801,7 @@ return [
             'date' => 'التاريخ',
             'time' => 'الوقت',
             'payment_method' => 'طريقة الدفع',
+            'payment_image' => 'صورة الدفع',
             'subject_name' => 'اسم المادة',
             'course' => 'الدورة',
             'lesson' => 'الدرس',

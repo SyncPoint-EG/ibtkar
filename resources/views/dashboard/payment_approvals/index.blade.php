@@ -153,6 +153,7 @@
                                             <th>{{ __('dashboard.payment_approval.fields.date') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.time') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.payment_method') }}</th>
+                                            <th>{{ __('dashboard.payment_approval.fields.payment_image') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.subject_name') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.course') }}</th>
                                             <th>{{ __('dashboard.payment_approval.fields.lesson') }}</th>
@@ -172,6 +173,21 @@
                                                 <td>{{ $payment->created_at->format('Y-m-d') }}</td>
                                                 <td>{{ $payment->created_at->format('H:i') }}</td>
                                                 <td>{{ $payment->payment_method }}</td>
+                                                <td>
+                                                    @if($payment->getRawOriginal('payment_image'))
+                                                        <a href="#" role="button"
+                                                           class="d-inline-block payment-image-trigger"
+                                                           data-toggle="modal" data-target="#paymentImageModal"
+                                                           data-image="{{ $payment->payment_image }}">
+                                                            <img src="{{ $payment->payment_image }}"
+                                                                 alt="{{ __('dashboard.payment_approval.fields.payment_image') }}"
+                                                                 class="img-thumbnail"
+                                                                 style="max-width: 60px; cursor: zoom-in;">
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">{{ __('dashboard.common.not_available') }}</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if($payment->lesson)
                                                         {{ $payment->lesson?->chapter?->course?->subject?->name }}
@@ -240,7 +256,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="13"
+                                                <td colspan="15"
                                                     class="text-center">{{ __('dashboard.payment_approval.no_records') }}</td>
                                             </tr>
                                         @endforelse
@@ -256,4 +272,37 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="paymentImageModal" tabindex="-1" role="dialog"
+         aria-labelledby="paymentImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-0 shadow-none">
+                <button type="button" class="close ml-auto p-2" data-dismiss="modal" aria-label="Close"
+                        style="position: absolute; right: 0; z-index: 10;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body p-0">
+                    <img src="" alt="{{ __('dashboard.payment_approval.fields.payment_image') }}"
+                         id="payment-image-preview" class="img-fluid w-100">
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('page_scripts')
+    <script>
+        $(function () {
+            $(document).on('click', '.payment-image-trigger', function (event) {
+                event.preventDefault();
+            });
+
+            $('#paymentImageModal').on('show.bs.modal', function (event) {
+                var trigger = $(event.relatedTarget);
+                var imageUrl = trigger.data('image');
+                $(this).find('#payment-image-preview').attr('src', imageUrl);
+            }).on('hidden.bs.modal', function () {
+                $(this).find('#payment-image-preview').attr('src', '');
+            });
+        });
+    </script>
 @endsection

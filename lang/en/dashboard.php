@@ -830,6 +830,7 @@ return [
                 'date' => 'Date',
                 'time' => 'Time',
                 'payment_method' => 'Payment Method',
+                'payment_image' => 'Payment Image',
                 'subject_name' => 'Subject Name',
                 'course' => 'Course',
                 'lesson' => 'Lesson',
