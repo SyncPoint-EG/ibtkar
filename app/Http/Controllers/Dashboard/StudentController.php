@@ -124,7 +124,7 @@ class StudentController extends Controller
     {
         $purchasedLessonsQuery = \App\Models\Lesson::whereHas('payments', function ($query) use ($student) {
             $query->where('student_id', $student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
-        })->orWhereHas('chapter.payments', function ($query) use ($student) {);
+        })->orWhereHas('chapter.payments', function ($query) use ($student) {
             $query->where('student_id', $student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
         })->orWhereHas('chapter.course.payments', function ($query) use ($student) {
             $query->where('student_id', $student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
