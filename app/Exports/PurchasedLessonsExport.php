@@ -22,6 +22,10 @@ class PurchasedLessonsExport implements FromCollection, WithHeadings, WithMappin
     {
         return Lesson::whereHas('payments', function ($query) {
             $query->where('student_id', $this->student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+        })->orWhereHas('chapter.payments',function ($q){
+            $q->where('student_id', $this->student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+        })->orWhereHas('chapter.course.payments', function ($query) {
+            $query->where('student_id', $this->student->id)->where('payment_status', Payment::PAYMENT_STATUS['approved']);
         })->get();
     }
 
