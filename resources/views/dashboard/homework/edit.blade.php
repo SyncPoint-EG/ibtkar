@@ -28,7 +28,7 @@
                             <div class="card-body">
                                 <form action="{{ route('homework.update', $homework) }}" method="POST">
                                     @csrf
-                                    @method('PATCH')
+                                    @method('PUT')
 
                                     <div class="form-group">
                                         <label for="title">Homework Title *</label>
