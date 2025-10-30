@@ -83,12 +83,30 @@ class Payment extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        if (isset($filters['payment_method']) && $filters['payment_method']) {
+        if (!empty($filters['payment_method'])) {
             $query->where('payment_method', $filters['payment_method']);
         }
 
-        if (isset($filters['payment_status']) && $filters['payment_status']) {
+        if (!empty($filters['payment_status'])) {
             $query->where('payment_status', $filters['payment_status']);
+        }
+
+        if (!empty($filters['student_name'])) {
+            $studentName = trim($filters['student_name']);
+            $query->whereHas('student', function ($studentQuery) use ($studentName) {
+                $studentQuery->where(function ($nameQuery) use ($studentName) {
+                    $nameQuery->where('first_name', 'like', "%{$studentName}%")
+                        ->orWhere('last_name', 'like', "%{$studentName}%")
+                        ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$studentName}%"]);
+                });
+            });
+        }
+
+        if (!empty($filters['student_phone'])) {
+            $studentPhone = trim($filters['student_phone']);
+            $query->whereHas('student', function ($studentQuery) use ($studentPhone) {
+                $studentQuery->where('phone', 'like', "%{$studentPhone}%");
+            });
         }
 
         return $query;

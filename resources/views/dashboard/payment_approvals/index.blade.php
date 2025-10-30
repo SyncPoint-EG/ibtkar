@@ -105,7 +105,7 @@
                                 <div class="card-block">
                                     <form action="{{ route('payment_approvals.index') }}" method="GET">
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="payment_method">{{ __('dashboard.payment_approval.fields.payment_method') }}</label>
                                                     <select name="payment_method" id="payment_method" class="form-control">
@@ -117,7 +117,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="payment_status">{{ __('dashboard.payment_approval.fields.status') }}</label>
                                                     <select name="payment_status" id="payment_status" class="form-control">
@@ -128,6 +128,26 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="student_name">{{ __('dashboard.payment_approval.fields.student_name') }}</label>
+                                                    <input type="text" name="student_name" id="student_name"
+                                                           value="{{ request()->get('student_name') }}"
+                                                           class="form-control"
+                                                           placeholder="{{ __('dashboard.payment_approval.filters.student_name_placeholder') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="student_phone">{{ __('dashboard.payment_approval.fields.student_phone') }}</label>
+                                                    <input type="text" name="student_phone" id="student_phone"
+                                                           value="{{ request()->get('student_phone') }}"
+                                                           class="form-control"
+                                                           placeholder="{{ __('dashboard.payment_approval.filters.student_phone_placeholder') }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>&nbsp;</label>

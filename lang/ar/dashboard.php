@@ -798,6 +798,7 @@ return [
             'id' => 'المعرف',
             'student_id' => 'معرف الطالب',
             'student_name' => 'اسم الطالب',
+            'student_phone' => 'هاتف الطالب',
             'date' => 'التاريخ',
             'time' => 'الوقت',
             'payment_method' => 'طريقة الدفع',
@@ -811,6 +812,10 @@ return [
             'teacher_name' => 'اسم المعلم',
             'status' => 'الحالة',
             'actions' => 'الإجراءات',
+        ],
+        'filters' => [
+            'student_name_placeholder' => 'ابحث باسم الطالب',
+            'student_phone_placeholder' => 'ابحث برقم الهاتف',
         ],
     ],
     'charge_approval' => [

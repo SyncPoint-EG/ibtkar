@@ -25,15 +25,7 @@ class PaymentApprovalService
             'lesson.chapter.course.teacher',
             'chapter.course.subject',
             'chapter.course.teacher',
-        ]);
-
-        if (!empty($filters['payment_method'])) {
-            $query->where('payment_method', $filters['payment_method']);
-        }
-
-        if (!empty($filters['payment_status'])) {
-            $query->where('payment_status', $filters['payment_status']);
-        }
+        ])->filter($filters);
 
         return $query->latest()->paginate($perPage);
     }

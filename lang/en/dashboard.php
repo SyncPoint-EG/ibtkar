@@ -827,6 +827,7 @@ return [
                 'id' => 'ID',
                 'student_id' => 'Student ID',
                 'student_name' => 'Student Name',
+                'student_phone' => 'Student Phone',
                 'date' => 'Date',
                 'time' => 'Time',
                 'payment_method' => 'Payment Method',
@@ -840,6 +841,10 @@ return [
                 'teacher_name' => 'Teacher Name',
                 'status' => 'Status',
                 'actions' => 'Actions',
+            ],
+            'filters' => [
+                'student_name_placeholder' => 'Search by student name',
+                'student_phone_placeholder' => 'Search by phone number',
             ],
         ],
         'charge_approval' => [

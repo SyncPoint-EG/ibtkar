@@ -22,9 +22,27 @@ class PaymentController extends Controller
 
     public function store(PaymentRequest $request)
     {
+        $student = auth('student')->user();
+
         try {
+            $existing_payment = Payment::where('student_id',$student->id)->where(function ($query) use ($request) {
+                if($request->lesson_id){
+                    $query->where('lesson_id',$request->lesson_id);
+                }elseif ($request->chapter_id){
+                    $query->where('chapter_id',$request->chapter_id);
+                }elseif ($request->course_id){
+                    $query->where('course_id',$request->course_id);
+                }
+            })->whereIn('payment_method',['instapay','wallet'])->where('payment_status',Payment::PAYMENT_STATUS['pending'])->first();
+
+            if($existing_payment){
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Payment already done and you are waiting for admin approval'
+                ]);
+            }
+
             DB::beginTransaction();
-            $student = auth('student')->user();
             $points = null;
             $student_id = $student->id;
             $amount = $this->getAmount($request);
