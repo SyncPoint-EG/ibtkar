@@ -39,7 +39,7 @@ class PaymentController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'Payment already done and you are waiting for admin approval'
-                ]);
+                ],201);
             }
 
             DB::beginTransaction();
