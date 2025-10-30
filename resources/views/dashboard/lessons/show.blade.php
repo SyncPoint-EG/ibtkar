@@ -227,8 +227,24 @@
                                                     </form>
                                                 </div>
                                                 @if($students && $students->count() > 0)
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-4">
+                                                            <label for="student-name-filter">{{ __('dashboard.student.fields.name') }}</label>
+                                                            <input type="text"
+                                                                   id="student-name-filter"
+                                                                   class="form-control"
+                                                                   placeholder="{{ __('dashboard.student.fields.name') }}">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="student-phone-filter">{{ __('dashboard.student.fields.phone') }}</label>
+                                                            <input type="text"
+                                                                   id="student-phone-filter"
+                                                                   class="form-control"
+                                                                   placeholder="{{ __('dashboard.student.fields.phone') }}">
+                                                        </div>
+                                                    </div>
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped">
+                                                        <table id="students-table" class="table table-bordered table-striped">
                                                             <thead>
                                                             <tr>
                                                                 <th>{{ __('dashboard.student.fields.id') }}</th>
@@ -365,9 +381,29 @@
                 },
                 minimumInputLength: 1,
             });
+
+            const $studentsTable = $('#students-table');
+            if ($studentsTable.length) {
+                const filterRows = () => {
+                    const nameQuery = (($('#student-name-filter').val() || '').trim()).toLowerCase();
+                    const phoneQuery = (($('#student-phone-filter').val() || '').trim()).toLowerCase();
+
+                    $studentsTable.find('tbody tr').each(function () {
+                        const $row = $(this);
+                        const nameText = (($row.find('td').eq(1).text() || '').trim()).toLowerCase();
+                        const phoneText = (($row.find('td').eq(2).text() || '').trim()).toLowerCase();
+
+                        const matchesName = !nameQuery || nameText.includes(nameQuery);
+                        const matchesPhone = !phoneQuery || phoneText.includes(phoneQuery);
+
+                        $row.toggle(matchesName && matchesPhone);
+                    });
+                };
+
+                $('#student-name-filter, #student-phone-filter').on('input', filterRows);
+                filterRows();
+            }
         });
     </script>
 
 @endsection
-
-
