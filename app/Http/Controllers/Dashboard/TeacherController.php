@@ -17,13 +17,13 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Watch;
 use App\Services\TeacherService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use Mpdf\Mpdf;
 
 class TeacherController extends Controller
 {
@@ -613,8 +613,35 @@ class TeacherController extends Controller
             'logo' => $logo,
         ];
 
-        $pdf = Pdf::loadView('dashboard.teachers.report', $data);
+        $html = view('dashboard.teachers.report', $data)->render();
 
-        return $pdf->download('report.pdf');
+        $tempDir = storage_path('app/mpdf-temp');
+
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'default_font' => 'dejavusanscondensed',
+            'margin_top' => 15,
+            'margin_right' => 15,
+            'margin_bottom' => 15,
+            'margin_left' => 15,
+            'tempDir' => $tempDir,
+            'autoScriptToLang' => true,
+            'autoLangToFont' => true,
+        ]);
+
+        $mpdf->SetDirectionality('rtl');
+        $mpdf->WriteHTML($html);
+
+        $pdfContent = $mpdf->Output('', 'S');
+
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="report.pdf"',
+        ]);
     }
 }

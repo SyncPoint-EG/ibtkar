@@ -4,16 +4,26 @@
     <meta charset="utf-8">
     <title>تقرير المعلم</title>
     <style>
-        * {
-            font-family: 'DejaVu Sans', sans-serif;
-        }
-
         body {
+            font-family: 'DejaVu Sans', sans-serif;
             margin: 24px;
             direction: rtl;
             text-align: right;
             color: #1f1f1f;
-            unicode-bidi: bidi-override;
+        }
+
+        h1, h2, p {
+            font-family: 'DejaVu Sans', sans-serif;
+        }
+
+        table {
+            font-family: 'DejaVu Sans', sans-serif;
+        }
+
+        .ltr {
+            direction: ltr;
+            unicode-bidi: embed;
+            display: inline-block;
         }
 
         .header {
@@ -43,14 +53,17 @@
             margin-bottom: 16px;
             font-size: 14px;
             direction: rtl;
+            direction: rtl;
         }
 
         th, td {
             border: 1px solid #d0d0d0;
             padding: 8px;
-            direction: rtl;
-            unicode-bidi: bidi-override;
             text-align: right;
+        }
+
+        td.numeric, th.numeric {
+            text-align: center;
         }
 
         th {
@@ -60,6 +73,18 @@
         .section-title {
             font-size: 18px;
             margin: 24px 0 12px;
+        }
+
+        .panel {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            background-color: #fafafa;
+        }
+
+        .panel + .panel {
+            page-break-inside: avoid;
         }
 
         .total {
@@ -78,11 +103,11 @@
         <div>
             <h1>تقرير المعلم {{ $teacher->name }}</h1>
             @if($startDate && $endDate)
-                <p>الفترة من {{ $startDate }} إلى {{ $endDate }}</p>
+                <p>الفترة من <span class="ltr">{{ $startDate }}</span> إلى <span class="ltr">{{ $endDate }}</span></p>
             @elseif($startDate)
-                <p>منذ {{ $startDate }}</p>
+                <p>منذ <span class="ltr">{{ $startDate }}</span></p>
             @elseif($endDate)
-                <p>حتى {{ $endDate }}</p>
+                <p>حتى <span class="ltr">{{ $endDate }}</span></p>
             @endif
         </div>
         @if($logo)
@@ -90,48 +115,52 @@
         @endif
     </div>
 
-    <h2 class="section-title">ملخص المبيعات</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>البند</th>
-                <th>عدد المدفوعات</th>
-                <th>إجمالي الإيرادات (جنيه)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($overallSummary as $row)
-                <tr>
-                    <td>{{ $row['label'] }}</td>
-                    <td>{{ $row['count'] }}</td>
-                    <td>{{ number_format((float) $row['total'], 2) }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <p class="total">إجمالي الإيرادات: {{ number_format((float) $overallTotal, 2) }} جنيه</p>
-
-    @forelse($gradeSummaries as $gradeSummary)
-        <h2 class="section-title">الصف: {{ $gradeSummary['grade']->name }}</h2>
+    <div class="panel">
+        <h2 class="section-title">ملخص المبيعات</h2>
         <table>
             <thead>
                 <tr>
                     <th>البند</th>
-                    <th>عدد المدفوعات</th>
-                    <th>إجمالي الإيرادات (جنيه)</th>
+                    <th class="numeric">عدد المدفوعات</th>
+                    <th class="numeric">إجمالي الإيرادات (جنيه)</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($gradeSummary['summary'] as $row)
+                @foreach($overallSummary as $row)
                     <tr>
                         <td>{{ $row['label'] }}</td>
-                        <td>{{ $row['count'] }}</td>
-                        <td>{{ number_format((float) $row['total'], 2) }}</td>
+                        <td class="numeric"><span class="ltr">{{ $row['count'] }}</span></td>
+                        <td class="numeric"><span class="ltr">{{ number_format((float) $row['total'], 2) }}</span></td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        <p class="total">الإجمالي للصف {{ $gradeSummary['grade']->name }}: {{ number_format((float) $gradeSummary['total'], 2) }} جنيه</p>
+        <p class="total">إجمالي الإيرادات <span class="ltr">{{ number_format((float) $overallTotal, 2) }}</span> جنيه</p>
+    </div>
+
+    @forelse($gradeSummaries as $gradeSummary)
+        <div class="panel">
+            <h2 class="section-title">الصف {{ $gradeSummary['grade']->name }}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>البند</th>
+                        <th class="numeric">عدد المدفوعات</th>
+                        <th class="numeric">إجمالي الإيرادات (جنيه)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($gradeSummary['summary'] as $row)
+                        <tr>
+                            <td>{{ $row['label'] }}</td>
+                            <td class="numeric"><span class="ltr">{{ $row['count'] }}</span></td>
+                            <td class="numeric"><span class="ltr">{{ number_format((float) $row['total'], 2) }}</span></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p class="total">الإجمالي للصف {{ $gradeSummary['grade']->name }} <span class="ltr">{{ number_format((float) $gradeSummary['total'], 2) }}</span> جنيه</p>
+        </div>
     @empty
         <p class="no-data">لا توجد صفوف مرتبطة بهذا المعلم حاليًا.</p>
     @endforelse
