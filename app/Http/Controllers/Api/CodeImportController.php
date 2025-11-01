@@ -28,7 +28,7 @@ class CodeImportController extends Controller
             ]);
         }
 
-        $import = new UpdateCodesPriceImport(70.0);
+        $import = new UpdateCodesPriceImport(99.0);
 
         try {
             Excel::import($import, $file);
