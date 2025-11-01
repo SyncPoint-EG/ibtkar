@@ -7,7 +7,7 @@ use App\Exports\TeacherStudentsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Imports\TeachersImport;
-use App\Models\Code;
+use App\Models\Course;
 use App\Models\Division;
 use App\Models\Grade;
 use App\Models\Payment;
@@ -18,6 +18,7 @@ use App\Models\Teacher;
 use App\Models\Watch;
 use App\Services\TeacherService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -479,33 +480,13 @@ class TeacherController extends Controller
 
     public function generateReport(Request $request, Teacher $teacher)
     {
-        $startDate = $request->get('start_date');
-        $endDate = $request->get('end_date');
+        $startDateInput = $request->get('start_date');
+        $endDateInput = $request->get('end_date');
+        $startDate = $startDateInput ? Carbon::parse($startDateInput)->startOfDay() : null;
+        $endDate = $endDateInput ? Carbon::parse($endDateInput)->endOfDay() : null;
 
-        // 1. Number of codes used for a lecture "during a specific period"
-        $lectureCodesQuery = Payment::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
-            $query->where('teacher_id', $teacher->id);
-        })->whereNotNull('payment_code');
-
-        if ($startDate && $endDate) {
-            $lectureCodesQuery->whereBetween('created_at', [$startDate, $endDate]);
-        }
-        $lectureCodesCount = $lectureCodesQuery->count();
-
-        // 2. Number of codes used for a month "during a specific period"
-        $monthlyCodesQuery = Code::where('teacher_id', $teacher->id)
-            ->where('code_classification', 'monthly') // This is an assumption
-            ->whereHas('payment');
-
-        if ($startDate && $endDate) {
-            $monthlyCodesQuery->whereHas('payment', function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate]);
-            });
-        }
-        $monthlyCodesCount = $monthlyCodesQuery->count();
-
-        // 3. Number of students for the teacher
-        $studentIds = Payment::where('payment_status', 'approved')
+        $paymentsQuery = Payment::query()
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->where(function ($query) use ($teacher) {
                 $query->whereHas('course', function ($q) use ($teacher) {
                     $q->where('teacher_id', $teacher->id);
@@ -514,29 +495,122 @@ class TeacherController extends Controller
                 })->orWhereHas('lesson.chapter.course', function ($q) use ($teacher) {
                     $q->where('teacher_id', $teacher->id);
                 });
-            })
-            ->pluck('student_id')->unique();
-        $studentsCount = $studentIds->count();
+            });
 
-        // 4. Number of lectures (lessons) for the teacher
-        $lessonsCount = \App\Models\Lesson::whereHas('chapter.course', function ($query) use ($teacher) {
-            $query->where('teacher_id', $teacher->id);
-        })->count();
+        if ($startDate && $endDate) {
+            $paymentsQuery->whereBetween('created_at', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $paymentsQuery->where('created_at', '>=', $startDate);
+        } elseif ($endDate) {
+            $paymentsQuery->where('created_at', '<=', $endDate);
+        }
 
-        // 5. Number of exams for the teacher
-        $examsCount = \App\Models\Exam::whereHas('lesson.chapter.course', function ($query) use ($teacher) {
-            $query->where('teacher_id', $teacher->id);
-        })->count();
+        $sumPayments = static function ($query) {
+            $aggregate = (clone $query)
+                ->selectRaw(
+                    'COALESCE(SUM(CASE WHEN total_amount IS NOT NULL THEN total_amount WHEN amount IS NOT NULL THEN amount ELSE 0 END), 0) as aggregate'
+                )
+                ->value('aggregate');
+            return (float) $aggregate;
+        };
+
+        $lessonPayments = (clone $paymentsQuery)->whereNotNull('lesson_id');
+        $chapterPayments = (clone $paymentsQuery)
+            ->whereNull('lesson_id')
+            ->whereNotNull('chapter_id');
+        $coursePayments = (clone $paymentsQuery)
+            ->whereNull('lesson_id')
+            ->whereNull('chapter_id')
+            ->whereNotNull('course_id');
+
+        $overallSummary = [
+            'lessons' => [
+                'label' => 'الدروس',
+                'count' => (clone $lessonPayments)->count(),
+                'total' => $sumPayments($lessonPayments),
+            ],
+            'chapters' => [
+                'label' => 'الفصول',
+                'count' => (clone $chapterPayments)->count(),
+                'total' => $sumPayments($chapterPayments),
+            ],
+            'courses' => [
+                'label' => 'الكورسات',
+                'count' => (clone $coursePayments)->count(),
+                'total' => $sumPayments($coursePayments),
+            ],
+        ];
+
+        $overallTotal = collect($overallSummary)->sum('total');
+
+        $gradeIds = Course::where('teacher_id', $teacher->id)
+            ->whereNotNull('grade_id')
+            ->pluck('grade_id')
+            ->unique()
+            ->values();
+
+        $grades = Grade::whereIn('id', $gradeIds)->get();
+
+        $gradeSummaries = $grades->map(function ($grade) use ($paymentsQuery, $sumPayments) {
+            $gradePayments = (clone $paymentsQuery)->where(function ($query) use ($grade) {
+                $query->whereHas('course', function ($q) use ($grade) {
+                    $q->where('grade_id', $grade->id);
+                })->orWhereHas('chapter.course', function ($q) use ($grade) {
+                    $q->where('grade_id', $grade->id);
+                })->orWhereHas('lesson.chapter.course', function ($q) use ($grade) {
+                    $q->where('grade_id', $grade->id);
+                });
+            });
+
+            $gradeLessonPayments = (clone $gradePayments)->whereNotNull('lesson_id');
+            $gradeChapterPayments = (clone $gradePayments)
+                ->whereNull('lesson_id')
+                ->whereNotNull('chapter_id');
+            $gradeCoursePayments = (clone $gradePayments)
+                ->whereNull('lesson_id')
+                ->whereNull('chapter_id')
+                ->whereNotNull('course_id');
+
+            $summary = [
+                'lessons' => [
+                    'label' => 'الدروس',
+                    'count' => (clone $gradeLessonPayments)->count(),
+                    'total' => $sumPayments($gradeLessonPayments),
+                ],
+                'chapters' => [
+                    'label' => 'الفصول',
+                    'count' => (clone $gradeChapterPayments)->count(),
+                    'total' => $sumPayments($gradeChapterPayments),
+                ],
+                'courses' => [
+                    'label' => 'الكورسات',
+                    'count' => (clone $gradeCoursePayments)->count(),
+                    'total' => $sumPayments($gradeCoursePayments),
+                ],
+            ];
+
+            return [
+                'grade' => $grade,
+                'summary' => $summary,
+                'total' => collect($summary)->sum('total'),
+            ];
+        });
+
+        $logoPath = public_path('dashboard/app-assets/images/logo.png');
+        $logo = null;
+
+        if (file_exists($logoPath)) {
+            $logo = 'data:' . mime_content_type($logoPath) . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
 
         $data = [
             'teacher' => $teacher,
-            'lectureCodesCount' => $lectureCodesCount,
-            'monthlyCodesCount' => $monthlyCodesCount,
-            'studentsCount' => $studentsCount,
-            'lessonsCount' => $lessonsCount,
-            'examsCount' => $examsCount,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $startDateInput,
+            'endDate' => $endDateInput,
+            'overallSummary' => $overallSummary,
+            'overallTotal' => $overallTotal,
+            'gradeSummaries' => $gradeSummaries,
+            'logo' => $logo,
         ];
 
         $pdf = Pdf::loadView('dashboard.teachers.report', $data);

@@ -1,57 +1,131 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>Teacher Report</title>
+    <title>تقرير المعلم</title>
     <style>
         body {
-            font-family: 'XB RiyazBd', sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
+            margin: 24px;
+            direction: rtl;
+            text-align: right;
+            color: #1f1f1f;
         }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            height: 70px;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin: 0 0 8px;
+        }
+
+        p {
+            margin: 0 0 4px;
+            font-size: 14px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 14px;
         }
+
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #d0d0d0;
             padding: 8px;
-            text-align: right;
         }
+
         th {
             background-color: #f2f2f2;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 24px 0 12px;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .no-data {
+            font-size: 14px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h1>{{ __('dashboard.teacher.report_for') }} {{ $teacher->name }}</h1>
-    @if($startDate && $endDate)
-        <p>{{ __('dashboard.common.from') }} {{ $startDate }} {{ __('dashboard.common.to') }} {{ $endDate }}</p>
-    @endif
+    <div class="header">
+        <div>
+            <h1>تقرير المعلم {{ $teacher->name }}</h1>
+            @if($startDate && $endDate)
+                <p>الفترة من {{ $startDate }} إلى {{ $endDate }}</p>
+            @elseif($startDate)
+                <p>منذ {{ $startDate }}</p>
+            @elseif($endDate)
+                <p>حتى {{ $endDate }}</p>
+            @endif
+        </div>
+        @if($logo)
+            <img src="{{ $logo }}" alt="شعار" class="logo">
+        @endif
+    </div>
 
+    <h2 class="section-title">ملخص المبيعات</h2>
     <table>
-        <tr>
-            <th>{{ __('dashboard.teacher.report.metric') }}</th>
-            <th>{{ __('dashboard.teacher.report.value') }}</th>
-        </tr>
-        <tr>
-            <td>{{ __('dashboard.teacher.report.lecture_codes_count') }}</td>
-            <td>{{ $lectureCodesCount }}</td>
-        </tr>
-        <tr>
-            <td>{{ __('dashboard.teacher.report.monthly_codes_count') }}</td>
-            <td>{{ $monthlyCodesCount }}</td>
-        </tr>
-        <tr>
-            <td>{{ __('dashboard.teacher.report.students_count') }}</td>
-            <td>{{ $studentsCount }}</td>
-        </tr>
-        <tr>
-            <td>{{ __('dashboard.teacher.report.lessons_count') }}</td>
-            <td>{{ $lessonsCount }}</td>
-        </tr>
-        <tr>
-            <td>{{ __('dashboard.teacher.report.exams_count') }}</td>
-            <td>{{ $examsCount }}</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>البند</th>
+                <th>عدد المدفوعات</th>
+                <th>إجمالي الإيرادات (جنيه)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($overallSummary as $row)
+                <tr>
+                    <td>{{ $row['label'] }}</td>
+                    <td>{{ $row['count'] }}</td>
+                    <td>{{ number_format((float) $row['total'], 2) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
+    <p class="total">إجمالي الإيرادات: {{ number_format((float) $overallTotal, 2) }} جنيه</p>
+
+    @forelse($gradeSummaries as $gradeSummary)
+        <h2 class="section-title">الصف: {{ $gradeSummary['grade']->name }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>البند</th>
+                    <th>عدد المدفوعات</th>
+                    <th>إجمالي الإيرادات (جنيه)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($gradeSummary['summary'] as $row)
+                    <tr>
+                        <td>{{ $row['label'] }}</td>
+                        <td>{{ $row['count'] }}</td>
+                        <td>{{ number_format((float) $row['total'], 2) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <p class="total">الإجمالي للصف {{ $gradeSummary['grade']->name }}: {{ number_format((float) $gradeSummary['total'], 2) }} جنيه</p>
+    @empty
+        <p class="no-data">لا توجد صفوف مرتبطة بهذا المعلم حاليًا.</p>
+    @endforelse
 </body>
 </html>
