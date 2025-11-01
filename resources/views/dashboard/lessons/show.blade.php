@@ -382,6 +382,14 @@
                 minimumInputLength: 1,
             });
 
+            $('.delete-payment-btn').on('click', function (e) {
+                e.preventDefault();
+
+                if (confirm('{{ __("dashboard.lesson.delete_payment_confirm") }}')) {
+                    $(this).closest('form').submit();
+                }
+            });
+
             const $studentsTable = $('#students-table');
             if ($studentsTable.length) {
                 const filterRows = () => {

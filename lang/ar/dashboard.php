@@ -562,6 +562,7 @@ return [
         'fill_required' => 'يرجى ملء جميع الحقول المطلوبة لإنشاء درس جديد.',
         'update_info' => 'تحديث معلومات هذا الدرس.',
         'delete_confirm' => 'هل أنت متأكد أنك تريد حذف هذا الدرس؟',
+        'delete_payment_confirm' => 'هل أنت متأكد أنك تريد حذف هذا الدفع؟',
         'search_placeholder' => 'البحث باسم الدرس...',
         'featured_status_updated' => 'تم تحديث حالة الدرس المميز بنجاح',
         'teachers_lessons' => 'دروس المعلمين',
