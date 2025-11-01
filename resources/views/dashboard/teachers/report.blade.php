@@ -4,12 +4,16 @@
     <meta charset="utf-8">
     <title>تقرير المعلم</title>
     <style>
-        body {
+        * {
             font-family: 'DejaVu Sans', sans-serif;
+        }
+
+        body {
             margin: 24px;
             direction: rtl;
             text-align: right;
             color: #1f1f1f;
+            unicode-bidi: bidi-override;
         }
 
         .header {
@@ -38,11 +42,15 @@
             border-collapse: collapse;
             margin-bottom: 16px;
             font-size: 14px;
+            direction: rtl;
         }
 
         th, td {
             border: 1px solid #d0d0d0;
             padding: 8px;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            text-align: right;
         }
 
         th {
