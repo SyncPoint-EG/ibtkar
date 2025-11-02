@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::post('test-notification', TestNotificationController::class);
+Route::post('test/notification', TestNotificationController::class);
 
 Route::get('stages', [HomeController::class, 'getStages']);
 Route::get('grades/{id}', [HomeController::class, 'getGrades']);
