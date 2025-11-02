@@ -25,7 +25,7 @@ Route::get('attachments', [HomeController::class, 'getAttachments']);
 
 Route::post('codes/import-price', CodeImportController::class);
 
-Route::get('test-notification', TestNotificationController::class);
+Route::post('test-notification', TestNotificationController::class);
 
 Route::group(['prefix' => 'notifications', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
