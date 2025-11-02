@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CodeImportController;
+use App\Http\Controllers\Api\TestNotificationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,8 @@ Route::get('attachments', [HomeController::class, 'getAttachments']);
 // Route::get('student/tables', [App\Http\Controllers\Mobile\Student\TableController::class, 'getTeacherTables'])->middleware('auth:sanctum');
 
 Route::post('codes/import-price', CodeImportController::class);
+
+Route::post('test-notify', TestNotificationController::class);
 
 Route::group(['prefix' => 'notifications', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
