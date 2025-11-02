@@ -19,8 +19,8 @@ class TestNotificationController extends Controller
      */
     public function __invoke(TestNotificationRequest $request): JsonResponse
     {
-        $authRecipient = $this->resolveAuthenticatedRecipient($request);
-        $recipients = $this->gatherRecipients($request, $authRecipient);
+//        $authRecipient = $this->resolveAuthenticatedRecipient($request);
+        $recipients = $this->gatherRecipients($request, null );
 
         if ($recipients->isEmpty()) {
             return response()->json([
