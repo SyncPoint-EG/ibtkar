@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+Route::post('test-notification', TestNotificationController::class);
 
 Route::get('stages', [HomeController::class, 'getStages']);
 Route::get('grades/{id}', [HomeController::class, 'getGrades']);
@@ -25,7 +26,6 @@ Route::get('attachments', [HomeController::class, 'getAttachments']);
 
 Route::post('codes/import-price', CodeImportController::class);
 
-Route::post('test-notification', TestNotificationController::class);
 
 Route::group(['prefix' => 'notifications', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
