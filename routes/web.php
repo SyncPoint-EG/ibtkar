@@ -21,6 +21,7 @@ use App\Http\Controllers\Dashboard\HomeworkController;
 use App\Http\Controllers\Dashboard\HomeworkQuestionController;
 use App\Http\Controllers\Dashboard\LessonAttachmentController;
 use App\Http\Controllers\Dashboard\LessonController;
+use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\PaymentApprovalController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PermissionController;
@@ -139,6 +140,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('center-exams/{centerExam}/submissions', [CenterExamController::class, 'submissions'])
         ->name('center-exams.submissions')
         ->middleware('can:view_center_exam');
+
+    Route::get('notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+    Route::post('notifications', [NotificationController::class, 'store'])
+        ->name('notifications.store');
 
 });
 

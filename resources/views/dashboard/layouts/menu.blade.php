@@ -163,6 +163,9 @@
 </li>
 @endcan
 
+<li class=" nav-item"><a href="{{ route('notifications.index') }}"><i class="icon-bell"></i><span class="menu-title">إرسال إشعار</span></a>
+</li>
+
 
 {{--@can('view_luckwheelitem')--}}
 {{--<li class=" nav-item"><a href="{{ route('luck-wheel-items.index') }}"><i class="icon-list"></i><span data-i18n="nav.luck-wheel-items.main" class="menu-title">{{__('dashboard.luckwheelitem.title_plural')}}</span></a>--}}
