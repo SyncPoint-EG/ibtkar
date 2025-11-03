@@ -8,13 +8,14 @@ use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
 use App\Services\ExamAttemptService;
+use App\Traits\FirebaseNotify;
 use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
-    use GamificationTrait;
+    use GamificationTrait, FirebaseNotify;
 
     protected ExamAttemptService $examAttemptService;
 
@@ -135,6 +136,8 @@ class ExamController extends Controller
         $this->examAttemptService->checkIfPassed($examAttempt);
         $points = $this->givePoints($student, 'solve_exam');
 
+        $this->notifyGuardianAboutExamResult($student, $exam, $examAttempt);
+
         return response()->json([
             'message' => 'Exam submitted successfully.',
             'score' => $total_score,
@@ -143,5 +146,28 @@ class ExamController extends Controller
             'rewarded_points' => $points,
 
         ]);
+    }
+
+    protected function notifyGuardianAboutExamResult($student, Exam $exam, ExamAttempt $examAttempt): void
+    {
+        $student->loadMissing('guardian');
+        $guardian = $student->guardian;
+
+        if (! $guardian) {
+            return;
+        }
+
+        $title = 'نتيجة امتحان '.$exam->title;
+        $body = sprintf('حصل %s على %s من %s في الامتحان.', $student->name, $examAttempt->score, $examAttempt->total_marks);
+
+        $data = [
+            'type' => 'exam_result',
+            'exam_id' => (string) $exam->id,
+            'student_id' => (string) $student->id,
+            'score' => (string) $examAttempt->score,
+            'total_marks' => (string) $examAttempt->total_marks,
+        ];
+
+        $this->sendAndStoreFirebaseNotification($guardian, $title, $body, $data);
     }
 }

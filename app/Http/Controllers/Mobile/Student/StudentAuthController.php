@@ -7,6 +7,7 @@ use App\Http\Resources\StudentResource;
 use App\Models\ActionPoint;
 use App\Models\Guardian;
 use App\Models\Student;
+use App\Traits\FirebaseNotify;
 use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentAuthController
 {
-    use GamificationTrait;
+    use GamificationTrait, FirebaseNotify;
 
     public function register(StudentRequest $request)
     {
@@ -59,6 +60,10 @@ class StudentAuthController
         $student->update($data);
         //        $referral_points = ActionPoint::where('action_name', 'successful_referral')->value('points');
         $referral_points = $this->givePoints($referrer, 'successful_referral');
+
+        if ($referrer) {
+            $this->sendReferralRewardNotification($referrer, $student, $referral_points);
+        }
 
         //        $referrer->increment('points', $referral_points);
         return $referral_points;
@@ -169,5 +174,25 @@ class StudentAuthController
             'success' => true,
             'message' => 'Account deleted successfully',
         ]);
+    }
+
+    protected function sendReferralRewardNotification(Student $referrer, Student $newStudent, ?int $rewardedPoints): void
+    {
+        $points = $rewardedPoints ?? 0;
+        $title = 'مبروك! نقاط جديدة';
+        $body = sprintf(
+            'كسبت %d نقطة لأن %s سجل باستخدام كود الدعوة الخاص بك.',
+            $points,
+            $newStudent->name
+        );
+
+        $data = [
+            'type' => 'referral_reward',
+            'referrer_id' => (string) $referrer->id,
+            'new_student_id' => (string) $newStudent->id,
+            'points' => (string) $points,
+        ];
+
+        $this->sendAndStoreFirebaseNotification($referrer, $title, $body, $data);
     }
 }

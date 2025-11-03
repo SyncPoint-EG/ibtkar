@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Student;
+use App\Traits\FirebaseNotify;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentApprovalService
 {
+    use FirebaseNotify;
+
     /**
      * Get all pending payments with pagination.
      */
@@ -71,6 +74,8 @@ class PaymentApprovalService
                 $student->save();
             }
         }
+
+        $this->notifyPaymentApproval($payment);
     }
 
     /**
@@ -109,5 +114,80 @@ class PaymentApprovalService
         $payment->payment_method = 'gift';
         $payment->payment_status = Payment::PAYMENT_STATUS['approved'];
         $payment->save();
+    }
+
+    protected function notifyPaymentApproval(Payment $payment): void
+    {
+        if (! in_array($payment->payment_method, ['wallet', 'instapay'], true)) {
+            return;
+        }
+
+        $payment->loadMissing(
+            'student.guardian',
+            'lesson.chapter.course.teacher',
+            'chapter.course.teacher',
+            'course.teacher'
+        );
+
+        $student = $payment->student;
+        if (! $student) {
+            return;
+        }
+
+        $resource = $this->resolvePaymentResource($payment);
+        if (! $resource) {
+            return;
+        }
+
+        [$resourceType, $resourceId, $resourceName] = $resource;
+        $resourceLabel = $this->formatResourceLabel($resourceType, $resourceName);
+
+        $data = [
+            'type' => 'payment_approved',
+            'payment_id' => (string) $payment->id,
+            'resource_type' => $resourceType,
+            'resource_id' => (string) $resourceId,
+            'student_id' => (string) $student->id,
+        ];
+
+        $studentTitle = 'تم تفعيل المحتوى الدراسي';
+        $studentBody = sprintf('%s متاحة الآن. نتمنى لك تجربة موفقة!', $resourceLabel);
+        $this->sendAndStoreFirebaseNotification($student, $studentTitle, $studentBody, $data);
+
+        $guardian = $student->guardian;
+        if (! $guardian) {
+            return;
+        }
+
+        $guardianTitle = 'تمت الموافقة على شراء '.$student->name;
+        $guardianBody = sprintf('تمت الموافقة على شراء %s للطالب %s. المحتوى متاح الآن.', $resourceLabel, $student->name);
+        $this->sendAndStoreFirebaseNotification($guardian, $guardianTitle, $guardianBody, $data);
+    }
+
+    protected function resolvePaymentResource(Payment $payment): ?array
+    {
+        if ($payment->lesson) {
+            return ['lesson', $payment->lesson->id, $payment->lesson->name];
+        }
+
+        if ($payment->chapter) {
+            return ['chapter', $payment->chapter->id, $payment->chapter->name];
+        }
+
+        if ($payment->course) {
+            return ['course', $payment->course->id, $payment->course->name];
+        }
+
+        return null;
+    }
+
+    protected function formatResourceLabel(string $resourceType, string $resourceName): string
+    {
+        return match ($resourceType) {
+            'lesson' => 'الحصة "'.$resourceName.'"',
+            'chapter' => 'الشابتر "'.$resourceName.'"',
+            'course' => 'الكورس "'.$resourceName.'"',
+            default => $resourceName,
+        };
     }
 }

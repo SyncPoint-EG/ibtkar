@@ -10,6 +10,7 @@ use App\Http\Requests\LessonRequest;
 use App\Models\Chapter;
 use App\Models\Lesson;
 use App\Models\LessonAttachment;
+use App\Models\Payment;
 use App\Models\Student;
 use App\Models\Watch;
 use App\Services\LessonService;
@@ -83,14 +84,7 @@ class LessonController extends Controller
 
             $lesson = $this->lessonService->create($data);
 
-            //            $students = Student::all();
-            //            $title = 'New Lesson Added';
-            //            $body = 'A new lesson \'' . $lesson->name . '\' has been added.';
-            //            $data = [
-            //                'lesson_id' => $lesson->id,
-            //            ];
-            //
-            //            $this->sendAndStoreFirebaseNotification($students, $title, $body, $data);
+            $this->notifyTeacherStudentsAboutLesson($lesson);
 
             return redirect()->route('lessons.index')
                 ->with('success', 'Lesson created successfully.');
@@ -188,6 +182,56 @@ class LessonController extends Controller
                 'message' => __('dashboard.common.error').': '.$e->getMessage(),
             ], 500);
         }
+    }
+
+    protected function notifyTeacherStudentsAboutLesson(Lesson $lesson): void
+    {
+        $lesson->loadMissing('chapter.course.teacher');
+
+        $teacher = optional(optional($lesson->chapter)->course)->teacher;
+        if (! $teacher) {
+            return;
+        }
+
+        $studentIds = Payment::query()
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->whereNotNull('student_id')
+            ->where(function ($query) use ($teacher) {
+                $query
+                    ->whereHas('lesson.chapter.course', function ($subQuery) use ($teacher) {
+                        $subQuery->where('teacher_id', $teacher->id);
+                    })
+                    ->orWhereHas('chapter.course', function ($subQuery) use ($teacher) {
+                        $subQuery->where('teacher_id', $teacher->id);
+                    })
+                    ->orWhereHas('course', function ($subQuery) use ($teacher) {
+                        $subQuery->where('teacher_id', $teacher->id);
+                    });
+            })
+            ->pluck('student_id')
+            ->unique()
+            ->filter();
+
+        if ($studentIds->isEmpty()) {
+            return;
+        }
+
+        $students = Student::whereIn('id', $studentIds)->get();
+        if ($students->isEmpty()) {
+            return;
+        }
+
+        $title = 'حصة جديدة متاحة';
+        $body = sprintf('تم إضافة الحصة %s مع المدرس %s.', $lesson->name, $teacher->name);
+
+        $data = [
+            'type' => 'lesson_published',
+            'lesson_id' => (string) $lesson->id,
+            'teacher_id' => (string) $teacher->id,
+            'teacher_name' => $teacher->name,
+        ];
+
+        $this->sendAndStoreFirebaseNotification($students, $title, $body, $data);
     }
 
     public function teachers()

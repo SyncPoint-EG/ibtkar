@@ -55,6 +55,10 @@ class TestNotificationController extends Controller
     {
         $recipients = collect();
 
+        $recipientType = $request->input('recipient_type', 'students');
+        $sendStudents = in_array($recipientType, ['students', 'both'], true);
+        $sendGuardians = in_array($recipientType, ['guardians', 'both'], true);
+
         $includeAuth = $request->has('send_to_auth')
             ? $request->boolean('send_to_auth')
             : (bool) $authRecipient;
@@ -64,14 +68,14 @@ class TestNotificationController extends Controller
         }
 
         $studentIds = $request->input('student_ids', []);
-        if (! empty($studentIds)) {
+        if ($sendStudents && ! empty($studentIds)) {
             $recipients = $recipients->merge(
                 Student::whereIn('id', $studentIds)->get()
             );
         }
 
         $guardianIds = $request->input('guardian_ids', []);
-        if (! empty($guardianIds)) {
+        if ($sendGuardians && ! empty($guardianIds)) {
             $recipients = $recipients->merge(
                 Guardian::whereIn('id', $guardianIds)->get()
             );
@@ -81,6 +85,34 @@ class TestNotificationController extends Controller
         if (! empty($teacherIds)) {
             $recipients = $recipients->merge(
                 Teacher::whereIn('id', $teacherIds)->get()
+            );
+        }
+
+        $stageIds = $request->input('stage_ids', []);
+        $gradeIds = $request->input('grade_ids', []);
+        $divisionIds = $request->input('division_ids', []);
+        $hasHierarchyFilters = ! empty($stageIds) || ! empty($gradeIds) || ! empty($divisionIds);
+
+        if ($sendStudents && $hasHierarchyFilters) {
+            $recipients = $recipients->merge(
+                Student::query()
+                    ->when(! empty($stageIds), fn ($query) => $query->whereIn('stage_id', $stageIds))
+                    ->when(! empty($gradeIds), fn ($query) => $query->whereIn('grade_id', $gradeIds))
+                    ->when(! empty($divisionIds), fn ($query) => $query->whereIn('division_id', $divisionIds))
+                    ->get()
+            );
+        }
+
+        if ($sendGuardians && $hasHierarchyFilters) {
+            $recipients = $recipients->merge(
+                Guardian::query()
+                    ->whereHas('children', function ($query) use ($stageIds, $gradeIds, $divisionIds) {
+                        $query
+                            ->when(! empty($stageIds), fn ($q) => $q->whereIn('stage_id', $stageIds))
+                            ->when(! empty($gradeIds), fn ($q) => $q->whereIn('grade_id', $gradeIds))
+                            ->when(! empty($divisionIds), fn ($q) => $q->whereIn('division_id', $divisionIds));
+                    })
+                    ->get()
             );
         }
 

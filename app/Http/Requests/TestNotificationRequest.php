@@ -26,6 +26,7 @@ class TestNotificationRequest extends FormRequest
             'body' => ['required', 'string'],
             'data' => ['sometimes', 'array'],
             'data.*' => ['nullable'],
+            'recipient_type' => ['sometimes', 'in:students,guardians,both'],
             'send_to_auth' => ['sometimes', 'boolean'],
             'student_ids' => ['sometimes', 'array'],
             'student_ids.*' => ['integer', 'exists:students,id'],
@@ -33,6 +34,12 @@ class TestNotificationRequest extends FormRequest
             'guardian_ids.*' => ['integer', 'exists:guardians,id'],
             'teacher_ids' => ['sometimes', 'array'],
             'teacher_ids.*' => ['integer', 'exists:teachers,id'],
+            'stage_ids' => ['sometimes', 'array'],
+            'stage_ids.*' => ['integer', 'exists:stages,id'],
+            'grade_ids' => ['sometimes', 'array'],
+            'grade_ids.*' => ['integer', 'exists:grades,id'],
+            'division_ids' => ['sometimes', 'array'],
+            'division_ids.*' => ['integer', 'exists:divisions,id'],
         ];
     }
 }
