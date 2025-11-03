@@ -34,15 +34,15 @@ class NotificationController extends Controller
         if ($recipients->isEmpty()) {
             return back()
                 ->withInput()
-                ->with('error', 'لم يتم العثور على مستلمين مطابقين للاختيارات الحالية.');
+                ->with('error', __('dashboard.notification.empty_recipients'));
         }
 
         $data = [
             'type' => 'dashboard_manual',
             'recipient_type' => $request->input('recipient_type'),
-            'stage_ids' => collect($request->input('stage_ids'))->map(fn ($id) => (string) $id)->all(),
-            'grade_ids' => collect($request->input('grade_ids'))->map(fn ($id) => (string) $id)->all(),
-            'division_ids' => collect($request->input('division_ids'))->map(fn ($id) => (string) $id)->all(),
+            'stage_ids' => collect($request->input('stage_ids', []))->map(fn ($id) => (string) $id)->all(),
+            'grade_ids' => collect($request->input('grade_ids', []))->map(fn ($id) => (string) $id)->all(),
+            'division_ids' => collect($request->input('division_ids', []))->map(fn ($id) => (string) $id)->all(),
         ];
 
         $this->sendAndStoreFirebaseNotification(
@@ -52,7 +52,7 @@ class NotificationController extends Controller
             $data
         );
 
-        return back()->with('success', 'تم إرسال الإشعار بنجاح.');
+        return back()->with('success', __('dashboard.notification.success'));
     }
 
     protected function resolveRecipients(DashboardNotificationRequest $request): Collection

@@ -163,8 +163,10 @@
 </li>
 @endcan
 
-<li class=" nav-item"><a href="{{ route('notifications.index') }}"><i class="icon-bell"></i><span class="menu-title">إرسال إشعار</span></a>
-</li>
+@can('send_notification')
+    <li class=" nav-item"><a href="{{ route('notifications.index') }}"><i class="icon-bell"></i><span class="menu-title">{{ __('dashboard.notification.send') }}</span></a>
+    </li>
+@endcan
 
 
 {{--@can('view_luckwheelitem')--}}

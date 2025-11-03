@@ -142,9 +142,11 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('can:view_center_exam');
 
     Route::get('notifications', [NotificationController::class, 'index'])
-        ->name('notifications.index');
+        ->name('notifications.index')
+        ->middleware('can:send_notification');
     Route::post('notifications', [NotificationController::class, 'store'])
-        ->name('notifications.store');
+        ->name('notifications.store')
+        ->middleware('can:send_notification');
 
 });
 
