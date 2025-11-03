@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Lesson;
+use App\Models\Payment;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -297,18 +299,34 @@ class LessonService
 
     public function getStudents(Lesson $lesson)
     {
-        $students = new Collection;
-        $payments = $lesson->payments()->with('student')->get();
-        foreach ($payments as $payment) {
-            if ($payment->student) {
-                $students->add($payment->student);
-            }
+        $studentIds = Payment::query()
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->whereNotNull('student_id')
+            ->where(function ($query) use ($lesson) {
+                $query->where('lesson_id', $lesson->id);
+
+                if ($lesson->chapter_id) {
+                    $query->orWhere('chapter_id', $lesson->chapter_id);
+                }
+
+                $courseId = optional($lesson->chapter)->course_id;
+                if ($courseId) {
+                    $query->orWhere('course_id', $courseId);
+                }
+            })
+            ->pluck('student_id')
+            ->unique()
+            ->values();
+
+        if ($studentIds->isEmpty()) {
+            return new Collection();
         }
 
-        $students = $students->unique('id');
+        $students = Student::whereIn('id', $studentIds)->get();
 
         foreach ($students as $student) {
             $watch = $student->watches()->where('lesson_id', $lesson->id)->first();
+
             $student->watches_count = $watch ? $watch->count : 0;
         }
 
