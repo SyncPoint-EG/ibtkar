@@ -26,7 +26,7 @@ class FirebasePushNotification extends Notification
     {
         $this->title = $title;
         $this->body = $body;
-        $this->data = $data;
+        $this->data = $this->stringifyData($data);
     }
 
     /**
@@ -61,5 +61,33 @@ class FirebasePushNotification extends Notification
             'title' => $this->title,
             'body' => $this->body,
         ]);
+    }
+
+    /**
+     * Ensure all data payload values are strings as required by FCM.
+     */
+    private function stringifyData(array $data): array
+    {
+        return collect($data)
+            ->map(function ($value) {
+                if ($value instanceof \Stringable) {
+                    return (string) $value;
+                }
+
+                if (is_bool($value)) {
+                    return $value ? 'true' : 'false';
+                }
+
+                if (is_scalar($value)) {
+                    return (string) $value;
+                }
+
+                if (is_null($value)) {
+                    return '';
+                }
+
+                return json_encode($value);
+            })
+            ->all();
     }
 }
