@@ -1,0 +1,413 @@
+{
+    "info": {
+        "_postman_id": "8c2ba68c-6d87-4fd0-85f4-13b0e1b5f7f3",
+        "name": "Notifications API",
+        "description": "Collection scoped to the notification endpoints defined in routes/api.php. Each request includes helpful comments in the description field so you can quickly understand the intent, auth needs, payload, and expected responses before running it.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Notifications",
+            "description": "Authenticated Sanctum endpoints. Attach an `Authorization: Bearer {{sanctum_token}}` header before invoking these requests.",
+            "item": [
+                {
+                    "name": "List Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications"
+                            ]
+                        },
+                        "description": "Comment: Paginated index of all notifications for the authenticated user. Optional `page` query parameter adjusts pagination. Mirrors `NotificationController@index`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Unread Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/unread",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "unread"
+                            ]
+                        },
+                        "description": "Comment: Lists unread notifications only. Use to build unread inbox UIs. Endpoint wraps `NotificationController@unread`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Read Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/read",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "read"
+                            ]
+                        },
+                        "description": "Comment: Lists read notifications. Handy for building historical views of previously opened alerts. Driven by `NotificationController@read`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Notification",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/:id",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "description": "Notification database ID.",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "description": "Comment: Fetch a single notification by id. This will 404 if the notification does not belong to the authenticated user (`NotificationController@show`)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark Notification As Read",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/notifications/:id/mark-as-read",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                ":id",
+                                "mark-as-read"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "description": "Notification database ID.",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "description": "Comment: No body required. Marks the targeted notification as read and returns a confirmation message. Maps to `NotificationController@markAsRead`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark All Notifications As Read",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/notifications/mark-all-as-read",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "mark-all-as-read"
+                            ]
+                        },
+                        "description": "Comment: Bulk mark all unread notifications as read for the authenticated user (`NotificationController@markAllAsRead`)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Notification",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/:id",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "description": "Notification database ID.",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        "description": "Comment: Removes a single notification (`NotificationController@destroy`). Use carefully: deletion is permanent."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete All Notifications",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications"
+                            ]
+                        },
+                        "description": "Comment: Destroys every notification tied to the user account (`NotificationController@destroyAll`). Recommended for administrative clean-up flows only."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Notification Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "count"
+                            ]
+                        },
+                        "description": "Comment: Returns the total notification count as `{\"count\": <int>}`. Useful for quick badge values (`NotificationController@count`)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Unread Notification Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/unread-count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "unread-count"
+                            ]
+                        },
+                        "description": "Comment: Returns only the unread notification count (`NotificationController@unreadCount`). Ideal for real-time badge updates."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Read Notification Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{sanctum_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/notifications/read-count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "read-count"
+                            ]
+                        },
+                        "description": "Comment: Returns the read notification count (`NotificationController@readCount`). Pair with unread counts for dashboards."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Notification Utilities",
+            "description": "Helper endpoints that simplify testing push delivery. These may require elevated roles in production.",
+            "item": [
+                {
+                    "name": "Dispatch Test Notification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Test notification\",\n    \"body\": \"Triggered from Postman\",\n    \"data\": {\n        \"channel\": \"demo\"\n    },\n    \"send_to_auth\": false,\n    \"student_ids\": [1, 2],\n    \"guardian_ids\": [],\n    \"teacher_ids\": []\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/test-notification",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "test-notification"
+                            ]
+                        },
+                        "description": "Comment: Sends a Firebase push notification using `TestNotificationController`. Adjust the arrays to match real recipient IDs. Validation rules live in `TestNotificationRequest`."
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost/api",
+            "type": "string",
+            "description": "Comment: Point this at your API root (e.g. http://localhost:8000/api)."
+        },
+        {
+            "key": "sanctum_token",
+            "value": "replace-with-token",
+            "type": "string",
+            "description": "Comment: Paste a valid Sanctum bearer token for the authenticated user."
+        }
+    ]
+}
