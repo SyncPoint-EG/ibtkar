@@ -1,5 +1,15 @@
 @extends('dashboard.layouts.master')
 
+@php
+    $lessonCascadePrefill = array_merge([
+        'stage_id' => null,
+        'grade_id' => null,
+        'course_id' => null,
+        'chapter_id' => null,
+        'lesson_id' => null,
+    ], $cascadePrefill ?? []);
+@endphp
+
 @section('content')
     <div class="app-content content container-fluid">
         <div class="content-wrapper">
@@ -37,20 +47,43 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="lesson_id">Lesson *</label>
-                                        <select class="form-control @error('lesson_id') is-invalid @enderror"
-                                                id="lesson_id" name="lesson_id" required>
-                                            <option value="">Select Lesson</option>
-                                            @foreach($lessons as $lesson)
-                                                <option value="{{ $lesson->id }}" {{ old('lesson_id') == $lesson->id ? 'selected' : '' }}>
-                                                    {{ $lesson->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('lesson_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="stage_id">{{ __('dashboard.stage.title') }} *</label>
+                                                <select id="stage_id" class="form-control" data-placeholder="{{ __('dashboard.common.select') }}"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="grade_id">{{ __('dashboard.grade.title') }} *</label>
+                                                <select id="grade_id" class="form-control" data-placeholder="{{ __('dashboard.common.select') }}"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="course_id">{{ __('dashboard.course.title') }} *</label>
+                                                <select id="course_id" class="form-control" data-placeholder="{{ __('dashboard.common.select') }}"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="chapter_id">{{ __('dashboard.chapter.title') }} *</label>
+                                                <select id="chapter_id" class="form-control" data-placeholder="{{ __('dashboard.common.select') }}"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="lesson_id">{{ __('dashboard.lesson.title') }} *</label>
+                                                <select class="form-control @error('lesson_id') is-invalid @enderror"
+                                                        id="lesson_id" name="lesson_id" required></select>
+                                                @error('lesson_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -100,4 +133,30 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('page_scripts')
+    @include('dashboard.partials.lesson-cascade-script')
+    <script>
+        (function () {
+            const cascadePrefill = @json($lessonCascadePrefill);
+
+            window.initLessonCascade({
+                stageSelector: '#stage_id',
+                gradeSelector: '#grade_id',
+                courseSelector: '#course_id',
+                chapterSelector: '#chapter_id',
+                lessonSelector: '#lesson_id',
+                placeholder: '{{ __('dashboard.common.select') }}',
+                routes: {
+                    stages: '{{ route('api.stages') }}',
+                    grades: '{{ route('api.stages.grades', ['stage' => '__stage__']) }}',
+                    courses: '{{ route('api.courses.by-filters') }}',
+                    chapters: '{{ route('api.courses.chapters', ['course' => '__course__']) }}',
+                    lessons: '{{ route('api.chapters.lessons', ['chapter' => '__chapter__']) }}',
+                },
+                prefill: cascadePrefill
+            });
+        })();
+    </script>
 @endsection

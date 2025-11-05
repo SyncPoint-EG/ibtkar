@@ -1,5 +1,16 @@
 @extends('dashboard.layouts.master')
 
+@php
+    $lessonCascadePrefill = array_merge([
+        'stage_id' => null,
+        'grade_id' => null,
+        'course_id' => null,
+        'chapter_id' => null,
+        'lesson_id' => null,
+    ], $cascadePrefill ?? []);
+    $selectedExamType = old('exam_type', $exam->lesson_id ? 'lesson' : 'teacher');
+@endphp
+
 @section('content')
     <div class="app-content content container-fluid">
         <div class="content-wrapper">
@@ -62,12 +73,12 @@
                                                 <label>{{ __('dashboard.exam.exam_for') }}</label>
                                                 <div class="input-group">
                                                     <label class="display-inline-block custom-control custom-radio mr-1">
-                                                        <input type="radio" name="exam_type" value="lesson" class="custom-control-input" {{ $exam->lesson_id ? 'checked' : '' }}>
+                                                        <input type="radio" name="exam_type" value="lesson" class="custom-control-input" {{ $selectedExamType === 'lesson' ? 'checked' : '' }}>
                                                         <span class="custom-control-indicator"></span>
                                                         <span class="custom-control-description">{{ __('dashboard.exam.types.lesson') }}</span>
                                                     </label>
                                                     <label class="display-inline-block custom-control custom-radio">
-                                                        <input type="radio" name="exam_type" value="teacher" class="custom-control-input" {{ $exam->course_id ? 'checked' : '' }}>
+                                                        <input type="radio" name="exam_type" value="teacher" class="custom-control-input" {{ $selectedExamType === 'teacher' ? 'checked' : '' }}>
                                                         <span class="custom-control-indicator"></span>
                                                         <span class="custom-control-description">{{ __('dashboard.exam.types.teacher') }}</span>
                                                     </label>
@@ -93,7 +104,9 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="teacher_course_id">{{ __('dashboard.course.title') }}</label>
-                                                            <select class="form-control" id="teacher_course_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
+                                                            <select class="form-control" id="teacher_course_id" data-placeholder="{{ __('dashboard.common.select') }}" disabled>
+                                                                <option value="">{{ __('dashboard.common.select') }}</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -102,41 +115,35 @@
                                             <!-- Section for Lesson -->
                                             <div id="lesson-section">
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="stage_id">{{ __('dashboard.stage.title') }}</label>
+                                                            <label for="stage_id">{{ __('dashboard.stage.title') }} *</label>
                                                             <select class="form-control" id="stage_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
+                                                            <label for="grade_id">{{ __('dashboard.grade.title') }} *</label>
                                                             <select class="form-control" id="grade_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="division_id">{{ __('dashboard.division.title') }}</label>
-                                                            <select class="form-control" id="division_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="lesson_course_id">{{ __('dashboard.course.title') }}</label>
+                                                            <label for="lesson_course_id">{{ __('dashboard.course.title') }} *</label>
                                                             <select class="form-control" id="lesson_course_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="chapter_id">{{ __('dashboard.chapter.title') }}</label>
+                                                            <label for="chapter_id">{{ __('dashboard.chapter.title') }} *</label>
                                                             <select class="form-control" id="chapter_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="lesson_id">{{ __('dashboard.lesson.title') }}</label>
+                                                            <label for="lesson_id">{{ __('dashboard.lesson.title') }} *</label>
                                                             <select class="form-control" id="lesson_id" data-placeholder="{{ __('dashboard.common.select') }}"></select>
                                                         </div>
                                                     </div>
@@ -229,172 +236,129 @@
 @endsection
 
 @section('page_scripts')
-<script>
-    $(document).ready(function () {
-        const exam = @json($exam);
-        const placeholder = '{{ __("dashboard.common.select") }}';
+    @include('dashboard.partials.lesson-cascade-script')
+    <script>
+        $(function () {
+            const placeholder = '{{ __("dashboard.common.select") }}';
+            const cascadePrefill = @json($lessonCascadePrefill);
+            const examContext = {
+                lesson_id: {{ $exam->lesson_id ?? 'null' }},
+                teacher_id: {{ $exam->teacher_id ?? 'null' }},
+                course_id: {{ $exam->course_id ?? 'null' }},
+            };
 
-        // Helper to reset and fill a select box
-        function populateSelect(selector, data, selectedId = null) {
-            const select = $(selector);
-            select.empty().append(`<option value="">${placeholder}</option>`);
-            $.each(data, function (index, item) {
-                const isSelected = item.id == selectedId ? ' selected' : '';
-                select.append(`<option value="${item.id}"${isSelected}>${item.name || (item.first_name + ' ' + item.last_name)}</option>`);
-            });
-            select.prop('disabled', false);
-        }
-
-        function resetSelect(selector) {
-            $(selector).empty().append(`<option value="">${placeholder}</option>`).prop('disabled', true);
-        }
-
-        function fetchCourses(stageId, gradeId, divisionId = null, selectedCourseId = null) {
-            if (!stageId || !gradeId) {
-                resetSelect('#lesson_course_id');
-                return $.Deferred().resolve().promise();
-            }
-
-            const params = { stage_id: stageId, grade_id: gradeId };
-            if (divisionId) {
-                params.division_id = divisionId;
-            }
-
-            return $.get('{{ route("api.courses.by-filters") }}', params, function (data) {
-                populateSelect('#lesson_course_id', data, selectedCourseId);
-            });
-        }
-
-        function initPage() {
-            const examType = $('input[name="exam_type"]:checked').val();
-            $('#teacher-section').toggle(examType === 'teacher');
-            $('#lesson-section').toggle(examType === 'lesson');
-
-            if (examType === 'teacher') {
-                if (exam.teacher_id) {
-                    $.get(`/api/teachers/${exam.teacher_id}/courses`, function (data) {
-                        populateSelect('#teacher_course_id', data, exam.course_id);
-                    });
+            const toastError = function (message) {
+                if (!message) {
+                    return;
                 }
-            } else if (examType === 'lesson' && exam.lesson) {
-                const course = exam.lesson.chapter.course;
-                const stageId = course.stage.id;
-                const gradeId = course.grade.id;
-                const divisionId = course.division ? course.division.id : null;
-                const courseId = course.id;
-                const chapterId = exam.lesson.chapter.id;
-                const lessonId = exam.lesson.id;
 
-                // Chain of calls to populate and select everything
-                $.get('{{ route("api.stages") }}', function (stages) {
-                    populateSelect('#stage_id', stages, stageId);
-                    $.get(`/api/stages/${stageId}/grades`, function (grades) {
-                        populateSelect('#grade_id', grades, gradeId);
-                        $.get(`/api/grades/${stageId}/${gradeId}/divisions`, function (divisions) {
-                            populateSelect('#division_id', divisions, divisionId);
-                            fetchCourses(stageId, gradeId, divisionId, courseId).done(function () {
-                                $.get(`/api/courses/${courseId}/chapters`, function (chapters) {
-                                    populateSelect('#chapter_id', chapters, chapterId);
-                                    $.get(`/api/chapters/${chapterId}/lessons`, function (lessons) {
-                                        populateSelect('#lesson_id', lessons, lessonId);
-                                    });
-                                });
+                if (window.toastr && typeof window.toastr.error === 'function') {
+                    window.toastr.error(message);
+                } else {
+                    console.error(message);
+                    if (window.alert) {
+                        window.alert(message);
+                    }
+                }
+            };
+
+            const resetTeacherCourses = function () {
+                const $courseSelect = $('#teacher_course_id');
+                $courseSelect
+                    .empty()
+                    .append(`<option value="">${placeholder}</option>`)
+                    .prop('disabled', true);
+                $('#hidden_course_id').val('');
+            };
+
+            const loadTeacherCourses = function (teacherId, selectedCourseId) {
+                if (!teacherId) {
+                    resetTeacherCourses();
+                    return;
+                }
+
+                const $courseSelect = $('#teacher_course_id');
+                $courseSelect.prop('disabled', true);
+
+                $.get(`/api/teachers/${teacherId}/courses`)
+                    .done(function (data) {
+                        $courseSelect
+                            .empty()
+                            .append(`<option value="">${placeholder}</option>`);
+
+                        if (Array.isArray(data) && data.length) {
+                            data.forEach(function (course) {
+                                const isSelected = selectedCourseId && Number(selectedCourseId) === Number(course.id)
+                                    ? ' selected'
+                                    : '';
+                                $courseSelect.append(`<option value="${course.id}"${isSelected}>${course.name}</option>`);
                             });
-                        });
+                        }
+
+                        $courseSelect.prop('disabled', false);
+
+                        if (selectedCourseId) {
+                            $('#hidden_course_id').val(selectedCourseId);
+                        }
+                    })
+                    .fail(function () {
+                        toastError('Failed to load courses for the selected teacher.');
                     });
-                });
+            };
+
+            window.initLessonCascade({
+                stageSelector: '#stage_id',
+                gradeSelector: '#grade_id',
+                courseSelector: '#lesson_course_id',
+                chapterSelector: '#chapter_id',
+                lessonSelector: '#lesson_id',
+                placeholder: placeholder,
+                routes: {
+                    stages: '{{ route('api.stages') }}',
+                    grades: '{{ route('api.stages.grades', ['stage' => '__stage__']) }}',
+                    courses: '{{ route('api.courses.by-filters') }}',
+                    chapters: '{{ route('api.courses.chapters', ['course' => '__course__']) }}',
+                    lessons: '{{ route('api.chapters.lessons', ['chapter' => '__chapter__']) }}',
+                },
+                prefill: cascadePrefill,
+                onLessonChange: function (lessonId) {
+                    $('#hidden_lesson_id').val(lessonId || '');
+                }
+            });
+
+            const toggleExamType = function (type) {
+                $('#teacher-section').toggle(type === 'teacher');
+                $('#lesson-section').toggle(type === 'lesson');
+
+                if (type === 'teacher') {
+                    $('#hidden_lesson_id').val('');
+                } else {
+                    resetTeacherCourses();
+                }
+            };
+
+            $('input[name="exam_type"]').on('change', function () {
+                toggleExamType($(this).val());
+            });
+
+            toggleExamType('{{ $selectedExamType }}');
+
+            if (examContext.teacher_id) {
+                $('#teacher_id').val(examContext.teacher_id);
+                loadTeacherCourses(examContext.teacher_id, examContext.course_id);
             } else {
-                 // Fallback for lesson type without pre-loaded data
-                 $.get('{{ route("api.stages") }}', function (data) {
-                    populateSelect('#stage_id', data);
-                });
-            }
-        }
-
-        // --- Event Handlers ---
-        $('input[name="exam_type"]').change(function () {
-            const selectedType = $(this).val();
-            $('#teacher-section').toggle(selectedType === 'teacher');
-            $('#lesson-section').toggle(selectedType === 'lesson');
-            $('#hidden_course_id').val('');
-            $('#hidden_lesson_id').val('');
-        });
-
-        $('#teacher_id').change(function () {
-            const teacherId = $(this).val();
-            resetSelect('#teacher_course_id');
-            $('#hidden_course_id').val('');
-            if (teacherId) {
-                $.get(`/api/teachers/${teacherId}/courses`, function (data) {
-                    populateSelect('#teacher_course_id', data);
-                });
-            }
-        });
-
-        $('#teacher_course_id').change(function () {
-            $('#hidden_course_id').val($(this).val());
-        });
-
-        $('#stage_id, #grade_id, #division_id').change(function() {
-            const changedId = $(this).attr('id');
-            let stageId = $('#stage_id').val();
-            let gradeId = $('#grade_id').val();
-
-            if (changedId === 'stage_id') {
-                resetSelect('#grade_id');
-                resetSelect('#division_id');
-                resetSelect('#lesson_course_id');
-                resetSelect('#chapter_id');
-                resetSelect('#lesson_id');
-                $('#hidden_lesson_id').val('');
-                if(stageId) $.get(`/api/stages/${stageId}/grades`, data => populateSelect('#grade_id', data));
-                return;
+                resetTeacherCourses();
             }
 
-            if (changedId === 'grade_id') {
-                resetSelect('#division_id');
-                resetSelect('#lesson_course_id');
-                resetSelect('#chapter_id');
-                resetSelect('#lesson_id');
-                $('#hidden_lesson_id').val('');
-                if(stageId && gradeId) $.get(`/api/grades/${stageId}/${gradeId}/divisions`, data => populateSelect('#division_id', data));
-            }
+            $('#teacher_id').on('change', function () {
+                const teacherId = $(this).val();
+                resetTeacherCourses();
+                loadTeacherCourses(teacherId, null);
+            });
 
-            if (changedId === 'division_id') {
-                resetSelect('#lesson_course_id');
-                resetSelect('#chapter_id');
-                resetSelect('#lesson_id');
-                $('#hidden_lesson_id').val('');
-            }
-
-            stageId = $('#stage_id').val();
-            gradeId = $('#grade_id').val();
-            const divisionId = $('#division_id').val() || null;
-
-            if (stageId && gradeId) {
-                fetchCourses(stageId, gradeId, divisionId);
-            }
+            $('#teacher_course_id').on('change', function () {
+                $('#hidden_course_id').val($(this).val() || '');
+            });
         });
-
-        $('#lesson_course_id').change(function () {
-            const courseId = $(this).val();
-            resetSelect('#chapter_id');
-            resetSelect('#lesson_id');
-            if (courseId) $.get(`/api/courses/${courseId}/chapters`, data => populateSelect('#chapter_id', data));
-        });
-
-        $('#chapter_id').change(function () {
-            const chapterId = $(this).val();
-            resetSelect('#lesson_id');
-            if (chapterId) $.get(`/api/chapters/${chapterId}/lessons`, data => populateSelect('#lesson_id', data));
-        });
-
-        $('#lesson_id').change(function () {
-            $('#hidden_lesson_id').val($(this).val());
-        });
-
-        // Initialize the page
-        initPage();
-    });
-</script>
+    </script>
 @endsection

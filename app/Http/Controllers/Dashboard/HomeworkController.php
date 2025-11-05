@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Homework;
-use App\Models\Lesson;
+use App\Traits\ResolvesLessonCascade;
 use Illuminate\Http\Request;
 
 class HomeworkController extends Controller
 {
+    use ResolvesLessonCascade;
+
     public function index()
     {
         $homework = Homework::with('lesson')->paginate(10);
@@ -16,11 +18,15 @@ class HomeworkController extends Controller
         return view('dashboard.homework.index', compact('homework'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $lessons = Lesson::all();
+        $cascadePrefill = $this->resolveLessonCascadePrefill(
+            $request,
+            null,
+            $request->session()->getOldInput('lesson_id')
+        );
 
-        return view('dashboard.homework.create', compact('lessons'));
+        return view('dashboard.homework.create', compact('cascadePrefill'));
     }
 
     public function store(Request $request)
@@ -45,11 +51,17 @@ class HomeworkController extends Controller
         return view('dashboard.homework.show', compact('homework'));
     }
 
-    public function edit(Homework $homework)
+    public function edit(Request $request, Homework $homework)
     {
-        $lessons = Lesson::all();
+        $homework->loadMissing('lesson.chapter.course.stage', 'lesson.chapter.course.grade');
 
-        return view('dashboard.homework.edit', compact('homework', 'lessons'));
+        $cascadePrefill = $this->resolveLessonCascadePrefill(
+            $request,
+            $homework->lesson,
+            $request->session()->getOldInput('lesson_id')
+        );
+
+        return view('dashboard.homework.edit', compact('homework', 'cascadePrefill'));
     }
 
     public function update(Request $request, Homework $homework)

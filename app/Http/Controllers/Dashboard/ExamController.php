@@ -7,15 +7,17 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamRequest;
 use App\Models\Exam;
-use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use Illuminate\Http\Request;
+use App\Traits\ResolvesLessonCascade;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ExamController extends Controller
 {
+    use ResolvesLessonCascade;
+
     public function index(Request $request)
     {
         $filters = $request->only(['teacher_id', 'grade_id']);
@@ -26,11 +28,16 @@ class ExamController extends Controller
         return view('dashboard.exams.index', compact('exams', 'teachers', 'grades'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $teachers = \App\Models\Teacher::all();
+        $cascadePrefill = $this->resolveLessonCascadePrefill(
+            $request,
+            null,
+            $request->session()->getOldInput('lesson_id')
+        );
 
-        return view('dashboard.exams.create', compact('teachers'));
+        return view('dashboard.exams.create', compact('teachers', 'cascadePrefill'));
     }
 
     public function store(ExamRequest $request)
@@ -60,7 +67,7 @@ class ExamController extends Controller
         return view('dashboard.exams.show', compact('exam'));
     }
 
-    public function edit(Exam $exam)
+    public function edit(Request $request, Exam $exam)
     {
         $teachers = \App\Models\Teacher::all();
 
@@ -71,7 +78,13 @@ class ExamController extends Controller
             $exam->load('course', 'teacher');
         }
 
-        return view('dashboard.exams.edit', compact('exam', 'teachers'));
+        $cascadePrefill = $this->resolveLessonCascadePrefill(
+            $request,
+            $exam->lesson,
+            $request->session()->getOldInput('lesson_id')
+        );
+
+        return view('dashboard.exams.edit', compact('exam', 'teachers', 'cascadePrefill'));
     }
 
     public function update(ExamRequest $request, Exam $exam)
