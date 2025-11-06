@@ -78,11 +78,33 @@ class LessonController extends Controller
     public function store(LessonRequest $request): RedirectResponse
     {
         try {
+            $attachmentInput = $request->input('attachment', []);
+            $attachmentFile = $request->file('attachment.file');
+
+            if (! $attachmentFile && $this->attachmentHasPayload($attachmentInput)) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors([
+                        'attachment.file' => trans('validation.required', ['attribute' => trans('dashboard.lesson.file')]),
+                    ]);
+            }
+
             $data = $request->validated();
             $data['is_featured'] = $request->has('is_featured');
             $data['date'] = $request->date;
 
             $lesson = $this->lessonService->create($data);
+
+            if ($attachmentFile) {
+                $attachment = new LessonAttachment([
+                    'name' => $attachmentInput['name'] ?? $attachmentFile->getClientOriginalName(),
+                    'bio' => $attachmentInput['bio'] ?? null,
+                    'is_featured' => ! empty($attachmentInput['is_featured']),
+                ]);
+                $attachment->file = $attachmentFile;
+
+                $lesson->attachments()->save($attachment);
+            }
 
             $this->notifyTeacherStudentsAboutLesson($lesson);
 
@@ -182,6 +204,19 @@ class LessonController extends Controller
                 'message' => __('dashboard.common.error').': '.$e->getMessage(),
             ], 500);
         }
+    }
+
+    private function attachmentHasPayload(array $input): bool
+    {
+        if (isset($input['name']) && trim((string) $input['name']) !== '') {
+            return true;
+        }
+
+        if (isset($input['bio']) && trim((string) $input['bio']) !== '') {
+            return true;
+        }
+
+        return ! empty($input['is_featured']);
     }
 
     protected function notifyTeacherStudentsAboutLesson(Lesson $lesson): void

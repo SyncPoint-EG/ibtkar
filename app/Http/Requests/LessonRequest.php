@@ -34,6 +34,10 @@ class LessonRequest extends FormRequest
             'is_featured' => 'nullable|boolean',
             'type' => 'required|in:explanation,revision,solve_homework,center',
             'date' => 'nullable|date',
+            'attachment.name' => 'nullable|string|max:255',
+            'attachment.file' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx,ppt,pptx,xls,xlsx',
+            'attachment.bio' => 'nullable|string',
+            'attachment.is_featured' => 'nullable|boolean',
         ];
     }
 }

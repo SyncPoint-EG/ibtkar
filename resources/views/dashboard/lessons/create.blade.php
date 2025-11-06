@@ -137,7 +137,8 @@
                                                     @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="is_featured">{{ __("dashboard.lesson.fields.is_featured") }}</label>
+                                                    <label
+                                                        for="is_featured">{{ __("dashboard.lesson.fields.is_featured") }}</label>
                                                     <input type="checkbox" id="is_featured"
                                                            name="is_featured" value="1"
                                                         {{ (isset($lesson) && $lesson->is_featured) || old('is_featured') ? 'checked' : '' }}>
@@ -147,34 +148,43 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="type">{{ __("dashboard.lesson.fields.type") }}</label>
-                                                    <select id="type" name="type" class="form-control @error('type') is-invalid @enderror">
-                                                        <option value="explanation" {{ old('type') == 'explanation' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.explanation') }}</option>
-                                                        <option value="revision" {{ old('type') == 'revision' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.revision') }}</option>
-                                                        <option value="solve_homework" {{ old('type') == 'solve_homework' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.solve_homework') }}</option>
-                                                        <option value="center" {{ old('type') == 'center' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.center') }}</option>
+                                                    <select id="type" name="type"
+                                                            class="form-control @error('type') is-invalid @enderror">
+                                                        <option
+                                                            value="explanation" {{ old('type') == 'explanation' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.explanation') }}</option>
+                                                        <option
+                                                            value="revision" {{ old('type') == 'revision' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.revision') }}</option>
+                                                        <option
+                                                            value="solve_homework" {{ old('type') == 'solve_homework' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.solve_homework') }}</option>
+                                                        <option
+                                                            value="center" {{ old('type') == 'center' ? 'selected' : '' }}>{{ __('dashboard.lesson.types.center') }}</option>
                                                     </select>
-                                        @error('type')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                                    @error('type')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 
-                                    <div class="form-group">
-                                        <label for="date">{{ trans('dashboard.lesson.fields.date') }}</label>
-                                        <input type="date" class="form-control @error('date') is-invalid @enderror"
-                                               id="date" name="date" value="{{ old('date') }}">
-                                        @error('date')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                                 <div class="form-group">
-                                                    <label for="chapter_id">{{ __("dashboard.lesson.fields.chapter_id") }}</label>
+                                                    <label
+                                                        for="date">{{ trans('dashboard.lesson.fields.date') }}</label>
+                                                    <input type="date"
+                                                           class="form-control @error('date') is-invalid @enderror"
+                                                           id="date" name="date" value="{{ old('date') }}">
+                                                    @error('date')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        for="chapter_id">{{ __("dashboard.lesson.fields.chapter_id") }}</label>
                                                     <select id="chapter_id" name="chapter_id"
                                                             class="form-control @error('chapter_id') is-invalid @enderror"
                                                             data-toggle="tooltip" data-trigger="hover"
                                                             data-placement="top"
                                                             data-title="{{ __("dashboard.lesson.fields.chapter_id") }}"
                                                         {{ isset($selectedChapterId) ? 'disabled' : '' }}>
-                                                        <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.lesson.fields.chapter_id") }}</option>
+                                                        <option
+                                                            value="">{{ __("dashboard.common.select") }} {{ __("dashboard.lesson.fields.chapter_id") }}</option>
                                                         @foreach($chapters as $chapter)
                                                             <option value="{{ $chapter->id }}"
                                                                 {{ (isset($selectedChapterId) && $selectedChapterId == $chapter->id) || (isset($lesson) && $lesson->chapter_id == $chapter->id) ? 'selected' : '' }}>
@@ -185,7 +195,8 @@
 
                                                     {{-- Hidden input to maintain the selected chapter when form is disabled --}}
                                                     @if(isset($selectedChapterId))
-                                                        <input type="hidden" name="chapter_id" value="{{ $selectedChapterId }}">
+                                                        <input type="hidden" name="chapter_id"
+                                                               value="{{ $selectedChapterId }}">
                                                         <small class="form-text text-muted">
                                                             <i class="icon-info"></i> {{ __("dashboard.lesson.chapter_preselected") }}
                                                         </small>
@@ -194,6 +205,72 @@
                                                     @error('chapter_id')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
+                                                </div>
+
+                                                <div class="card mt-2" style="border: 1px solid #dcdcdc;">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title mb-0">
+                                                            <i class="icon-file-add"></i> {{ __('dashboard.lesson.add_attachment') }}
+                                                        </h5>
+                                                    </div>
+                                                    <div class="card-body p-1 pb-2">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="attachment_name">{{ __('dashboard.lesson.attachment_name') }}</label>
+                                                                    <input type="text"
+                                                                           id="attachment_name"
+                                                                           class="form-control @error('attachment.name') is-invalid @enderror"
+                                                                           name="attachment[name]"
+                                                                           value="{{ old('attachment.name') }}">
+                                                                    @error('attachment.name')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="attachment_file">{{ __('dashboard.lesson.file') }}</label>
+                                                                    <input type="file"
+                                                                           id="attachment_file"
+                                                                           class="form-control @error('attachment.file') is-invalid @enderror"
+                                                                           name="attachment[file]">
+                                                                    @error('attachment.file')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="display-block"
+                                                                           for="attachment_is_featured">{{ __("dashboard.lesson_attachment.fields.is_featured") }}</label>
+                                                                    <input type="checkbox"
+                                                                           id="attachment_is_featured"
+                                                                           name="attachment[is_featured]"
+                                                                           value="1"
+                                                                        {{ old('attachment.is_featured') ? 'checked' : '' }}>
+                                                                    @error('attachment.is_featured')
+                                                                    <div
+                                                                        class="invalid-feedback d-block">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="attachment_bio">{{ __('dashboard.lesson_attachment.fields.bio') }}</label>
+                                                                    <textarea id="attachment_bio"
+                                                                              class="form-control @error('attachment.bio') is-invalid @enderror"
+                                                                              name="attachment[bio]">{{ old('attachment.bio') }}</textarea>
+                                                                    @error('attachment.bio')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
