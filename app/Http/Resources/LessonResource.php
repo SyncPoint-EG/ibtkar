@@ -32,6 +32,7 @@ class LessonResource extends JsonResource
             'chapter_name' => $this->chapter?->name,
             'price' => $this->price,
             'course_id' => $this->chapter ? $this->chapter?->course_id : null,
+            'teacher_id' => $this->chapter ? $this->chapter?->course?->teacher_id : null,
             'subject' => new SubjectResource($this?->chapter?->course?->subject),
             'attachments' => AttachmentResource::collection($this->attachments ?? collect()),
             'homework' => HomeworkResource::collection($this->homework ?? collect()),
