@@ -41,6 +41,10 @@ class HomeController extends Controller
 
         // Main stats
         $studentsCount = Student::where($dateFilter)->count();
+        $purchasingStudentsCount = Payment::where('is_approved', 1)
+            ->where($dateFilter)
+            ->distinct('student_id')
+            ->count('student_id');
         $teachersCount = Teacher::where($dateFilter)->count();
         $coursesCount = Course::where($dateFilter)->count();
         $chaptersCount = Chapter::where($dateFilter)->count();
@@ -51,7 +55,8 @@ class HomeController extends Controller
         $lessonAttachmentsCount = LessonAttachment::where($dateFilter)->count();
 
         $mainStats = [
-            'Students' => $studentsCount,
+            'Registered Students' => $studentsCount,
+            'Purchasing Students' => $purchasingStudentsCount,
             'Teachers' => $teachersCount,
             'Courses' => $coursesCount,
             'Chapters' => $chaptersCount,
@@ -76,11 +81,14 @@ class HomeController extends Controller
             $chargesQuery = Charge::where('type', 'increase')->where('payment_status', 'completed')->where($dateFilter);
 
             $financialStats = [
+                'Purchasing Students Count' => $purchasingStudentsCount,
+                'Approved Payments Count' => (clone $allPaymentsQuery)->count(),
+                'Approved Payments Total' => (clone $allPaymentsQuery)->sum('amount'),
                 'Paid Lessons Count' => (clone $paidLessonsQuery)->count(),
                 'Paid Lessons Total' => (clone $paidLessonsQuery)->sum('amount'),
                 'Paid Courses Count' => (clone $paidCoursesQuery)->count(),
                 'Paid Courses Total' => (clone $paidCoursesQuery)->sum('amount'),
-                'Total Payments Amount' => $allPaymentsQuery->sum('amount'),
+                'Total Payments Amount' => (clone $allPaymentsQuery)->sum('amount'),
                 'Coupons Count' => Code::where($dateFilter)->count(),
                 'Used Coupons Count' => Code::where('number_of_uses', '>', 0)->where($dateFilter)->count(),
                 'Charge Actions Count' => (clone $chargesQuery)->count(),
@@ -101,7 +109,47 @@ class HomeController extends Controller
             ->orderBy(DB::raw('DATE(created_at)'))
             ->pluck('count', 'date');
 
-        return view('dashboard.index', compact('mainStats', 'financialStats', 'lessonsChart', 'lessonViewsChart', 'startDate', 'endDate'));
+        $studentRegistrationsChart = Student::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->where($dateFilter)
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
+            ->pluck('count', 'date');
+
+        $paymentAmountChart = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+            ->where('is_approved', 1)
+            ->where($dateFilter)
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
+            ->pluck('total', 'date');
+
+        $paymentCountChart = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->where('is_approved', 1)
+            ->where($dateFilter)
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
+            ->pluck('count', 'date');
+
+        $paymentChartLabels = $paymentAmountChart->keys()
+            ->merge($paymentCountChart->keys())
+            ->unique()
+            ->sort()
+            ->values();
+
+        $paymentAmountSeries = $paymentChartLabels->map(fn ($date) => (float) ($paymentAmountChart[$date] ?? 0));
+        $paymentCountSeries = $paymentChartLabels->map(fn ($date) => (int) ($paymentCountChart[$date] ?? 0));
+
+        return view('dashboard.index', compact(
+            'mainStats',
+            'financialStats',
+            'lessonsChart',
+            'lessonViewsChart',
+            'studentRegistrationsChart',
+            'paymentChartLabels',
+            'paymentAmountSeries',
+            'paymentCountSeries',
+            'startDate',
+            'endDate'
+        ));
     }
 
     public function test()

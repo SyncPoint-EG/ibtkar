@@ -26,6 +26,7 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">Filter by Date</h4>
+                <p class="mb-0 text-muted small">All stats and charts below reflect this date range.</p>
             </div>
             <div class="card-body p-1">
                 <form method="GET" action="{{ route('dashboard') }}">
@@ -58,23 +59,23 @@
     <section id="main-stats">
         <div class="row">
             @foreach($mainStats as $title => $count)
-            <div class="col-xl-3 col-lg-6 col-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-body p-2">
-                            <div class="media">
-                                <div class="media-body text-left">
-                                    <h3 class="font-large-1">{{ $count }}</h3>
-                                    <span>{{ $title }}</span>
-                                </div>
-                                <div class="media-right media-middle">
-                                    <i class="icon-layers font-large-2"></i>
+                <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body p-2">
+                                <div class="media">
+                                    <div class="media-body text-left">
+                                        <h3 class="font-large-1">{{ number_format($count) }}</h3>
+                                        <span>{{ $title }}</span>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <i class="icon-layers font-large-2"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </section>
@@ -85,23 +86,29 @@
         <h4 class="text-bold-600">Financial Stats</h4>
         <div class="row">
             @foreach($financialStats as $title => $value)
-            <div class="col-xl-3 col-lg-6 col-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-body p-2">
-                            <div class="media">
-                                <div class="media-body text-left">
-                                    <h3 class="font-large-1">{{ is_numeric($value) ? number_format($value, 2) : $value }}</h3>
-                                    <span>{{ $title }}</span>
-                                </div>
-                                <div class="media-right media-middle">
-                                    <i class="icon-wallet font-large-2"></i>
+                <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body p-2">
+                                <div class="media">
+                                    <div class="media-body text-left">
+                                        <h3 class="font-large-1">
+                                            @if(is_numeric($value))
+                                                {{ number_format($value, is_int($value) ? 0 : 2) }}
+                                            @else
+                                                {{ $value }}
+                                            @endif
+                                        </h3>
+                                        <span>{{ $title }}</span>
+                                    </div>
+                                    <div class="media-right media-middle">
+                                        <i class="icon-wallet font-large-2"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </section>
@@ -109,6 +116,30 @@
 
     <!-- Charts -->
     <section id="charts">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Student Registrations</h4>
+                        <p class="small text-muted mb-0">Daily new students within the selected range.</p>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="studentRegistrationsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Purchasing Students & Payments</h4>
+                        <p class="small text-muted mb-0">How many approvals and total amount per day.</p>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="paymentsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
@@ -141,6 +172,80 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        // Student Registrations
+        var ctxStudents = document.getElementById('studentRegistrationsChart').getContext('2d');
+        new Chart(ctxStudents, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($studentRegistrationsChart->keys()) !!},
+                datasets: [{
+                    label: 'New Students',
+                    data: {!! json_encode($studentRegistrationsChart->values()) !!},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    tension: 0.2,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+
+        // Payments Chart (count + amount)
+        var ctxPayments = document.getElementById('paymentsChart').getContext('2d');
+        new Chart(ctxPayments, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($paymentChartLabels) !!},
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Approved Payments',
+                        data: {!! json_encode($paymentCountSeries) !!},
+                        backgroundColor: 'rgba(40, 199, 111, 0.4)',
+                        borderColor: 'rgba(40, 199, 111, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'Amount (EGP)',
+                        data: {!! json_encode($paymentAmountSeries) !!},
+                        backgroundColor: 'rgba(255, 159, 64, 0.3)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        tension: 0.2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        position: 'left',
+                        ticks: { stepSize: 1 }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: true }
+                }
+            }
+        });
+
         // Lessons Chart
         var ctxLessons = document.getElementById('lessonsChart').getContext('2d');
         var lessonsChart = new Chart(ctxLessons, {
