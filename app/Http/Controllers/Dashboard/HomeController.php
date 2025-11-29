@@ -29,18 +29,17 @@ class HomeController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $filterApplied = $startDate || $endDate;
 
-        // Default to the latest 30 days when no range is provided to keep charts meaningful
-        if (! $startDate && ! $endDate) {
-            $startDate = now()->subDays(29)->toDateString();
-            $endDate = now()->toDateString();
-        }
+        $dateFilter = function ($query) use ($startDate, $endDate, $filterApplied) {
+            if (! $filterApplied) {
+                return;
+            }
 
-        $dateFilter = function ($query) use ($startDate, $endDate) {
-            if ($startDate !=null) {
+            if ($startDate != null) {
                 $query->whereDate('created_at', '>=', $startDate);
             }
-            if ($endDate !=null) {
+            if ($endDate != null) {
                 $query->whereDate('created_at', '<=', $endDate);
             }
         };

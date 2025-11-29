@@ -26,7 +26,7 @@
         <div class="card">
             <div class="card-header">
                         <h4 class="card-title">Filter by Date</h4>
-                <p class="mb-0 text-muted small">All stats and charts below reflect this date range. Default is last 30 days.</p>
+                <p class="mb-0 text-muted small">All stats and charts below reflect this date range. Leave blank to view all time.</p>
             </div>
             <div class="card-body p-1">
                 <form method="GET" action="{{ route('dashboard') }}">
