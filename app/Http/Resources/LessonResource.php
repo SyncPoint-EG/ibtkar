@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Payment;
+use App\Models\Watch;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,9 @@ class LessonResource extends JsonResource
         if ($user) {
             $watches_count = $this->resource->watches()->where('student_id', $user->id)?->first() ? 3 - $this->resource->watches()->where('student_id', $user->id)?->first()?->count : 3;
         }
-        $numberOfStudents = Payment::where('lesson_id',$this->id)->where('payment_status',Payment::PAYMENT_STATUS['approved'])->count();
+        $number_of_students = Payment::where('lesson_id',$this->id)->where('payment_status',Payment::PAYMENT_STATUS['approved'])->count();
+        $watched_students = Watch::query()->where('lesson_id',$this->id)->count();
+        $unWatched_students = $number_of_students - $watched_students;
 
         return [
             'id' => $this->id,
@@ -45,7 +48,9 @@ class LessonResource extends JsonResource
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'is_passed_exam' => $this->exams->isEmpty() ? true : ($user ? $user->examAttempts()->whereIn('exam_id', $this->exams->pluck('id'))->where('is_passed', true)->exists() : false),
-            'number_of_students' => $numberOfStudents,
+            'number_of_students' => $number_of_students,
+            'watched_students' => $watched_students,
+            'un_watched_students' => $unWatched_students,
         ];
     }
 }
