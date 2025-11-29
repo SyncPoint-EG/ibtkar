@@ -190,7 +190,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$lessons->links()}}
+                                    {{$lessons->withQueryString()->links()}}
 
                                 </div>
                             </div>

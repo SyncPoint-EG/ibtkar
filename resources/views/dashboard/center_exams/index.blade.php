@@ -96,7 +96,7 @@
                                     </table>
                                 </div>
 
-                                {{ $centerExams->links() }}
+                                {{ $centerExams->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>

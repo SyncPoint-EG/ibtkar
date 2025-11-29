@@ -90,7 +90,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$permissions->links()}}
+                                    {{$permissions->withQueryString()->links()}}
 
                                 </div>
 

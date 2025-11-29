@@ -96,7 +96,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$guardians->links()}}
+                                    {{$guardians->withQueryString()->links()}}
 
                                 </div>
                             </div>

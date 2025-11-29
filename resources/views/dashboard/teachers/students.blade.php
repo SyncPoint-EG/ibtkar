@@ -138,7 +138,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        {{ $students->links() }}
+                                        {{ $students->withQueryString()->links() }}
                                     </div>
                                 </div>
                             </div>

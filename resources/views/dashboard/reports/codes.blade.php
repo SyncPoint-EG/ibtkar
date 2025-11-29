@@ -87,7 +87,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{ $codes->links() }}
+                            {{ $codes->withQueryString()->links() }}
                         </div>
                     </div>
                 </div>

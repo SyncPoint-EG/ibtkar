@@ -88,7 +88,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$educationTypes->links()}}
+                                    {{$educationTypes->withQueryString()->links()}}
 
                                 </div>
                             </div>

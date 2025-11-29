@@ -153,7 +153,7 @@
                                     </div>
 
                                     <div class="d-flex justify-content-center">
-                                        {{ $exams->links() }}
+                                        {{ $exams->withQueryString()->links() }}
                                     </div>
                                 @else
                                     <div class="text-center py-4">

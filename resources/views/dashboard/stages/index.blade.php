@@ -88,7 +88,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$stages->links()}}
+                                    {{$stages->withQueryString()->links()}}
 
                                 </div>
                             </div>

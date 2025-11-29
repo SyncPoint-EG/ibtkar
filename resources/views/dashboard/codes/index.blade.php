@@ -198,7 +198,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$codes->links()}}
+                                    {{$codes->withQueryString()->links()}}
 
                                 </div>
                             </div>

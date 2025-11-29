@@ -101,7 +101,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$subjects->links()}}
+                                    {{$subjects->withQueryString()->links()}}
 
                                 </div>
                             </div>

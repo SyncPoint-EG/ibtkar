@@ -144,7 +144,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$courses->links()}}
+                                    {{$courses->withQueryString()->links()}}
 
                                 </div>
                             </div>

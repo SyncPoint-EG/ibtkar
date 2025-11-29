@@ -101,7 +101,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$luckWheelItems->links()}}
+                                    {{$luckWheelItems->withQueryString()->links()}}
 
                                 </div>
                             </div>

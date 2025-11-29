@@ -282,7 +282,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{ $payments->links() }}
+                                    {{ $payments->withQueryString()->links() }}
                                 </div>
                             </div>
                         </div>

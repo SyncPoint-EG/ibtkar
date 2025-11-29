@@ -92,7 +92,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$semisters->links()}}
+                                    {{$semisters->withQueryString()->links()}}
 
                                 </div>
                             </div>

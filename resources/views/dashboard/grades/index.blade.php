@@ -96,7 +96,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$grades->links()}}
+                                    {{$grades->withQueryString()->links()}}
 
                                 </div>
                             </div>

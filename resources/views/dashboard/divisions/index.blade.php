@@ -98,7 +98,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$divisions->links()}}
+                                    {{$divisions->withQueryString()->links()}}
 
                                 </div>
                             </div>

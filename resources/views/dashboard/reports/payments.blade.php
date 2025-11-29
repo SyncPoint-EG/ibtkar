@@ -89,7 +89,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{ $payments->links() }}
+                            {{ $payments->withQueryString()->links() }}
                         </div>
                     </div>
                 </div>

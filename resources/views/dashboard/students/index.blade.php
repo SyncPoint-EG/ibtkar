@@ -335,7 +335,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$students->appends(request()->query())->links()}}
+                                    {{$students->withQueryString()->links()}}
 
                                 </div>
                             </div>

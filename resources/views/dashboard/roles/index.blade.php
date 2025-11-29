@@ -141,7 +141,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <nav aria-label="Page navigation">
-                                                {{ $roles->links() }}
+                                                {{ $roles->withQueryString()->links() }}
                                             </nav>
                                         </div>
                                     </div>

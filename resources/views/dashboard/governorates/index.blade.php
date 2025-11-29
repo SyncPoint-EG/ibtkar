@@ -95,7 +95,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$governorates->links()}}
+                                    {{$governorates->withQueryString()->links()}}
 
                                 </div>
                             </div>

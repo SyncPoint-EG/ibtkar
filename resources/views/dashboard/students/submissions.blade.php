@@ -58,7 +58,7 @@
                                 @endforelse
                                 </tbody>
                             </table>
-                            {{$examAttempts->links()}}
+                            {{$examAttempts->withQueryString()->links()}}
                         </div>
                     </div>
                 </div>

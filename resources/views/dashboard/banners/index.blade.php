@@ -98,7 +98,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$banners->links()}}
+                                    {{$banners->withQueryString()->links()}}
 
                                 </div>
                             </div>

@@ -201,7 +201,7 @@
                                             </table>
                                         </div>
                                         <div class="text-center">
-                                            {{ $purchasedLessons->links() }}
+                                            {{ $purchasedLessons->withQueryString()->links() }}
                                         </div>
                                     </div>
                                 </div>

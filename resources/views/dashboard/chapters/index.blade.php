@@ -157,7 +157,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$chapters->links()}}
+                                    {{$chapters->withQueryString()->links()}}
 
                                 </div>
                             </div>

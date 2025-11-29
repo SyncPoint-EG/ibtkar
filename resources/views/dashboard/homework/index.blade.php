@@ -101,7 +101,7 @@
                                     </table>
                                 </div>
 
-                                {{ $homework->links() }}
+                                {{ $homework->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>

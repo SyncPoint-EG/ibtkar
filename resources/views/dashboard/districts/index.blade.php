@@ -96,7 +96,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$districts->links()}}
+                                    {{$districts->withQueryString()->links()}}
 
                                 </div>
                             </div>

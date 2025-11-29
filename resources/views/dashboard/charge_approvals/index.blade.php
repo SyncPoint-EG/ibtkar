@@ -85,7 +85,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{ $charges->links() }}
+                                    {{ $charges->withQueryString()->links() }}
                                 </div>
                             </div>
                         </div>

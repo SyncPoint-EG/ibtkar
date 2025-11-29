@@ -96,7 +96,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    {{$centers->links()}}
+                                    {{$centers->withQueryString()->links()}}
 
                                 </div>
                             </div>

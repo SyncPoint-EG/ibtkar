@@ -63,7 +63,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{ $teachers->links() }}
+                            {{ $teachers->withQueryString()->links() }}
                         </div>
                     </div>
                 </div>
