@@ -30,6 +30,12 @@ class HomeController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
+        // Default to the latest 30 days when no range is provided to keep charts meaningful
+        if (! $startDate && ! $endDate) {
+            $startDate = now()->subDays(29)->toDateString();
+            $endDate = now()->toDateString();
+        }
+
         $dateFilter = function ($query) use ($startDate, $endDate) {
             if ($startDate) {
                 $query->whereDate('created_at', '>=', $startDate);
@@ -129,14 +135,26 @@ class HomeController extends Controller
             ->orderBy(DB::raw('DATE(created_at)'))
             ->pluck('count', 'date');
 
-        $paymentChartLabels = $paymentAmountChart->keys()
+        $purchasingStudentsDaily = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT student_id) as count'))
+            ->where('is_approved', 1)
+            ->where($dateFilter)
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'))
+            ->pluck('count', 'date');
+
+        $chartLabels = collect()
+            ->merge($paymentAmountChart->keys())
             ->merge($paymentCountChart->keys())
+            ->merge($purchasingStudentsDaily->keys())
+            ->merge($studentRegistrationsChart->keys())
             ->unique()
             ->sort()
             ->values();
 
-        $paymentAmountSeries = $paymentChartLabels->map(fn ($date) => (float) ($paymentAmountChart[$date] ?? 0));
-        $paymentCountSeries = $paymentChartLabels->map(fn ($date) => (int) ($paymentCountChart[$date] ?? 0));
+        $paymentAmountSeries = $chartLabels->map(fn ($date) => (float) ($paymentAmountChart[$date] ?? 0));
+        $paymentCountSeries = $chartLabels->map(fn ($date) => (int) ($paymentCountChart[$date] ?? 0));
+        $purchasingStudentsSeries = $chartLabels->map(fn ($date) => (int) ($purchasingStudentsDaily[$date] ?? 0));
+        $newStudentsSeries = $chartLabels->map(fn ($date) => (int) ($studentRegistrationsChart[$date] ?? 0));
 
         return view('dashboard.index', compact(
             'mainStats',
@@ -144,9 +162,11 @@ class HomeController extends Controller
             'lessonsChart',
             'lessonViewsChart',
             'studentRegistrationsChart',
-            'paymentChartLabels',
+            'chartLabels',
             'paymentAmountSeries',
             'paymentCountSeries',
+            'purchasingStudentsSeries',
+            'newStudentsSeries',
             'startDate',
             'endDate'
         ));

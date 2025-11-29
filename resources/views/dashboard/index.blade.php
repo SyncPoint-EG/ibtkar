@@ -25,19 +25,19 @@
     <section id="date-filter">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Filter by Date</h4>
-                <p class="mb-0 text-muted small">All stats and charts below reflect this date range.</p>
+                        <h4 class="card-title">Filter by Date</h4>
+                <p class="mb-0 text-muted small">All stats and charts below reflect this date range. Default is last 30 days.</p>
             </div>
             <div class="card-body p-1">
                 <form method="GET" action="{{ route('dashboard') }}">
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="start_date">Start Date</label>
                                 <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $startDate ?? '' }}">
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="end_date">End Date</label>
                                 <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $endDate ?? '' }}">
@@ -47,6 +47,13 @@
                             <div class="form-group">
                                 <label>&nbsp;</label>
                                 <button type="submit" class="btn btn-primary btn-block">Filter</button>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="button" id="filter-today" class="btn btn-secondary btn-block mb-1">Today</button>
+                                <a href="{{ route('dashboard') }}" class="btn btn-light btn-block">Clear</a>
                             </div>
                         </div>
                     </div>
@@ -132,10 +139,23 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Purchasing Students & Payments</h4>
-                        <p class="small text-muted mb-0">How many approvals and total amount per day.</p>
+                        <p class="small text-muted mb-0">Daily approvals, revenue, and unique purchasing students.</p>
                     </div>
                     <div class="card-body">
                         <canvas id="paymentsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Conversion: New vs Purchasing Students</h4>
+                        <p class="small text-muted mb-0">How many new students convert to buyers each day.</p>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="conversionChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -172,6 +192,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(){
+        var todayBtn = document.getElementById('filter-today');
+        if (todayBtn) {
+            todayBtn.addEventListener('click', function () {
+                var today = new Date().toISOString().slice(0, 10);
+                document.getElementById('start_date').value = today;
+                document.getElementById('end_date').value = today;
+                this.closest('form').submit();
+            });
+        }
+
         // Student Registrations
         var ctxStudents = document.getElementById('studentRegistrationsChart').getContext('2d');
         new Chart(ctxStudents, {
@@ -203,7 +233,7 @@
         new Chart(ctxPayments, {
             type: 'bar',
             data: {
-                labels: {!! json_encode($paymentChartLabels) !!},
+                labels: {!! json_encode($chartLabels) !!},
                 datasets: [
                     {
                         type: 'bar',
@@ -224,6 +254,18 @@
                         yAxisID: 'y1',
                         tension: 0.2,
                         fill: false
+                    },
+                    {
+                        type: 'line',
+                        label: 'Unique Purchasing Students',
+                        data: {!! json_encode($purchasingStudentsSeries) !!},
+                        backgroundColor: 'rgba(0, 123, 255, 0.15)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 2,
+                        yAxisID: 'y',
+                        tension: 0.2,
+                        fill: false,
+                        borderDash: [6, 3]
                     }
                 ]
             },
@@ -242,6 +284,43 @@
                 },
                 plugins: {
                     legend: { display: true }
+                }
+            }
+        });
+
+        // Conversion chart
+        var ctxConversion = document.getElementById('conversionChart').getContext('2d');
+        new Chart(ctxConversion, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($chartLabels) !!},
+                datasets: [
+                    {
+                        label: 'New Students',
+                        data: {!! json_encode($newStudentsSeries) !!},
+                        backgroundColor: 'rgba(54, 162, 235, 0.15)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.25,
+                        fill: true
+                    },
+                    {
+                        label: 'Purchasing Students',
+                        data: {!! json_encode($purchasingStudentsSeries) !!},
+                        backgroundColor: 'rgba(40, 199, 111, 0.15)',
+                        borderColor: 'rgba(40, 199, 111, 1)',
+                        borderWidth: 2,
+                        tension: 0.25,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
                 }
             }
         });
