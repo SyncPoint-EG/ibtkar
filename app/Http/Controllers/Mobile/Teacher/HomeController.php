@@ -113,6 +113,15 @@ class HomeController extends Controller
         $teacher = auth()->guard('teacher')->user();
         $lessons = Lesson::whereHas('chapter.course', function ($query) use ($teacher) {
             $query->where('teacher_id', $teacher->id);
+            if(request()->stage_id){
+                $query->where('stage_id', request()->stage_id);
+            }
+            if(request()->grade_id){
+                $query->where('grade_id', request()->grade_id);
+            }
+            if(request()->division_id){
+                $query->where('division_id', request()->division_id);
+            }
         })->get();
 
         return LessonResource::collection($lessons);
