@@ -37,10 +37,10 @@ class HomeController extends Controller
         }
 
         $dateFilter = function ($query) use ($startDate, $endDate) {
-            if ($startDate) {
+            if ($startDate !=null) {
                 $query->whereDate('created_at', '>=', $startDate);
             }
-            if ($endDate) {
+            if ($endDate !=null) {
                 $query->whereDate('created_at', '<=', $endDate);
             }
         };
