@@ -29,7 +29,7 @@ class LessonRequest extends FormRequest
             'desc' => 'required',
             'chapter_id' => 'required|exists:chapters,id',
             'video_link' => 'required',
-            'video_image' => 'required',
+            'video_image' => 'nullable',
             'price' => 'required|numeric',
             'is_featured' => 'nullable|boolean',
             'type' => 'required|in:explanation,revision,solve_homework,center',
