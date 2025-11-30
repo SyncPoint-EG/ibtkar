@@ -136,13 +136,18 @@
     </li>
 @endcan
 
-@can('edit_reward_points')
-    <li class=" nav-item"><a href="{{ route('reward-points.edit') }}"><i class="icon-gift"></i><span data-i18n="nav.reward-points.main" class="menu-title">{{ trans('dashboard.reward_points.title') }}</span></a>
-    </li>
-@endcan
+{{--@can('edit_reward_points')--}}
+{{--    <li class=" nav-item"><a href="{{ route('reward-points.edit') }}"><i class="icon-gift"></i><span data-i18n="nav.reward-points.main" class="menu-title">{{ trans('dashboard.reward_points.title') }}</span></a>--}}
+{{--    </li>--}}
+{{--@endcan--}}
 
 @can('view_students')
     <li class=" nav-item"><a href="{{ route('points-logs.index') }}"><i class="icon-clipboard"></i><span class="menu-title">Student Points Logs</span></a>
+    </li>
+@endcan
+
+@can('edit_reward_points')
+    <li class=" nav-item"><a href="{{ route('point-redemptions.index') }}"><i class="icon-shuffle"></i><span class="menu-title">Point Redemptions</span></a>
     </li>
 @endcan
 

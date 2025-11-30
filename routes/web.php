@@ -1154,6 +1154,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('points-logs/{student}', [\App\Http\Controllers\Dashboard\StudentPointLogController::class, 'show'])
         ->name('points-logs.show')
         ->middleware('can:view_students');
+
+    Route::resource('point-redemptions', \App\Http\Controllers\Dashboard\PointRedemptionController::class)
+        ->middleware('can:edit_reward_points')
+        ->except(['show']);
 });
 
 // Routes for Banner

@@ -108,4 +108,8 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::post('rewards/{id}/purchase', [RewardController::class, 'purchase']);
     Route::get('rewards-history', [RewardController::class, 'rewardsHistory']);
     Route::get('action-points', [RewardController::class, 'actionPoints']);
+
+    // point redemptions
+    Route::get('point-redemptions', [\App\Http\Controllers\Mobile\Student\PointRedemptionController::class, 'index']);
+    Route::post('point-redemptions/{pointRedemption}/redeem', [\App\Http\Controllers\Mobile\Student\PointRedemptionController::class, 'redeem']);
 });
