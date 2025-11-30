@@ -5,15 +5,20 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentPointLogController extends Controller
 {
     public function index()
     {
-        $students = Student::whereHas('pointLogs')
+        $students = Student::query()
             ->withSum('pointLogs', 'points')
             ->withCount('pointLogs')
-            ->orderByDesc('point_logs_sum_points')
+            ->where(function ($query) {
+                $query->has('pointLogs')
+                    ->orWhere('points', '>', 0);
+            })
+            ->orderByDesc(DB::raw('COALESCE(point_logs_sum_points, 0) + points'))
             ->paginate(15);
 
         return view('dashboard.points-logs.index', compact('students'));
