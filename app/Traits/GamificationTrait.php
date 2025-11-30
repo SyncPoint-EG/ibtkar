@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\ActionPoint;
+use App\Models\StudentPointLog;
 
 trait GamificationTrait
 {
@@ -12,6 +13,12 @@ trait GamificationTrait
         $points = $action->points ?? 0;
         $student->points = $student->points + $points;
         $student->save();
+
+        StudentPointLog::create([
+            'student_id' => $student->id,
+            'action_name' => $action_name,
+            'points' => $points,
+        ]);
 
         return $points;
     }

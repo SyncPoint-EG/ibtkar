@@ -141,6 +141,11 @@
     </li>
 @endcan
 
+@can('view_students')
+    <li class=" nav-item"><a href="{{ route('points-logs.index') }}"><i class="icon-clipboard"></i><span class="menu-title">Student Points Logs</span></a>
+    </li>
+@endcan
+
 @can('view_luckwheelitem')
     <li class=" nav-item"><a href="{{ route('luck-wheel-items.index') }}"><i class="icon-disc"></i><span data-i18n="nav.luck-wheel.main" class="menu-title">{{ trans('dashboard.luck_wheel.title') }}</span></a>
     </li>

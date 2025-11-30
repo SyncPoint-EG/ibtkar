@@ -1147,6 +1147,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'editLuckWheelItems'])->name('luck-wheel.edit')->middleware('can:edit_luck_wheel');
     Route::put('luck-wheel', [\App\Http\Controllers\Dashboard\GamificationController::class, 'updateLuckWheelItems'])->name('luck-wheel.update')->middleware('can:edit_luck_wheel');
+
+    Route::get('points-logs', [\App\Http\Controllers\Dashboard\StudentPointLogController::class, 'index'])
+        ->name('points-logs.index')
+        ->middleware('can:view_students');
+    Route::get('points-logs/{student}', [\App\Http\Controllers\Dashboard\StudentPointLogController::class, 'show'])
+        ->name('points-logs.show')
+        ->middleware('can:view_students');
 });
 
 // Routes for Banner
