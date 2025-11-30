@@ -270,4 +270,43 @@ class CodeController extends Controller
 
         return Excel::download(new CodesExport($filters), 'codes.xlsx');
     }
+
+    public function classificationDefaults(string $classification): JsonResponse
+    {
+        $defaults = $this->codeService->getDefaultsByClassification($classification);
+
+        if (! $defaults) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No defaults found for this classification.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $defaults->only(['for', 'teacher_id', 'expires_at', 'price']),
+        ]);
+    }
+
+    public function bulkUpdateByClassification(\App\Http\Requests\CodeBulkUpdateRequest $request): RedirectResponse
+    {
+        $data = collect($request->validated())
+            ->except(['code_classification'])
+            ->filter(function ($value) {
+                return $value !== null && $value !== '';
+            })
+            ->all();
+
+        if (empty($data)) {
+            return redirect()->back()->with('error', 'Please provide at least one field to update.');
+        }
+
+        $updated = $this->codeService->bulkUpdateByClassification(
+            $request->input('code_classification'),
+            $data
+        );
+
+        return redirect()->route('codes.index')
+            ->with('success', "Updated {$updated} codes for classification {$request->input('code_classification')}.");
+    }
 }

@@ -113,6 +113,55 @@
                                         <a href="{{ route('codes.index') }}"
                                            class="btn btn-secondary mr-1">{{ __("dashboard.common.clear") }}</a>
                                     </form>
+                                    @can('edit_code')
+                                        <div class="card mt-1">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Bulk update by classification</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <form action="{{ route('codes.bulk-update-classification') }}" method="POST" id="bulk-update-form" class="form-inline">
+                                                    @csrf
+                                                    <div class="form-group mr-1">
+                                                        <label for="bulk_code_classification" class="mr-1">Classification</label>
+                                                        <select id="bulk_code_classification" name="code_classification" class="form-control" required>
+                                                            <option value="">Select classification</option>
+                                                            @foreach($codeClassifications as $classification)
+                                                                <option value="{{ $classification }}">{{ $classification }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mr-1">
+                                                        <label for="bulk_for" class="mr-1">For</label>
+                                                        <select id="bulk_for" name="for" class="form-control">
+                                                            <option value="">Keep as is</option>
+                                                            @foreach(['course', 'chapter', 'lesson', 'charge'] as $option)
+                                                                <option value="{{ $option }}">{{ ucfirst($option) }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mr-1">
+                                                        <label for="bulk_teacher_id" class="mr-1">Teacher</label>
+                                                        <select id="bulk_teacher_id" name="teacher_id" class="form-control">
+                                                            <option value="">Keep as is</option>
+                                                            @foreach($teachers as $teacher)
+                                                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mr-1">
+                                                        <label for="bulk_expires_at" class="mr-1">Expires at</label>
+                                                        <input type="date" id="bulk_expires_at" name="expires_at" class="form-control">
+                                                    </div>
+                                                    <div class="form-group mr-1">
+                                                        <label for="bulk_price" class="mr-1">Price</label>
+                                                        <input type="number" step="0.01" id="bulk_price" name="price" class="form-control" placeholder="Keep as is">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-warning">Update all</button>
+                                                </form>
+                                                <p class="mt-1 text-muted small">Select a classification to prefill fields from an existing code. Only non-empty fields are applied.</p>
+                                            </div>
+                                        </div>
+                                    @endcan
                                     @can('create_code')
                                         <a href="{{ route('codes.create') }}" class="btn btn-primary mb-1">
                                             <i class="icon-plus2"></i> {{ __('dashboard.code.add_new') }}
@@ -209,4 +258,35 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('page_scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const classificationSelect = document.getElementById('bulk_code_classification');
+            if (!classificationSelect) return;
+
+            classificationSelect.addEventListener('change', function () {
+                const value = this.value;
+                if (!value) {
+                    document.getElementById('bulk_for').value = '';
+                    document.getElementById('bulk_teacher_id').value = '';
+                    document.getElementById('bulk_expires_at').value = '';
+                    document.getElementById('bulk_price').value = '';
+                    return;
+                }
+                fetch("{{ url('codes/classification') }}/" + encodeURIComponent(value) + "/defaults")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.data) {
+                            document.getElementById('bulk_for').value = data.data.for || '';
+                            document.getElementById('bulk_teacher_id').value = data.data.teacher_id || '';
+                            document.getElementById('bulk_expires_at').value = data.data.expires_at ? data.data.expires_at.substring(0,10) : '';
+                            document.getElementById('bulk_price').value = data.data.price ?? '';
+                        }
+                    })
+                    .catch(() => {});
+            });
+        });
+    </script>
 @endsection

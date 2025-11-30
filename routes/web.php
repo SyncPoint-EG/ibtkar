@@ -1158,6 +1158,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('point-redemptions', \App\Http\Controllers\Dashboard\PointRedemptionController::class)
         ->middleware('can:edit_reward_points')
         ->except(['show']);
+
+    Route::get('codes/classification/{classification}/defaults', [\App\Http\Controllers\Dashboard\CodeController::class, 'classificationDefaults'])
+        ->name('codes.classification-defaults')
+        ->middleware('can:edit_code');
+    Route::post('codes/bulk-update-classification', [\App\Http\Controllers\Dashboard\CodeController::class, 'bulkUpdateByClassification'])
+        ->name('codes.bulk-update-classification')
+        ->middleware('can:edit_code');
 });
 
 // Routes for Banner

@@ -184,6 +184,21 @@ class CodeService
         return $this->model->distinct()->pluck('code_classification')->filter()->values();
     }
 
+    public function getDefaultsByClassification(string $classification): ?Code
+    {
+        return $this->model
+            ->where('code_classification', $classification)
+            ->latest()
+            ->first();
+    }
+
+    public function bulkUpdateByClassification(string $classification, array $data): int
+    {
+        return $this->model
+            ->where('code_classification', $classification)
+            ->update($data);
+    }
+
     /**
      * Bulk delete codes
      *
