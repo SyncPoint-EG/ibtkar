@@ -129,14 +129,14 @@ class HomeController extends Controller
     public function getStages()
     {
         $teacher = auth()->guard('teacher')->user();
-        $stages = $teacher->stages->unique('id')->pluck('name')->values();
+        $stages = $teacher->stages->unique('id')->pluck('id' ,'name')->values();
         return response()->json(['data' => $stages], 200);
     }
 
     public function getGrades()
     {
         $teacher = auth()->guard('teacher')->user();
-        $grades = $teacher->grades->unique('id')->pluck('name')->values();
+        $grades = $teacher->grades->unique('id')->pluck('id','name')->values();
         return response()->json(['data' => $grades], 200);
     }
 }
