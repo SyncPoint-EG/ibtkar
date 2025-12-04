@@ -126,6 +126,13 @@ class HomeController extends Controller
 
         return LessonResource::collection($lessons);
     }
+    public function getStages()
+    {
+        $teacher = auth()->guard('teacher')->user();
+        $stages = $teacher->stages->unique('id')->pluck('name')->values();
+        return response()->json(['data' => $stages], 200);
+    }
+
     public function getGrades()
     {
         $teacher = auth()->guard('teacher')->user();

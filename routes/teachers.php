@@ -19,6 +19,7 @@ Route::middleware('auth:teacher')->group(function () {
     Route::get('homework-students/{homework_id}', [HomeController::class, 'getHomeworkStudents']);
     Route::get('attachments', [HomeController::class, 'getAttachments']);
     Route::get('lessons', [HomeController::class, 'getLessons']);
+    Route::get('stages', [HomeController::class, 'getStages']);
     Route::get('grades', [HomeController::class, 'getGrades']);
 
     Route::get('students', [HomeController::class, 'getStudents']);
