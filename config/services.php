@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'ultra_msg' => [
+        'instance_id' => env('ULTRA_MSG_INSTANCE_ID'),
+        'token' => env('ULTRA_MSG_TOKEN'),
+    ],
+
 ];

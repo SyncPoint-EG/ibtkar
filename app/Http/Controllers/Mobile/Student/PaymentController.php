@@ -12,6 +12,7 @@ use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Watch;
+use App\Services\WhatsappNotificationService;
 use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\DB;
 class PaymentController extends Controller
 {
     use GamificationTrait;
+
+    public function __construct(private readonly WhatsappNotificationService $whatsappNotificationService)
+    {
+    }
 
     public function store(PaymentRequest $request)
     {
@@ -147,6 +152,10 @@ class PaymentController extends Controller
             }
             $payment = Payment::create($validated);
             DB::commit();
+
+            if ($payment->payment_status === Payment::PAYMENT_STATUS['approved']) {
+                $this->whatsappNotificationService->sendLessonPurchaseNotification($payment);
+            }
 
             if (in_array($request->payment_method, ['code', 'ibtkar_wallet'])) {
                 return response()->json([

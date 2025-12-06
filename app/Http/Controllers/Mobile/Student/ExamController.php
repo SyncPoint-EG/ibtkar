@@ -8,6 +8,7 @@ use App\Models\Exam;
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
 use App\Services\ExamAttemptService;
+use App\Services\WhatsappNotificationService;
 use App\Traits\FirebaseNotify;
 use App\Traits\GamificationTrait;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class ExamController extends Controller
 
     protected ExamAttemptService $examAttemptService;
 
-    public function __construct(ExamAttemptService $examAttemptService)
+    public function __construct(ExamAttemptService $examAttemptService, private readonly WhatsappNotificationService $whatsappNotificationService)
     {
         $this->examAttemptService = $examAttemptService;
     }
@@ -134,7 +135,12 @@ class ExamController extends Controller
         ]);
 
         $this->examAttemptService->checkIfPassed($examAttempt);
+        $examAttempt->refresh();
         $points = $this->givePoints($student, 'solve_exam');
+
+        if ($examAttempt->is_passed) {
+            $this->whatsappNotificationService->sendExamPassNotification($student, $exam, $examAttempt);
+        }
 
         $this->notifyGuardianAboutExamResult($student, $exam, $examAttempt);
 

@@ -6,11 +6,16 @@ use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Traits\FirebaseNotify;
+use App\Services\WhatsappNotificationService;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentApprovalService
 {
     use FirebaseNotify;
+
+    public function __construct(private readonly WhatsappNotificationService $whatsappNotificationService)
+    {
+    }
 
     /**
      * Get all pending payments with pagination.
@@ -76,6 +81,10 @@ class PaymentApprovalService
         }
 
         $this->notifyPaymentApproval($payment);
+
+        if ($payment->lesson_id) {
+            $this->whatsappNotificationService->sendLessonPurchaseNotification($payment);
+        }
     }
 
     /**
