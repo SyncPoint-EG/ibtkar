@@ -136,7 +136,8 @@ class HomeController extends Controller
     public function getGrades()
     {
         $teacher = auth()->guard('teacher')->user();
-        $grades = $teacher->grades->unique('id')->pluck('id','name');
+        $grades = $teacher->grades->unique('id')->pluck('id');
+//        $grades = $teacher->grades->unique('id')->pluck('id','name');
         return response()->json(['data' => $grades], 200);
     }
 }
