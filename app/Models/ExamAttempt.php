@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ExamAttempt extends Model
 {
@@ -41,5 +42,10 @@ class ExamAttempt extends Model
     public function getPercentageScore()
     {
         return $this->total_marks > 0 ? round(($this->score / $this->total_marks) * 100, 2) : 0;
+    }
+
+    public function getIsPassedAttribute($value)
+    {
+        return $value == 1 ? true : false;
     }
 }
