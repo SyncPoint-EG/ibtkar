@@ -13,4 +13,8 @@ Route::group(['middleware' => 'auth:guardian'], function () {
     Route::post('logout', [GuardianAuthController::class, 'logout']);
 
     Route::get('children', [HomeController::class, 'getChildren']);
+    Route::get('children/{student}/wallet', [HomeController::class, 'getChildWallet']);
+    Route::get('children/{student}/charges', [HomeController::class, 'getChildCharges']);
+    Route::get('children/{student}/payments', [HomeController::class, 'getChildPayments']);
+    Route::get('children/{student}/points', [HomeController::class, 'getChildPoints']);
 });
