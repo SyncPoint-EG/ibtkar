@@ -18,8 +18,9 @@ class HomeController extends Controller
         return StudentProfileResource::collection($children);
     }
 
-    public function getChildWallet(Student $student)
+    public function getChildWallet($studentId)
     {
+        $student = Student::findOrFail($studentId);
         $student = $this->authorizeChild($student);
 
         return response()->json([
@@ -29,8 +30,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function getChildCharges(Student $student)
+    public function getChildCharges($studentId)
     {
+        $student = Student::findOrFail($studentId);
+
         $student = $this->authorizeChild($student);
 
         $charges = Charge::where('student_id', $student->id)
@@ -53,8 +56,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function getChildPayments(Student $student)
+    public function getChildPayments($studentId)
     {
+        $student = Student::findOrFail($studentId);
+
         $student = $this->authorizeChild($student);
 
         $payments = Payment::where('student_id', $student->id)
@@ -82,8 +87,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function getChildPoints(Student $student)
+    public function getChildPoints($studentId)
     {
+        $student = Student::findOrFail($studentId);
+
         $student = $this->authorizeChild($student);
 
         $logs = $student->pointLogs()
