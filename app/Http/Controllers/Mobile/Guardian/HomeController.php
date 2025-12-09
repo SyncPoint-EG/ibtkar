@@ -7,6 +7,7 @@ use App\Http\Resources\StudentProfileResource;
 use App\Models\Charge;
 use App\Models\Payment;
 use App\Models\Student;
+use Illuminate\Http\JsonResponse;
 
 class HomeController extends Controller
 {
@@ -21,7 +22,13 @@ class HomeController extends Controller
     public function getChildWallet($studentId)
     {
         $student = Student::findOrFail($studentId);
-        $student = $this->authorizeChild($student);
+
+        $authorizationResult = $this->authorizeChild($student);
+        if ($authorizationResult instanceof JsonResponse) {
+            return $authorizationResult;
+        }
+
+        $student = $authorizationResult;
 
         return response()->json([
             'status' => true,
@@ -34,7 +41,12 @@ class HomeController extends Controller
     {
         $student = Student::findOrFail($studentId);
 
-        $student = $this->authorizeChild($student);
+        $authorizationResult = $this->authorizeChild($student);
+        if ($authorizationResult instanceof JsonResponse) {
+            return $authorizationResult;
+        }
+
+        $student = $authorizationResult;
 
         $charges = Charge::where('student_id', $student->id)
             ->latest()
@@ -60,7 +72,12 @@ class HomeController extends Controller
     {
         $student = Student::findOrFail($studentId);
 
-        $student = $this->authorizeChild($student);
+        $authorizationResult = $this->authorizeChild($student);
+        if ($authorizationResult instanceof JsonResponse) {
+            return $authorizationResult;
+        }
+
+        $student = $authorizationResult;
 
         $payments = Payment::where('student_id', $student->id)
             ->latest()
@@ -91,7 +108,12 @@ class HomeController extends Controller
     {
         $student = Student::findOrFail($studentId);
 
-        $student = $this->authorizeChild($student);
+        $authorizationResult = $this->authorizeChild($student);
+        if ($authorizationResult instanceof JsonResponse) {
+            return $authorizationResult;
+        }
+
+        $student = $authorizationResult;
 
         $logs = $student->pointLogs()
             ->latest()
@@ -105,12 +127,15 @@ class HomeController extends Controller
         ]);
     }
 
-    protected function authorizeChild(Student $student): Student
+    protected function authorizeChild(Student $student): Student|JsonResponse
     {
         $guardian = auth()->guard('guardian')->user();
 
         if ($student->guardian_id !== $guardian->id) {
-            abort(404);
+            return response()->json([
+                'status' => false,
+                'message' => 'The requested student does not belong to the authenticated guardian.',
+            ], 403);
         }
 
         return $student;
