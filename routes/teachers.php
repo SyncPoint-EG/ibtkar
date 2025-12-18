@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Mobile\Teacher\HomeController;
+use App\Http\Controllers\Mobile\Teacher\InquiryController;
 use App\Http\Controllers\Mobile\Teacher\StatisticsController;
 use App\Http\Controllers\Mobile\Teacher\StoryController;
 use App\Http\Controllers\Mobile\Teacher\TeacherAuthController;
@@ -25,4 +26,7 @@ Route::middleware('auth:teacher')->group(function () {
     Route::get('students', [HomeController::class, 'getStudents']);
     Route::get('student/{id}', [HomeController::class, 'getStudent']);
     Route::get('students-per-lesson/{lesson_id}', [StatisticsController::class, 'getStudentsPerLesson']);
+
+    Route::get('inquiries', [InquiryController::class, 'index']);
+    Route::patch('inquiries/{inquiry}/answer', [InquiryController::class, 'answer']);
 });

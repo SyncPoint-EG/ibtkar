@@ -7,6 +7,7 @@ use App\Http\Controllers\Mobile\Student\ExamController;
 use App\Http\Controllers\Mobile\Student\FavoritesController;
 use App\Http\Controllers\Mobile\Student\HomeController;
 use App\Http\Controllers\Mobile\Student\HomeworkController;
+use App\Http\Controllers\Mobile\Student\InquiryController;
 use App\Http\Controllers\Mobile\Student\LessonController;
 use App\Http\Controllers\Mobile\Student\LuckWheelController;
 use App\Http\Controllers\Mobile\Student\PaymentController;
@@ -108,6 +109,11 @@ Route::group(['middleware' => 'auth:student'], function () {
     Route::post('rewards/{id}/purchase', [RewardController::class, 'purchase']);
     Route::get('rewards-history', [RewardController::class, 'rewardsHistory']);
     Route::get('action-points', [RewardController::class, 'actionPoints']);
+
+    // inquiries routes
+    Route::get('inquiries', [InquiryController::class, 'index']);
+    Route::get('inquiries/subjects', [InquiryController::class, 'subjects']);
+    Route::post('inquiries', [InquiryController::class, 'store']);
 
     // point redemptions
     Route::get('point-redemptions', [\App\Http\Controllers\Mobile\Student\PointRedemptionController::class, 'index']);

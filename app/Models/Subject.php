@@ -143,6 +143,11 @@ class Subject extends Model
         return $this->hasMany(Course::class, 'subject_id');
     }
 
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
     public function subjectTeacherAssignments()
     {
         return $this->hasMany(SubjectTeacher::class, 'subject_id')->with(['subject', 'grade', 'stage', 'division']);

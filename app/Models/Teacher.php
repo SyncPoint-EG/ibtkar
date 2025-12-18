@@ -218,6 +218,11 @@ class Teacher extends Authenticatable
         return $this->hasMany(\App\Models\Course::class);
     }
 
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
     // Get stages through courses
     public function stages()
     {

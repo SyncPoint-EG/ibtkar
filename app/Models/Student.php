@@ -166,6 +166,11 @@ class Student extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
     public function pointLogs()
     {
         return $this->hasMany(StudentPointLog::class);
