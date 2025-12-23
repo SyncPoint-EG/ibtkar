@@ -87,15 +87,12 @@ class TableController extends Controller
             });
         }
 
-        $subjectTeacher = $subjectTeacherQuery->first();
+        $subjectTeachers = $subjectTeacherQuery->get();
 
-        if (! $subjectTeacher) {
+        if ($subjectTeachers->isEmpty()) {
             return response()->json(['message' => 'Teacher not found'], 404);
         }
 
-        return response()->json([
-            'id' => $subjectTeacher->teacher->id,
-            'name' => $subjectTeacher->teacher->name,
-        ]);
+        return SubjectTeacherResource::collection($subjectTeachers);
     }
 }

@@ -1,0 +1,95 @@
+{
+    "info": {
+        "_postman_id": "fcb1ad14-66a9-4e12-8d62-8a34f0c1e9d4",
+        "name": "Student Point Redemptions",
+        "description": "Scoped collection for the mobile student point redemption endpoints defined at the end of `routes/students.php`.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Point Redemptions",
+            "description": "Authenticated endpoints. Supply `Authorization: Bearer {{student_token}}` and `Accept: application/json` headers before running these requests.",
+            "item": [
+                {
+                    "name": "List Active Point Redemptions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{student_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/mobile/student/point-redemptions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "mobile",
+                                "student",
+                                "point-redemptions"
+                            ]
+                        },
+                        "description": "Returns the active redemptions ordered by `points_required`. Mirrors `PointRedemptionController@index`."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Redeem Points",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{student_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/mobile/student/point-redemptions/:pointRedemptionId/redeem",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "mobile",
+                                "student",
+                                "point-redemptions",
+                                ":pointRedemptionId",
+                                "redeem"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "pointRedemptionId",
+                                    "description": "ID of the redemption to apply against the authenticated student's points.",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "description": "Redeems the selected reward for the authenticated student. Requires enough points and an active redemption. Maps to `PointRedemptionController@redeem`."
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "https://example.test"
+        },
+        {
+            "key": "student_token",
+            "value": ""
+        }
+    ]
+}
