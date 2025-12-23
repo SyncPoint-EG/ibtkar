@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:student'], function () {
 
     Route::get('subjects', [HomeController::class, 'getSubjects']);
     Route::get('subject/{subject}', [HomeController::class, 'getSubject']);
+    Route::get('subject/{subject}/teacher', [TableController::class, 'getSubjectTeacher']);
 
     Route::get('courses', [CourseController::class, 'index']);
     Route::get('courses/{course}', [CourseController::class, 'show']);

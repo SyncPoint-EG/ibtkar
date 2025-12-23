@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mobile\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubjectTeacherResource;
+use App\Models\Subject;
 use App\Models\SubjectTeacher;
 use Illuminate\Http\Request;
 
@@ -67,5 +68,34 @@ class TableController extends Controller
         $subjectTeachers = $query->orderBy('day_of_week')->orderBy('time')->get();
 
         return SubjectTeacherResource::collection($subjectTeachers);
+    }
+
+    public function getSubjectTeacher($subjectId)
+    {
+        $subject = Subject::findOrFail($subjectId);
+        $student = auth()->guard('student')->user();
+
+        $subjectTeacherQuery = SubjectTeacher::with('teacher')
+            ->where('stage_id', $student->stage_id)
+            ->where('grade_id', $student->grade_id)
+            ->where('subject_id', $subject->id);
+
+        if ($student->division_id) {
+            $subjectTeacherQuery->where(function ($query) use ($student) {
+                $query->where('division_id', $student->division_id)
+                    ->orWhereNull('division_id');
+            });
+        }
+
+        $subjectTeacher = $subjectTeacherQuery->first();
+
+        if (! $subjectTeacher) {
+            return response()->json(['message' => 'Teacher not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $subjectTeacher->teacher->id,
+            'name' => $subjectTeacher->teacher->name,
+        ]);
     }
 }
