@@ -42,11 +42,11 @@ class InquiryController extends Controller
         return InquiryResource::collection($inquiries);
     }
 
-    public function answer(Request $request, Inquiry $inquiry)
+    public function answer(Request $request,  $inquiryId)
     {
+        $inquiry = Inquiry::findOrFail($inquiryId);
         $teacher = auth()->guard('teacher')->user();
 
-        dd($teacher);
         if ($inquiry->teacher_id !== $teacher->id) {
             return response()->json(['message' => 'Not authorized.'], 403);
         }
