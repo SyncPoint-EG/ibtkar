@@ -46,6 +46,7 @@ class InquiryController extends Controller
     {
         $teacher = auth()->guard('teacher')->user();
 
+        dd($teacher);
         if ($inquiry->teacher_id !== $teacher->id) {
             return response()->json(['message' => 'Not authorized.'], 403);
         }
