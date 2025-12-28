@@ -25,8 +25,8 @@ class CodeRequest extends FormRequest
     {
         return [
             'code' => 'nullable|string',
-            'for' => 'required|string|in:course,chapter,lesson,charge',
-            'teacher_id' => 'required|exists:teachers,id',
+            'for' => 'required|string|in:course,chapter,lesson,charge,grade_plan',
+            'teacher_id' => 'required_unless:for,grade_plan|nullable|exists:teachers,id',
             'expires_at' => 'nullable|date',
             'code_classification' => 'nullable|string',
             'price' => 'nullable|numeric',

@@ -60,6 +60,11 @@
     </li>
 @endcan
 
+@can('view_grade_plan')
+    <li class=" nav-item"><a href="{{ route('grade-plans.index') }}"><i class="icon-clipboard"></i><span class="menu-title">{{ __('dashboard.grade_plan.title_plural') }}</span></a>
+    </li>
+@endcan
+
 @can('view_division')
     <li class=" nav-item"><a href="{{ route('divisions.index') }}"><i class="icon-grid"></i><span data-i18n="nav.divisions.main" class="menu-title">{{__('dashboard.division.title_plural')}}</span></a>
     </li>

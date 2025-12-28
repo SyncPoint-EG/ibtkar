@@ -30,11 +30,12 @@ class AttachmentController extends Controller
         $course = $chapter->course;
 
         $student = auth('student')->user();
-        $is_purchased = Payment::where('student_id', $student->id)->where(function ($query) use ($lesson, $chapter, $course) {
-            $query->where('lesson_id', $lesson->id)
-                ->orWhere('chapter_id', $chapter->id)
-                ->orWhere('course_id', $course->id);
-        })->exists();
+        $hasGradePlan = $student->hasGradePlanForCourse($course);
+        $is_purchased = $hasGradePlan || Payment::where('student_id', $student->id)->where(function ($query) use ($lesson, $chapter, $course) {
+                $query->where('lesson_id', $lesson->id)
+                    ->orWhere('chapter_id', $chapter->id)
+                    ->orWhere('course_id', $course->id);
+            })->exists();
         if ($is_purchased) {
             return new LessonResource($lesson);
         } else {

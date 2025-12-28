@@ -36,19 +36,20 @@ class LessonController extends Controller
 
         $student = auth('student')->user();
         $is_free = $lesson->price == 0 || $chapter->price == 0 || $course->price == 0;
-        $is_purchased = Payment::where('student_id', $student->id)->where(function ($query) use ($lesson, $chapter, $course) {
-            $query->where(function ($qq) use ($lesson, $chapter, $course) {
-                $qq->where('lesson_id', $lesson->id);
-                $qq->orWhere('chapter_id', $chapter->id);
-                $qq->orWhere('course_id', $course->id);
-            });
+        $hasGradePlan = $student->hasGradePlanForCourse($course);
+        $is_purchased = $hasGradePlan || Payment::where('student_id', $student->id)->where(function ($query) use ($lesson, $chapter, $course) {
+                $query->where(function ($qq) use ($lesson, $chapter, $course) {
+                    $qq->where('lesson_id', $lesson->id);
+                    $qq->orWhere('chapter_id', $chapter->id);
+                    $qq->orWhere('course_id', $course->id);
+                });
 
-        })->where(function ($query) {
-            $query->where(function ($q) {
-                $q->whereIn('payment_method', ['instapay', 'wallet'])
-                    ->where('payment_status', Payment::PAYMENT_STATUS['approved']);
-            })->orWhereNotIn('payment_method', ['instapay', 'wallet']);
-        })->exists();
+            })->where(function ($query) {
+                $query->where(function ($q) {
+                    $q->whereIn('payment_method', ['instapay', 'wallet'])
+                        ->where('payment_status', Payment::PAYMENT_STATUS['approved']);
+                })->orWhereNotIn('payment_method', ['instapay', 'wallet']);
+            })->exists();
         $max_watches = $student->watches()->where('lesson_id', $lesson->id)->first();
         if (! $is_free && $max_watches && $max_watches->count > 3) {
             return response()->json([

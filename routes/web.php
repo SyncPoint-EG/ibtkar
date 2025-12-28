@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\EducationTypeController;
 use App\Http\Controllers\Dashboard\ExamController;
 use App\Http\Controllers\Dashboard\GovernorateController;
 use App\Http\Controllers\Dashboard\GradeController;
+use App\Http\Controllers\Dashboard\GradePlanController;
 use App\Http\Controllers\Dashboard\GuardianController;
 use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 use App\Http\Controllers\Dashboard\HomeworkController;
@@ -489,6 +490,33 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('grades/{grade}', [GradeController::class, 'destroy'])
         ->name('grades.destroy')
         ->middleware('can:delete_grade');
+});
+
+// Routes for Grade Plans
+Route::middleware(['auth'])->group(function () {
+    Route::get('grade-plans', [GradePlanController::class, 'index'])
+        ->name('grade-plans.index')
+        ->middleware('can:view_grade_plan');
+
+    Route::get('grade-plans/create', [GradePlanController::class, 'create'])
+        ->name('grade-plans.create')
+        ->middleware('can:create_grade_plan');
+
+    Route::post('grade-plans', [GradePlanController::class, 'store'])
+        ->name('grade-plans.store')
+        ->middleware('can:create_grade_plan');
+
+    Route::get('grade-plans/{grade_plan}/edit', [GradePlanController::class, 'edit'])
+        ->name('grade-plans.edit')
+        ->middleware('can:edit_grade_plan');
+
+    Route::put('grade-plans/{grade_plan}', [GradePlanController::class, 'update'])
+        ->name('grade-plans.update')
+        ->middleware('can:edit_grade_plan');
+
+    Route::delete('grade-plans/{grade_plan}', [GradePlanController::class, 'destroy'])
+        ->name('grade-plans.destroy')
+        ->middleware('can:delete_grade_plan');
 });
 
 // Routes for District

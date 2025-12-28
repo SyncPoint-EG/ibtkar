@@ -61,7 +61,7 @@
             <select id="for" name="for" class="form-control @error('for') is-invalid @enderror" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="{{ __("dashboard.code.fields.for") }}">
                 <option value="">{{ __("dashboard.common.select") }} {{ __("dashboard.code.fields.for") }}</option>
                 @php
-                    $forOptions = ['course', 'chapter', 'lesson', 'charge'];
+                    $forOptions = ['course', 'chapter', 'lesson', 'charge', 'grade_plan'];
                 @endphp
                 @foreach($forOptions as $option)
                     <option value="{{ $option }}" {{ (isset($code) && $code->for == $option) || old('for') == $option ? 'selected' : '' }}>

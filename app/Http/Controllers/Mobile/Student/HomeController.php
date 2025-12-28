@@ -11,8 +11,8 @@ use App\Http\Resources\StagesResource;
 use App\Http\Resources\SubjectResource;
 use App\Models\Division;
 use App\Models\Grade;
+use App\Models\GradePlan;
 use App\Models\Lesson;
-use App\Models\Setting;
 use App\Models\Stage;
 use App\Models\Subject;
 use App\Services\BannerService;
@@ -42,8 +42,24 @@ class HomeController extends Controller
 
     public function getPlanPrice()
     {
+        $student = auth('student')->user();
+
+        $gradePlan = GradePlan::where('stage_id', $student->stage_id)
+            ->where('grade_id', $student->grade_id)
+            ->where('is_active', true)
+            ->first();
+
+        if (! $gradePlan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'لم يتم إعداد خطة لهذه المرحلة والصف بعد.',
+            ], 404);
+        }
+
         return response()->json([
-            'price' => Setting::where('key', 'general plan price')->first()->value,
+            'price' => $gradePlan->general_plan_price,
+            'general_plan_price' => $gradePlan->general_plan_price,
+            'currency' => 'EGP',
         ]);
     }
 

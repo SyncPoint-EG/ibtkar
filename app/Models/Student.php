@@ -232,7 +232,13 @@ class Student extends Authenticatable
             return false;
         }
 
+        $course = $lesson->chapter?->course;
+
         if ($lesson->price == 0 || $lesson->chapter->price == 0 || $lesson->chapter->course->price == 0) {
+            return true;
+        }
+
+        if ($this->hasGradePlanForCourse($course)) {
             return true;
         }
         // Check for lesson purchase
@@ -286,6 +292,12 @@ class Student extends Authenticatable
             return false;
         }
 
+        $course = Course::find($courseId);
+
+        if ($this->hasGradePlanForCourse($course)) {
+            return true;
+        }
+
         return Payment::where('student_id', $this->id)
             ->where('course_id', $courseId)
             ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
@@ -296,6 +308,10 @@ class Student extends Authenticatable
     {
         if (! $lesson) {
             return false;
+        }
+
+        if ($this->hasGradePlanForCourse($lesson->chapter?->course)) {
+            return true;
         }
 
         return Payment::where('student_id', $this->id)
@@ -440,5 +456,19 @@ class Student extends Authenticatable
     public function rewards()
     {
         return $this->hasMany(StudentReward::class);
+    }
+
+    public function hasGradePlanForCourse(?Course $course): bool
+    {
+        if (! $course) {
+            return false;
+        }
+
+        return Payment::where('student_id', $this->id)
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->where('plan_type', GradePlan::TYPE_GENERAL)
+            ->where('stage_id', $course->stage_id)
+            ->where('grade_id', $course->grade_id)
+            ->exists();
     }
 }

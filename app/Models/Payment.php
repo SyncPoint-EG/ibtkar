@@ -81,6 +81,21 @@ class Payment extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function stage()
+    {
+        return $this->belongsTo(Stage::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
+
+    public function gradePlan()
+    {
+        return $this->belongsTo(GradePlan::class);
+    }
+
     public function scopeFilter($query, array $filters)
     {
         if (!empty($filters['payment_method'])) {

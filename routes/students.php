@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\PaymentController as DashboardPaymentController;
 use App\Http\Controllers\Mobile\Student\AttachmentController;
 use App\Http\Controllers\Mobile\Student\CenterExamController;
 use App\Http\Controllers\Mobile\Student\CourseController;
@@ -27,7 +28,7 @@ Route::post('logout', [StudentAuthController::class, 'logout']);
 
 Route::group(['middleware' => 'auth:student'], function () {
     // purchase routes
-    Route::post('purchase', [PaymentController::class, 'store']);
+    Route::post('purchase', [DashboardPaymentController::class, 'store']);
     Route::post('charge-wallet', [PaymentController::class, 'chargeWallet']);
     Route::get('general-plan-price', [HomeController::class, 'getPlanPrice']);
 

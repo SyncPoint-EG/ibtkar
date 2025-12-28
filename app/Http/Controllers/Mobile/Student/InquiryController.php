@@ -11,6 +11,7 @@ use App\Models\Inquiry;
 use App\Models\Lesson;
 use App\Models\Payment;
 use App\Models\Subject;
+use App\Models\GradePlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -35,7 +36,7 @@ class InquiryController extends Controller
         ]);
 
         $student = auth('student')->user();
-        $courseIds = $this->getPurchasedCourseIds($student->id);
+        $courseIds = $this->getPurchasedCourseIds($student);
 
         $subjects = Subject::whereIn(
             'id',
@@ -56,7 +57,7 @@ class InquiryController extends Controller
         ]);
 
         $student = auth('student')->user();
-        $courseIds = $this->getPurchasedCourseIds($student->id);
+        $courseIds = $this->getPurchasedCourseIds($student);
 
         $hasCourse = Course::whereIn('id', $courseIds)
             ->where('teacher_id', $validated['teacher_id'])
@@ -81,9 +82,9 @@ class InquiryController extends Controller
         return new InquiryResource($inquiry);
     }
 
-    private function getPurchasedCourseIds(int $studentId): Collection
+    private function getPurchasedCourseIds($student): Collection
     {
-        $payments = Payment::where('student_id', $studentId)
+        $payments = Payment::where('student_id', $student->id)
             ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
             ->get(['lesson_id', 'chapter_id', 'course_id']);
 
@@ -101,9 +102,28 @@ class InquiryController extends Controller
             $lessonCourseIds = Chapter::whereIn('id', $lessonChapterIds)->pluck('course_id');
         }
 
+        $gradePlanCourseIds = collect();
+        $hasGradePlan = Payment::where('student_id', $student->id)
+            ->where('plan_type', GradePlan::TYPE_GENERAL)
+            ->where('payment_status', Payment::PAYMENT_STATUS['approved'])
+            ->exists();
+
+        if ($hasGradePlan) {
+            $gradePlanCourseIds = Course::where('stage_id', $student->stage_id)
+                ->where('grade_id', $student->grade_id)
+                ->when($student->division_id, function ($query) use ($student) {
+                    $query->where(function ($qq) use ($student) {
+                        $qq->where('division_id', $student->division_id)
+                            ->orWhereNull('division_id');
+                    });
+                })
+                ->pluck('id');
+        }
+
         return $courseIds
             ->merge($chapterCourseIds)
             ->merge($lessonCourseIds)
+            ->merge($gradePlanCourseIds)
             ->unique()
             ->values();
     }

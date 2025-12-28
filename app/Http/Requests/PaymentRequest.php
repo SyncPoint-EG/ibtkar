@@ -26,9 +26,10 @@ class PaymentRequest extends FormRequest
             'payment_image' => 'required_if:payment_method,instapay,wallet|image|mimes:jpg,jpeg,png',
             'phone_number' => 'required_if:payment_method,instapay,wallet|nullable',
             'payment_code' => 'required_if:payment_method,code|nullable|exists:codes,code',
-            'course_id' => 'required_without_all:chapter_id,lesson_id|prohibits:chapter_id,lesson_id|nullable|exists:courses,id',
-            'chapter_id' => 'required_without_all:course_id,lesson_id|prohibits:course_id,lesson_id|nullable|exists:chapters,id',
-            'lesson_id' => 'required_without_all:course_id,chapter_id|prohibits:course_id,chapter_id|nullable|exists:lessons,id',
+            'plan_type' => 'required_without_all:course_id,chapter_id,lesson_id|nullable|in:general',
+            'course_id' => 'required_without_all:chapter_id,lesson_id,plan_type|prohibits:chapter_id,lesson_id,plan_type|nullable|exists:courses,id',
+            'chapter_id' => 'required_without_all:course_id,lesson_id,plan_type|prohibits:course_id,lesson_id,plan_type|nullable|exists:chapters,id',
+            'lesson_id' => 'required_without_all:course_id,chapter_id,plan_type|prohibits:course_id,chapter_id,plan_type|nullable|exists:lessons,id',
         ];
     }
 }

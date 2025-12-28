@@ -27,6 +27,7 @@ class PaymentApprovalService
             'student.stage',
             'student.grade',
             'student.division',
+            'gradePlan',
             'course.subject',
             'course.teacher',
             'lesson.chapter.course.subject',
