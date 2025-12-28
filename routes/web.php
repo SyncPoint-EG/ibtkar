@@ -459,6 +459,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('grades/{grade}', [GradeController::class, 'destroy'])
         ->name('grades.destroy')
         ->middleware('can:delete_grade');
+
+    Route::get('grades/by-stage/{stage}', [GradeController::class, 'byStage'])
+        ->name('grades.by-stage')
+        ->middleware('can:view_grade');
 });
 
 // Routes for Grade

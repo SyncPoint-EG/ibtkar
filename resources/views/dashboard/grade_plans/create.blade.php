@@ -47,7 +47,7 @@
                                             <div class="form-body">
                                                 <div class="form-group">
                                                     <label for="stage_id">{{ __('dashboard.stage.title') }}</label>
-                                                    <select id="stage_id" name="stage_id" class="form-control @error('stage_id') is-invalid @enderror">
+                                                    <select id="stage_id" name="stage_id" class="form-control @error('stage_id') is-invalid @enderror" data-grades-url="{{ url('grades/by-stage') }}">
                                                         <option value="">{{ __('dashboard.common.select') }} {{ __('dashboard.stage.title') }}</option>
                                                         @foreach($stages as $stage)
                                                             <option value="{{ $stage->id }}" {{ old('stage_id') == $stage->id ? 'selected' : '' }}>{{ $stage->name }}</option>
@@ -60,11 +60,8 @@
 
                                                 <div class="form-group">
                                                     <label for="grade_id">{{ __('dashboard.grade.title') }}</label>
-                                                    <select id="grade_id" name="grade_id" class="form-control @error('grade_id') is-invalid @enderror">
+                                                    <select id="grade_id" name="grade_id" class="form-control @error('grade_id') is-invalid @enderror" data-selected-grade="{{ old('grade_id') }}">
                                                         <option value="">{{ __('dashboard.common.select') }} {{ __('dashboard.grade.title') }}</option>
-                                                        @foreach($grades as $grade)
-                                                            <option value="{{ $grade->id }}" {{ old('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
-                                                        @endforeach
                                                     </select>
                                                     @error('grade_id')
                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -111,4 +108,47 @@
             </div>
         </div>
     </div>
+
+@section('page_scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const stageSelect = document.getElementById('stage_id');
+            const gradeSelect = document.getElementById('grade_id');
+            const baseUrl = stageSelect?.dataset.gradesUrl;
+            const selectLabel = @json(__('dashboard.common.select').' '.__('dashboard.grade.title'));
+
+            const renderGrades = (grades, selectedId = null) => {
+                gradeSelect.innerHTML = `<option value="">${selectLabel}</option>`;
+                grades.forEach(grade => {
+                    const option = document.createElement('option');
+                    option.value = grade.id;
+                    option.textContent = grade.name;
+                    if (selectedId && Number(selectedId) === Number(grade.id)) {
+                        option.selected = true;
+                    }
+                    gradeSelect.appendChild(option);
+                });
+            };
+
+            const fetchGrades = (stageId, selectedId = null) => {
+                if (!baseUrl || !stageId) {
+                    renderGrades([], selectedId);
+                    return;
+                }
+                fetch(`${baseUrl}/${stageId}`)
+                    .then(response => response.json())
+                    .then(({data}) => renderGrades(data || [], selectedId))
+                    .catch(() => renderGrades([], selectedId));
+            };
+
+            stageSelect?.addEventListener('change', (event) => {
+                fetchGrades(event.target.value);
+            });
+
+            if (stageSelect?.value) {
+                fetchGrades(stageSelect.value, gradeSelect.dataset.selectedGrade);
+            }
+        });
+    </script>
+@endsection
 @endsection

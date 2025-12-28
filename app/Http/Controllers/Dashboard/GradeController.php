@@ -8,6 +8,7 @@ use App\Models\Grade;
 use App\Models\Stage;
 use App\Services\GradeService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class GradeController extends Controller
@@ -105,5 +106,17 @@ class GradeController extends Controller
             return redirect()->back()
                 ->with('error', 'Error deleting Grade: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Return grades for a specific stage (JSON).
+     */
+    public function byStage(Stage $stage): JsonResponse
+    {
+        $grades = $stage->grades()->select('id', 'name')->get();
+
+        return response()->json([
+            'data' => $grades,
+        ]);
     }
 }
