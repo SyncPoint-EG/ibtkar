@@ -12,6 +12,7 @@ class Payment extends Model
     const PAYMENT_STATUS = [
         'pending' => 'Pending',
         'approved' => 'Approved',
+        'accepted' => 'Accepted',
         'rejected' => 'Rejected',
     ];
 
@@ -125,5 +126,16 @@ class Payment extends Model
         }
 
         return $query;
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where(function ($query) {
+            $query->where('payment_status', self::PAYMENT_STATUS['approved'])
+                ->orWhere(function ($legacyQuery) {
+                    $legacyQuery->whereNull('payment_status')
+                        ->where('is_approved', 1);
+                });
+        });
     }
 }

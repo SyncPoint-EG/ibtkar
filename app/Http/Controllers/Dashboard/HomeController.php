@@ -46,8 +46,8 @@ class HomeController extends Controller
 
         // Main stats
         $studentsCount = Student::where($dateFilter)->count();
-        $purchasingStudentsCount = Payment::where('is_approved', 1)
-            ->where($dateFilter)
+        $approvedPaymentsBaseQuery = Payment::approved()->where($dateFilter);
+        $purchasingStudentsCount = (clone $approvedPaymentsBaseQuery)
             ->distinct('student_id')
             ->count('student_id');
         $teachersCount = Teacher::where($dateFilter)->count();
@@ -75,15 +75,20 @@ class HomeController extends Controller
         // Financial stats
         $financialStats = [];
         if (auth()->user()->can('view_financial_stats')) {
-            $paidLessonsQuery = Payment::whereNotNull('lesson_id')->where('is_approved', 1)->where($dateFilter);
-            $paidCoursesQuery = Payment::whereNotNull('course_id')->where('is_approved', 1)->where($dateFilter);
-            $allPaymentsQuery = Payment::where('is_approved', 1)->where($dateFilter);
+            $paidLessonsQuery = (clone $approvedPaymentsBaseQuery)->whereNotNull('lesson_id');
+            $paidCoursesQuery = (clone $approvedPaymentsBaseQuery)->whereNotNull('course_id');
+            $allPaymentsQuery = clone $approvedPaymentsBaseQuery;
 
-            // The 'charges' table has a 'type' column with 'increase' or 'decrease' values.
-            // The HomeController was using 'charge' and 'transfer'.
-            // I will assume 'charge' corresponds to 'increase' and 'transfer' is not a valid type.
-            // I will also assume the status is in the 'payment_status' column with a value of 'completed'.
-            $chargesQuery = Charge::where('type', 'increase')->where('payment_status', 'completed')->where($dateFilter);
+            $chargeStatuses = array_unique([
+                Payment::PAYMENT_STATUS['approved'],
+                Payment::PAYMENT_STATUS['accepted'],
+                'completed',
+                'Completed',
+            ]);
+
+            $chargesQuery = Charge::where('type', 'increase')
+                ->whereIn('payment_status', $chargeStatuses)
+                ->where($dateFilter);
 
             $financialStats = [
                 'Purchasing Students Count' => $purchasingStudentsCount,
@@ -121,21 +126,21 @@ class HomeController extends Controller
             ->pluck('count', 'date');
 
         $paymentAmountChart = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
-            ->where('is_approved', 1)
+            ->approved()
             ->where($dateFilter)
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy(DB::raw('DATE(created_at)'))
             ->pluck('total', 'date');
 
         $paymentCountChart = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
-            ->where('is_approved', 1)
+            ->approved()
             ->where($dateFilter)
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy(DB::raw('DATE(created_at)'))
             ->pluck('count', 'date');
 
         $purchasingStudentsDaily = Payment::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT student_id) as count'))
-            ->where('is_approved', 1)
+            ->approved()
             ->where($dateFilter)
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy(DB::raw('DATE(created_at)'))
