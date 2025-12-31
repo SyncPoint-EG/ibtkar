@@ -21,10 +21,11 @@ class PointRedemptionController extends Controller
         ]);
     }
 
-    public function redeem(Request $request, PointRedemption $pointRedemption)
+    public function redeem(Request $request, PointRedemption $pointRedemptionId)
     {
         $student = $request->user();
 
+        $pointRedemption = PointRedemption::findOrFail($pointRedemptionId);
         if (! $pointRedemption->is_active) {
             return response()->json(['message' => 'This redemption is inactive'], 400);
         }
